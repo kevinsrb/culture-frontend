@@ -1,0 +1,29 @@
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 0px;
+}
+
+html, body {
+    height: 100vh;
+    width: 100vw;
+}
+
+main {
+    width: 100%;
+}
+
+
+label{
+    display: block;
+    margin: 0 0 .28571429rem 0;
+    color: rgba(0,0,0,.87);
+    font-size: .92857143em;
+    font-weight: 700;
+    text-transform: none;
+}
+
+.btn{
+    border-radius: 20px !important;
+}
+
+

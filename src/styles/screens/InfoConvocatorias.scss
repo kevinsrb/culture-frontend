@@ -1,0 +1,55 @@
+.padre {
+    background: $azulClarito;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hijo {
+    background: white;
+    border-radius: 5px;
+    padding: 40px;
+    width: 40%;
+  }
+
+  .btn_agregar{
+      display: block;
+      margin-left: 20px !important;
+      background-color: $azulClarito !important;
+  }
+
+  .input_nombre{
+      width: 70%;
+  }
+
+  .input-group {
+    display: flex;
+    align-content: stretch;
+  }
+  
+  .input-group > input {
+    flex: 1 0 auto;
+  }
+
+  .container_actividades{
+      margin-top: 10px;
+  }
+
+  .texarea_atividades{
+        margin: 0;
+        -webkit-appearance: none;
+        padding: .78571429em 1em;
+        background: #fff;
+        border: 1px solid rgba(34,36,38,.15);
+        outline: 0;
+        color: rgba(0,0,0,.87);
+        border-radius: .28571429rem;
+        box-shadow: 0 0 0 0 transparent inset;
+        transition: color .1s ease,border-color .1s ease;
+        font-size: 1em;
+        line-height: 1.2857;
+        resize: vertical;
+        width: 100%;
+      
+  }
