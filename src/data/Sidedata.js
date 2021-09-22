@@ -29,8 +29,14 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'Crear convocatoria',
-    path: '/CrearConvocatoria',
+    title: 'Crear categoria',
+    path: '/CreateCategoria',
+    icon: <IoIcons.IoIosPaper />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Cronograma actividades',
+    path: '/cronogramaActividades',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   }

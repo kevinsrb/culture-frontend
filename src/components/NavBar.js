@@ -3,7 +3,7 @@ import * as FaIcons from "react-icons/fa";
 import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
-import { SidebarData } from "./Sidedata";
+import { SidebarData } from "../data/Sidedata";
 import escudoAlcaldia from '../assets/escudoAlcaldia.png'
 import './Header.css';
 

@@ -1,12 +1,12 @@
 import React from 'react'
 import { Container, Header, Input, Divider, Button } from "semantic-ui-react";
 
-export const CreateConvocatoria = () => {
+export const CreateCategoria = () => {
     return (
         <div className="padre">
             <div className="hijo">
                 
-                <Header as='h3'>Crear convocatoria</Header>
+                <Header as='h3'>Crear Categoria</Header>
                 <Divider />
                 <label>Nombre de la actividad</label>
                 <div className="input-group">
