@@ -1,0 +1,76 @@
+.container-modal-description {
+    padding: 3%;
+}
+
+.container-titulos-modal-actividades{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.container-modal-fechas-checkbox{
+    display: flex;
+    width: 100%;
+    margin-top: 3%;
+}
+
+.container-fechas-modal-actividades{
+    display: flex;
+    width: 80%;
+}
+
+.container-clasefecha-modal{
+    display: flex;
+    width: 50%;
+}
+
+.container-checkbox-modal-actividades {
+    display: flex;
+    width: 20%;
+}
+
+.primer-input-fecha {
+    width: 20%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.input-container-sin-label {
+    width: 20%;
+    margin-top: 5% !important;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.input-container-sin-label-año {
+    width: 25%;
+    margin-top: 5% !important;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.input-container-horas {
+    width: 25%;
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+.icono-fechas-actividades {
+    margin-top: 6% !important;
+    padding-left: 2%;
+}
+
+.container-datepicker {
+    position: absolute;
+    margin-top: 9%;
+    margin-left: 6%;
+    z-index: 2;
+}
+
+.contenido-acciones-modal-actividades {
+    padding: 2% !important;
+}
+
+.botones-redondos {
+    border-radius: 2rem !important;
+}

@@ -14,7 +14,7 @@ export default function Navbar() {
     <IconContext.Provider value={{ color: "#004884" }}>
       <div className="navbar">
         <div>
-          <Link to="/" className="menu-bars">
+          <Link to="/infoconvocatorias" className="menu-bars">
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
         </div>
