@@ -1,71 +1,117 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from 'axios'
-import moment from 'moment'
 
 import { ObjConstanst } from '../../config/utils/constanst'
-import { Form, Grid, Header, Divider, Segment, Icon, Button, Dropdown , Select} from "semantic-ui-react";
-import { LineaEstrategicaOptions, CicloOptions, CoberturaOptions, ModalidadEstimuloOptions, EntidadOptions, AreaOptions, TipoEstimuloOptions } from '../../data/selectOption.data'
+import { Form, Grid, Header, Divider, Segment, Input, Button, Dropdown , Select} from "semantic-ui-react";
+import { LineaEstrategicaOptions, CicloOptions, CoberturaOptions, ModalidadEstimuloOptions, EntidadOptions, AreaOptions, TipoEstimuloOptions, NumeroConvocatoiriaOptions, QuienParticipaOptions} from '../../data/selectOption.data'
 
-//datapickers
-import SemanticDatepicker from 'react-semantic-ui-datepickers';
-import 'react-semantic-ui-datepickers/dist/react-semantic-ui-datepickers.css';
 
 //Alertas y notificaciones
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 
-export default function InfoConvocatoria() {
+export function InfoConvocatoria() {
 
-  let objConvocatoria = { nombre: '',
-  fecha_apertura: '',
-  fecha_cierre: '', 
-  entidad: '',
-  categoria: false,
-  diferentes_req: false,
-  pseudonimos: false,
-  grp_confor: false,
-  per_jurdca: false,
-  per_ntral: false,
-  cobertura: '',
-  ciclo: '',
-  linea_estgica: '',
-  area: '',
-  convenido: false,
-  modalidad: '',
-  tipo_estimulo: '',
-  descrip_corta: '',
-  perfil_participante: '',
-  no_participa: '',
-};
-
-
-  const history = useHistory();
-  const [convocatoria, setConvocatoria] = useState(objConvocatoria)
-
-  const handleCreateConvocatoria = async (e) => {
-    e.preventDefault();
-    formatearFechas()
-    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
-    .then((response) =>  {
-      ObjNotificaciones.MSG_SUCCESS('success', response.data.mensaje)
-      history.push("/CreateCategoria");
-    })
-    .catch(function (error) {
-      ObjNotificaciones.MSG_ERROR('error', 'Oops...' ,error.data.mensaje)
-    })
+  const objConvocatoria = { 
+    numero_convocatoria: '',
+    linea_convocatoria: '',
+    categoria_linea_convocatoria: '', 
+    entidad: '',
+    pseudonimos: false,
+    tipo_participante: [],
+    ciclo: '',
+    linea_estgica: '',
+    area: '',
+    cobertura: '',
+    convenido: false,
+    modalidad: '',
+    tipo_estimulo: '',
+    bolsa_concursable: false,
+    num_estimulos: '',
+    descrip_corta: '',
+    perfil_participante: '',
+    no_participa: '',
   };
 
-   const  formatearFechas = () => {
-      convocatoria.fecha_apertura =  moment(convocatoria.fecha_apertura, "YYYY/MM/DD").format('YYYY/MM/DD');
-      convocatoria.fecha_cierre =  moment(convocatoria.fecha_apertura, "YYYY/MM/DD").format('YYYY/MM/DD')
 
-   }
+  let LineaConvocatoriaOptionsMap = {};
+
+  const history = useHistory();
+  const [convocatoria, setConvocatoria] = useState(objConvocatoria);
+  const [lineaConvocatoriaOptions, setlineaConvocatoriaOptions] =  useState();
+  const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] = useState();
+
+  useEffect(() => {
+    cargarSelectLineaConvocatoria()
+  }, []);
+
+
+  const cargarSelectLineaConvocatoria = async() =>{
+    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
+    .then(({data}) =>  { 
+      console.log(data.data)
+
+      LineaConvocatoriaOptionsMap = data.data.map(ds => {
+        return {
+          key: ds.idlineaconvocatoria,
+          value: ds.idlineaconvocatoria,
+          text: ds.nombre
+        }
+      })
+      setlineaConvocatoriaOptions(LineaConvocatoriaOptionsMap)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
+  }
+
+
+  const handleCreateConvocatoria = async (e) => {  
+    e.preventDefault();
+    console.log(convocatoria)
+    // const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
+    // .then((response) =>  {
+    //   console.log(response)
+    //   //ObjNotificaciones.MSG_SUCCESS('success', response.data.mensaje)
+    //   history.push("/CreateCategoria");
+    // })
+    // .catch(function (error) {
+    //   console.error(error);
+    //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' ,error.data.mensaje)
+    // })
+    //ObjNotificaciones.MSG_SUCCESS('success', "Convocatoria creada correctamente")
+    //history.push("/cronogramaActividades");
+  };
+
     
 
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
+    console.log(value, name);
     setConvocatoria({ ...convocatoria, [name]: value });
   };
+
+  let categoriaslineasconvocatoriaMap;
+
+  const handleLineaConvocatoria = async (event, results) => {
+    const { name, value } = results || event.target;
+    setConvocatoria({ ...convocatoria, [name]: value });
+    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${value}`)
+    .then(({data}) =>  {
+      console.log(data)
+      categoriaslineasconvocatoriaMap = data.data.map(ds => {
+        return {
+          key: ds.idcategorialineaconvocatoria,
+          value: ds.idcategorialineaconvocatoria,
+          text: ds.nombre
+        }
+      })
+      setCategoriasLineaconvocatoria(categoriaslineasconvocatoriaMap);
+    })
+    .catch(function (error) {
+      
+    })
+  }
 
   const handletoggleChange = (event, result) => {
     const { name , checked } = result || event.target;
@@ -86,67 +132,58 @@ export default function InfoConvocatoria() {
                 Codigo de convocatoria #: 1
               </Header>
               <Header as="h4" floated="left">
-                Informacion general
+                Informacion general - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
               </Header>
               <Divider clearing />
               <Form.Group widths="equal">
-                <Form.Input 
-                  fluid 
-                  label="Nombre de la convocatoria" 
-                  name="nombre"
+                <Form.Select 
+                  placeholder='Seleccionar' 
+                  label="Número de la convocatoria" 
+                  options={NumeroConvocatoiriaOptions} 
+                  name="numero_convocatoria"
                   onChange={ handleInputChange }
-                  autocomplete="off"
                 />
 
-                <SemanticDatepicker 
-                  fluid
-                  label="Fecha de apertura"
-                  name="fecha_apertura"
-                  onChange={handleInputChange} 
-                  icon="calendar alternate outline" 
-                  format="DD-MM-YYYY"
-                  />
+                <Form.Select 
+                  placeholder='Seleccionar' 
+                  label="Línea convocatoria" 
+                  name="linea_convocatoria"
+                  onChange={ handleInputChange, handleLineaConvocatoria } 
+                  options={ lineaConvocatoriaOptions }
+                />
 
-                  <SemanticDatepicker 
-                    fluid
-                    label="Fecha de cierre"
-                    name="fecha_cierre"
-                    onChange={handleInputChange} 
-                    icon="calendar alternate outline" 
-                    format="DD-MM-YYYY"
-                  />
+                <Form.Select 
+                  placeholder='Seleccionar' 
+                  label="Categorías línea convocatoria" 
+                  name="categoria_linea_convocatoria"
+                  onChange={ handleInputChange }
+                  options={ categoriasLineaconvocatoria }
 
-                  <Form.Select 
-                    placeholder='Entidad' 
-                    label="Entidad" 
-                    options={EntidadOptions} 
-                    name="entidad"
-                    onChange={ handleInputChange }
-                  />
+                />
+
+                <Form.Select 
+                  placeholder='Seleccionar' 
+                  label="Entidad" 
+                  options={EntidadOptions} 
+                  name="entidad"
+                  onChange={ handleInputChange }
+                />
               </Form.Group>
               
               
-              <Grid columns={4}>
+              <Grid columns={2}>
                 <Grid.Row>
                   <Grid.Column>
-                  <label>¿Convocatoria tiene categoria?</label>
-                    <Form.Checkbox 
-                      toggle
-                      value={convocatoria.categoria}
-                      name="categoria"
-                      checked={convocatoria.categoria}
-                      onChange={ handletoggleChange }
-                      />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <label>¿las categorias manejan diferentes requisitos y/o fechas?</label>
-                    <Form.Checkbox 
-                      toggle 
-                      value={convocatoria.diferentes_req}
-                      name="diferentes_req"
-                      checked={convocatoria.diferentes_req}
-                      onChange={ handletoggleChange }
-                      />
+                    <Form.Dropdown 
+                      label="¿Quien puede participar?"
+                      placeholder='Seleccionar' 
+                      fluid 
+                      multiple 
+                      selection 
+                      name="tipo_participante"
+                      options={QuienParticipaOptions} 
+                      onChange={ handleInputChange }
+                    />
                   </Grid.Column>
                   <Grid.Column>
                     <label>¿Convocatoria maneja pseudonimos?</label>
@@ -157,43 +194,14 @@ export default function InfoConvocatoria() {
                       onChange={ handletoggleChange }
                       />
                   </Grid.Column>
-                  <Grid.Column>
-                    <label>¿Quien puede participar?</label>
-                    <Form.Checkbox 
-                      label='Grupo conformado'
-                      name="grp_confor"
-                      value={convocatoria.grp_confor}
-                      onChange={ handletoggleChange }
-                      />
-                    <Form.Checkbox 
-                      label='Persona juridica'
-                      name="per_jurdca"
-                      value={convocatoria.per_jurdca}
-                      onChange={ handletoggleChange }
-                      />
-                    <Form.Checkbox 
-                      label='Persona natural' 
-                      name="per_ntral" 
-                      value={convocatoria.per_ntral}
-                      onChange={ handletoggleChange }
-                      />
-                  </Grid.Column>
+                  
                 </Grid.Row>
               </Grid>
                 
               <Divider clearing />   
 
               <Form.Group widths="equal">
-                <Form.Dropdown
-                  label="Cobertura"
-                  placeholder='Seleccionar' 
-                  fluid
-                  selection 
-                  options={CoberturaOptions} 
-                  name="cobertura"
-                  value={convocatoria.cobertura}
-                  onChange={ handleInputChange }
-                />        
+                       
                 <Form.Dropdown
                   label="Ciclo"
                   placeholder='Seleccionar' 
@@ -228,6 +236,17 @@ export default function InfoConvocatoria() {
                   options={AreaOptions}
                   onChange={ handleInputChange }
                 />
+
+                <Form.Dropdown
+                  label="Cobertura"
+                  placeholder='Seleccionar' 
+                  fluid
+                  selection 
+                  options={CoberturaOptions} 
+                  name="cobertura"
+                  value={convocatoria.cobertura}
+                  onChange={ handleInputChange }
+                /> 
              </Form.Group>
 
               <Divider clearing />   
@@ -248,31 +267,65 @@ export default function InfoConvocatoria() {
 
               <Divider clearing />   
 
-              <Grid columns={2}>
+              <Grid columns={4}>
                 <Grid.Row>
                   <Grid.Column>  
                     <Form.Select 
-                      placeholder='Seleccionar' 
-                      size='large' 
-                      label="Modalidad de estimulo" 
-                      options={ModalidadEstimuloOptions} 
-                      name="modalidad"
-                      onChange={ handleInputChange }
-                    />
-                  </Grid.Column>
-                  <Grid.Column>  
-                    <Form.Select 
-                      placeholder='Seleccionar' 
-                      label="Tipo de estimulo" 
-                      options={TipoEstimuloOptions} 
-                      style={{ Width: "30%" }}
-                      name="tipo_estimulo"
-                      onChange={ handleInputChange }
-                      />
+                    placeholder='Seleccionar' 
+                    size='large' 
+                    label="Modalidad de estimulo" 
+                    options={ModalidadEstimuloOptions} 
+                    name="modalidad"
+                    onChange={ handleInputChange }
+                  />  
+               
                   </Grid.Column>
                 </Grid.Row>
-              </Grid>  
+              </Grid> 
 
+             
+
+              <Form.Group widths="equal">
+                <Form.Select 
+                  placeholder='Seleccionar' 
+                  label="Tipo de estimulo" 
+                  options={TipoEstimuloOptions} 
+                  name="tipo_estimulo"
+                  onChange={ handleInputChange }
+                />
+
+              
+
+                { convocatoria.tipo_estimulo == 'economico' && 
+                  <>
+                    <Form.Input 
+                      fluid 
+                      placeholder='Search...'
+                      label="Valor total de recursos que entregará la convocatoria"
+                      name="valor_total_entg_convocatoria"
+                    />
+
+                    <Form.Field>
+                      <label>bolsa concursable</label>
+                      <Form.Checkbox 
+                        toggle 
+                        name="bolsa_concursable"
+                        checked={convocatoria.bolsa_concursable}
+                        onChange={ handletoggleChange }
+                      />
+                    </Form.Field>
+
+                    <Form.Input 
+                      fluid 
+                      placeholder='Seleccionar'
+                      label="Numero de estimulos"
+                      name="num_estimulos"
+                      onChange={ handleInputChange }
+                    />
+                  </>
+                }
+              </Form.Group>
+               
               <Divider clearing />   
 
               <Grid columns={1}>

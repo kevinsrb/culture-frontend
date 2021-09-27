@@ -36,6 +36,11 @@
       margin-top: 10px;
   }
 
+  .text_campo_obligatorios{
+    color: red ;
+    font-size: 12px;
+}
+
   .texarea_atividades{
         margin: 0;
         -webkit-appearance: none;
@@ -51,5 +56,4 @@
         line-height: 1.2857;
         resize: vertical;
         width: 100%;
-      
   }

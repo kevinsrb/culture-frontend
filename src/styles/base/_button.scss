@@ -1,0 +1,12 @@
+.btn{
+    border-radius: 20px !important;
+}
+
+.btn-primary {
+    background-color: $azulClarito !important;
+    color: white !important;
+}
+
+.btn-primary:hover{
+    background-color: $azulGov !important;
+}

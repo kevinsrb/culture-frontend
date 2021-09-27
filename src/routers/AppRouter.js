@@ -1,6 +1,6 @@
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import CreateNotice from "../screens/Notices/CreateNotice";
-import InfoConvocatoria from "../screens/Convocatorias/InfoConvocatoria";
+import {InfoConvocatoria} from "../screens/Convocatorias/InfoConvocatoria";
 import {Cronograma}  from "../screens/Cronograma/Cronograma";
 import { CreateCategoria } from "../screens/Categorias/CreateCategoria";
 import { CronogramaActividades } from "../screens/Actividades/CronogramaActividades";

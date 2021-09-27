@@ -73,6 +73,20 @@ export const AreaOptions = [
 ]
 
 
+export const NumeroConvocatoiriaOptions = [
+  { key: '1', value: '1',  text: 'Primera' },
+  { key: '2', value: '2',  text: 'Segunda' },
+  { key: '3', value: '3',  text: 'Tercera' },
+  { key: '4', value: '4',  text: 'Cuarta' }
+]
+
+export const QuienParticipaOptions = [
+  { key: '1', value: 'grupo_conf',  text: 'Grupo conformador' },
+  { key: '2', value: 'pers_ntr',  text: 'Persona natural' },
+  { key: '3', value: 'pers_jrd',  text: 'Persona juridica' }
+]
+
+
 
  
 

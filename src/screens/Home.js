@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
+import * as actions from './../store/actions/userAction';
 import axios from "axios";
 import { Form, Image, Header, Input, Checkbox, Button, Grid } from "semantic-ui-react";
 import loginimage from "../assets/login.png";
