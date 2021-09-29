@@ -8,6 +8,8 @@ import OlvidoContraseña from '../screens/Login/OlvidoContraseña';
 import CrearUsuario from '../screens/Login/CrearUsuario';
 import Navbar from "../components/NavBar";
 import Home from "../screens/Home";
+import { CargarArchivos } from "../screens/CargarArchivos/CargarArchivos";
+
 
 export const AppRouter = () => {
     return (
@@ -17,6 +19,10 @@ export const AppRouter = () => {
                     <Route path="/noticias">
                         <Navbar />
                         <CreateNotice />
+                    </Route>
+                    <Route path="/cargarArchivos">
+                        <Navbar />
+                        <CargarArchivos />
                     </Route>
                     <Route path="/infoconvocatorias">
                         <Navbar />
