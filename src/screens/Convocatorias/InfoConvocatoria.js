@@ -15,22 +15,23 @@ export function InfoConvocatoria() {
   const objConvocatoria = { 
     numero_convocatoria: '',
     linea_convocatoria: '',
-    categoria_linea_convocatoria: '', 
+    categoria_linea_convocatoria: {}, 
     entidad: '',
     pseudonimos: false,
-    tipo_participante: [],
+    tipo_participante: { "grupo": false, "juridica" : false,  "natural" : false },
+    cobertura: '',
     ciclo: '',
     linea_estgica: '',
     area: '',
-    cobertura: '',
     convenido: false,
     modalidad: '',
     tipo_estimulo: '',
+    valor_total_entg: 0,
     bolsa_concursable: false,
     num_estimulos: '',
-    descrip_corta: '',
+    descripcion_corta: '',
     perfil_participante: '',
-    no_participa: '',
+    noparticipa: '',
   };
 
 
@@ -49,8 +50,6 @@ export function InfoConvocatoria() {
   const cargarSelectLineaConvocatoria = async() =>{
     const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
     .then(({data}) =>  { 
-      console.log(data.data)
-
       LineaConvocatoriaOptionsMap = data.data.map(ds => {
         return {
           key: ds.idlineaconvocatoria,
@@ -65,27 +64,33 @@ export function InfoConvocatoria() {
     })
   }
 
-
   const handleCreateConvocatoria = async (e) => {  
     e.preventDefault();
     console.log(convocatoria)
+
+    //convocatoria.categoria_linea_convocatoria = JSON.parse(convocatoria.categoria_linea_convocatoria 
     // const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
-    // .then((response) =>  {
-    //   console.log(response)
-    //   //ObjNotificaciones.MSG_SUCCESS('success', response.data.mensaje)
-    //   history.push("/CreateCategoria");
+    // .then((data) =>  {
+
+    //   console.log(data)
+    //   //ObjNotificaciones.MSG_SUCCESS('success', data.mensaje)
+    //   //history.push("/cronogramaActividades");
     // })
     // .catch(function (error) {
     //   console.error(error);
-    //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' ,error.data.mensaje)
+    //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
     // })
-    //ObjNotificaciones.MSG_SUCCESS('success', "Convocatoria creada correctamente")
-    //history.push("/cronogramaActividades");
   };
 
     
 
   const handleInputChange = (event, result) => {
+    const { name, value } = result || event.target;
+    console.log(value, name);
+    setConvocatoria({ ...convocatoria, [name]: value });
+  };
+
+  const handleInputJsonChange = (event, result) => {
     const { name, value } = result || event.target;
     console.log(value, name);
     setConvocatoria({ ...convocatoria, [name]: value });
@@ -152,13 +157,24 @@ export function InfoConvocatoria() {
                   options={ lineaConvocatoriaOptions }
                 />
 
-                <Form.Select 
+                {/* <Form.Select 
                   placeholder='Seleccionar' 
                   label="Categorías línea convocatoria" 
                   name="categoria_linea_convocatoria"
                   onChange={ handleInputChange }
                   options={ categoriasLineaconvocatoria }
 
+                /> */}
+
+                <Form.Dropdown 
+                  label="Categorías línea convocatoria"
+                  placeholder='Seleccionar' 
+                  fluid 
+                  multiple 
+                  selection 
+                  name="categoria_linea_convocatoria"
+                  options={categoriasLineaconvocatoria} 
+                  onChange={ handleInputChange }
                 />
 
                 <Form.Select 
@@ -302,7 +318,8 @@ export function InfoConvocatoria() {
                       fluid 
                       placeholder='Search...'
                       label="Valor total de recursos que entregará la convocatoria"
-                      name="valor_total_entg_convocatoria"
+                      name="valor_total_entg"
+                      onChange={ handleInputChange }
                     />
 
                     <Form.Field>
@@ -333,7 +350,7 @@ export function InfoConvocatoria() {
                   <Grid.Column>  
                     <Form.TextArea 
                       label="Descripcion corta" 
-                      name="descrip_corta" 
+                      name="descripcion_corta" 
                       onChange={ handleInputChange }
                       />
                   </Grid.Column> 
@@ -352,7 +369,7 @@ export function InfoConvocatoria() {
                   <Grid.Column>  
                     <Form.TextArea 
                     label="¿Quien no puede participar?"
-                     name="no_participa" 
+                     name="noparticipa" 
                      onChange={ handleInputChange }
                      />
                   </Grid.Column>
