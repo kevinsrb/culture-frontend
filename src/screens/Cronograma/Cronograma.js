@@ -1,5 +1,7 @@
 import React from "react";
-import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon } from "semantic-ui-react";
+import { useHistory } from "react-router-dom";
+import axios from "axios";
+import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider } from "semantic-ui-react";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!'
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -30,18 +32,31 @@ export const StyleWrapper = styled.div`
     background: white;
     color: #632264;
     border-color: #632264;
+    padding-left: 17%;
+    padding-right: 17%;
   }
   .fc-button.fc-prev-button,
   .fc-button.fc-next-button {
     background: white;
     color: #632264;
     border-color: #632264;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .fc-button.fc-prev-button span,
+  .fc-button.fc-next-button span {
+    margin-left: 0;
   }
   .fc-button.fc-button-primary.fc-button-active {
     background: #632264;
+    padding-left: 17%;
+    padding-right: 17%;
   }
   .fc-toolbar-title {
     text-transform: capitalize;
+    font-weight: normal;
+    font-size: 22px;
+    letter-spacing: 0px;
   }
   .fc-col-header-cell.fc-day.fc-day-sun,
   .fc-col-header-cell.fc-day.fc-day-mon,
@@ -70,11 +85,20 @@ export const StyleWrapper = styled.div`
     right: 0;
     height: 100%;
   }
+  .fc-toolbar-chunk {
+    width: 22%;
+  }
+  .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-top a {
+    background: #632264;
+    color: white;
+    border-radius: 1rem;
+  }
 `;
 
 export const Cronograma = () => {
   const CalendarRef = React.useRef();
-  const [actividad, setActividad] = React.useState("");
+  const history = useHistory();
+  const [actividad, setActividad] = React.useState({ text: "" });
   const [open, setOpen] = React.useState(false);
   const [openDatepicker1, setOpenDatepicker1] = React.useState(false);
   const [openDatepicker2, setOpenDatepicker2] = React.useState(false);
@@ -82,20 +106,27 @@ export const Cronograma = () => {
   const [startDate2, setStartDate2] = React.useState(new Date());
   const [verFechas, setVerFechas] = React.useState(true);
   const [verHoras, setVerHoras] = React.useState(true);
-  const [fechaClickeada, setFechaClickeada] = React.useState('');
+  const [fechaClickeada, setFechaClickeada] = React.useState("");
   // FECHA DE INICIO
-  const [fechainiciodia, setFechainiciodia] = React.useState(moment().format("DD"));
-  const [fechainiciomes, setFechainiciomes] = React.useState(moment().format("MM"));
-  const [fechainicioaño, setFechainicioaño] = React.useState(moment().format("YYYY"));
+  const [fechainiciodia, setFechainiciodia] = React.useState();
+  const [fechainiciomes, setFechainiciomes] = React.useState();
+  const [fechainicioaño, setFechainicioaño] = React.useState();
   // FECHA DE FINALIZACION
-  const [fechafinaldia, setFechafinaldia] = React.useState(moment().endOf("month").format("DD"));
-  const [fechafinalmes, setFechafinalmes] = React.useState(moment().format("MM"));
-  const [fechafinalaño, setFechafinalaño] = React.useState(moment().format("YYYY"));
+  const [fechafinaldia, setFechafinaldia] = React.useState();
+  const [fechafinalmes, setFechafinalmes] = React.useState();
+  const [fechafinalaño, setFechafinalaño] = React.useState();
   //  HORA FINAL
-  const [hora, setHora] = React.useState("");
-  const [minuto, setMinuto] = React.useState("");
+  const [hora, setHora] = React.useState("23");
+  const [minuto, setMinuto] = React.useState("59");
   // EVENTOS
   const [eventosCalendario, setEventosCalendar] = React.useState([]);
+  // CONTEO PARA GUARDAR LAS FECHAS
+  const [conteoFechas, setConteoFechas] = React.useState(0);
+
+  function seleccionarActividad(event, result) {
+    let seleccionada = result.options.filter((data) => data.value === result.value);
+    return setActividad(seleccionada[0]);
+  }
 
   function onFechaSeleccionada1(e) {
     setStartDate1(e);
@@ -105,11 +136,8 @@ export const Cronograma = () => {
     let año = fecha.substring(0, 4);
     console.log(año, mes, dia, "fecha1 que llega");
     setFechainiciodia(dia);
-    console.log(fechainiciodia);
     setFechainiciomes(mes);
-    console.log(fechainiciomes);
     setFechainicioaño(año);
-    console.log(fechainicioaño);
     setOpenDatepicker1(false);
   }
   function onFechaSeleccionada2(e) {
@@ -117,43 +145,76 @@ export const Cronograma = () => {
     let fecha = moment(e).format("YYYYMMDD");
     console.log(fecha, `${fechainicioaño}${fechainiciomes}${fechainiciodia}`, "fecha 2 tomada");
     if (parseInt(`${fechainicioaño}${fechainiciomes}${fechainiciodia}`) > parseInt(fecha)) {
-      console.error("FECHA INVALIDA");
+      return console.error("FECHA INVALIDA");
     }
     setFechafinaldia(fecha.substring(6, 8));
     setFechafinalmes(fecha.substring(4, 6));
     setFechafinalaño(fecha.substring(0, 4));
     setOpenDatepicker2(false);
   }
-  function grabarActividades() {
-    setOpen(false);
+  function adicionarActividad() {
     let id = eventosCalendario.length;
-    if (hora.trim() === "") setHora("00");
-    if (minuto.trim() === "") setMinuto("00");
-    // setEventosCalendar([{ id:id,  title:actividad, start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`, end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}` , allDay: false }])
     const calendarApi = CalendarRef.current.getApi();
-    calendarApi.addEvent({
+    if (actividad.text.trim() === "") {
+      return console.error("falta diligenciar la actividad");
+    }
+    setOpen(false);
+    // setEventosCalendar([
+    //   {
+    //     id: id,
+    //     title: actividad.text,
+    //     start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
+    //     end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
+    //     allDay: false,
+    //   },
+    // ]);
+    return calendarApi.addEvent({
       id: id,
-      title: actividad,
+      title: actividad.text,
       start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
       end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
       allDay: false,
     });
   }
+  async function grabarActividades() {
+    let id_convocatoria = 1;
+    console.log(eventosCalendario);
+    let calendaroptions = CalendarRef.current.getApi();
+    console.log(calendaroptions.getEvent());
+    // try {
+    //   await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/fechas`, {
+    //     id_convocatoria,
+    //     clave: eventosCalendario[conteoFechas].title,
+    //     valormin: eventosCalendario[conteoFechas].start,
+    //     valormax: eventosCalendario[conteoFechas].end,
+    //   });
+    //   console.log(conteoFechas, actividad);
+    //   if (eventosCalendario.length - 1 === conteoFechas) {
+    //     history.push("/infoconvocatorias");
+    //   }
+    //   setConteoFechas(conteoFechas + 1);
+    //   return grabarActividades();
+    // } catch (error) {
+    //   return console.error(error);
+    // }
+  }
   return (
-    <div>
-      <Segment>
-        <StyleWrapper>
+    <div style={{ padding: "2%" }}>
+      <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }}>
+        <Header style={{ margin: 0 }}>Cronograma</Header>
+        <Divider className="divider-admin-convocatorias" />
+        <StyleWrapper style={{ padding: "1%" }}>
           <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             weekends={true}
             droppable={true}
             locale="es"
             height={450}
             headerToolbar={{
-              start: "title",
-              center: "dayGridMonth,timeGridWeek,timeGridDay",
-              end: "today prev,next",
+              start: "dayGridMonth,timeGridWeek,timeGridDay",
+              center: "title",
+              end: "prev,next today",
             }}
             buttonText={{
               today: "Hoy",
@@ -162,32 +223,33 @@ export const Cronograma = () => {
               day: "Día",
             }}
             dateClick={(info) => {
-              let fecha = moment(info.date).format('YYYY-MM-DD');
-              setFechaClickeada(fecha);
-              setOpen(true);
+              setFechainicioaño(moment(info.date).format("YYYY"));
+              setFechainiciomes(moment(info.date).format("MM"));
+              setFechainiciodia(moment(info.date).format("DD"));
+              return setOpen(true);
             }}
             events={eventosCalendario}
-            eventColor="blue"
+            eventColor="#1FAEEF"
             ref={CalendarRef}
           />
         </StyleWrapper>
+        <Grid>
+          <Grid.Row>
+            <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
+              Atras
+            </Button>
+            <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
+              Guardar y continuar
+            </Button>
+          </Grid.Row>
+        </Grid>
       </Segment>
       <Modal open={open} size="large">
         <Modal.Description className="container-modal-description">
-          <div className="container-titulos-modal-actividades">
-            <Header as="h2">
-              Seleccionar Actividades
-              <Header.Subheader>Seleccionar las actividades que se van a asignar</Header.Subheader>
-            </Header>
-          </div>
+          <Header>Seleccionar Actividades</Header>
+          <Divider className="divider-admin-convocatorias" />
           <Header sub>Lista de actividades</Header>
-          <Select
-            fluid
-            label="Gender"
-            options={options}
-            placeholder="Actividades"
-            onChange={(e, { value }) => setActividad(value.toString())}
-          />
+          <Select fluid label="Gender" options={options} placeholder="Seleccionar" onChange={seleccionarActividad} />
           <div className="container-modal-fechas-checkbox">
             <Form className="container-fechas-modal-actividades">
               <div className="container-clasefecha-modal">
@@ -223,7 +285,7 @@ export const Cronograma = () => {
                       size="large"
                       color="blue"
                       className="icono-fechas-actividades"
-                      onMouseOver={() => setOpenDatepicker1(true)}
+                      onClick={() => setOpenDatepicker1(!openDatepicker1)}
                     />
                     {openDatepicker1 ? (
                       <div className="container-datepicker">
@@ -266,7 +328,7 @@ export const Cronograma = () => {
                       size="large"
                       color="blue"
                       className="icono-fechas-actividades"
-                      onMouseOver={() => setOpenDatepicker2(true)}
+                      onClick={() => setOpenDatepicker2(!openDatepicker2)}
                     />
                     {openDatepicker2 ? (
                       <div className="container-datepicker">
@@ -320,7 +382,7 @@ export const Cronograma = () => {
             <Button className="botones-redondos" basic color="blue" onClick={() => setOpen(false)}>
               Cancelar
             </Button>
-            <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
+            <Button className="botones-redondos" color="blue" onClick={adicionarActividad}>
               Asignar Actividades
             </Button>
           </Grid>

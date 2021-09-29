@@ -1,84 +1,157 @@
 .registos-adminconvocatoria {
-    display: flex !important;
-    flex-direction: row;
-    justify-content: end;
+  display: flex !important;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .select-registros-adminconvocatoria {
-    flex: 0.1;
+  flex: 0.1;
 }
 
 .celda-estatica-adminconvocatoria {
-    position: absolute;
+  position: absolute;
 }
 
 .no-padding-left {
-    padding-left: 0px !important;
+  padding-left: 0px !important;
 }
 
 .no-padding-rigth {
-    padding-right: 0px !important;
+  padding-right: 0px !important;
 }
 
 .table-adminconvocatorias-fixed {
-    height: 30px;
+  height: 30px;
 }
 
 .table-adminconvocatorias-fixed thead tr {
-    height: 30px;
+  height: 30px;
 }
 
 .table-adminconvocatorias-fixed tbody tr td {
-    height: 30px;
+  height: 30px;
 }
 
 .table-adminconvocatorias-fixed tr {
-    line-height: 26px;
+  line-height: 26px;
 }
 
+// .table-adminconvocatorias-fixed th {
+//   position: sticky;
+//   top: 0;
+// }
+
 .table-adminconvocatorias-scrollable {
-    width: 100px;
-    border-spacing: 0;
+  width: 100px;
+  border-spacing: 0;
 }
 
 .table-adminconvocatorias-scrollable thead tr {
-    width: 100px;
+  width: 100px;
 }
 
+.table-adminconvocatorias-scrollable tr td {
+  border-top: 0px !important;
+}
+
+.table-adminconvocatorias-fixed tr td {
+  border-top: 0px !important;
+}
+// .ui.table tr td {
+//   border-bottom: 0px !important;
+// }
+
+// .ui.table tr td {
+//     border-top: 0px !important;
+// }
+
+// .table-adminconvocatorias-scrollable th {
+//   position: sticky;
+//   top: 0;
+// }
+
 .table-adminconvocatorias-scrollable tbody tr td {
-    white-space: nowrap;
+  white-space: nowrap;
+}
+
+.table-adminconvocatorias-scrollable thead th {
+  white-space: nowrap;
 }
 
 .table-adminconvocatorias-scrollable tr {
-    line-height: 12px;
+  line-height: 12px;
 }
 
 .container-scroll {
-    width: 200px;
-    overflow-x: scroll;
+  width: 200px;
+  overflow-x: scroll;
 }
 
 .container-pagination-adminconvocatorias {
-    display: flex !important;
-    justify-content: flex-end;
+  display: flex !important;
+  justify-content: flex-end;
 }
 
 .container-grid-filtros {
-    background-color: #F0F6FB;
+  background-color: #f0f6fb;
 }
 
 .button-filtro-adminconvocatorias {
-    background-color: transparent !important;
-    color: #1FAEEF !important;
+  background-color: transparent !important;
+  color: #1faeef !important;
 }
 
 .divider-admin-convocatorias {
-    border-top: 1px solid #E2E2E3 !important;
-    margin-bottom: 0% !important;
-    margin-top: 0% !important;
+  border-top: 1px solid #e2e2e3 !important;
+  margin-bottom: 0% !important;
+  margin-top: 0% !important;
 }
 
 .botones-acciones {
-    background-color: transparent !important;
-    padding: 0px !important;
+  background-color: transparent !important;
+  padding: 0px !important;
+}
+
+.container-scrollable-adminconvocatorias {
+  overflow-y: scroll;
+  height: 380px;
+}
+
+.container-scrollable-adminconvocatorias::-webkit-scrollbar-thumb {
+  background: #1faeef;
+  border-radius: 10px;
+}
+
+.container-scroll::-webkit-scrollbar-thumb {
+  background: #1faeef;
+  border-radius: 10px;
+}
+
+.boton-borrar-adminconvocatorias {
+  color: #db2828 !important;
+}
+
+.containar-header-eliminar-adminconvocatoria {
+    margin-top: 2% !important;
+    color: #9F0505 !important;
+    font-weight: 600 !important;
+    font-size: 25px !important;
+    font-style: normal;
+}
+
+.container-subheader-eliminar-adminconvocatoria {
+    margin: 0 !important;
+    color: #1B1C1D;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0;
+    font-style: normal;
+}
+
+.container-convocatoria-eliminar-adminconvocatoria {
+    margin: 0 !important;
+    font-size: 14px;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: #1B1C1D;
 }

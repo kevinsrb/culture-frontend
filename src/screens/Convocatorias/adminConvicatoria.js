@@ -197,6 +197,7 @@ export const AdminConvocatorias = () => {
   const [filtroentidad, setFiltroEntidad] = React.useState("");
   const [filtrolineaestrategica, setFiltroLineaestrategica] = React.useState("");
   const [filtroarea, setFiltroArea] = React.useState("");
+  const [openModalBorrar, setOpenModalBorrar] = React.useState(false);
 
   function primeroDatostabla() {
     let copy = options.map((data) => data);
@@ -241,15 +242,10 @@ export const AdminConvocatorias = () => {
         <Grid columns={4}>
           <Grid.Row>
             <Grid.Column>
-              <Header style={{ "padding-left": "2%" }}>Gestionar convocatorias</Header>
+              <Header style={{ paddingLeft: "2%" }}>Gestionar convocatorias</Header>
             </Grid.Column>
           </Grid.Row>
           <Divider className="divider-admin-convocatorias" />
-          <Grid.Row columns={2}>
-            <Grid.Column>
-              <Header>Filtrar por codigo de convocatoria, nombre o palabra clave</Header>
-            </Grid.Column>
-          </Grid.Row>
           <Grid.Row>
             <Grid.Column className="no-padding-rigth">
               <Input icon="search" placeholder="Codigo/Nombre" fluid onChange={filtradodeinformacion} />
@@ -327,15 +323,19 @@ export const AdminConvocatorias = () => {
           </Grid>
         ) : null}
         <Grid>
-          <Grid.Row>
+          <Grid.Row className="container-scrollable-adminconvocatorias">
             <Grid.Column width={5} className="no-padding-left no-padding-rigth">
-              <Table className="table-adminconvocatorias-fixed">
+              <Table className="table-adminconvocatorias-fixed" striped singleLine>
+                <Table.Header>
+                  <Table.HeaderCell width={1}>No.</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Nombre</Table.HeaderCell>
+                </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
                       <Table.Row key={datos.value}>
-                        <Table.Cell>{datos.value}</Table.Cell>
-                        <Table.Cell>{datos.nombre}</Table.Cell>
+                        <Table.Cell width={1}>{datos.value}</Table.Cell>
+                        <Table.Cell width={2}>{datos.nombre}</Table.Cell>
                       </Table.Row>
                     ))
                   ) : (
@@ -347,15 +347,27 @@ export const AdminConvocatorias = () => {
               </Table>
             </Grid.Column>
             <Grid.Column className="container-scroll no-padding-left no-padding-rigth" width={8}>
-              <Table className="table-adminconvocatorias-scrollable">
+              <Table className="table-adminconvocatorias-scrollable" striped singleLine>
+                <Table.Header>
+                  <Table.HeaderCell width={1}>Codigo</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Fecha</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Estado</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Publicada</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Entidad</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Linea estratégica</Table.HeaderCell>
+                  <Table.HeaderCell width={2}>Area</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Creado por</Table.HeaderCell>
+                </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
                       <Table.Row key={datos.value}>
-                        <Table.Cell>{datos.codigo}</Table.Cell>
-                        <Table.Cell>{datos.fecha}</Table.Cell>
-                        <Table.Cell style={{ color: coloresEstado[datos.estado] }}>{datos.estado}</Table.Cell>
-                        <Table.Cell>
+                        <Table.Cell width={1}>{datos.codigo}</Table.Cell>
+                        <Table.Cell width={1}>{datos.fecha}</Table.Cell>
+                        <Table.Cell width={1} style={{ color: coloresEstado[datos.estado] }}>
+                          {datos.estado}
+                        </Table.Cell>
+                        <Table.Cell width={1}>
                           <Checkbox
                             toggle
                             name="publicada"
@@ -363,10 +375,10 @@ export const AdminConvocatorias = () => {
                             onChange={() => handletoggleChange(datos)}
                           />
                         </Table.Cell>
-                        <Table.Cell>{datos.entidad}</Table.Cell>
-                        <Table.Cell>{datos.linea_estrategica}</Table.Cell>
-                        <Table.Cell>{datos.area}</Table.Cell>
-                        <Table.Cell>{datos.creadopor}</Table.Cell>
+                        <Table.Cell width={1}>{datos.entidad}</Table.Cell>
+                        <Table.Cell width={2}>{datos.linea_estrategica}</Table.Cell>
+                        <Table.Cell width={2}>{datos.area}</Table.Cell>
+                        <Table.Cell width={1}>{datos.creadopor}</Table.Cell>
                       </Table.Row>
                     ))
                   ) : (
@@ -378,7 +390,12 @@ export const AdminConvocatorias = () => {
               </Table>
             </Grid.Column>
             <Grid.Column width={3} className="no-padding-left no-padding-rigth">
-              <Table className="table-adminconvocatorias-fixed">
+              <Table className="table-adminconvocatorias-fixed" striped singleLine>
+                <Table.Header>
+                  <Table.HeaderCell width={1}>Ver</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Editar</Table.HeaderCell>
+                  <Table.HeaderCell width={1}>Borrar</Table.HeaderCell>
+                </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
@@ -387,10 +404,14 @@ export const AdminConvocatorias = () => {
                           <Button className="botones-acciones" icon="eye" />
                         </Table.Cell>
                         <Table.Cell>
-                          <Button className="botones-acciones" icon="eye" />
+                          <Button className="botones-acciones" icon="pencil" />
                         </Table.Cell>
                         <Table.Cell>
-                          <Button className="botones-acciones" icon="eye" />
+                          <Button
+                            className="botones-acciones boton-borrar-adminconvocatorias"
+                            icon="trash alternate outline"
+                            onClick={() => setOpenModalBorrar(!openModalBorrar)}
+                          />
                         </Table.Cell>
                       </Table.Row>
                     ))
@@ -410,6 +431,32 @@ export const AdminConvocatorias = () => {
           </Grid.Row>
         </Grid>
       </Segment>
+      <Modal open={openModalBorrar} size="small">
+        <Modal.Description>
+          <div className="container-titulos-modal-actividades">
+            <Header className="containar-header-eliminar-adminconvocatoria">¿Desea eliminar la convocatoria?</Header>
+            <Header className="container-subheader-eliminar-adminconvocatoria">
+              Haz clic en aceptar, si estas seguro de borrar
+            </Header>
+            <Header className="container-convocatoria-eliminar-adminconvocatoria">Nombre convocatoria</Header>
+          </div>
+        </Modal.Description>
+        <Modal.Actions>
+          <Grid className="contenido-acciones-modal-actividades" centered>
+            <Button
+              className="botones-redondos"
+              basic
+              color="blue"
+              onClick={() => setOpenModalBorrar(!openModalBorrar)}
+            >
+              Cancelar
+            </Button>
+            <Button className="botones-redondos" color="blue" onClick={() => setOpenModalBorrar(!openModalBorrar)}>
+              Aceptar
+            </Button>
+          </Grid>
+        </Modal.Actions>
+      </Modal>
     </div>
   );
 };
