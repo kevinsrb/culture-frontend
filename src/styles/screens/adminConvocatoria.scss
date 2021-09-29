@@ -1,0 +1,84 @@
+.registos-adminconvocatoria {
+    display: flex !important;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.select-registros-adminconvocatoria {
+    flex: 0.1;
+}
+
+.celda-estatica-adminconvocatoria {
+    position: absolute;
+}
+
+.no-padding-left {
+    padding-left: 0px !important;
+}
+
+.no-padding-rigth {
+    padding-right: 0px !important;
+}
+
+.table-adminconvocatorias-fixed {
+    height: 30px;
+}
+
+.table-adminconvocatorias-fixed thead tr {
+    height: 30px;
+}
+
+.table-adminconvocatorias-fixed tbody tr td {
+    height: 30px;
+}
+
+.table-adminconvocatorias-fixed tr {
+    line-height: 26px;
+}
+
+.table-adminconvocatorias-scrollable {
+    width: 100px;
+    border-spacing: 0;
+}
+
+.table-adminconvocatorias-scrollable thead tr {
+    width: 100px;
+}
+
+.table-adminconvocatorias-scrollable tbody tr td {
+    white-space: nowrap;
+}
+
+.table-adminconvocatorias-scrollable tr {
+    line-height: 12px;
+}
+
+.container-scroll {
+    width: 200px;
+    overflow-x: scroll;
+}
+
+.container-pagination-adminconvocatorias {
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+.container-grid-filtros {
+    background-color: #F0F6FB;
+}
+
+.button-filtro-adminconvocatorias {
+    background-color: transparent !important;
+    color: #1FAEEF !important;
+}
+
+.divider-admin-convocatorias {
+    border-top: 1px solid #E2E2E3 !important;
+    margin-bottom: 0% !important;
+    margin-top: 0% !important;
+}
+
+.botones-acciones {
+    background-color: transparent !important;
+    padding: 0px !important;
+}

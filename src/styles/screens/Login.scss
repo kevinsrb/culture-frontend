@@ -11,12 +11,12 @@
 }
 
 .container-form-login {
-  width: 38%;
+  width: 70%;
   align-items: center;
 }
 
 .sub-header-login {
-  padding-top: 4%;
+  padding-top: 4% !important;
 }
 
 .container-inputs-login {
@@ -54,6 +54,11 @@
   width: 100%;
   display: flex;
   justify-content: space-between;
+}
+
+.container-center {
+  display: flex;
+  justify-content: center;
 }
 
 .boton-ingresar-login {
@@ -96,5 +101,10 @@
 }
 
 .form-creacion-cuentas {
-  width: 45%;
+  width: 70%;
+}
+
+.image-logo-container-login {
+  display: flex !important;
+  width: 50%;
 }

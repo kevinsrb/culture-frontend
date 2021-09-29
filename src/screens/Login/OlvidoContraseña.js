@@ -21,11 +21,11 @@ export default function OlvidoContraseña() {
           </Grid.Column>
           <Grid.Column className="no-padding-right no-padding-left container-form-creacion-cuentas">
             <Form className="container-form-login">
-              <Form.Field>
-                <Image src={logo} fluid />
+              <Form.Field className="container-center" >
+                <Image className="image-logo-container-login" src={logo} />
               </Form.Field>
               <Form.Field>
-                <Header as="h2">
+                <Header as="h2" className="sub-header-login">
                   Convocatorias de fomento y estimulos para el arte y la cultura
                   <Header.Subheader className="sub-header-login">Ingrese el correo electrónico</Header.Subheader>
                 </Header>

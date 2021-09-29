@@ -8,28 +8,31 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
 import es from "date-fns/locale/es";
-import styled from '@emotion/styled';
-
+import styled from "@emotion/styled";
+// import Actividades from "./../../../Actividades.json";
 
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
-import '@fullcalendar/daygrid/main.css';
+import "@fullcalendar/daygrid/main.css";
 
 registerLocale("es", es);
 
 const options = [
-  { key: "m", text: "Male", value: "male" },
-  { key: "f", text: "Female", value: "female" },
-  { key: "o", text: "Other", value: "other" },
+  { key: 1, value: 1, text: "Observaciones a los lineamientos" },
+  { key: 2, value: 2, text: "Observaciones al informe final de verificación de documentos" },
+  { key: 3, value: 3, text: "Informe evaluación" },
+  { key: 4, value: 4, text: "Cierre" },
+  { key: 5, value: 5, text: "Observaciones al informe de evaluación" },
 ];
 
 export const StyleWrapper = styled.div`
-  .fc-button.fc-button-primary{
+  .fc-button.fc-button-primary {
     background: white;
     color: #632264;
     border-color: #632264;
   }
-  .fc-button.fc-prev-button, .fc-button.fc-next-button {
+  .fc-button.fc-prev-button,
+  .fc-button.fc-next-button {
     background: white;
     color: #632264;
     border-color: #632264;
@@ -40,12 +43,16 @@ export const StyleWrapper = styled.div`
   .fc-toolbar-title {
     text-transform: capitalize;
   }
-  .fc-col-header-cell.fc-day.fc-day-sun,  .fc-col-header-cell.fc-day.fc-day-mon, .fc-col-header-cell.fc-day.fc-day-tue, 
-  .fc-col-header-cell.fc-day.fc-day-wed, .fc-col-header-cell.fc-day.fc-day-thu, .fc-col-header-cell.fc-day.fc-day-fri,
+  .fc-col-header-cell.fc-day.fc-day-sun,
+  .fc-col-header-cell.fc-day.fc-day-mon,
+  .fc-col-header-cell.fc-day.fc-day-tue,
+  .fc-col-header-cell.fc-day.fc-day-wed,
+  .fc-col-header-cell.fc-day.fc-day-thu,
+  .fc-col-header-cell.fc-day.fc-day-fri,
   .fc-col-header-cell.fc-day.fc-day-sat {
     background: #632264;
   }
-  .fc-col-header-cell-cushion  {
+  .fc-col-header-cell-cushion {
     color: white;
     text-transform: uppercase;
   }
@@ -61,13 +68,13 @@ export const StyleWrapper = styled.div`
     top: 0;
     left: 0;
     right: 0;
-    height: 100%; 
+    height: 100%;
   }
 `;
 
 export const Cronograma = () => {
   const CalendarRef = React.useRef();
-  const [actividad, setActividad] = React.useState('');
+  const [actividad, setActividad] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [openDatepicker1, setOpenDatepicker1] = React.useState(false);
   const [openDatepicker2, setOpenDatepicker2] = React.useState(false);
@@ -75,6 +82,7 @@ export const Cronograma = () => {
   const [startDate2, setStartDate2] = React.useState(new Date());
   const [verFechas, setVerFechas] = React.useState(true);
   const [verHoras, setVerHoras] = React.useState(true);
+  const [fechaClickeada, setFechaClickeada] = React.useState('');
   // FECHA DE INICIO
   const [fechainiciodia, setFechainiciodia] = React.useState(moment().format("DD"));
   const [fechainiciomes, setFechainiciomes] = React.useState(moment().format("MM"));
@@ -84,8 +92,8 @@ export const Cronograma = () => {
   const [fechafinalmes, setFechafinalmes] = React.useState(moment().format("MM"));
   const [fechafinalaño, setFechafinalaño] = React.useState(moment().format("YYYY"));
   //  HORA FINAL
-  const [hora, setHora] = React.useState('');
-  const [minuto, setMinuto] = React.useState('');
+  const [hora, setHora] = React.useState("");
+  const [minuto, setMinuto] = React.useState("");
   // EVENTOS
   const [eventosCalendario, setEventosCalendar] = React.useState([]);
 
@@ -119,11 +127,17 @@ export const Cronograma = () => {
   function grabarActividades() {
     setOpen(false);
     let id = eventosCalendario.length;
-    if (hora.trim() === '') setHora('00');
-    if (minuto.trim() === '') setMinuto('00');
-    setEventosCalendar([{ id:id,  title:actividad, start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`, end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}` , allDay: false }])
-    const calendarApi = CalendarRef.current.getApi()
-    calendarApi.addEvent({ id:id,  title:actividad, start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`, end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}` , allDay: false });
+    if (hora.trim() === "") setHora("00");
+    if (minuto.trim() === "") setMinuto("00");
+    // setEventosCalendar([{ id:id,  title:actividad, start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`, end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}` , allDay: false }])
+    const calendarApi = CalendarRef.current.getApi();
+    calendarApi.addEvent({
+      id: id,
+      title: actividad,
+      start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
+      end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
+      allDay: false,
+    });
   }
   return (
     <div>
@@ -148,6 +162,8 @@ export const Cronograma = () => {
               day: "Día",
             }}
             dateClick={(info) => {
+              let fecha = moment(info.date).format('YYYY-MM-DD');
+              setFechaClickeada(fecha);
               setOpen(true);
             }}
             events={eventosCalendario}
@@ -165,7 +181,13 @@ export const Cronograma = () => {
             </Header>
           </div>
           <Header sub>Lista de actividades</Header>
-          <Select fluid label="Gender" options={options} placeholder="Actividades" onChange={(e, {value}) => setActividad(value.toString())} />
+          <Select
+            fluid
+            label="Gender"
+            options={options}
+            placeholder="Actividades"
+            onChange={(e, { value }) => setActividad(value.toString())}
+          />
           <div className="container-modal-fechas-checkbox">
             <Form className="container-fechas-modal-actividades">
               <div className="container-clasefecha-modal">
@@ -274,7 +296,12 @@ export const Cronograma = () => {
                     </Form.Field>
                     <Form.Field className="input-container-horas">
                       <label>Minutos</label>
-                      <Input placeholder="MM" maxLength="2" onChange={(e) => setMinuto(e.target.value)} value={minuto} />
+                      <Input
+                        placeholder="MM"
+                        maxLength="2"
+                        onChange={(e) => setMinuto(e.target.value)}
+                        value={minuto}
+                      />
                     </Form.Field>
                   </React.Fragment>
                 ) : null}
