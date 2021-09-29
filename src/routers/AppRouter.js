@@ -4,6 +4,7 @@ import {InfoConvocatoria} from "../screens/Convocatorias/InfoConvocatoria";
 import {Cronograma}  from "../screens/Cronograma/Cronograma";
 import { CreateCategoria } from "../screens/Categorias/CreateCategoria";
 import { CronogramaActividades } from "../screens/Actividades/CronogramaActividades";
+import { AdminConvocatorias } from "../screens/Convocatorias/adminConvicatoria";
 import OlvidoContraseña from '../screens/Login/OlvidoContraseña';
 import CrearUsuario from '../screens/Login/CrearUsuario';
 import Navbar from "../components/NavBar";
@@ -33,6 +34,10 @@ export const AppRouter = () => {
                     <Route path="/cronogramaActividades">
                         <Navbar />
                         <CronogramaActividades />
+                    </Route>
+                    <Route path="/adminconvocatorias">
+                        <Navbar />
+                        <AdminConvocatorias />
                     </Route>
                     <Route path="/OlvidoContraseña">
                         <OlvidoContraseña />

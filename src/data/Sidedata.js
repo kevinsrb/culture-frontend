@@ -33,5 +33,11 @@ export const SidebarData = [
     path: '/cronogramaActividades',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
+  },
+  {
+    title: 'Amin convocatorias',
+    path: '/adminconvocatorias',
+    icon: <IoIcons.IoIosPaper />,
+    cName: 'nav-text'
   }
 ];
