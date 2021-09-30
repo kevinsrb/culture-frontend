@@ -158,45 +158,48 @@ export const Cronograma = () => {
     if (actividad.text.trim() === "") {
       return console.error("falta diligenciar la actividad");
     }
+    calendarApi.unselect();
     setOpen(false);
-    // setEventosCalendar([
-    //   {
-    //     id: id,
-    //     title: actividad.text,
-    //     start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
-    //     end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
-    //     allDay: false,
-    //   },
-    // ]);
-    return calendarApi.addEvent({
-      id: id,
-      title: actividad.text,
-      start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
-      end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
-      allDay: false,
-    });
+    let events = [
+      ...eventosCalendario,
+      {
+        id: id,
+        title: actividad.text,
+        start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
+        end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
+        allDay: false,
+      },
+    ];
+    return setEventosCalendar(events);
+    // return calendarApi.addEvent({
+    //   id: id,
+    //   title: actividad.text,
+    //   start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
+    //   end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
+    //   allDay: false,
+    // });
   }
   async function grabarActividades() {
     let id_convocatoria = 1;
     console.log(eventosCalendario);
     let calendaroptions = CalendarRef.current.getApi();
-    console.log(calendaroptions.getEvent());
-    // try {
-    //   await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/fechas`, {
-    //     id_convocatoria,
-    //     clave: eventosCalendario[conteoFechas].title,
-    //     valormin: eventosCalendario[conteoFechas].start,
-    //     valormax: eventosCalendario[conteoFechas].end,
-    //   });
-    //   console.log(conteoFechas, actividad);
-    //   if (eventosCalendario.length - 1 === conteoFechas) {
-    //     history.push("/infoconvocatorias");
-    //   }
-    //   setConteoFechas(conteoFechas + 1);
-    //   return grabarActividades();
-    // } catch (error) {
-    //   return console.error(error);
-    // }
+    console.log(calendaroptions);
+    try {
+      await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/fechas`, {
+        id_convocatoria,
+        clave: eventosCalendario[conteoFechas].title,
+        valormin: eventosCalendario[conteoFechas].start,
+        valormax: eventosCalendario[conteoFechas].end,
+      });
+      console.log(conteoFechas, actividad);
+      if (eventosCalendario.length - 1 === conteoFechas) {
+        history.push("/infoconvocatorias");
+      }
+      setConteoFechas(conteoFechas + 1);
+      return grabarActividades();
+    } catch (error) {
+      return console.error(error);
+    }
   }
   return (
     <div style={{ padding: "2%" }}>
