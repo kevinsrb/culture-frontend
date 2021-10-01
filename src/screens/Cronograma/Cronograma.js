@@ -1,24 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import axios from "axios";
-import { ObjConstanst } from "../../config/utils/constanst";
+import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { ObjConstanst } from '../../config/utils/constanst'
 
 
-import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon } from "semantic-ui-react";
+import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider } from "semantic-ui-react";
+import es from "date-fns/locale/es";
+import styled from "@emotion/styled";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!'
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import moment from "moment";
-import es from "date-fns/locale/es";
-import styled from "@emotion/styled";
-// import Actividades from "./../../../Actividades.json";
-
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
 import '@fullcalendar/daygrid/main.css';
 import { useSelector } from "react-redux";
+
 
 registerLocale("es", es);
 
@@ -148,8 +149,24 @@ export const Cronograma = () => {
     // return setEventosCalendar(events);
   }
 
+  const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
+
+ 
+
+  const { idConvocatoria } = useSelector( state => state.convocatoria );
+  console.log(idConvocatoria)
+  
+  let actividadesSeleccionadasMap = [];
+
+  useEffect(() => {
+    handelCargarActividadesSeleccionadas()
+  }, [])
+
+
+
   function seleccionarActividad(event, result) {
     let seleccionada = result.options.filter((data) => data.value === result.value);
+    console.log(seleccionada[0])
     return setActividad(seleccionada[0]);
   }
 
@@ -195,6 +212,7 @@ export const Cronograma = () => {
         allDay: false,
       },
     ];
+    setActividadesSeleccionadas(actividadesSeleccionadas.filter((i) => i !== actividad))
     return setEventosCalendar(events);
     // return calendarApi.addEvent({
     //   id: id,
@@ -228,21 +246,21 @@ export const Cronograma = () => {
 
     return history.push("/adminconvocatorias");
   }
-  const { idConvocatoria } = useSelector( state => state.convocatoria );
-  console.log(idConvocatoria)
-  let actividadesSeleccionadas = [];
-
-  useEffect(() => {
-    handelCargarActividadesSeleccionadas()
-  }, [])
-
   
   const handelCargarActividadesSeleccionadas = async () => {
 
-    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
+    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${1}`)
     .then(({ data }) => {
-      actividadesSeleccionadas = data.data;
-      console.log(actividadesSeleccionadas)
+      actividadesSeleccionadasMap = data.data.map(ds => {
+        return {
+          key: ds.key,
+          value: ds.idactividad,
+          text: ds.nombre
+        }
+      })
+
+      setActividadesSeleccionadas(actividadesSeleccionadasMap)
+      console.log(actividadesSeleccionadasMap)
     })
     .catch(function (error) {
       console.error(error);
@@ -303,10 +321,17 @@ export const Cronograma = () => {
           <Select 
             fluid 
             label="Gender" 
+<<<<<<< HEAD
             options={options} 
             placeholder="Actividades" 
             onChange={(e, {value}) => setActividad(value.toString())} /
           >
+=======
+            options={actividadesSeleccionadas} 
+            placeholder="Seleccionar" 
+            onChange={seleccionarActividad} 
+          />
+>>>>>>> 4ff7afd (cronograma listo)
           <div className="container-modal-fechas-checkbox">
             <Form className="container-fechas-modal-actividades">
               <div className="container-clasefecha-modal">

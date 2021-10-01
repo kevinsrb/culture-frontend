@@ -47,18 +47,16 @@ export function InfoConvocatoria() {
   const [participantesSeleccionados, setParticipantesSeleccionados] = useState([]);
   const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] = useState([]);
 
-  useEffect(() => {
-    cargarSelectLineaConvocatoria()
-    consultarIdConvocatoria()
-  }, []);
-
-
-
-  
   const history = useHistory();
   const dispatch = useDispatch();
   const { idConvocatoria } = useSelector( state => state.convocatoria );
- 
+  console.log(idConvocatoria)
+
+  useEffect(() => {
+    cargarSelectLineaConvocatoria()
+    dispatch(consultarIdConvocatoria())
+  }, [dispatch]);
+
 
   //funciones
   const cargarSelectLineaConvocatoria = async () => {
@@ -163,7 +161,7 @@ export function InfoConvocatoria() {
           <Form size="large" onSubmit={handleCreateConvocatoria} autoComplete="off">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: {idConvocatoria}
+                Codigo de convocatoria #: {idConvocatoria + 1 }
               </Header>
               <Header as="h4" floated="left">
                 Informacion general - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
