@@ -30,7 +30,7 @@ export function InfoConvocatoria() {
     tipo_estimulo: '',
     valor_total_entg: 0,
     bolsa_concursable: false,
-    num_estimulos: '',
+    num_estimulos: 0,
     descripcion_corta: '',
     perfil_participante: '',
     noparticipa: '',
