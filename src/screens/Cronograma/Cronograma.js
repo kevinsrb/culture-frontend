@@ -19,6 +19,8 @@ import "@fullcalendar/daygrid/main.css";
 
 registerLocale("es", es);
 
+var conteoFechas = 0;
+
 const options = [
   { key: 1, value: 1, text: "Observaciones a los lineamientos" },
   { key: 2, value: 2, text: "Observaciones al informe final de verificación de documentos" },
@@ -120,8 +122,28 @@ export const Cronograma = () => {
   const [minuto, setMinuto] = React.useState("59");
   // EVENTOS
   const [eventosCalendario, setEventosCalendar] = React.useState([]);
-  // CONTEO PARA GUARDAR LAS FECHAS
-  const [conteoFechas, setConteoFechas] = React.useState(0);
+
+  React.useEffect(() => {
+    primerasFechas();
+  }, []);
+
+  async function primerasFechas() {
+    let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/1`);
+    if (response.data.data.length === 0) return;
+
+    return console.log(response);
+    // let events = [
+    //   ...eventosCalendario,
+    //   {
+    //     id: id,
+    //     title: actividad.text,
+    //     start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
+    //     end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
+    //     allDay: false,
+    //   },
+    // ];
+    // return setEventosCalendar(events);
+  }
 
   function seleccionarActividad(event, result) {
     let seleccionada = result.options.filter((data) => data.value === result.value);
@@ -180,26 +202,28 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    let id_convocatoria = 1;
-    console.log(eventosCalendario);
+    let id_convocatoria = 7;
     let calendaroptions = CalendarRef.current.getApi();
-    console.log(calendaroptions);
-    try {
-      await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/fechas`, {
-        id_convocatoria,
-        clave: eventosCalendario[conteoFechas].title,
-        valormin: eventosCalendario[conteoFechas].start,
-        valormax: eventosCalendario[conteoFechas].end,
-      });
-      console.log(conteoFechas, actividad);
-      if (eventosCalendario.length - 1 === conteoFechas) {
-        history.push("/infoconvocatorias");
+    let events = calendaroptions.getEvents();
+    console.log(events.length, "total de eventos");
+    if (events.length === 0) return;
+    if (events[conteoFechas]) {
+      try {
+        await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/fechas`, {
+          id_convocatoria,
+          clave: events[conteoFechas].title,
+          valormin: events[conteoFechas].start,
+          valormax: events[conteoFechas].end,
+        });
+        conteoFechas++;
+        console.log(conteoFechas);
+        return grabarActividades();
+      } catch (error) {
+        return console.error(error);
       }
-      setConteoFechas(conteoFechas + 1);
-      return grabarActividades();
-    } catch (error) {
-      return console.error(error);
     }
+
+    return history.push("/adminconvocatorias");
   }
   return (
     <div style={{ padding: "2%" }}>

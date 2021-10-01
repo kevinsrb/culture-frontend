@@ -114,6 +114,7 @@
 
 .container-scrollable-adminconvocatorias {
   overflow-y: scroll;
+  overflow-x: hidden;
   height: 380px;
 }
 
@@ -154,4 +155,10 @@
     line-height: 16px;
     letter-spacing: 0;
     color: #1B1C1D;
+    padding-top: 18px !important;
+    padding-bottom: 18px !important;
+}
+
+.ui.labeled.icon.button>.icon, .ui.labeled.icon.buttons>.button>.icon {
+  background-color: transparent !important;
 }

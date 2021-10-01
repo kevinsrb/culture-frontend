@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+import { useHistory } from "react-router-dom";
 import {
   Segment,
   Modal,
@@ -183,6 +185,7 @@ const tiposidentificacion = [
 ];
 
 export const AdminConvocatorias = () => {
+  const history = useHistory();
   //  DATOS QUE VAN HACER MOSTRADOS EN LA TABLA
   React.useEffect(() => {
     primeroDatostabla();
@@ -198,14 +201,37 @@ export const AdminConvocatorias = () => {
   const [filtrolineaestrategica, setFiltroLineaestrategica] = React.useState("");
   const [filtroarea, setFiltroArea] = React.useState("");
   const [openModalBorrar, setOpenModalBorrar] = React.useState(false);
+  const [nombreBorrar, setNombreBorrrar] = React.useState('');
+  const [idBorrar, setIdBorrrar] = React.useState('');
 
-  function primeroDatostabla() {
-    let copy = options.map((data) => data);
-    let datos = copy.slice(0, cantidadPáginas);
-    setDatosActuales(datos);
-    let x = options.length / cantidadPáginas;
-    x = Math.ceil(x);
-    setPaginacionTotal(x);
+  async function primeroDatostabla() {
+    try {
+      let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/`);
+      let copynombres = response.data.lineasconvocatorias.map((data) => data);
+      for (var i in response.data.convocatorias) {
+        let nombreconvocatoria = copynombres.filter(
+          (data) => data.idlineaconvocatoria === response.data.convocatorias[i].numero_convocatoria
+        );
+        response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
+      }
+      if (response.data.convocatorias.length > 0) {
+        let copy = response.data.convocatorias.map((data) => data);
+        console.log(copy);
+        let datos = copy.slice(0, cantidadPáginas);
+        setDatosActuales(datos);
+        let x = response.data.convocatorias.length / cantidadPáginas;
+        x = Math.ceil(x);
+        return setPaginacionTotal(x);
+      }
+
+      let datos = [];
+      setDatosActuales(datos);
+      let x = 1;
+      x = Math.ceil(x);
+      return setPaginacionTotal(x);
+    } catch (error) {
+      console.error(error);
+    }
   }
   function handletoggleChange(data) {
     let datosActualesDiff = JSON.parse(JSON.stringify(datosActuales));
@@ -236,8 +262,43 @@ export const AdminConvocatorias = () => {
     setPaginacionTotal(x);
     setCantidadPáginas(10);
   }
+  function abrirmodalEliminar(e, value) {
+    setNombreBorrrar(value.numero_convocatoria);
+    setIdBorrrar(value.idconvocatorias);
+    return setOpenModalBorrar(!openModalBorrar);
+  }
+  async function borrarConvocatoria() {
+    console.log(idBorrar, nombreBorrar);
+    try {
+      await axios.delete(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/delete/${idBorrar}`);
+      let copy = datosActuales.map(data => data);
+      let eliminar = copy.filter(data => data.idconvocatorias !== idBorrar);
+      setDatosActuales(eliminar);
+      return setOpenModalBorrar(!openModalBorrar)
+    } catch (error) {
+      console.error(error);
+      return ;
+    }
+  }
   return (
     <div style={{ padding: "2%" }}>
+      <Grid columns={4}>
+        <Grid.Row>
+          <Grid.Column></Grid.Column>
+          <Grid.Column></Grid.Column>
+          <Grid.Column></Grid.Column>
+          <Grid.Column className="container-pagination-adminconvocatorias">
+            <Button
+              style={{ fontSize: "14px" }}
+              icon="plus circle"
+              content="Crear"
+              labelPosition="right"
+              className="button-filtro-adminconvocatorias"
+              onClick={() => history.push("/infoconvocatorias")}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
       <Segment>
         <Grid columns={4}>
           <Grid.Row>
@@ -333,9 +394,9 @@ export const AdminConvocatorias = () => {
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
-                      <Table.Row key={datos.value}>
-                        <Table.Cell width={1}>{datos.value}</Table.Cell>
-                        <Table.Cell width={2}>{datos.nombre}</Table.Cell>
+                      <Table.Row key={datos.idconvocatorias}>
+                        <Table.Cell width={1}>{datos.idconvocatorias}</Table.Cell>
+                        <Table.Cell width={2}>{datos.numero_convocatoria}</Table.Cell>
                       </Table.Row>
                     ))
                   ) : (
@@ -363,7 +424,7 @@ export const AdminConvocatorias = () => {
                     datosActuales.map((datos) => (
                       <Table.Row key={datos.value}>
                         <Table.Cell width={1}>{datos.codigo}</Table.Cell>
-                        <Table.Cell width={1}>{datos.fecha}</Table.Cell>
+                        <Table.Cell width={1}>{datos.fecha_creacion}</Table.Cell>
                         <Table.Cell width={1} style={{ color: coloresEstado[datos.estado] }}>
                           {datos.estado}
                         </Table.Cell>
@@ -410,7 +471,7 @@ export const AdminConvocatorias = () => {
                           <Button
                             className="botones-acciones boton-borrar-adminconvocatorias"
                             icon="trash alternate outline"
-                            onClick={() => setOpenModalBorrar(!openModalBorrar)}
+                            onClick={(e) => abrirmodalEliminar(e, datos)}
                           />
                         </Table.Cell>
                       </Table.Row>
@@ -438,7 +499,7 @@ export const AdminConvocatorias = () => {
             <Header className="container-subheader-eliminar-adminconvocatoria">
               Haz clic en aceptar, si estas seguro de borrar
             </Header>
-            <Header className="container-convocatoria-eliminar-adminconvocatoria">Nombre convocatoria</Header>
+            <Header className="container-convocatoria-eliminar-adminconvocatoria">{nombreBorrar}</Header>
           </div>
         </Modal.Description>
         <Modal.Actions>
@@ -451,7 +512,7 @@ export const AdminConvocatorias = () => {
             >
               Cancelar
             </Button>
-            <Button className="botones-redondos" color="blue" onClick={() => setOpenModalBorrar(!openModalBorrar)}>
+            <Button className="botones-redondos" color="blue" onClick={borrarConvocatoria}>
               Aceptar
             </Button>
           </Grid>

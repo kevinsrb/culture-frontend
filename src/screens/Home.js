@@ -21,7 +21,7 @@ export default function Home() {
         contraseña,
       });
       localStorage.setItem('token', token.data)
-      history.push('/infoconvocatorias')
+      history.push('/adminconvocatorias')
     } catch (error) {
       console.error(error);
     }
