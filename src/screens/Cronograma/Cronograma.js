@@ -321,17 +321,10 @@ export const Cronograma = () => {
           <Select 
             fluid 
             label="Gender" 
-<<<<<<< HEAD
-            options={options} 
-            placeholder="Actividades" 
-            onChange={(e, {value}) => setActividad(value.toString())} /
-          >
-=======
             options={actividadesSeleccionadas} 
             placeholder="Seleccionar" 
             onChange={seleccionarActividad} 
           />
->>>>>>> 4ff7afd (cronograma listo)
           <div className="container-modal-fechas-checkbox">
             <Form className="container-fechas-modal-actividades">
               <div className="container-clasefecha-modal">
