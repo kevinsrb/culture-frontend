@@ -1,8 +1,8 @@
-import { USER_TOKEN } from "../types";
+import { types } from "../types/types";
 
 export const user_token = (payload) => {
     return  {
-        type: USER_TOKEN,
+        type: types.USER_TOKEN,
         payload,
     }
 }

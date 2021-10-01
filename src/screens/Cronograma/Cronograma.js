@@ -1,7 +1,9 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
 import axios from "axios";
-import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider } from "semantic-ui-react";
+import { ObjConstanst } from "../../config/utils/constanst";
+
+
+import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon } from "semantic-ui-react";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!'
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -15,7 +17,8 @@ import styled from "@emotion/styled";
 
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
-import "@fullcalendar/daygrid/main.css";
+import '@fullcalendar/daygrid/main.css';
+import { useSelector } from "react-redux";
 
 registerLocale("es", es);
 
@@ -225,6 +228,27 @@ export const Cronograma = () => {
 
     return history.push("/adminconvocatorias");
   }
+  const { idConvocatoria } = useSelector( state => state.convocatoria );
+  console.log(idConvocatoria)
+  let actividadesSeleccionadas = [];
+
+  useEffect(() => {
+    handelCargarActividadesSeleccionadas()
+  }, [])
+
+  
+  const handelCargarActividadesSeleccionadas = async () => {
+
+    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
+    .then(({ data }) => {
+      actividadesSeleccionadas = data.data;
+      console.log(actividadesSeleccionadas)
+    })
+    .catch(function (error) {
+      console.error(error);
+    })
+  }
+
   return (
     <div style={{ padding: "2%" }}>
       <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }}>
@@ -276,7 +300,13 @@ export const Cronograma = () => {
           <Header>Seleccionar Actividades</Header>
           <Divider className="divider-admin-convocatorias" />
           <Header sub>Lista de actividades</Header>
-          <Select fluid label="Gender" options={options} placeholder="Seleccionar" onChange={seleccionarActividad} />
+          <Select 
+            fluid 
+            label="Gender" 
+            options={options} 
+            placeholder="Actividades" 
+            onChange={(e, {value}) => setActividad(value.toString())} /
+          >
           <div className="container-modal-fechas-checkbox">
             <Form className="container-fechas-modal-actividades">
               <div className="container-clasefecha-modal">

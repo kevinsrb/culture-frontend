@@ -10,9 +10,23 @@ import CrearUsuario from '../screens/Login/CrearUsuario';
 import Navbar from "../components/NavBar";
 import Home from "../screens/Home";
 import { CargarArchivos } from "../screens/CargarArchivos/CargarArchivos";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
 
 
 export const AppRouter = () => {
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+       
+       dispatch(consultarIdConvocatoria())
+        
+    }, [dispatch])
+
+
+
+
     return (
         <Router>
             <div className="App">

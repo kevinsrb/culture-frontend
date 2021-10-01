@@ -3,10 +3,19 @@
 }
 
 .check {
-    font-size: 13px;
-    color: $gris;
-    text-align: left;
-    letter-spacing: 0px;
-    color: #4B4B4B;
-    opacity: 1;
+    font-family: Montserrat, Regular !important;
+    font-size: 13px !important;
+    color: $gris !important;
+    text-align: left !important;
+    letter-spacing: 0px !important;
+    color: #4B4B4B !important;
+    opacity: 1 !important;
+}
+
+.search {
+    color: $azulClarito;
+}
+
+.search  input{
+    border-radius: 25px !important;
 }

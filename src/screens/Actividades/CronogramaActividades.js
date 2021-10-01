@@ -3,12 +3,15 @@ import axios from 'axios'
 import { ObjConstanst } from '../../config/utils/constanst'
 import { CrearActividades } from './CrearActividades';
 import { Button, Container, Form, Grid, Header, Divider, Segment, Search, Checkbox } from "semantic-ui-react";
+import { useSelector } from 'react-redux';
+import { ObjNotificaciones } from '../../config/utils/notificaciones.utils';
+import { useHistory } from 'react-router';
+
 export const CronogramaActividades = () => {
 
   const [actividades, setActividades] = useState([]);
-  const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
-
-  let objActividadesSelecionadas = {};
+  const { idConvocatoria } = useSelector( state => state.convocatoria );
+  const history = useHistory();
 
 
   const handleCargarActividades = async () => {
@@ -34,37 +37,31 @@ export const CronogramaActividades = () => {
     handleCargarActividades()
   }, [])
 
-  const handletoggleChange = (actividad, event, result) => {
+  const handletoggleChange = ( event, result, actividad) => {
     let actividadChange = JSON.parse(JSON.stringify(actividades))
     actividadChange[actividad.idactividad - 1].check = !actividadChange[actividad.idactividad - 1].check
-    setActividades(actividadChange);
-    //let idActividad = actividad.idActividad
-    //setActividadesSeleccionadas([...actividadesSeleccionadas, idActividad])
-    
+    return setActividades(actividadChange);
   }
 
-  const handelGuardarActiviadesConvocatorias = () => {
-    var cad=[];
-
-    console.log(actividadesSeleccionadas)
-
-    for(let i in actividadesSeleccionadas){
-      cad.push('{0: "nombre: '+actividadesSeleccionadas[i]+'"}');
+  const handelGuardarActiviadesConvocatorias = async () => {
+    let actividadesSeleccionadas = actividades.filter(data => data.check);
+    const objActividades = {
+      "actividades": actividadesSeleccionadas
     }
 
-
-
-    console.log(cad);
+    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`, objActividades)
+    .then(({ data }) => {
+      ObjNotificaciones.MSG_SUCCESS('success', data.mensaje)
+      history.push("/Cronograma")
+      
+    })
+    .catch(function (error) {
+      console.error(error);
+    })
   }
 
 
   const handelSeleccionarCheckbox = () => {
-    let checkboxes = document.querySelectorAll('.check');
-    console.log(checkboxes)
-
-    // for(var i=0, n=checkboxes.length;i<n;i++) {
-    //   checkboxes[i].checked = source.checked;
-    // }
 
   }
 
@@ -73,10 +70,10 @@ export const CronogramaActividades = () => {
       <Grid style={{ height: "100vh", width: "100%", margin: 0 }}>
         <Grid.Column style={{ maxWidth: "100%" }}>
 
-          <Form size="large" onSubmit={handelGuardarActiviadesConvocatorias}>
+          <Form size="large" onSubmit={handelGuardarActiviadesConvocatorias} clasname="formulario">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: 1
+                Codigo de convocatoria #: {idConvocatoria}
               </Header>
               <Header as="h4" floated="left">
                 Cronograma de actividades
@@ -88,7 +85,10 @@ export const CronogramaActividades = () => {
                   <Grid.Column>
 
                     <Header as="h4" floated="left">
-                      <Search />
+                      <Search 
+                        className="search"
+                        placeholder="Search"
+                      />
                     </Header>
                   </Grid.Column>
                   <Grid.Column>               
@@ -128,7 +128,7 @@ export const CronogramaActividades = () => {
                             name={actividad.nombre}
                             checked={actividad.check}
                             className="check"
-                            onChange={() => handletoggleChange(actividad)}
+                            onChange={(event, result) => handletoggleChange(event, result,actividad)}
                           />
                         </Grid.Column>
                       ))
@@ -139,8 +139,7 @@ export const CronogramaActividades = () => {
               </Segment>
 
               <Container textAlign='right'>
-                <Button basic color='red' content='Atras' className="btn" />
-                <Button basic color='blue' content='Guardar y continuar' className="btn" />
+                <Button basic color='gray' content='Guardar y continuar' className="btn btn-disable" />
               </Container>
 
             </Segment>

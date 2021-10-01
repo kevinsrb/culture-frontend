@@ -1,12 +1,12 @@
-import { USER_TOKEN } from "../types";
+import { types } from "../types/types";
 
 const initialState = {
     token: ''
 }
 
-export default function (state = initialState, action) {
+export const userReducer = (state = initialState, action) => {
     switch(action.type) {
-        case USER_TOKEN:
+        case types.USER_TOKEN:
             return action.payload;
         default:
             return state

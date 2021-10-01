@@ -6,7 +6,7 @@ export const ObjNotificaciones = {
     
     MSG_SUCCESS: function(icon, title )  {
         Swal.fire({
-            icon: icon,
+            icon: 'success',
             title: title,
             showConfirmButton: false,
             timer: 1500
