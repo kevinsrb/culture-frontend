@@ -49,7 +49,7 @@ export const CronogramaActividades = () => {
       "actividades": actividadesSeleccionadas
     }
 
-    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`, objActividades)
+    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${1}`, objActividades)
     .then(({ data }) => {
       ObjNotificaciones.MSG_SUCCESS('success', data.mensaje)
       history.push("/Cronograma")

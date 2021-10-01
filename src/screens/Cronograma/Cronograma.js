@@ -18,7 +18,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
 import '@fullcalendar/daygrid/main.css';
-import { useSelector } from "react-redux";
 
 
 registerLocale("es", es);
@@ -223,7 +222,7 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    let id_convocatoria = 7;
+    let id_convocatoria = 1;
     let calendaroptions = CalendarRef.current.getApi();
     let events = calendaroptions.getEvents();
     console.log(events.length, "total de eventos");
