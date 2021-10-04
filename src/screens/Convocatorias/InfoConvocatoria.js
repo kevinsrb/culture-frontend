@@ -31,7 +31,7 @@ export function InfoConvocatoria() {
     tipo_participante: [],
     cobertura: "",
     ciclo: "",
-    linea_estrategica: "",
+    linea_estgica: "",
     area: "",
     convenido: false,
     modalidad: "",
@@ -109,7 +109,7 @@ export function InfoConvocatoria() {
       tipo_participante: editarConvocatoria.tipo_participante,
       cobertura: editarConvocatoria.cobertura,
       ciclo: editarConvocatoria.ciclo,
-      linea_estrategica: editarConvocatoria.linea_estrategica,
+      linea_estgica: editarConvocatoria.linea_estgica,
       area: editarConvocatoria.area,
       convenido: editarConvocatoria.esconvenio,
       modalidad: editarConvocatoria.modalidad,
@@ -350,8 +350,8 @@ export function InfoConvocatoria() {
                   fluid
                   search
                   selection
-                  name="linea_estrategica"
-                  value={convocatoria.linea_estrategica}
+                  name="linea_estgica"
+                  value={convocatoria.linea_estgica}
                   options={LineaEstrategicaOptions}
                   onChange={handleInputChange}
                 />
