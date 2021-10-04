@@ -31,7 +31,7 @@ export function InfoConvocatoria() {
     tipo_participante: [],
     cobertura: "",
     ciclo: "",
-    linea_estgica: "",
+    linea_estrategica: "",
     area: "",
     convenido: false,
     modalidad: "",
@@ -109,7 +109,7 @@ export function InfoConvocatoria() {
       tipo_participante: editarConvocatoria.tipo_participante,
       cobertura: editarConvocatoria.cobertura,
       ciclo: editarConvocatoria.ciclo,
-      linea_estgica: editarConvocatoria.linea_estrategica,
+      linea_estrategica: editarConvocatoria.linea_estrategica,
       area: editarConvocatoria.area,
       convenido: editarConvocatoria.esconvenio,
       modalidad: editarConvocatoria.modalidad,
@@ -255,7 +255,7 @@ export function InfoConvocatoria() {
           <Form size="large" onSubmit={handleCreateConvocatoria} autoComplete="off">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: {idConvocatoria + 1}
+                Codigo de convocatoria #: {idConvocatoria}
               </Header>
               <Header as="h4" floated="left">
                 Informacion general - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
@@ -350,8 +350,8 @@ export function InfoConvocatoria() {
                   fluid
                   search
                   selection
-                  name="linea_estgica"
-                  value={convocatoria.linea_estgica}
+                  name="linea_estrategica"
+                  value={convocatoria.linea_estrategica}
                   options={LineaEstrategicaOptions}
                   onChange={handleInputChange}
                 />
