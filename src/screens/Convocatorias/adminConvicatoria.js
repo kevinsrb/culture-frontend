@@ -141,9 +141,9 @@ export const AdminConvocatorias = () => {
     }
   }
   function abrirEditar(e, datos) {
-    console.log('dicspatch');
+    console.log("dicspatch");
     dispatch(edicionConvocatoria(datos));
-    return history.push('/infoconvocatorias')
+    return history.push("/infoconvocatorias");
   }
   return (
     <div style={{ padding: "2%" }}>
@@ -309,7 +309,7 @@ export const AdminConvocatorias = () => {
                     ))
                   ) : (
                     <Table.Row>
-                      <Table.Cell>No hay datos por mostrar</Table.Cell>
+                      <Table.Cell style={{ "line-height": "26px" }}>No hay datos por mostrar</Table.Cell>
                     </Table.Row>
                   )}
                 </Table.Body>
