@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { edicionConvocatoria } from "../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,
@@ -16,153 +18,7 @@ import {
   Divider,
   Select,
 } from "semantic-ui-react";
-import { TableHeader } from "../../components/Convocatorias/TableHeader";
 
-const options = [
-  {
-    key: 1,
-    value: 1,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: false,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 2,
-    value: 2,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: false,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 3,
-    value: 3,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: false,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 4,
-    value: 4,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "En proceso",
-    publicada: false,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 5,
-    value: 5,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Cerrada",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 6,
-    value: 6,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 7,
-    value: 7,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Cerrada",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 8,
-    value: 8,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 9,
-    value: 9,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 10,
-    value: 10,
-    nombre: "Nombre convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "Abierta",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-  {
-    key: 11,
-    value: 11,
-    nombre: "Este convocatoria",
-    codigo: "43001",
-    fecha: "2021-09-10",
-    estado: "En proceso",
-    publicada: true,
-    entidad: "OE",
-    linea_estrategica: "Arte",
-    area: "Arte",
-    creadopor: "CamiloFr",
-  },
-];
 const cantidadRegistros = [
   { key: 1, value: 10, text: "10" },
   { key: 2, value: 20, text: "20" },
@@ -186,6 +42,7 @@ const tiposidentificacion = [
 
 export const AdminConvocatorias = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   //  DATOS QUE VAN HACER MOSTRADOS EN LA TABLA
   React.useEffect(() => {
     primeroDatostabla();
@@ -201,18 +58,21 @@ export const AdminConvocatorias = () => {
   const [filtrolineaestrategica, setFiltroLineaestrategica] = React.useState("");
   const [filtroarea, setFiltroArea] = React.useState("");
   const [openModalBorrar, setOpenModalBorrar] = React.useState(false);
-  const [nombreBorrar, setNombreBorrrar] = React.useState('');
-  const [idBorrar, setIdBorrrar] = React.useState('');
+  const [nombreBorrar, setNombreBorrrar] = React.useState("");
+  const [idBorrar, setIdBorrrar] = React.useState("");
 
   async function primeroDatostabla() {
     try {
       let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/`);
+      console.log(response);
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
+      console.log(copynombres);
       for (var i in response.data.convocatorias) {
         let nombreconvocatoria = copynombres.filter(
           (data) => data.idlineaconvocatoria === response.data.convocatorias[i].numero_convocatoria
         );
         response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
+        response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
       }
       if (response.data.convocatorias.length > 0) {
         let copy = response.data.convocatorias.map((data) => data);
@@ -239,28 +99,28 @@ export const AdminConvocatorias = () => {
     setDatosActuales(datosActualesDiff);
   }
   function cambioPaginación(event, { activePage }) {
-    let copy = options.map((data) => data);
+    let copy = datosActuales.map((data) => data);
     let datos = copy.slice(cantidadPáginas * activePage - cantidadPáginas, cantidadPáginas * activePage);
     setDatosActuales(datos);
-    setPaginacionActual(activePage);
+    return setPaginacionActual(activePage);
   }
   function mostrarConvocatorias(event, value) {
-    let copy = options.map((data) => data);
+    let copy = datosActuales.map((data) => data);
     let datos = copy.slice(0, value);
     setDatosActuales(datos);
-    let x = options.length / value;
+    let x = datosActuales.length / value;
     x = Math.ceil(x);
     setPaginacionTotal(x);
-    setCantidadPáginas(value);
+    return setCantidadPáginas(value);
   }
   function filtradodeinformacion(e) {
-    let filtrado = options.filter((data) => data.nombre.indexOf(e.target.value) >= 0);
+    let filtrado = datosActuales.filter((data) => data.nombre.indexOf(e.target.value) >= 0);
     let datos = filtrado.slice(0, 10);
     setDatosActuales(datos);
     let x = datos.length / 10;
     x = Math.ceil(x);
     setPaginacionTotal(x);
-    setCantidadPáginas(10);
+    return setCantidadPáginas(10);
   }
   function abrirmodalEliminar(e, value) {
     setNombreBorrrar(value.numero_convocatoria);
@@ -271,14 +131,19 @@ export const AdminConvocatorias = () => {
     console.log(idBorrar, nombreBorrar);
     try {
       await axios.delete(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/delete/${idBorrar}`);
-      let copy = datosActuales.map(data => data);
-      let eliminar = copy.filter(data => data.idconvocatorias !== idBorrar);
+      let copy = datosActuales.map((data) => data);
+      let eliminar = copy.filter((data) => data.idconvocatorias !== idBorrar);
       setDatosActuales(eliminar);
-      return setOpenModalBorrar(!openModalBorrar)
+      return setOpenModalBorrar(!openModalBorrar);
     } catch (error) {
       console.error(error);
-      return ;
+      return;
     }
+  }
+  function abrirEditar(e, datos) {
+    console.log('dicspatch');
+    dispatch(edicionConvocatoria(datos));
+    return history.push('/infoconvocatorias')
   }
   return (
     <div style={{ padding: "2%" }}>
@@ -465,7 +330,7 @@ export const AdminConvocatorias = () => {
                           <Button className="botones-acciones" icon="eye" />
                         </Table.Cell>
                         <Table.Cell>
-                          <Button className="botones-acciones" icon="pencil" />
+                          <Button className="botones-acciones" icon="pencil" onClick={(e) => abrirEditar(e, datos)} />
                         </Table.Cell>
                         <Table.Cell>
                           <Button

@@ -22,3 +22,9 @@ export const idConvocatorias = (idConvocatoria) => ({
     }
 })
 
+export const edicionConvocatoria = (editarConvocatoria) => ({
+    type: types.edicion,
+    payload:  {
+        editarConvocatoria,
+    }
+})

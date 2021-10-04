@@ -31,7 +31,9 @@ export const CoberturaOptions = [
 export const ModalidadEstimuloOptions = [
   { key: 'apoyo', value: 'apoyo',  text: 'Apoyo' },
   { key: 'pasantia', value: 'pasantia',  text: 'Pasantía' },
-  { key: 'premio', value: 'premio',  text: 'Premio' }
+  { key: 'premio', value: 'premio',  text: 'Premio' },
+  { key: 'estimulo', value: 'estimulo',  text: 'Estimulo' },
+  { key: 'residenciasalas', value: 'residenciasalas',  text: 'Residencia - Salas' }
 ]
 
 export const TipoEstimuloOptions = [
@@ -81,9 +83,9 @@ export const NumeroConvocatoiriaOptions = [
 ]
 
 export const QuienParticipaOptions = [
-  { key: 1, value: 1,  text: 'Grupo conformador' },
-  { key: 2, value: 2,  text: 'Persona natural' },
-  { key: 3, value: 3,  text: 'Persona juridica' }
+  { value: 1,  text: 'Grupo conformador' },
+  { value: 2,  text: 'Persona natural' },
+  { value: 3,  text: 'Persona juridica' }
 ]
 
 

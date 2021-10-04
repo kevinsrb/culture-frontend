@@ -13,3 +13,15 @@ export const convocatoriasReducer = (state = {}, action) => {
             return state
     }
 }
+
+export const edicionReducer = (state = {}, action) => {
+    switch(action.type) {
+        case types.edicion:
+            return {
+                ...state,
+                editarConvocatoria: action.payload.editarConvocatoria
+            };
+        default:
+            return state
+    }
+}

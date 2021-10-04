@@ -150,8 +150,6 @@ export const Cronograma = () => {
 
   const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
 
- 
-
   const { idConvocatoria } = useSelector( state => state.convocatoria );
   console.log(idConvocatoria)
   
@@ -222,7 +220,7 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    let id_convocatoria = 1;
+    let id_convocatoria = idConvocatoria;
     let calendaroptions = CalendarRef.current.getApi();
     let events = calendaroptions.getEvents();
     console.log(events.length, "total de eventos");
@@ -247,7 +245,7 @@ export const Cronograma = () => {
   }
   
   const handelCargarActividadesSeleccionadas = async () => {
-
+    console.log(idConvocatoria);
     const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${1}`)
     .then(({ data }) => {
       actividadesSeleccionadasMap = data.data.map(ds => {

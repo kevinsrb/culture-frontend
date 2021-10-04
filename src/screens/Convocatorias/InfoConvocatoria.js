@@ -1,39 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { consultarIdConvocatoria } from '../../store/actions/convocatoriaAction'
-import axios from 'axios'
+import { useDispatch, useSelector } from "react-redux";
+import { consultarIdConvocatoria, edicionConvocatoria } from "../../store/actions/convocatoriaAction";
+import axios from "axios";
 
-import { ObjConstanst } from '../../config/utils/constanst'
-import { Form, Grid, Header, Divider, Segment,  Button } from "semantic-ui-react";
-import { LineaEstrategicaOptions, CicloOptions, CoberturaOptions, ModalidadEstimuloOptions, EntidadOptions, AreaOptions, TipoEstimuloOptions, NumeroConvocatoiriaOptions, QuienParticipaOptions } from '../../data/selectOption.data'
-
+import { ObjConstanst } from "../../config/utils/constanst";
+import { Form, Grid, Header, Divider, Segment, Button } from "semantic-ui-react";
+import {
+  LineaEstrategicaOptions,
+  CicloOptions,
+  CoberturaOptions,
+  ModalidadEstimuloOptions,
+  EntidadOptions,
+  AreaOptions,
+  TipoEstimuloOptions,
+  NumeroConvocatoiriaOptions,
+  QuienParticipaOptions,
+} from "../../data/selectOption.data";
 
 //Alertas y notificaciones
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 
 export function InfoConvocatoria() {
-
   const objConvocatoria = {
-    numero_convocatoria: '',
-    linea_convocatoria: '',
+    numero_convocatoria: "",
+    linea_convocatoria: "",
     categoria_linea_convocatoria: [],
-    entidad: '',
+    entidad: "",
     pseudonimos: false,
     tipo_participante: [],
-    cobertura: '',
-    ciclo: '',
-    linea_estgica: '',
-    area: '',
+    cobertura: "",
+    ciclo: "",
+    linea_estgica: "",
+    area: "",
     convenido: false,
-    modalidad: '',
-    tipo_estimulo: '',
+    modalidad: "",
+    tipo_estimulo: "",
     valor_total_entg: 0,
     bolsa_concursable: false,
     num_estimulos: 0,
-    descripcion_corta: '',
-    perfil_participante: '',
-    noparticipa: '',
+    descripcion_corta: "",
+    perfil_participante: "",
+    noparticipa: "",
   };
 
   //variables
@@ -46,113 +54,199 @@ export function InfoConvocatoria() {
   const [numeroConvocatoria, setNumeroConvocatoria] = useState();
   const [participantesSeleccionados, setParticipantesSeleccionados] = useState([]);
   const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] = useState([]);
+  const [tipoparticipanteseleccionado, setTipoparticipanteseleccionado] = useState([]);
+  const [tipocategoriasseleccionado, setTipocategoriasseleccionado] = useState([]);
 
   const history = useHistory();
   const dispatch = useDispatch();
-  const { idConvocatoria } = useSelector( state => state.convocatoria );
-  console.log(idConvocatoria)
+  const { idConvocatoria } = useSelector((state) => state.convocatoria);
+  const { editarConvocatoria } = useSelector((state) => state.edicion);
 
   useEffect(() => {
-    cargarSelectLineaConvocatoria()
-    dispatch(consultarIdConvocatoria())
+    cargarSelectLineaConvocatoria();
+    dispatch(consultarIdConvocatoria());
   }, [dispatch]);
 
+  useEffect(() => {
+    cargarEdicion();
+  }, []);
+
+  const cargarEdicion = async () => {
+    console.log(editarConvocatoria);
+    if (editarConvocatoria === undefined) {
+      return;
+    }
+    let participantes = [];
+    let categorias = [];
+    for (var i in editarConvocatoria.tipo_participante) {
+      participantes.push(editarConvocatoria.tipo_participante[i].value);
+    }
+    setTipoparticipanteseleccionado(participantes);
+    await axios
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${editarConvocatoria.idnumero_convocatoria}`)
+      .then(({ data }) => {
+        console.log(data);
+        categoriaslineasconvocatoriaMap = data.data.map((ds) => {
+          return {
+            key: ds.idcategorialineaconvocatoria,
+            value: ds.idcategorialineaconvocatoria,
+            text: ds.nombre,
+          };
+        });
+        setCategoriasLineaconvocatoria(categoriaslineasconvocatoriaMap);
+      })
+      .catch(function (error) {});
+    for (var x in editarConvocatoria.categoria_linea_convocatoria) {
+      categorias.push(editarConvocatoria.categoria_linea_convocatoria[x].value);
+    }
+    setTipocategoriasseleccionado(categorias);
+    setConvocatoria({
+      numero_convocatoria: editarConvocatoria.idnumero_convocatoria,
+      linea_convocatoria: editarConvocatoria.linea_convocatoria,
+      categoria_linea_convocatoria: editarConvocatoria.categoria_linea_convocatoria,
+      entidad: editarConvocatoria.entidad,
+      pseudonimos: editarConvocatoria.pseudonimo,
+      tipo_participante: editarConvocatoria.tipo_participante,
+      cobertura: editarConvocatoria.cobertura,
+      ciclo: editarConvocatoria.ciclo,
+      linea_estgica: editarConvocatoria.linea_estrategica,
+      area: editarConvocatoria.area,
+      convenido: editarConvocatoria.esconvenio,
+      modalidad: editarConvocatoria.modalidad,
+      tipo_estimulo: editarConvocatoria.tipo_estimulo,
+      valor_total_entg: editarConvocatoria.valor_total_entg,
+      bolsa_concursable: editarConvocatoria.bolsa_concursable,
+      num_estimulos: editarConvocatoria.num_estimulos,
+      descripcion_corta: editarConvocatoria.descripcion_corta,
+      perfil_participante: editarConvocatoria.perfil_participante,
+      noparticipa: editarConvocatoria.noparticipa,
+    });
+    console.log(convocatoria, tipoparticipanteseleccionado);
+  };
 
   //funciones
   const cargarSelectLineaConvocatoria = async () => {
-    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
+    const response = await axios
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
       .then(({ data }) => {
-        LineaConvocatoriaOptionsMap = data.data.map(ds => {
+        LineaConvocatoriaOptionsMap = data.data.map((ds) => {
           return {
             key: ds.idlineaconvocatoria,
             value: ds.idlineaconvocatoria,
-            text: ds.nombre
-          }
-        })
-        setlineaConvocatoriaOptions(LineaConvocatoriaOptionsMap)
+            text: ds.nombre,
+          };
+        });
+        setlineaConvocatoriaOptions(LineaConvocatoriaOptionsMap);
       })
       .catch(function (error) {
-        console.log(error)
-      })
-  }
-
-  const capturarValoresOptionsMultiple = (event, result, stateActualizar) => {
-
-    let posicion = result.value.length - 1;
-    let option = result.options.filter(data => data.value === result.value[posicion])
-    let array = [];
-    
-    if(stateActualizar == 'categoria'){
-      let repetido = convocatoria.categoria_linea_convocatoria.filter(data => data.text.trim() === option[0].text.trim())
-      if (repetido.length > 0) return;
-      array = [
-        ...convocatoria.categoria_linea_convocatoria,
-        option[0]
-      ]
-      return setConvocatoria({ ...convocatoria, categoria_linea_convocatoria: array });
-    }else{
-      let repetido = convocatoria.tipo_participante.filter(data => data.text.trim() === option[0].text.trim())
-      if (repetido.length > 0) return;
-      array = [
-        ...convocatoria.tipo_participante,
-        option[0]
-      ]
-      return setConvocatoria({ ...convocatoria, tipo_participante: array });
-    }
-  }
-
-  const handleCreateConvocatoria = async (e) => {
-    e.preventDefault();
-    console.log(convocatoria)
-    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
-    .then((data) =>  {
-
-      console.log(data)
-      ObjNotificaciones.MSG_SUCCESS('success', data.data.mensaje)
-      history.push("/cronogramaActividades");
-    })
-    .catch(function (error) {
-      //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-    })
+        console.log(error);
+      });
   };
 
+  const capturarValoresOptionsMultiple = (event, result, stateActualizar) => {
+    let posicion = result.value.length - 1;
+    let option = result.options.filter((data) => data.value === result.value[posicion]);
+    let array = [];
+
+    if (stateActualizar === "categoria") {
+      setTipocategoriasseleccionado(result.value);
+      if (event.target.className.indexOf("delete") >= 0) {
+        let arraycategorias = [];
+        for (var i in convocatoria.categoria_linea_convocatoria) {
+          for (var x in result.value){
+            if (convocatoria.categoria_linea_convocatoria[i].value === result.value[x]) arraycategorias.push(convocatoria.categoria_linea_convocatoria[i]);
+          }
+        }
+        return setConvocatoria({ ...convocatoria, categoria_linea_convocatoria: arraycategorias });
+      }
+      if (option.length === 0) return;
+      let repetido = convocatoria.categoria_linea_convocatoria.filter(
+        (data) => data.text.trim() === option[0].text.trim()
+      );
+      if (repetido.length > 0) return;
+      array = [...convocatoria.categoria_linea_convocatoria, option[0]];
+      return setConvocatoria({ ...convocatoria, categoria_linea_convocatoria: array });
+    } else {
+      setTipoparticipanteseleccionado(result.value);
+      if (event.target.className.indexOf("delete") >= 0) {
+        let arrayparticipantes = [];
+        for (var i in convocatoria.tipo_participante) {
+          for (var x in result.value){
+            if (convocatoria.tipo_participante[i].value === result.value[x]) arrayparticipantes.push(convocatoria.tipo_participante[i]);
+          }
+        }
+        return setConvocatoria({ ...convocatoria, tipo_participante: arrayparticipantes });
+      }
+      if (option.length === 0) return;
+      let repetido = convocatoria.tipo_participante.filter((data) => data.text.trim() === option[0].text.trim());
+      if (repetido.length > 0) return;
+      array = [...convocatoria.tipo_participante, option[0]];
+      return setConvocatoria({ ...convocatoria, tipo_participante: array });
+    }
+  };
+
+  const handleCreateConvocatoria = async (e) => {
+    if (editarConvocatoria === undefined) {
+      e.preventDefault();
+      console.log(convocatoria);
+      return await axios
+        .post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
+        .then((data) => {
+          console.log(data);
+          ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
+          history.push("/cronogramaActividades");
+        })
+        .catch(function (error) {
+          //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+        });
+    }
+
+    await axios
+      .post(`${ObjConstanst.IP_CULTURE}convocatorias/${editarConvocatoria.idconvocatorias}`, convocatoria)
+      .then((data) => {
+        console.log(data);
+        ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
+        history.push("/adminconvocatorias");
+        dispatch(edicionConvocatoria());
+      })
+      .catch(function (error) {
+        //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+      });
+  };
 
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
     console.log(value, name);
-    setConvocatoria({ ...convocatoria, [name]: value });
+    return setConvocatoria({ ...convocatoria, [name]: value });
   };
-
 
   const handleLineaConvocatoria = async (event, results) => {
     const { name, value } = results || event.target;
     setConvocatoria({ ...convocatoria, [name]: value });
-    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${value}`)
+    const response = await axios
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${value}`)
       .then(({ data }) => {
-        console.log(data)
-        categoriaslineasconvocatoriaMap = data.data.map(ds => {
+        console.log(data);
+        categoriaslineasconvocatoriaMap = data.data.map((ds) => {
           return {
             key: ds.idcategorialineaconvocatoria,
             value: ds.idcategorialineaconvocatoria,
-            text: ds.nombre
-          }
-        })
+            text: ds.nombre,
+          };
+        });
         setCategoriasLineaconvocatoria(categoriaslineasconvocatoriaMap);
       })
-      .catch(function (error) {
-
-      })
-  }
+      .catch(function (error) {});
+  };
 
   const handletoggleChange = (event, result) => {
     const { name, checked } = result || event.target;
-    console.log(name, checked)
+    console.log(name, checked);
     setConvocatoria({ ...convocatoria, [name]: checked });
-  }
+  };
 
   const [currentDate, setNewDate] = useState(null);
   const onChange = (event, data) => setNewDate(data.value);
-
 
   return (
     <React.Fragment>
@@ -161,7 +255,7 @@ export function InfoConvocatoria() {
           <Form size="large" onSubmit={handleCreateConvocatoria} autoComplete="off">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: {idConvocatoria + 1 }
+                Codigo de convocatoria #: {idConvocatoria + 1}
               </Header>
               <Header as="h4" floated="left">
                 Informacion general - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
@@ -169,54 +263,58 @@ export function InfoConvocatoria() {
               <Divider clearing />
               <Form.Group widths="equal">
                 <Form.Select
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   label="Número de la convocatoria"
                   options={NumeroConvocatoiriaOptions}
                   name="numero_convocatoria"
+                  value={convocatoria.numero_convocatoria.toString()}
                   onChange={handleInputChange}
                 />
 
                 <Form.Select
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   label="Línea convocatoria"
                   name="linea_convocatoria"
-                  onChange={handleInputChange, handleLineaConvocatoria}
+                  value={convocatoria.linea_convocatoria}
+                  onChange={(handleInputChange, handleLineaConvocatoria)}
                   options={lineaConvocatoriaOptions}
                 />
 
                 <Form.Dropdown
                   label="Categorías línea convocatoria"
-                  placeholder='Seleccionar'
+                  value={tipocategoriasseleccionado}
+                  placeholder="Seleccionar"
                   fluid
                   multiple
                   selection
                   name="categoria_linea_convocatoria"
                   options={categoriasLineaconvocatoria}
-                  onChange={(event, result) => capturarValoresOptionsMultiple(event, result, 'categoria')}
+                  onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "categoria")}
                 />
 
                 <Form.Select
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   label="Entidad"
                   options={EntidadOptions}
                   name="entidad"
+                  value={convocatoria.entidad}
                   onChange={handleInputChange}
                 />
               </Form.Group>
-
 
               <Grid columns={2}>
                 <Grid.Row>
                   <Grid.Column>
                     <Form.Dropdown
                       label="¿Quien puede participar?"
-                      placeholder='Seleccionar'
+                      placeholder="Seleccionar"
+                      value={tipoparticipanteseleccionado}
                       fluid
                       multiple
                       selection
                       name="tipo_participante"
                       options={QuienParticipaOptions}
-                      onChange={(event, result) => capturarValoresOptionsMultiple(event, result, 'tipoParticipante')}
+                      onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "tipo_participante")}
                     />
                   </Grid.Column>
                   <Grid.Column>
@@ -224,21 +322,20 @@ export function InfoConvocatoria() {
                     <Form.Checkbox
                       toggle
                       name="pseudonimos"
+                      value={convocatoria.pseudonimos}
                       checked={convocatoria.pseudonimos}
                       onChange={handletoggleChange}
                     />
                   </Grid.Column>
-
                 </Grid.Row>
               </Grid>
 
               <Divider clearing />
 
               <Form.Group widths="equal">
-
                 <Form.Dropdown
                   label="Ciclo"
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   fluid
                   selection
                   options={CicloOptions}
@@ -249,7 +346,7 @@ export function InfoConvocatoria() {
 
                 <Form.Dropdown
                   label="Linea estrategica"
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   fluid
                   search
                   selection
@@ -261,7 +358,7 @@ export function InfoConvocatoria() {
 
                 <Form.Dropdown
                   label="Área"
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   fluid
                   search
                   selection
@@ -273,7 +370,7 @@ export function InfoConvocatoria() {
 
                 <Form.Dropdown
                   label="Cobertura"
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   fluid
                   selection
                   options={CoberturaOptions}
@@ -305,34 +402,36 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <Form.Select
-                      placeholder='Seleccionar'
-                      size='large'
+                      placeholder="Seleccionar"
+                      size="large"
                       label="Modalidad de estimulo"
+                      value={convocatoria.modalidad}
                       options={ModalidadEstimuloOptions}
                       name="modalidad"
                       onChange={handleInputChange}
                     />
-
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
 
               <Form.Group widths="equal">
                 <Form.Select
-                  placeholder='Seleccionar'
+                  placeholder="Seleccionar"
                   label="Tipo de estimulo"
                   options={TipoEstimuloOptions}
+                  value={convocatoria.tipo_estimulo}
                   name="tipo_estimulo"
                   onChange={handleInputChange}
                 />
 
-                {convocatoria.tipo_estimulo == 'economico' &&
+                {convocatoria.tipo_estimulo == "economico" && (
                   <>
                     <Form.Input
                       fluid
-                      placeholder='Search...'
+                      placeholder="Search..."
                       label="Valor total de recursos que entregará la convocatoria"
                       name="valor_total_entg"
+                      value={convocatoria.valor_total_entg}
                       onChange={handleInputChange}
                     />
 
@@ -341,6 +440,7 @@ export function InfoConvocatoria() {
                       <Form.Checkbox
                         toggle
                         name="bolsa_concursable"
+                        value={convocatoria.bolsa_concursable}
                         checked={convocatoria.bolsa_concursable}
                         onChange={handletoggleChange}
                       />
@@ -348,13 +448,14 @@ export function InfoConvocatoria() {
 
                     <Form.Input
                       fluid
-                      placeholder='Seleccionar'
+                      placeholder="Seleccionar"
                       label="Numero de estimulos"
                       name="num_estimulos"
+                      value={convocatoria.num_estimulos}
                       onChange={handleInputChange}
                     />
                   </>
-                }
+                )}
               </Form.Group>
 
               <Divider clearing />
@@ -365,6 +466,7 @@ export function InfoConvocatoria() {
                     <Form.TextArea
                       label="Descripcion corta"
                       name="descripcion_corta"
+                      value={convocatoria.descripcion_corta}
                       onChange={handleInputChange}
                     />
                   </Grid.Column>
@@ -377,6 +479,7 @@ export function InfoConvocatoria() {
                     <Form.TextArea
                       label="Perfil de participante"
                       name="perfil_participante"
+                      value={convocatoria.perfil_participante}
                       onChange={handleInputChange}
                     />
                   </Grid.Column>
@@ -384,6 +487,7 @@ export function InfoConvocatoria() {
                     <Form.TextArea
                       label="¿Quien no puede participar?"
                       name="noparticipa"
+                      value={convocatoria.noparticipa}
                       onChange={handleInputChange}
                     />
                   </Grid.Column>
