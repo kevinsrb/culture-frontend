@@ -13,6 +13,7 @@ import { CargarArchivos } from "../screens/CargarArchivos/CargarArchivos";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
+import {Documentos}  from "../screens/Documentos/Documentos";
 
 
 export const AppRouter = () => {
@@ -58,6 +59,10 @@ export const AppRouter = () => {
                     <Route path="/adminconvocatorias">
                         <Navbar />
                         <AdminConvocatorias />
+                    </Route>
+                    <Route path="/documentos">
+                        <Navbar />
+                        <Documentos />
                     </Route>
                     <Route path="/OlvidoContraseña">
                         <OlvidoContraseña />

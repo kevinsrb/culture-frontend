@@ -39,11 +39,16 @@ export const SidebarData = [
     path: '/cargarArchivos',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
-  }
-  ,
+  },
   {
     title: 'Amin convocatorias',
     path: '/adminconvocatorias',
+    icon: <IoIcons.IoIosPaper />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Documentos',
+    path: '/documentos',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   }

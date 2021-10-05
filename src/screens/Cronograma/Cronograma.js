@@ -131,7 +131,7 @@ export const Cronograma = () => {
   }, []);
 
   async function primerasFechas() {
-    let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/1`);
+    let response = await axios.get(`${ObjConstanst.IP_CULTURE}api/convocatorias/1`);
     if (response.data.data.length === 0) return;
 
     return console.log(response);
@@ -227,7 +227,7 @@ export const Cronograma = () => {
     if (events.length === 0) return;
     if (events[conteoFechas]) {
       try {
-        await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/fechas`, {
+        await axios.post(`${ObjConstanst.IP_CULTURE}api/fechas`, {
           id_convocatoria,
           clave: events[conteoFechas].title,
           valormin: events[conteoFechas].start,
