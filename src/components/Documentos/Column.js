@@ -30,10 +30,10 @@ function Column(props) {
     setstate({ activeIndex: newIndex })
   }
 
-  const { activeIndex } = state;
+  const { activeIndex } = state; 
 
   return (
-    <Droppable droppableId={droppableId}  type={type} >
+    <Droppable droppableId={droppableId}  type={type} > 
       {provided => (
         <div {...provided.droppableProps} ref={provided.innerRef} style={style}>
           <Accordion styled>
