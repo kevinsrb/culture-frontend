@@ -31,7 +31,7 @@ export function InfoConvocatoria() {
     tipo_participante: [],
     cobertura: "",
     ciclo: "",
-    linea_estgica: "",
+    linea_estrategica: "",
     area: "",
     convenido: false,
     modalidad: "",
@@ -64,7 +64,10 @@ export function InfoConvocatoria() {
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
-    dispatch(consultarIdConvocatoria());
+    if(idConvocatoria != undefined){
+      dispatch(consultarIdConvocatoria())
+    }
+    
   }, [dispatch]);
 
   useEffect(() => {
@@ -109,7 +112,7 @@ export function InfoConvocatoria() {
       tipo_participante: editarConvocatoria.tipo_participante,
       cobertura: editarConvocatoria.cobertura,
       ciclo: editarConvocatoria.ciclo,
-      linea_estgica: editarConvocatoria.linea_estgica,
+      linea_estrategica: editarConvocatoria.linea_estrategica,
       area: editarConvocatoria.area,
       convenido: editarConvocatoria.esconvenio,
       modalidad: editarConvocatoria.modalidad,
@@ -350,8 +353,8 @@ export function InfoConvocatoria() {
                   fluid
                   search
                   selection
-                  name="linea_estgica"
-                  value={convocatoria.linea_estgica}
+                  name="linea_estrategica"
+                  value={convocatoria.linea_estrategica}
                   options={LineaEstrategicaOptions}
                   onChange={handleInputChange}
                 />
