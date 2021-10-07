@@ -1,6 +1,19 @@
-.container-tarjetas{
-    display: flex;
-    flex-flow: row wrap;
-    align-items: flex-start;
-    justify-content: flex-start;
+.container-tarjetas {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.container-documentacion {
+  border: 0.8px solid #cbd6e2;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background-color: #f5fafc;
+  color: #8796a5;
+}
+
+listado-container-documentacion {
+  padding: 8px;
 }
