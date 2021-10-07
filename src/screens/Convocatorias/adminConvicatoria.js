@@ -93,17 +93,20 @@ export const AdminConvocatorias = () => {
       console.error(error);
     }
   }
+
   function handletoggleChange(data) {
     let datosActualesDiff = JSON.parse(JSON.stringify(datosActuales));
     datosActualesDiff[data.key - 1].publicada = !datosActualesDiff[data.key - 1].publicada;
     setDatosActuales(datosActualesDiff);
   }
+
   function cambioPaginación(event, { activePage }) {
     let copy = datosActuales.map((data) => data);
     let datos = copy.slice(cantidadPáginas * activePage - cantidadPáginas, cantidadPáginas * activePage);
     setDatosActuales(datos);
     return setPaginacionActual(activePage);
   }
+
   function mostrarConvocatorias(event, value) {
     let copy = datosActuales.map((data) => data);
     let datos = copy.slice(0, value);
@@ -113,6 +116,7 @@ export const AdminConvocatorias = () => {
     setPaginacionTotal(x);
     return setCantidadPáginas(value);
   }
+
   function filtradodeinformacion(e) {
     let filtrado = datosActuales.filter((data) => data.nombre.indexOf(e.target.value) >= 0);
     let datos = filtrado.slice(0, 10);
@@ -122,11 +126,13 @@ export const AdminConvocatorias = () => {
     setPaginacionTotal(x);
     return setCantidadPáginas(10);
   }
+
   function abrirmodalEliminar(e, value) {
     setNombreBorrrar(value.numero_convocatoria);
     setIdBorrrar(value.idconvocatorias);
     return setOpenModalBorrar(!openModalBorrar);
   }
+
   async function borrarConvocatoria() {
     console.log(idBorrar, nombreBorrar);
     try {
@@ -140,11 +146,15 @@ export const AdminConvocatorias = () => {
       return;
     }
   }
+
   function abrirEditar(e, datos) {
     console.log("dicspatch");
     dispatch(edicionConvocatoria(datos));
     return history.push("/infoconvocatorias");
   }
+
+  
+  
   return (
     <div style={{ padding: "2%" }}>
       <Grid columns={4}>

@@ -18,6 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
 import '@fullcalendar/daygrid/main.css';
+import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 
 
 registerLocale("es", es);
@@ -131,7 +132,7 @@ export const Cronograma = () => {
   }, []);
 
   async function primerasFechas() {
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}api/convocatorias/1`);
+    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/1`);
     if (response.data.data.length === 0) return;
 
     return console.log(response);
@@ -227,7 +228,7 @@ export const Cronograma = () => {
     if (events.length === 0) return;
     if (events[conteoFechas]) {
       try {
-        await axios.post(`${ObjConstanst.IP_CULTURE}api/fechas`, {
+        await axios.post(`${ObjConstanst.IP_CULTURE}fechas`, {
           id_convocatoria,
           clave: events[conteoFechas].title,
           valormin: events[conteoFechas].start,
@@ -240,8 +241,8 @@ export const Cronograma = () => {
         return console.error(error);
       }
     }
-
-    return history.push("/adminconvocatorias");
+    await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado las actividades al cronograma");
+    return history.push("/documentacionTecnica");
   }
   
   const handelCargarActividadesSeleccionadas = async () => {

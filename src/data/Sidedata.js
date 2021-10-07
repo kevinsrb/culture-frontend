@@ -11,20 +11,8 @@ export const SidebarData = [
     cName: 'nav-text'
   },
   {
-    title: 'Reports',
-    path: '/noticias',
-    icon: <IoIcons.IoIosPaper />,
-    cName: 'nav-text'
-  },
-  {
     title: 'Cronograma',
     path: '/Cronograma',
-    icon: <IoIcons.IoIosPaper />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Crear categoria',
-    path: '/CreateCategoria',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   },
@@ -49,6 +37,24 @@ export const SidebarData = [
   {
     title: 'Documentos',
     path: '/documentos',
+    icon: <IoIcons.IoIosPaper />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Documentacion tecnica',
+    path: '/documentacionTecnica',
+    icon: <IoIcons.IoIosPaper />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Documentos convocatoria',
+    path: '/documentacionConvocatoria',
+    icon: <IoIcons.IoIosPaper />,
+    cName: 'nav-text'
+  },
+  {
+    title: 'Publicar convocatoria',
+    path: '/publicarConvocatoria',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   }

@@ -1,47 +1,86 @@
-import React from "react";
-import { useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { RequisitosOptions } from '../../data/selectOption.data'
 import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label } from "semantic-ui-react";
-
-const RequisitosOptions = [
-  { key: 1, value: "Anexo", text: "Anexo" },
-  { key: 2, value: "Hoja de vida", text: "Hoja de vida" },
-  { key: 3, value: "Propuesta", text: "Propuesta" },
-  { key: 4, value: "Presupuesto", text: "Presupuesto" },
-];
+import { useSelector } from "react-redux";
+import { ObjConstanst } from "../../config/utils/constanst";
+import { useHistory } from "react-router";
+import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 
 export const DocumentacionTecnica = () => {
   // STATE PRINCIPAL
   const State = {
-    requisito: "",
+    tipo_documento: "",
     descripcion: "",
     activo: false,
     documentacion: [],
+    existedocumentos: [],
     editar: false,
     index: 0,
     errors: {
-      requisito: false,
+      tipo_documento: false,
       descripcion: false,
     },
   };
-  const [principalState, setPrincipalState] = React.useState(State);
+
+  useEffect(() => {
+    cargarDocumentosTecnicos();
+  }, [])
+
+
+
+  const [principalState, setPrincipalState] = useState(State);
+  const { idConvocatoria } = useSelector((state) => state.convocatoria);
+  const history = useHistory();
+
+  const cargarDocumentosTecnicos = async () => {
+    await axios
+      .get(`${ObjConstanst.IP_CULTURE}documentosTecnicos/${idConvocatoria}`)
+      .then(({ data }) => {
+        console.log(data.data);
+        setPrincipalState({ ...principalState, documentacion: data.data })
+        //setlineaConvocatoriaOptions(LineaConvocatoriaOptionsMap);
+      })
+      .catch(function (error) {
+        //console.log(error);
+      });
+  }
 
   const CambiarValor = (event, result) => {
-    console.log(principalState);
     const { name, value } = result || event.target;
     return setPrincipalState({ ...principalState, [name]: value });
   };
+
+  // const eliminarErrores = (event, result) => {
+  //   const { name, value } = result || event.target;
+  //    return setPrincipalState({ ...principalState, errors:{ requisito: false } });
+  // };
+
+
   const agregarFila = () => {
-    if (principalState.descripcion.trim() === "")
-      setPrincipalState({ ...principalState, errors: { requisito: false, descripcion: true } });
-    if (principalState.requisito.trim() === "")
-      return setPrincipalState({ ...principalState, errors: { requisito: true, descripcion: false } });
+    let errores = false;
+    if (principalState.descripcion.trim() === "") {
+      errores = true;
+      setPrincipalState({ ...principalState, errors: { descripcion: true } });
+    }
+
+    if (principalState.tipo_documento.trim() === "") {
+      errores = true;
+      setPrincipalState({ ...principalState, errors: { tipo_documento: true, } });
+    }
+
+    if(errores){
+      return
+    }
+
+    //console.log(principalState.errors)
+
     let array = [];
     array = [
       ...principalState.documentacion,
       {
         index: principalState.documentacion.length,
-        tipo_documento: principalState.requisito,
+        tipo_documento: principalState.tipo_documento,
         descripcion: principalState.descripcion,
         activo: principalState.activo,
       },
@@ -51,38 +90,109 @@ export const DocumentacionTecnica = () => {
         ...principalState.documentacion,
         {
           index: principalState.index,
-          tipo_documento: "Anexo",
+          tipo_documento: principalState.tipo_documento,
           descripcion: principalState.descripcion,
           activo: principalState.activo,
         },
       ];
     }
-    return setPrincipalState({ ...principalState, requisito: "", descripcion: "", documentacion: array });
+
+
+    return setPrincipalState({ ...principalState, tipo_documento: "", descripcion: "", documentacion: array });
   };
+
   const cambiaChecktabla = (data) => {
     let array = JSON.parse(JSON.stringify(principalState.documentacion));
     array[data.index].activo = !array[data.index].activo;
     return setPrincipalState({ ...principalState, documentacion: array });
   };
+
   const Editardocumentacion = (data) => {
     console.log(data);
+    
   };
-  const Eliminardocumentacion = (data) => {
+
+  const Eliminardocumentacion = async ({ data }) => {
+    const { id_documentos_tecnico, index } = data;
+    console.log(id_documentos_tecnico, index)
+
+    const existeDocumento = await verificarExisteDocumento(id_documentos_tecnico, index + 1)
+    console.log(existeDocumento)
+    if (existeDocumento !== undefined && existeDocumento.length) {
+      await axios.delete(`${ObjConstanst.IP_CULTURE}documentosTecnicos/delete/${existeDocumento[0].id_documentos_tecnico}`);
+    }
+
     let array = [];
     let copy = principalState.documentacion.map((data) => data);
-    console.log(copy);
+    console.log(copy)
     array = copy.filter((doc) => doc.index !== data.index);
-    console.log(array);
     return setPrincipalState({ ...principalState, documentacion: array });
   };
+
+  const verificarExisteDocumento = async (id_documento_tecnico, index) => {
+    const id_consultar = id_documento_tecnico != undefined ? id_documento_tecnico : index;
+    if(id_consultar){
+      try {
+        let response = await axios
+          .get(`${ObjConstanst.IP_CULTURE}documentosTecnicos/${id_consultar}`)
+        return response.data.data
+      } catch (error) {
+        console.error(error);
+        return false;
+      }
+    }
+  }
+
+  let i = 0;
+  const handelAsociarDocumentosTecnicos = async () => {
+
+    let arrDocumentos = principalState.documentacion;
+    let documento = 0;
+    let ArrayFilter = arrDocumentos.map(data => data);
+    for (documento in arrDocumentos) {
+      if (arrDocumentos[documento]) {
+        let documentosExiste = await verificarExisteDocumento(arrDocumentos[documento].id_documentos_tecnico)
+        if (documentosExiste) {
+          ArrayFilter = ArrayFilter.filter((element) => element.id_documentos_tecnico !== documentosExiste[0].id_documentos_tecnico);
+          console.log(ArrayFilter);
+        }
+      }
+    }
+
+    arrDocumentos = ArrayFilter;
+
+    if (arrDocumentos.length === 0) return;
+    if (arrDocumentos[i]) {
+      try {
+        await axios.post(`${ObjConstanst.IP_CULTURE}documentosTecnicos`, {
+          activo: arrDocumentos[i].activo,
+          descripcion: arrDocumentos[i].descripcion,
+          tipo_documento: arrDocumentos[i].tipo_documento,
+          convocatoria_id: idConvocatoria ,
+        });
+        i++;
+        return handelAsociarDocumentosTecnicos();
+      } catch (error) {
+        return console.error(error);
+      }
+    }
+
+    await ObjNotificaciones.MSG_SUCCESS("success", 'Se Han asociado los documentos correctamente');
+    history.push('/documentacionConvocatoria')
+
+  }
+
   return (
     <div style={{ padding: "2%" }}>
       <Segment>
-        <Form>
+        <Form autoComplete="off">
           <Grid style={{ paddingRight: "2%" }}>
-            <Grid.Row columns={1}>
+            <Grid.Row columns={2}>
               <Grid.Column>
                 <Header>Asociar documentación técnica</Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Header as="h5" floated="right">Codigo convocarotia #{idConvocatoria}</Header>
               </Grid.Column>
             </Grid.Row>
             <Divider className="divider-admin-convocatorias" />
@@ -97,24 +207,25 @@ export const DocumentacionTecnica = () => {
                   fluid
                   className="select-registros-adminconvocatoria"
                   placeholder="Seleccionar"
-                  value={principalState.requisito}
-                  name="requisito"
+                  value={principalState.tipo_documento}
+                  name="tipo_documento"
                   options={RequisitosOptions}
                   onChange={CambiarValor}
-                  error={principalState.errors.requisito}
+                  error={principalState.errors.tipo_documento}
                 />
-                {principalState.errors.requisito ? <Label color="red">Campo requerido</Label> : null}
+                {principalState.errors.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={1}>
               <Grid.Column>
                 <Form.TextArea
-                  required
                   label="Descripción"
+                  className="select-registros-adminconvocatoria"
                   name="descripcion"
                   onChange={CambiarValor}
                   value={principalState.descripcion}
                 ></Form.TextArea>
+                {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={4}>
@@ -200,7 +311,7 @@ export const DocumentacionTecnica = () => {
               <Grid.Column></Grid.Column>
               <Grid.Column></Grid.Column>
               <Grid.Column className="container-pagination-adminconvocatorias">
-                <Button className="botones-redondos" color="blue" onClick={() => console.log("aplicando filtros")}>
+                <Button className="botones-redondos" color="blue" onClick={handelAsociarDocumentosTecnicos}>
                   Guardar y continuar
                 </Button>
               </Grid.Column>

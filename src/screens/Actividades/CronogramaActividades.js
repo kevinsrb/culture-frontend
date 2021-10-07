@@ -47,9 +47,9 @@ export const CronogramaActividades = () => {
     let actividadesSeleccionadas = actividades.filter(data => data.check);
     const objActividades = {
       "actividades": actividadesSeleccionadas
-    }
+  }
 
-    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${1}`, objActividades)
+    const response = await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`, objActividades)
     .then(({ data }) => {
       ObjNotificaciones.MSG_SUCCESS('success', data.mensaje)
       history.push("/Cronograma")
@@ -139,7 +139,7 @@ export const CronogramaActividades = () => {
               </Segment>
 
               <Container textAlign='right'>
-                <Button basic color='gray' content='Guardar y continuar' className="btn btn-disable" />
+                <Button content='Guardar y continuar' className="btn btn-disable" />
               </Container>
 
             </Segment>

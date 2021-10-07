@@ -88,6 +88,17 @@ export const QuienParticipaOptions = [
   { value: 3,  text: 'Persona juridica' }
 ]
 
+export const RequisitosOptions = [
+  { key: 1, value: "Anexo", text: "Anexo" },
+  { key: 2, value: "Hoja de vida", text: "Hoja de vida" },
+  { key: 3, value: "Propuesta", text: "Propuesta" },
+  { key: 4, value: "Presupuesto", text: "Presupuesto" },
+];
+
+export const TipodocumentosOptions = [
+  { key: 1, value: "Anexo", text: "Anexo" },
+  { key: 2, value: "Hoja de vida", text: "Hoja de vida" },
+];
 
 
  

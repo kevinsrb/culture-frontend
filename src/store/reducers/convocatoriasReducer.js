@@ -8,7 +8,7 @@ export const convocatoriasReducer = (state = {}, action) => {
             return {
                 ...state,
                 idConvocatoria: action.payload.idConvocatoria
-            };
+            };   
         default:
             return state
     }

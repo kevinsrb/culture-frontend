@@ -1,7 +1,23 @@
-.button-filtro-documentacion-general {
+.constiner_documentacion_general {
     background-color: #F6F6F6 !important;
     border: 1px solid #B0B0B0 !important;
     color: #1faeef !important;
     width: 100%;
     height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
+  .button_archivo {
+    background-color: transparent !important;
+    color: $azulClarito !important;
+    
+  }
+
+  .button_archivo:hover {
+    background-color: $naranja !important;
+    color: white !important;
+  }
+ 
+ 

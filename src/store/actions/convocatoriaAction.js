@@ -28,3 +28,5 @@ export const edicionConvocatoria = (editarConvocatoria) => ({
         editarConvocatoria,
     }
 })
+
+

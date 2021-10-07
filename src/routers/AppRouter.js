@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
 import { Documentos } from "../screens/Documentos/Documentos";
+import { PublicarConvocatoria } from "../screens/Convocatorias/publicarConvocatoria";
 
 
 export const AppRouter = () => {
@@ -67,6 +68,10 @@ export const AppRouter = () => {
           <Route path="/documentacionConvocatoria">
             <Navbar />
             <DocumentacionConvocatoria />
+          </Route>
+          <Route path="/publicarConvocatoria">
+            <Navbar />
+            <PublicarConvocatoria />
           </Route>
           <Route path="/OlvidoContraseña">
             <OlvidoContraseña />

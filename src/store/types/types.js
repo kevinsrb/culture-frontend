@@ -7,5 +7,6 @@ export const types = {
     USER_TOKEN: '[User] User Token',
 
     idConvocatoria: '[Cvt] id convocatoria',
-    edicion: '[Cvt] edicion'
+    edicion: '[Cvt] edicion',
+    eliminar: '[Cvt] eliminar'
 }
