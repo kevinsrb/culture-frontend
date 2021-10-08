@@ -5,29 +5,32 @@ import SubirArchivo from "../../components/Archivos/SubirArchivos";
 import { TipodocumentosOptions } from "../../data/selectOption.data";
 import { ObjConstanst } from "../../config/utils/constanst";
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
-import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label } from "semantic-ui-react";
+import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal } from "semantic-ui-react";
 import { useSelector } from "react-redux";
-
+import { Document, Page } from "react-pdf";
 
 export const DocumentacionConvocatoria = () => {
   // STATE PRINCIPAL
   const State = {
-    nombre: '',
-    tipo_documento: '',
-    descripcion: '',
+    nombre: "",
+    tipo_documento: "",
+    descripcion: "",
     activo: false,
-    url_documento: '',
+    url_documento: "",
     documentacion: [],
     editar: false,
     index: 0,
-    file: '',
-    filename: '',
-    tipo_documento_file: '',
+    file: "",
+    filename: "",
+    tipo_documento_file: "",
+    pdf: "",
+    namepdf: "",
     errors: {
       nombre: false,
       tipo_documento: false,
       descripcion: false,
-    }
+    },
+    openModalViewer: false,
   };
   const [principalState, setPrincipalState] = useState(State);
   const [files, setFiles] = useState();
@@ -36,51 +39,40 @@ export const DocumentacionConvocatoria = () => {
 
   const fileInputRef = React.useRef();
 
-
-
   const saveFile = async (e) => {
-    console.log(principalState)
+    let file = e.target.files[0];
     const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    formData.append("fileName", e.target.files[0].name);
-    // formData.append("filetype", principalState.tipo_documento_file);
-
-    console.log(formData)
-
+    formData.append("archivo", file);
     await axios
-      .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData)
+      .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData, {
+        headers: { "content-type": "multipart/form-data" },
+      })
       .then((data) => {
         console.log(data);
         //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
         //history.push("/cronogramaActividades");
       })
       .catch(function (error) {
-        console.log(error)
+        console.log(error);
       });
-    return setPrincipalState({ ...principalState, url_documento: e.target.files[0].name, file: e.target.files[0], filename: e.target.files[0].name, tipo_documento_file: e.target.files[0].type });
+    return setPrincipalState({
+      ...principalState,
+      url_documento: e.target.files[0].name,
+      file: e.target.files[0],
+      filename: e.target.files[0].name,
+      tipo_documento_file: e.target.files[0].type,
+    });
   };
 
-
-  const subirArchivo = async(e) => {
-    console.log(principalState)
-    const formData = new FormData();
-    formData.append("file", principalState.file);
-    formData.append("fileName", principalState.filename);
-    formData.append("filetype", principalState.tipo_documento_file);
-
-    console.log(formData)
-
-    await axios
-      .post(`${ObjConstanst.IP_CULTURE}guardarArchivo`, formData)
-      .then((data) => {
-        console.log(data);
-        //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-        //history.push("/cronogramaActividades");
-      })
-      .catch(function (error) {
-        console.log(error)
-      });
-
+  const subirArchivo = async (e) => {
+    try {
+      let data = new FormData();
+      data.append("pdf", e.target.files[0]);
+      let response = await axios.post(`http://127.0.0.1:3334/v1/docs/upload`, data);
+      console.log(response);
+    } catch (error) {
+      return console.error(error);
+    }
   };
 
   const CambiarValor = (event, result) => {
@@ -96,19 +88,19 @@ export const DocumentacionConvocatoria = () => {
 
     if (principalState.tipo_documento.trim() === "") {
       errores = true;
-      setPrincipalState({ ...principalState, errors: { tipo_documento: true, } });
+      setPrincipalState({ ...principalState, errors: { tipo_documento: true } });
     }
 
     if (principalState.descripcion.trim() === "") {
       errores = true;
-      setPrincipalState({ ...principalState, errors: { descripcion: true, } });
+      setPrincipalState({ ...principalState, errors: { descripcion: true } });
     }
 
-
-    if(errores){
-      return
+    if (errores) {
+      return;
     }
     let array = [];
+    console.log(principalState.editar);
     array = [
       ...principalState.documentacion,
       {
@@ -116,25 +108,30 @@ export const DocumentacionConvocatoria = () => {
         nombre: principalState.nombre,
         tipo_documento: principalState.tipo_documento,
         descripcion: principalState.descripcion,
-        url_documento: principalState.url_documento,
+        url_documento: principalState.filename,
         activo: principalState.activo,
       },
     ];
     if (principalState.editar) {
-      array = [
-        ...principalState.documentacion,
-        {
-          index: principalState.index,
-          nombre: principalState.nombre,
-          tipo_documento: principalState.tipo_documento,
-          descripcion: principalState.descripcion,
-          url_documento: principalState.url_documento,
-          activo: principalState.activo,
-        },
-      ];
+      let todoJSON = JSON.parse(JSON.stringify(principalState.documentacion));
+      todoJSON[principalState.index].nombre = principalState.nombre
+      todoJSON[principalState.index].tipo_documento = principalState.tipo_documento
+      todoJSON[principalState.index].descripcion = principalState.descripcion
+      todoJSON[principalState.index].url_documento = principalState.filename
+      todoJSON[principalState.index].activo = principalState.activo
+      array = todoJSON;
     }
 
-    return setPrincipalState({ ...principalState, nombre: '', tipo_documento: '', descripcion: '', url_documento: '', filename: '', documentacion: array });
+    return setPrincipalState({
+      ...principalState,
+      nombre: "",
+      tipo_documento: "",
+      descripcion: "",
+      url_documento: "",
+      filename: "",
+      documentacion: array,
+      editar: false,
+    });
   };
   const cambiaChecktabla = (data) => {
     let array = JSON.parse(JSON.stringify(principalState.documentacion));
@@ -144,21 +141,32 @@ export const DocumentacionConvocatoria = () => {
 
   const Editardocumentacion = (data) => {
     console.log(data);
+    return setPrincipalState({
+      ...principalState,
+      nombre: data.data.nombre,
+      tipo_documento: data.data.tipo_documento,
+      descripcion: data.data.descripcion,
+      url_documento: data.data.url_documento,
+      index: data.data.index,
+      editar: true,
+    });
   };
 
   const Eliminardocumentacion = async ({ data }) => {
     const { id_documentos_tecnico, index } = data;
-    console.log(id_documentos_tecnico, index)
+    console.log(id_documentos_tecnico, index);
 
-    const existeDocumento = await verificarExisteDocumento(id_documentos_tecnico, index + 1)
-    console.log(existeDocumento)
+    const existeDocumento = await verificarExisteDocumento(id_documentos_tecnico, index + 1);
+    console.log(existeDocumento);
     if (existeDocumento !== undefined && existeDocumento.length) {
-      await axios.delete(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/delete/${existeDocumento[0].id_documentos_tecnico}`);
+      await axios.delete(
+        `${ObjConstanst.IP_CULTURE}documentosConvocatoria/delete/${existeDocumento[0].id_documentos_tecnico}`
+      );
     }
 
     let array = [];
     let copy = principalState.documentacion.map((data) => data);
-    console.log(copy)
+    console.log(copy);
     array = copy.filter((doc) => doc.index !== data.index);
     return setPrincipalState({ ...principalState, documentacion: array });
   };
@@ -167,27 +175,28 @@ export const DocumentacionConvocatoria = () => {
     const id_consultar = id_documento_tecnico != undefined ? id_documento_tecnico : index;
     if (id_consultar) {
       try {
-        let response = await axios
-          .get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/${id_consultar}`)
-        return response.data.data
+        let response = await axios.get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/${id_consultar}`);
+        return response.data.data;
       } catch (error) {
         console.error(error);
         return false;
       }
     }
-  }
+  };
 
   let i = 0;
   const handelAsociarDocumentosGenerales = async () => {
-   console.log(principalState)
+    console.log(principalState);
     let arrDocumentos = principalState.documentacion;
     let documento = 0;
-    let ArrayFilter = arrDocumentos.map(data => data);
+    let ArrayFilter = arrDocumentos.map((data) => data);
     for (documento in arrDocumentos) {
       if (arrDocumentos[documento]) {
-        let documentosExiste = await verificarExisteDocumento(arrDocumentos[documento].id_documentos_tecnico)
+        let documentosExiste = await verificarExisteDocumento(arrDocumentos[documento].id_documentos_tecnico);
         if (documentosExiste) {
-          ArrayFilter = ArrayFilter.filter((element) => element.id_documentos_tecnico !== documentosExiste[0].id_documentos_tecnico);
+          ArrayFilter = ArrayFilter.filter(
+            (element) => element.id_documentos_tecnico !== documentosExiste[0].id_documentos_tecnico
+          );
           console.log(ArrayFilter);
         }
       }
@@ -197,7 +206,7 @@ export const DocumentacionConvocatoria = () => {
 
     if (arrDocumentos.length === 0) return;
     if (arrDocumentos[i]) {
-      console.log(arrDocumentos[i].activo)
+      console.log(arrDocumentos[i].activo);
       try {
         await axios.post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/`, {
           nombre: arrDocumentos[i].nombre,
@@ -214,9 +223,32 @@ export const DocumentacionConvocatoria = () => {
       }
     }
     // subirArchivo()
-    await ObjNotificaciones.MSG_SUCCESS("success", 'Se Han asociado los documentos correctamente');
-    //history.push('/adminconvocatorias')
-  }
+    await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
+    return history.push("/publicarConvocatoria");
+  };
+
+  const Verdocumentacion = async (data) => {
+    console.log(data);
+    await axios
+      .get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/consultarArchivos/${data.url_documento}`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        var file = new Blob([response.data], {
+          type: "application/pdf",
+        });
+        const fileURL = URL.createObjectURL(file);
+        return setPrincipalState({
+          ...principalState,
+          pdf: fileURL,
+          namepdf: data.url_documento,
+          openModalViewer: !principalState.openModalViewer,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div style={{ padding: "2%" }}>
@@ -267,27 +299,22 @@ export const DocumentacionConvocatoria = () => {
                   onChange={CambiarValor}
                   error={principalState.errors.descripcion}
                 >
-                {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
+                  {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
                 </Form.TextArea>
               </Grid.Column>
               <Grid.Column>
                 <Form.Field style={{ height: "74%" }}>
                   <label>Adjuntar archivo</label>
                   <div className="constiner_documentacion_general">
-                    {principalState.filename == '' &&
+                    {principalState.filename == "" && (
                       <Button
                         content="Seleccionar archivo"
                         className="btn button_archivo"
                         onClick={() => fileInputRef.current.click()}
                       />
-                    }
+                    )}
                     <span className="nombreArchivo">{principalState.filename}</span>
-                    <input
-                      ref={fileInputRef}
-                      type="file"
-                      hidden
-                      onChange={saveFile}
-                    />
+                    <input ref={fileInputRef} type="file" hidden onChange={saveFile} />
                   </div>
                 </Form.Field>
               </Grid.Column>
@@ -343,7 +370,7 @@ export const DocumentacionConvocatoria = () => {
                             <Checkbox checked={data.activo} onChange={() => cambiaChecktabla(data)} />
                           </Table.Cell>
                           <Table.Cell width={1}>
-                            <Button className="botones-acciones" icon="eye" />
+                            <Button className="botones-acciones" icon="eye" onClick={() => Verdocumentacion(data)} />
                           </Table.Cell>
                           <Table.Cell width={1}>
                             <Button
@@ -383,6 +410,16 @@ export const DocumentacionConvocatoria = () => {
           </Grid>
         </Form>
       </Segment>
+      <Modal
+        onClose={() => setPrincipalState({ ...principalState, openModalViewer: !principalState.openModalViewer })}
+        closeIcon
+        open={principalState.openModalViewer}
+      >
+        <Modal.Header>Previsualización: {principalState.namepdf}</Modal.Header>
+        <Modal.Content>
+          {principalState.pdf && <iframe src={principalState.pdf} style={{ width: "100%", height: "500px" }} />}
+        </Modal.Content>
+      </Modal>
     </div>
   );
 };

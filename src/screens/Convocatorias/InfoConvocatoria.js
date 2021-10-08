@@ -83,9 +83,9 @@ export function InfoConvocatoria() {
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
-    if(idConvocatoria != undefined){
-      dispatch(consultarIdConvocatoria())
-    }
+    // if(idConvocatoria != undefined){
+    //   dispatch(consultarIdConvocatoria())
+    // }
     
   }, [dispatch]);
 

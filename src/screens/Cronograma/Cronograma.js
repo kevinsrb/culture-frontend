@@ -152,7 +152,6 @@ export const Cronograma = () => {
   const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
 
   const { idConvocatoria } = useSelector( state => state.convocatoria );
-  console.log(idConvocatoria)
   
   let actividadesSeleccionadasMap = [];
 
@@ -242,12 +241,12 @@ export const Cronograma = () => {
       }
     }
     await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado las actividades al cronograma");
-    return history.push("/documentacionTecnica");
+    return history.push("/documentos");
   }
   
   const handelCargarActividadesSeleccionadas = async () => {
     console.log(idConvocatoria);
-    const response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${1}`)
+    return await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
     .then(({ data }) => {
       actividadesSeleccionadasMap = data.data.map(ds => {
         return {
@@ -258,7 +257,6 @@ export const Cronograma = () => {
       })
 
       setActividadesSeleccionadas(actividadesSeleccionadasMap)
-      console.log(actividadesSeleccionadasMap)
     })
     .catch(function (error) {
       console.error(error);

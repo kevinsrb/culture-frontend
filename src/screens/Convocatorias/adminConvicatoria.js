@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { edicionConvocatoria } from "../../store/actions/convocatoriaAction";
+import { edicionConvocatoria, consultarIdConvocatoria } from "../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,
@@ -153,8 +154,11 @@ export const AdminConvocatorias = () => {
     return history.push("/infoconvocatorias");
   }
 
-  
-  
+  const consultarconvocatioria = () => {
+    dispatch(consultarIdConvocatoria());
+    history.push("/infoconvocatorias");
+  };
+
   return (
     <div style={{ padding: "2%" }}>
       <Grid columns={4}>
@@ -169,7 +173,7 @@ export const AdminConvocatorias = () => {
               content="Crear"
               labelPosition="right"
               className="button-filtro-adminconvocatorias"
-              onClick={() => history.push("/infoconvocatorias")}
+              onClick={consultarconvocatioria}
             />
           </Grid.Column>
         </Grid.Row>
