@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { ObjConstanst } from '../../config/utils/constanst'
 
 
-import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider } from "semantic-ui-react";
+import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider, Container } from "semantic-ui-react";
 import es from "date-fns/locale/es";
 import styled from "@emotion/styled";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
@@ -268,7 +268,18 @@ export const Cronograma = () => {
   return (
     <div style={{ padding: "2%" }}>
       <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }}>
-        <Header style={{ margin: 0 }}>Cronograma</Header>
+        <Grid style={{ paddingRight: "2%" }}>
+          <Grid.Row columns={2}>
+            <Grid.Column>
+            <Header>Cronograma</Header>
+            </Grid.Column>
+            <Grid.Column>
+              <Header floated="right">
+                <span className="codigo_convovcatoria">Codigo convocarotia #{idConvocatoria}</span>
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
         <Divider className="divider-admin-convocatorias" />
         <StyleWrapper style={{ padding: "1%" }}>
           <FullCalendar
@@ -299,17 +310,15 @@ export const Cronograma = () => {
             eventColor="#1FAEEF"
             ref={CalendarRef}
           />
-        </StyleWrapper>
-        <Grid>
-          <Grid.Row>
-            <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
-              Atras
+        </StyleWrapper> 
+        <Container textAlign='right'>
+          <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
+            Atras
+          </Button>
+          <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
+            Guardar y continuar
             </Button>
-            <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
-              Guardar y continuar
-            </Button>
-          </Grid.Row>
-        </Grid>
+        </Container>
       </Segment>
       <Modal open={open} size="large">
         <Modal.Description className="container-modal-description">

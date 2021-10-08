@@ -61,8 +61,9 @@ export const CronogramaActividades = () => {
   }
 
 
-  const handelSeleccionarCheckbox = () => {
-
+  const handelSeleccionarCheckbox = (e, source) => {
+    
+  
   }
 
   return (
@@ -73,7 +74,7 @@ export const CronogramaActividades = () => {
           <Form size="large" onSubmit={handelGuardarActiviadesConvocatorias} clasname="formulario">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: {idConvocatoria}
+                <span className="codigo_convovcatoria">Codigo de convocatoria #: {idConvocatoria}</span>
               </Header>
               <Header as="h4" floated="left">
                 Cronograma de actividades
@@ -92,7 +93,7 @@ export const CronogramaActividades = () => {
                     </Header>
                   </Grid.Column>
                   <Grid.Column>               
-                    <CrearActividades />
+                    {/* <CrearActividades /> */}
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -107,6 +108,7 @@ export const CronogramaActividades = () => {
                       <Form.Checkbox
                         label="seleccionar todo"
                         name="dinamico"
+                        onChange={handelSeleccionarCheckbox}
                       />
                     </Header>
                   </Grid.Column>
@@ -124,7 +126,7 @@ export const CronogramaActividades = () => {
                           <Checkbox
                             label={actividad.nombre}
                             key={actividad.key}
-                            value={actividad.idactividad}
+                            value={actividad.idactividad }
                             name={actividad.nombre}
                             checked={actividad.check}
                             className="check"

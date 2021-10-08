@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import SubirArchivo from "../../components/Archivos/SubirArchivos";
@@ -29,6 +29,9 @@ export const DocumentacionConvocatoria = () => {
       descripcion: false,
     }
   };
+
+  
+
   const [principalState, setPrincipalState] = useState(State);
   const [files, setFiles] = useState();
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
@@ -36,27 +39,43 @@ export const DocumentacionConvocatoria = () => {
 
   const fileInputRef = React.useRef();
 
+  useEffect(() => {
+    cargarDocumentosConvocatorias();
+  }, [])
 
-
-  const saveFile = async (e) => {
-    console.log(principalState)
-    const formData = new FormData();
-    formData.append("file", e.target.files[0]);
-    formData.append("fileName", e.target.files[0].name);
-    // formData.append("filetype", principalState.tipo_documento_file);
-
-    console.log(formData)
-
-    await axios
-      .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData)
-      .then((data) => {
-        console.log(data);
-        //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-        //history.push("/cronogramaActividades");
+  const cargarDocumentosConvocatorias = async () => {
+    if(idConvocatoria !== undefined){
+      await axios
+      .get(`${ObjConstanst.IP_CULTURE}documentosTecnicos/${idConvocatoria}`)
+      .then(({ data }) => {
+        setPrincipalState({ ...principalState, documentacion: data.data })
       })
       .catch(function (error) {
-        console.log(error)
+        //console.log(error);
       });
+    }
+    
+  }
+
+  const saveFile = async (e) => {
+    // console.log(principalState)
+    // const formData = new FormData();
+    // formData.append("file", e.target.files[0]);
+    // formData.append("fileName", e.target.files[0].name);
+    // // formData.append("filetype", principalState.tipo_documento_file);
+
+    // console.log(formData)
+
+    // await axios
+    //   .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData)
+    //   .then((data) => {
+    //     console.log(data);
+    //     //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
+    //     //history.push("/cronogramaActividades");
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error)
+    //   });
     return setPrincipalState({ ...principalState, url_documento: e.target.files[0].name, file: e.target.files[0], filename: e.target.files[0].name, tipo_documento_file: e.target.files[0].type });
   };
 
@@ -88,26 +107,19 @@ export const DocumentacionConvocatoria = () => {
     return setPrincipalState({ ...principalState, [name]: value });
   };
   const agregarFila = () => {
-    let errores = false;
     if (principalState.nombre.trim() === "") {
-      errores = true;
-      setPrincipalState({ ...principalState, errors: { nombre: true } });
+      return setPrincipalState({ ...principalState, errors: { nombre: true } });
     }
 
     if (principalState.tipo_documento.trim() === "") {
-      errores = true;
-      setPrincipalState({ ...principalState, errors: { tipo_documento: true, } });
+      return setPrincipalState({ ...principalState, errors: { tipo_documento: true, } });
     }
 
     if (principalState.descripcion.trim() === "") {
-      errores = true;
-      setPrincipalState({ ...principalState, errors: { descripcion: true, } });
+      return setPrincipalState({ ...principalState, errors: { descripcion: true, } });
     }
 
 
-    if(errores){
-      return
-    }
     let array = [];
     array = [
       ...principalState.documentacion,
@@ -215,7 +227,7 @@ export const DocumentacionConvocatoria = () => {
     }
     // subirArchivo()
     await ObjNotificaciones.MSG_SUCCESS("success", 'Se Han asociado los documentos correctamente');
-    //history.push('/adminconvocatorias')
+    history.push('/publicarConvocatoria')
   }
 
   return (
@@ -224,9 +236,14 @@ export const DocumentacionConvocatoria = () => {
       <Segment>
         <Form>
           <Grid style={{ paddingRight: "2%" }}>
-            <Grid.Row columns={1}>
+            <Grid.Row columns={2}>
               <Grid.Column>
                 <Header>Documentación general convocatoria</Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Header floated="right">
+                  <span className="codigo_convovcatoria">Codigo convocarotia #{idConvocatoria}</span>
+                </Header>
               </Grid.Column>
             </Grid.Row>
             <Divider className="divider-admin-convocatorias" />
@@ -236,6 +253,7 @@ export const DocumentacionConvocatoria = () => {
                   label="Nombre"
                   name="nombre"
                   placeholder="Nombre"
+                  className="select-registros-adminconvocatoria"
                   value={principalState.nombre}
                   onChange={CambiarValor}
                   error={principalState.errors.nombre}
@@ -263,6 +281,7 @@ export const DocumentacionConvocatoria = () => {
                   label="Descripción"
                   name="descripcion"
                   placeholder="Descripcion"
+                  className="select-registros-adminconvocatoria"
                   value={principalState.descripcion}
                   onChange={CambiarValor}
                   error={principalState.errors.descripcion}
