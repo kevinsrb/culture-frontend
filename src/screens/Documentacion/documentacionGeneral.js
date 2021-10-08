@@ -46,7 +46,7 @@ export const DocumentacionConvocatoria = () => {
   const cargarDocumentosConvocatorias = async () => {
     if(idConvocatoria !== undefined){
       await axios
-      .get(`${ObjConstanst.IP_CULTURE}documentosTecnicos/${idConvocatoria}`)
+      .get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/${idConvocatoria}`)
       .then(({ data }) => {
         setPrincipalState({ ...principalState, documentacion: data.data })
       })
