@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import SubirArchivo from "../../components/Archivos/SubirArchivos";
@@ -32,6 +32,9 @@ export const DocumentacionConvocatoria = () => {
     },
     openModalViewer: false,
   };
+
+  
+
   const [principalState, setPrincipalState] = useState(State);
   const [files, setFiles] = useState();
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
@@ -80,25 +83,23 @@ export const DocumentacionConvocatoria = () => {
     return setPrincipalState({ ...principalState, [name]: value });
   };
   const agregarFila = () => {
-    let errores = false;
     if (principalState.nombre.trim() === "") {
-      errores = true;
-      setPrincipalState({ ...principalState, errors: { nombre: true } });
+      return setPrincipalState({ ...principalState, errors: { nombre: true } });
     }
 
     if (principalState.tipo_documento.trim() === "") {
-      errores = true;
+      // errores = true;
       setPrincipalState({ ...principalState, errors: { tipo_documento: true } });
     }
 
     if (principalState.descripcion.trim() === "") {
-      errores = true;
+      // errores = true;
       setPrincipalState({ ...principalState, errors: { descripcion: true } });
     }
 
-    if (errores) {
-      return;
-    }
+    // if (errores) {
+    //   return;
+    // }
     let array = [];
     console.log(principalState.editar);
     array = [
@@ -256,9 +257,14 @@ export const DocumentacionConvocatoria = () => {
       <Segment>
         <Form>
           <Grid style={{ paddingRight: "2%" }}>
-            <Grid.Row columns={1}>
+            <Grid.Row columns={2}>
               <Grid.Column>
                 <Header>Documentación general convocatoria</Header>
+              </Grid.Column>
+              <Grid.Column>
+                <Header floated="right">
+                  <span className="codigo_convovcatoria">Codigo convocarotia #{idConvocatoria}</span>
+                </Header>
               </Grid.Column>
             </Grid.Row>
             <Divider className="divider-admin-convocatorias" />
@@ -268,6 +274,7 @@ export const DocumentacionConvocatoria = () => {
                   label="Nombre"
                   name="nombre"
                   placeholder="Nombre"
+                  className="select-registros-adminconvocatoria"
                   value={principalState.nombre}
                   onChange={CambiarValor}
                   error={principalState.errors.nombre}
@@ -295,6 +302,7 @@ export const DocumentacionConvocatoria = () => {
                   label="Descripción"
                   name="descripcion"
                   placeholder="Descripcion"
+                  className="select-registros-adminconvocatoria"
                   value={principalState.descripcion}
                   onChange={CambiarValor}
                   error={principalState.errors.descripcion}

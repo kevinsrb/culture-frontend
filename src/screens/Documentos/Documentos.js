@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Grid, Segment, Header, Accordion, Icon, Table, Button, Checkbox } from "semantic-ui-react";
+import { Grid, Segment, Header, Accordion, Icon, Table, Button, Checkbox, Divider } from "semantic-ui-react";
 import { ObjConstanst } from "../../config/utils/constanst";
 
 var conteoDocumentos = 0;
@@ -216,9 +216,11 @@ export const Documentos = () => {
 
   return (
     <div style={{ padding: "2%" }}>
+      <Segment>
       <Header style={{ paddingLeft: "2%" }} as="h3">
         Asociar documentacion administrativa
       </Header>
+      <Divider clearing />
       <Grid>
         <Grid.Row>
           <Grid.Column width={5}>
@@ -306,6 +308,7 @@ export const Documentos = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      </Segment>
     </div>
   );
 };

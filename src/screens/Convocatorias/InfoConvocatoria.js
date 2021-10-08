@@ -368,7 +368,7 @@ export function InfoConvocatoria() {
           <Form size="large" onSubmit={handleCreateConvocatoria} autoComplete="off">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: {idConvocatoria}
+               <span className="codigo_convovcatoria"> Codigo de convocatoria #: {idConvocatoria}</span>
               </Header>
               <Header as="h4" floated="left">
                 Informacion general - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>

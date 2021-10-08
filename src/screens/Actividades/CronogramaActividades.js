@@ -85,7 +85,7 @@ export const CronogramaActividades = () => {
           <Form size="large" onSubmit={handelGuardarActiviadesConvocatorias} clasname="formulario">
             <Segment>
               <Header as="h4" floated="right">
-                Codigo de convocatoria #: {idConvocatoria}
+                <span className="codigo_convovcatoria">Codigo de convocatoria #: {idConvocatoria}</span>
               </Header>
               <Header as="h4" floated="left">
                 Cronograma de actividades
@@ -122,7 +122,7 @@ export const CronogramaActividades = () => {
                           <Checkbox
                             label={actividad.nombre}
                             key={actividad.key}
-                            value={actividad.idactividad}
+                            value={actividad.idactividad }
                             name={actividad.nombre}
                             checked={actividad.check}
                             className="check"

@@ -58,22 +58,15 @@ export const DocumentacionTecnica = () => {
 
 
   const agregarFila = () => {
-    let errores = false;
-    if (principalState.descripcion.trim() === "") {
-      errores = true;
-      setPrincipalState({ ...principalState, errors: { descripcion: true } });
-    }
 
     if (principalState.tipo_documento.trim() === "") {
-      errores = true;
-      setPrincipalState({ ...principalState, errors: { tipo_documento: true, } });
+      return setPrincipalState({ ...principalState, errors: { tipo_documento: true, } });
     }
 
-    if(errores){
-      return
+    if (principalState.descripcion.trim() === "") {
+      return setPrincipalState({ ...principalState, errors: { descripcion: true } });
     }
 
-    //console.log(principalState.errors)
 
     let array = [];
     array = [
@@ -109,6 +102,8 @@ export const DocumentacionTecnica = () => {
 
   const Editardocumentacion = (data) => {
     console.log(data);
+    const { descripcion, tipo_documento } = data;
+    return setPrincipalState({...principalState, descripcion:descripcion , tipo_documento:tipo_documento })
     
   };
 
@@ -192,7 +187,9 @@ export const DocumentacionTecnica = () => {
                 <Header>Asociar documentación técnica</Header>
               </Grid.Column>
               <Grid.Column>
-                <Header as="h5" floated="right">Codigo convocarotia #{idConvocatoria}</Header>
+                <Header floated="right">
+                  <span className="codigo_convovcatoria">Codigo convocarotia #{idConvocatoria}</span>
+                </Header>
               </Grid.Column>
             </Grid.Row>
             <Divider className="divider-admin-convocatorias" />
@@ -224,6 +221,7 @@ export const DocumentacionTecnica = () => {
                   name="descripcion"
                   onChange={CambiarValor}
                   value={principalState.descripcion}
+                  error={principalState.errors.descripcion}
                 ></Form.TextArea>
                 {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
