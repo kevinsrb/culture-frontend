@@ -32,7 +32,7 @@ export function InfoConvocatoria() {
     cobertura: "",
     ciclo: "",
     linea_estrategica: "",
-    area: "",
+    area: [],
     convenido: false,
     modalidad: "",
     tipo_estimulo: "",
@@ -73,6 +73,7 @@ export function InfoConvocatoria() {
   const [participantesSeleccionados, setParticipantesSeleccionados] = useState([]);
   const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] = useState([]);
   const [tipoparticipanteseleccionado, setTipoparticipanteseleccionado] = useState([]);
+  const [areaSeleccionada, setAreaSeleccionada] = useState([]);
   const [tipocategoriasseleccionado, setTipocategoriasseleccionado] = useState([]);
   const [errores, setErrores] = useState(stateErrores);
 
@@ -190,7 +191,7 @@ export function InfoConvocatoria() {
       if (repetido.length > 0) return;
       array = [...convocatoria.categoria_linea_convocatoria, option[0]];
       return setConvocatoria({ ...convocatoria, categoria_linea_convocatoria: array });
-    } else {
+    } else  if (stateActualizar === "tipo_participante" ){
       setErrores({...errores, tipo_participante: false});
       setTipoparticipanteseleccionado(result.value);
       if (event.target.className.indexOf("delete") >= 0) {
@@ -208,6 +209,24 @@ export function InfoConvocatoria() {
       if (repetido.length > 0) return;
       array = [...convocatoria.tipo_participante, option[0]];
       return setConvocatoria({ ...convocatoria, tipo_participante: array });
+    }else if(stateActualizar === "area"){
+      setErrores({...errores, area: false});
+      setAreaSeleccionada(result.value);
+      if (event.target.className.indexOf("delete") >= 0) {
+        let arrayAreas = [];
+        for (var i in convocatoria.area) {
+          for (var x in result.value) {
+            if (convocatoria.area[i].value === result.value[x])
+              arrayAreas.push(convocatoria.area[i]);
+          }
+        }
+        return setConvocatoria({ ...convocatoria, area: arrayAreas });
+      }
+      if (option.length === 0) return;
+      let repetido = convocatoria.area.filter((data) => data.text.trim() === option[0].text.trim());
+      if (repetido.length > 0) return;
+      array = [...convocatoria.area, option[0]];
+      return setConvocatoria({ ...convocatoria, area: array });
     }
   };
 
@@ -270,7 +289,7 @@ export function InfoConvocatoria() {
       };
       error = true;
     }
-    if (convocatoria.area === "") {
+    if (convocatoria.area.length === 0) {
       arrayErrores = {
         ...arrayErrores,
         area: true,
@@ -491,10 +510,11 @@ export function InfoConvocatoria() {
                   fluid
                   search
                   selection
+                  multiple
                   name="area"
-                  value={convocatoria.area}
+                  value={areaSeleccionada}
                   options={AreaOptions}
-                  onChange={handleInputChange}
+                  onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "area")}
                 />
 
                 <Form.Dropdown
@@ -599,7 +619,7 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <Form.TextArea
-                      required
+                      
                       label="Descripcion corta"
                       name="descripcion_corta"
                       value={convocatoria.descripcion_corta}
