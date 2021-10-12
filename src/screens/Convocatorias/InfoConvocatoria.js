@@ -346,6 +346,11 @@ export function InfoConvocatoria() {
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
     setErrores({ ...errores, [name]: false });
+    if(name === "valor_total_entg") {
+      if (isNaN(event.target.value)) {
+        return;
+      }
+    }
     return setConvocatoria({ ...convocatoria, [name]: value });
   };
   const conteoCaracteres = (event) => {
@@ -755,7 +760,7 @@ export function InfoConvocatoria() {
                       <Grid.Column>
                         <Form.Input
                           fluid
-                          placeholder="Search..."
+                          placeholder="Valor"
                           className="font-color-4B4B4B"
                           label={
                             <label className="font-color-4B4B4B">
@@ -812,6 +817,7 @@ export function InfoConvocatoria() {
                       value={convocatoria.descripcion_corta}
                       onChange={handleInputChange}
                       onKeyDown={conteoCaracteres}
+                      maxLength="250"
                     />
                     <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
                       {convocatoria.conteodescripcion_corta}
@@ -830,6 +836,7 @@ export function InfoConvocatoria() {
                       value={convocatoria.noparticipa}
                       onChange={handleInputChange}
                       onKeyDown={conteoCaracteres}
+                      maxLength="250"
                     />
                     <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
                       {convocatoria.conteonoparticipa}
@@ -852,6 +859,7 @@ export function InfoConvocatoria() {
                       value={convocatoria.perfil_participante}
                       onChange={handleInputChange}
                       onKeyDown={conteoCaracteres}
+                      maxLength="250"
                     />
                     <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
                       {convocatoria.conteoperfil_participante}

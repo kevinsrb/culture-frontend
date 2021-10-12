@@ -77,7 +77,6 @@ export const StyleWrapper = styled.div`
     font-weight: normal;
     font-size: 22px;
     letter-spacing: 0px;
-    float: right;
   }
   .fc-col-header-cell.fc-day.fc-day-sun,
   .fc-col-header-cell.fc-day.fc-day-mon,
@@ -108,7 +107,7 @@ export const StyleWrapper = styled.div`
     height: 100%;
   }
   .fc-toolbar-chunk {
-    width: 32%;
+    width: 22%;
   }
   .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-top a {
     background: #632264;
@@ -117,7 +116,6 @@ export const StyleWrapper = styled.div`
   }
   .fc-today-button {
     border-radius: 19px;
-    float: right;
     padding-left: 7% !important;
     padding-right: 7% !important;
   }

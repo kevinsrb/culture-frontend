@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { Grid, Segment, Header, Accordion, Icon, Table, Button, Checkbox, Divider } from "semantic-ui-react";
 import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 
 var conteoDocumentos = 0;
 
@@ -189,6 +190,7 @@ export const Documentos = () => {
 
 
     // return enviardocumentacion(documents);
+    await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado correctamente los documentos");
     return history.push("/documentacionTecnica");
   };
 
