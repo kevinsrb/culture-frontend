@@ -1,6 +1,13 @@
 .container_checks{
-    padding: 40px !important;
+    padding: 30px !important;
+    height: 337px;
+    overflow-y: auto;
 }
+
+.container_checks::-webkit-scrollbar-thumb {
+    background: #245E8E;
+    border-radius: 10px;
+  }
 
 .check {
     font-family: Montserrat, Regular !important;

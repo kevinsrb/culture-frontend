@@ -89,11 +89,11 @@
 
 .container-pagination-adminconvocatorias {
   display: flex !important;
-  justify-content: flex-end;
+  justify-content: flex-end !important;
 }
 
 .container-grid-filtros {
-  background-color: #f0f6fb;
+  background-color: #FFFFFF;
 }
 
 .button-filtro-adminconvocatorias {
@@ -119,12 +119,12 @@
 }
 
 .container-scrollable-adminconvocatorias::-webkit-scrollbar-thumb {
-  background: #1faeef;
+  background: #245E8E;
   border-radius: 10px;
 }
 
 .container-scroll::-webkit-scrollbar-thumb {
-  background: #1faeef;
+  background: #245E8E;
   border-radius: 10px;
 }
 
@@ -165,4 +165,11 @@
 
 .end-text-table-documentos {
   text-align: end !important;
+}
+
+.table-header-tabla {
+  background-color: #FFFFFF !important;
+  border-bottom: none !important;
+  border-right: none !important;
+  border-left: none !important;
 }
