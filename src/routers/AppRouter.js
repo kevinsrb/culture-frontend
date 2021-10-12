@@ -17,6 +17,8 @@ import { useDispatch } from "react-redux";
 import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
 import { Documentos } from "../screens/Documentos/Documentos";
 import { PublicarConvocatoria } from "../screens/Convocatorias/publicarConvocatoria";
+import { AdminMaestras } from "../screens/Maestras/Maestros";
+import { VentanaCreacionMaestras } from "../screens/Maestras/creandoMaestros";
 
 
 export const AppRouter = () => {
@@ -72,6 +74,14 @@ export const AppRouter = () => {
           <Route path="/publicarConvocatoria">
             <Navbar />
             <PublicarConvocatoria />
+          </Route>
+          <Route path="/adminMaestras">
+            <Navbar />
+            <AdminMaestras />
+          </Route>
+          <Route path="/seleccionarMaestra">
+            <Navbar />
+            <VentanaCreacionMaestras />
           </Route>
           <Route path="/OlvidoContraseña">
             <OlvidoContraseña />

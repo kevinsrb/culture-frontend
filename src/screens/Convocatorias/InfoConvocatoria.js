@@ -5,7 +5,7 @@ import { consultarIdConvocatoria, edicionConvocatoria } from "../../store/action
 import axios from "axios";
 
 import { ObjConstanst } from "../../config/utils/constanst";
-import { Form, Grid, Header, Divider, Segment, Button } from "semantic-ui-react";
+import { Form, Grid, Header, Divider, Segment, Button, Icon } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
   CicloOptions,
@@ -27,12 +27,16 @@ export function InfoConvocatoria() {
     linea_convocatoria: "",
     categoria_linea_convocatoria: [],
     entidad: "",
-    pseudonimos: false,
+    pseudonimossi: true,
+    pseudonimosno: false,
+    pseudonimo: true,
     tipo_participante: [],
     cobertura: "",
     ciclo: "",
     linea_estrategica: "",
     area: [],
+    conveniosi: false,
+    conveniono: true,
     convenido: false,
     modalidad: "",
     tipo_estimulo: "",
@@ -42,6 +46,9 @@ export function InfoConvocatoria() {
     descripcion_corta: "",
     perfil_participante: "",
     noparticipa: "",
+    conteodescripcion_corta: "0/250",
+    conteonoparticipa: "0/250",
+    conteoperfil_participante: "0/250",
   };
 
   const stateErrores = {
@@ -69,8 +76,6 @@ export function InfoConvocatoria() {
   //States
   const [convocatoria, setConvocatoria] = useState(objConvocatoria);
   const [lineaConvocatoriaOptions, setlineaConvocatoriaOptions] = useState();
-  const [numeroConvocatoria, setNumeroConvocatoria] = useState();
-  const [participantesSeleccionados, setParticipantesSeleccionados] = useState([]);
   const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] = useState([]);
   const [tipoparticipanteseleccionado, setTipoparticipanteseleccionado] = useState([]);
   const [areaSeleccionada, setAreaSeleccionada] = useState([]);
@@ -84,10 +89,6 @@ export function InfoConvocatoria() {
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
-    // if(idConvocatoria != undefined){
-    //   dispatch(consultarIdConvocatoria())
-    // }
-    
   }, [dispatch]);
 
   useEffect(() => {
@@ -172,7 +173,7 @@ export function InfoConvocatoria() {
     let array = [];
 
     if (stateActualizar === "categoria") {
-      setErrores({...errores, categoria_linea_convocatoria: false});
+      setErrores({ ...errores, categoria_linea_convocatoria: false });
       setTipocategoriasseleccionado(result.value);
       if (event.target.className.indexOf("delete") >= 0) {
         let arraycategorias = [];
@@ -191,8 +192,8 @@ export function InfoConvocatoria() {
       if (repetido.length > 0) return;
       array = [...convocatoria.categoria_linea_convocatoria, option[0]];
       return setConvocatoria({ ...convocatoria, categoria_linea_convocatoria: array });
-    } else  if (stateActualizar === "tipo_participante" ){
-      setErrores({...errores, tipo_participante: false});
+    } else if (stateActualizar === "tipo_participante") {
+      setErrores({ ...errores, tipo_participante: false });
       setTipoparticipanteseleccionado(result.value);
       if (event.target.className.indexOf("delete") >= 0) {
         let arrayparticipantes = [];
@@ -209,15 +210,14 @@ export function InfoConvocatoria() {
       if (repetido.length > 0) return;
       array = [...convocatoria.tipo_participante, option[0]];
       return setConvocatoria({ ...convocatoria, tipo_participante: array });
-    }else if(stateActualizar === "area"){
-      setErrores({...errores, area: false});
+    } else if (stateActualizar === "area") {
+      setErrores({ ...errores, area: false });
       setAreaSeleccionada(result.value);
       if (event.target.className.indexOf("delete") >= 0) {
         let arrayAreas = [];
         for (var i in convocatoria.area) {
           for (var x in result.value) {
-            if (convocatoria.area[i].value === result.value[x])
-              arrayAreas.push(convocatoria.area[i]);
+            if (convocatoria.area[i].value === result.value[x]) arrayAreas.push(convocatoria.area[i]);
           }
         }
         return setConvocatoria({ ...convocatoria, area: arrayAreas });
@@ -315,7 +315,6 @@ export function InfoConvocatoria() {
       return setErrores(arrayErrores);
     }
 
-
     if (editarConvocatoria === undefined) {
       e.preventDefault();
       console.log(convocatoria);
@@ -346,14 +345,60 @@ export function InfoConvocatoria() {
 
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
-    console.log(value, name);
-    setErrores({...errores, [name]: false});
+    setErrores({ ...errores, [name]: false });
     return setConvocatoria({ ...convocatoria, [name]: value });
+  };
+  const conteoCaracteres = (event) => {
+    if (
+      event.target.name === "descripcion_corta" ||
+      event.target.name === "noparticipa" ||
+      event.target.name === "perfil_participante"
+    ) {
+      if (
+        event.keyCode === 27 ||
+        event.keyCode === 112 ||
+        event.keyCode === 113 ||
+        event.keyCode === 114 ||
+        event.keyCode === 115 ||
+        event.keyCode === 116 ||
+        event.keyCode === 117 ||
+        event.keyCode === 118 ||
+        event.keyCode === 119 ||
+        event.keyCode === 120 ||
+        event.keyCode === 121 ||
+        event.keyCode === 122 ||
+        event.keyCode === 123 ||
+        event.keyCode === 9 ||
+        event.keyCode === 13 ||
+        event.keyCode === 20 ||
+        event.keyCode === 16 ||
+        event.keyCode === 17 ||
+        event.keyCode === 91 ||
+        event.keyCode === 93 ||
+        event.keyCode === 17 ||
+        event.keyCode === 45 ||
+        event.keyCode === 33 ||
+        event.keyCode === 36 ||
+        event.keyCode === 46 ||
+        event.keyCode === 35 ||
+        event.keyCode === 34 ||
+        event.keyCode === 37 ||
+        event.keyCode === 38 ||
+        event.keyCode === 39 ||
+        event.keyCode === 40
+      ) {
+        return;
+      }
+      let numero = convocatoria[event.target.name].length + 1;
+      if (event.keyCode === 8) numero = convocatoria[event.target.name].length - 1;
+      if (numero === -1) numero = 0;
+      return setConvocatoria({ ...convocatoria, [`conteo${event.target.name}`]: `${numero}/250` });
+    }
   };
 
   const handleLineaConvocatoria = async (event, results) => {
     const { name, value } = results || event.target;
-    setErrores({...errores, linea_convocatoria: false});
+    setErrores({ ...errores, linea_convocatoria: false });
     setConvocatoria({ ...convocatoria, [name]: value });
     const response = await axios
       .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${value}`)
@@ -374,7 +419,19 @@ export function InfoConvocatoria() {
   const handletoggleChange = (event, result) => {
     const { name, checked } = result || event.target;
     console.log(name, checked);
-    setConvocatoria({ ...convocatoria, [name]: checked });
+    if (name === 'pseudonimossi') {
+      return setConvocatoria({ ...convocatoria, [name]: true, pseudonimosno: false, pseudonimo: true });
+    }
+    if (name === 'pseudonimosno') {
+      return setConvocatoria({ ...convocatoria, [name]: true, pseudonimossi: false, pseudonimo: false });
+    }
+    if (name === 'conveniosi') {
+      return setConvocatoria({ ...convocatoria, [name]: true, conveniono: false, convenido: true });
+    }
+    if (name === 'conveniono') {
+      return setConvocatoria({ ...convocatoria, [name]: true, conveniosi: false, convenido: false });
+    }
+    return setConvocatoria({ ...convocatoria, [name]: checked });
   };
 
   const [currentDate, setNewDate] = useState(null);
@@ -382,63 +439,96 @@ export function InfoConvocatoria() {
 
   return (
     <React.Fragment>
-      <Grid style={{ height: "100vh", width: "100%", margin: 0 }}>
-        <Grid.Column style={{ maxWidth: "100%" }}>
+      <Grid>
+        <Grid.Column style={{ maxWidth: "100%", padding: '2%' }}>
           <Form size="large" onSubmit={handleCreateConvocatoria} autoComplete="off">
-            <Segment>
-              <Header as="h4" floated="right">
-               <span className="codigo_convovcatoria"> Codigo de convocatoria #: {idConvocatoria}</span>
+            <Segment className="segment-shadow">
+              <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
+                <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
+                  {" "}
+                  Codigo de convocatoria  {idConvocatoria}
+                </span>
               </Header>
-              <Header as="h4" floated="left">
-                Informacion general - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
+              <Header
+                className="font-size-14px font-family-Montserrat-SemiBold"
+                floated="left"
+                style={{ marginBottom: "0" }}
+              >
+                Informacion general&nbsp;-&nbsp;
+                <span
+                  style={{ marginBottom: "0" }}
+                  className="font-color-DB2828 font-size-10px font-family-Montserrat-SemiBold no-margin"
+                >
+                  Todos los campos son obligatorios
+                </span>
               </Header>
-              <Divider clearing />
+              <Divider clearing style={{ marginTop: "0", marginBottom: '3%' }} />
               <Form.Group widths="equal">
                 <Form.Select
-                  placeholder="Seleccionar"
-                  label="Número de la convocatoria"
+                  className="font-color-4B4B4B"
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Número de la convocatoria
+                    </label>
+                  }
+                  placeholder="Seleccionar..."
                   options={NumeroConvocatoiriaOptions}
                   name="numero_convocatoria"
                   value={convocatoria.numero_convocatoria.toString()}
                   onChange={handleInputChange}
-                  required
-                  error={errores.numero_convocatoria}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Select
-                  placeholder="Seleccionar"
-                  label="Línea convocatoria"
+                  className="font-color-4B4B4B"
+                  placeholder="Seleccionar..."
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Línea convocatoria
+                    </label>
+                  }
                   name="linea_convocatoria"
                   value={convocatoria.linea_convocatoria}
                   onChange={(handleInputChange, handleLineaConvocatoria)}
                   options={lineaConvocatoriaOptions}
-                  required
-                  error={errores.linea_convocatoria}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Dropdown
-                  required
-                  error={errores.categoria_linea_convocatoria}
-                  label="Categorías línea convocatoria"
+                  className="font-color-4B4B4B"
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Categorías línea convocatoria
+                    </label>
+                  }
                   value={tipocategoriasseleccionado}
-                  placeholder="Seleccionar"
+                  placeholder="Seleccionar..."
                   fluid
                   multiple
                   selection
                   name="categoria_linea_convocatoria"
                   options={categoriasLineaconvocatoria}
                   onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "categoria")}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right", marginTop: "2%" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Select
-                  required
-                  error={errores.entidad}
-                  placeholder="Seleccionar"
-                  label="Entidad"
+                  className="font-color-4B4B4B"
+                  placeholder="Seleccionar..."
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Entidad
+                    </label>
+                  }
                   options={EntidadOptions}
                   name="entidad"
                   value={convocatoria.entidad}
                   onChange={handleInputChange}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
               </Form.Group>
 
@@ -446,10 +536,13 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <Form.Dropdown
-                      required
-                      error={errores.tipo_participante}
-                      label="¿Quien puede participar?"
-                      placeholder="Seleccionar"
+                      className="font-color-4B4B4B"
+                      label={
+                        <label className="font-color-4B4B4B">
+                          ¿Quien puede participar?
+                        </label>
+                      }
+                      placeholder="Seleccionar..."
                       value={tipoparticipanteseleccionado}
                       fluid
                       multiple
@@ -457,17 +550,40 @@ export function InfoConvocatoria() {
                       name="tipo_participante"
                       options={QuienParticipaOptions}
                       onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "tipo_participante")}
+                      style={{ paddingRight: "2%" }}
+                      icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                     />
                   </Grid.Column>
                   <Grid.Column>
-                    <label>¿Convocatoria maneja pseudonimos?</label>
-                    <Form.Checkbox
-                      toggle
-                      name="pseudonimos"
-                      value={convocatoria.pseudonimos}
-                      checked={convocatoria.pseudonimos}
-                      onChange={handletoggleChange}
-                    />
+                    <label>
+                      ¿Seudonimos?&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                    </label>
+                    <Grid>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <Form.Checkbox
+                            className="font-color-4B4B4B"
+                            radio
+                            label="Si"
+                            name="pseudonimossi"
+                            value={convocatoria.pseudonimossi}
+                            checked={convocatoria.pseudonimossi}
+                            onChange={handletoggleChange}
+                          />
+                        </Grid.Column>
+                        <Grid.Column style={{ paddingLeft: "5%" }}>
+                          <Form.Checkbox
+                            className="font-color-4B4B4B"
+                            radio
+                            label="No"
+                            name="pseudonimosno"
+                            value={convocatoria.pseudonimosno}
+                            checked={convocatoria.pseudonimosno}
+                            onChange={handletoggleChange}
+                          />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -476,23 +592,31 @@ export function InfoConvocatoria() {
 
               <Form.Group widths="equal">
                 <Form.Dropdown
-                  required
-                  error={errores.ciclo}
-                  label="Ciclo"
-                  placeholder="Seleccionar"
+                  className="font-color-4B4B4B"
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Ciclo
+                    </label>
+                  }
+                  placeholder="Seleccionar..."
                   fluid
                   selection
                   options={CicloOptions}
                   name="ciclo"
                   value={convocatoria.ciclo}
                   onChange={handleInputChange}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Dropdown
-                  required
-                  error={errores.linea_estrategica}
-                  label="Linea estrategica"
-                  placeholder="Seleccionar"
+                  className="font-color-4B4B4B"
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Linea estrategica
+                    </label>
+                  }
+                  placeholder="Seleccionar..."
                   fluid
                   search
                   selection
@@ -500,13 +624,18 @@ export function InfoConvocatoria() {
                   value={convocatoria.linea_estrategica}
                   options={LineaEstrategicaOptions}
                   onChange={handleInputChange}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Dropdown
-                  required
-                  error={errores.area}
-                  label="Área"
-                  placeholder="Seleccionar"
+                  className="font-color-4B4B4B"
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Área
+                    </label>
+                  }
+                  placeholder="Seleccionar..."
                   fluid
                   search
                   selection
@@ -515,19 +644,26 @@ export function InfoConvocatoria() {
                   value={areaSeleccionada}
                   options={AreaOptions}
                   onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "area")}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right", marginTop: "2%" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Dropdown
-                  required
-                  error={errores.cobertura}
-                  label="Cobertura"
-                  placeholder="Seleccionar"
+                  className="font-color-4B4B4B"
+                  label={
+                    <label className="font-color-4B4B4B">
+                      Cobertura
+                    </label>
+                  }
+                  placeholder="Seleccionar..."
                   fluid
                   selection
                   options={CoberturaOptions}
                   name="cobertura"
                   value={convocatoria.cobertura}
                   onChange={handleInputChange}
+                  style={{ paddingRight: "2%" }}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
               </Form.Group>
 
@@ -536,13 +672,35 @@ export function InfoConvocatoria() {
               <Grid columns={1}>
                 <Grid.Row>
                   <Grid.Column>
-                    <strong>¿Es convenio?</strong>
-                    <Form.Checkbox
-                      toggle
-                      name="convenido"
-                      checked={convocatoria.convenido}
-                      onChange={handletoggleChange}
-                    />
+                    <label>
+                      ¿Es convenio?&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                    </label>
+                    <Grid>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <Form.Checkbox
+                            className="font-color-4B4B4B"
+                            radio
+                            label="Si"
+                            name="conveniosi"
+                            value={convocatoria.conveniosi}
+                            checked={convocatoria.conveniosi}
+                            onChange={handletoggleChange}
+                          />
+                        </Grid.Column>
+                        <Grid.Column style={{ paddingLeft: "0%" }}>
+                          <Form.Checkbox
+                            className="font-color-4B4B4B"
+                            radio
+                            label="No"
+                            name="conveniono"
+                            value={convocatoria.conveniono}
+                            checked={convocatoria.conveniono}
+                            onChange={handletoggleChange}
+                          />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -553,78 +711,129 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <Form.Select
-                      required
-                      error={errores.modalidad}
-                      placeholder="Seleccionar"
+                      className="font-color-4B4B4B"
+                      placeholder="Seleccionar..."
                       size="large"
-                      label="Modalidad de estimulo"
+                      label={
+                        <label className="font-color-4B4B4B">
+                          Modalidad de estimulo
+                        </label>
+                      }
                       value={convocatoria.modalidad}
                       options={ModalidadEstimuloOptions}
                       name="modalidad"
                       onChange={handleInputChange}
+                      style={{ paddingRight: "2%" }}
+                      icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                     />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
 
-              <Form.Group widths="equal">
-                <Form.Select
-                  required
-                  error={errores.tipo_estimulo}
-                  placeholder="Seleccionar"
-                  label="Tipo de estimulo"
-                  options={TipoEstimuloOptions}
-                  value={convocatoria.tipo_estimulo}
-                  name="tipo_estimulo"
-                  onChange={handleInputChange}
-                />
-
-                {convocatoria.tipo_estimulo == "economico" && (
-                  <>
-                    <Form.Input
-                      fluid
-                      placeholder="Search..."
-                      label="Valor total de recursos que entregará la convocatoria"
-                      name="valor_total_entg"
-                      value={convocatoria.valor_total_entg}
+              <Grid columns={4}>
+                <Grid.Row>
+                  <Grid.Column>
+                    <Form.Select
+                      className="font-color-4B4B4B"
+                      placeholder="Seleccionar..."
+                      label={
+                        <label className="font-color-4B4B4B">
+                          Tipo de estimulo
+                        </label>
+                      }
+                      options={TipoEstimuloOptions}
+                      value={convocatoria.tipo_estimulo}
+                      name="tipo_estimulo"
                       onChange={handleInputChange}
+                      style={{ paddingRight: "2%" }}
+                      icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                     />
+                  </Grid.Column>
 
-                    <Form.Field>
-                      <label>bolsa concursable</label>
-                      <Form.Checkbox
-                        toggle
-                        name="bolsa_concursable"
-                        value={convocatoria.bolsa_concursable}
-                        checked={convocatoria.bolsa_concursable}
-                        onChange={handletoggleChange}
-                      />
-                    </Form.Field>
-
-                    <Form.Input
-                      fluid
-                      placeholder="Seleccionar"
-                      label="Numero de estimulos"
-                      name="num_estimulos"
-                      value={convocatoria.num_estimulos}
-                      onChange={handleInputChange}
-                    />
-                  </>
-                )}
-              </Form.Group>
+                  {convocatoria.tipo_estimulo == "economico" && (
+                    <>
+                      <Grid.Column>
+                        <Form.Input
+                          fluid
+                          placeholder="Search..."
+                          className="font-color-4B4B4B"
+                          label={
+                            <label className="font-color-4B4B4B">
+                              Valor total de recursos
+                            </label>
+                          }
+                          name="valor_total_entg"
+                          value={convocatoria.valor_total_entg}
+                          onChange={handleInputChange}
+                        />
+                      </Grid.Column>
+                      <Grid.Column>
+                        <Form.Field>
+                          <label className="font-color-4B4B4B">Bolsa Concursable</label>
+                          <Form.Checkbox
+                            toggle
+                            className="font-color-4B4B4B"
+                            name="bolsa_concursable"
+                            value={convocatoria.bolsa_concursable}
+                            checked={convocatoria.bolsa_concursable}
+                            onChange={handletoggleChange}
+                          />
+                        </Form.Field>
+                      </Grid.Column>
+                      {/* <Grid.Column>
+                        <Form.Input
+                          fluid
+                          className="font-color-4B4B4B"
+                          placeholder="Seleccionar..."
+                          label="Numero de estimulos"
+                          name="num_estimulos"
+                          value={convocatoria.num_estimulos}
+                          onChange={handleInputChange}
+                        />
+                      </Grid.Column> */}
+                    </>
+                  )}
+                </Grid.Row>
+              </Grid>
 
               <Divider clearing />
 
-              <Grid columns={1}>
+              <Grid columns={2}>
                 <Grid.Row>
                   <Grid.Column>
                     <Form.TextArea
-                      
-                      label="Descripcion corta"
+                      className="no-margin"
+                      label={
+                        <label className="font-color-4B4B4B">
+                          Descripcion corta&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                        </label>
+                      }
                       name="descripcion_corta"
                       value={convocatoria.descripcion_corta}
                       onChange={handleInputChange}
+                      onKeyDown={conteoCaracteres}
                     />
+                    <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
+                      {convocatoria.conteodescripcion_corta}
+                    </label>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Form.TextArea
+                      className="no-margin"
+                      label={
+                        <label className="font-color-4B4B4B">
+                          ¿Quien no puede participar?&nbsp;-&nbsp;
+                          <span className="font-size-10px no-margin font-color-4B4B4B">opcional</span>
+                        </label>
+                      }
+                      name="noparticipa"
+                      value={convocatoria.noparticipa}
+                      onChange={handleInputChange}
+                      onKeyDown={conteoCaracteres}
+                    />
+                    <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
+                      {convocatoria.conteonoparticipa}
+                    </label>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
@@ -633,21 +842,20 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <Form.TextArea
-                      required
-                      label="Perfil de participante"
+                      className="no-margin"
+                      label={
+                        <label className="font-color-4B4B4B">
+                          Perfil de participante&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                        </label>
+                      }
                       name="perfil_participante"
                       value={convocatoria.perfil_participante}
                       onChange={handleInputChange}
+                      onKeyDown={conteoCaracteres}
                     />
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Form.TextArea
-                      required
-                      label="¿Quien no puede participar?"
-                      name="noparticipa"
-                      value={convocatoria.noparticipa}
-                      onChange={handleInputChange}
-                    />
+                    <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
+                      {convocatoria.conteoperfil_participante}
+                    </label>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

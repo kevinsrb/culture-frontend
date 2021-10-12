@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import SubirArchivo from "../../components/Archivos/SubirArchivos";
+// import SubirArchivo from "../../components/Archivos/SubirArchivos";
 import { TipodocumentosOptions } from "../../data/selectOption.data";
 import { ObjConstanst } from "../../config/utils/constanst";
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
@@ -70,8 +70,9 @@ export const DocumentacionConvocatoria = () => {
   const subirArchivo = async (e) => {
     try {
       let data = new FormData();
+      console.log(e.target.files[0]);
       data.append("pdf", e.target.files[0]);
-      let response = await axios.post(`http://127.0.0.1:3334/v1/docs/upload`, data);
+      let response = await axios.post(`http://127.0.0.1:80/v1/docs/upload`, data);
       console.log(response);
     } catch (error) {
       return console.error(error);

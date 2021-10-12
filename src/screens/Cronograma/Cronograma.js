@@ -3,10 +3,22 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { ObjConstanst } from '../../config/utils/constanst'
+import { ObjConstanst } from "../../config/utils/constanst";
 
-
-import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider, Container } from "semantic-ui-react";
+import {
+  Segment,
+  Modal,
+  Button,
+  Header,
+  Grid,
+  Form,
+  Select,
+  Input,
+  Checkbox,
+  Icon,
+  Divider,
+  Container,
+} from "semantic-ui-react";
 import es from "date-fns/locale/es";
 import styled from "@emotion/styled";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
@@ -17,9 +29,8 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
-import '@fullcalendar/daygrid/main.css';
+import "@fullcalendar/daygrid/main.css";
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
-
 
 registerLocale("es", es);
 
@@ -55,14 +66,18 @@ export const StyleWrapper = styled.div`
   }
   .fc-button.fc-button-primary.fc-button-active {
     background: #632264;
-    padding-left: 17%;
-    padding-right: 17%;
+    padding-top: 6%;
+    padding-bottom: 6%;
+    padding-left: 18%;
+    padding-right: 18%;
   }
   .fc-toolbar-title {
+    font-family: ""
     text-transform: capitalize;
     font-weight: normal;
     font-size: 22px;
     letter-spacing: 0px;
+    float: right;
   }
   .fc-col-header-cell.fc-day.fc-day-sun,
   .fc-col-header-cell.fc-day.fc-day-mon,
@@ -72,6 +87,7 @@ export const StyleWrapper = styled.div`
   .fc-col-header-cell.fc-day.fc-day-fri,
   .fc-col-header-cell.fc-day.fc-day-sat {
     background: #632264;
+    border-right: 1px solid #632264;
   }
   .fc-col-header-cell-cushion {
     color: white;
@@ -92,12 +108,18 @@ export const StyleWrapper = styled.div`
     height: 100%;
   }
   .fc-toolbar-chunk {
-    width: 22%;
+    width: 32%;
   }
   .fc .fc-daygrid-day.fc-day-today .fc-daygrid-day-top a {
     background: #632264;
     color: white;
     border-radius: 1rem;
+  }
+  .fc-today-button {
+    border-radius: 19px;
+    float: right;
+    padding-left: 7% !important;
+    padding-right: 7% !important;
   }
 `;
 
@@ -151,19 +173,17 @@ export const Cronograma = () => {
 
   const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
 
-  const { idConvocatoria } = useSelector( state => state.convocatoria );
-  
+  const { idConvocatoria } = useSelector((state) => state.convocatoria);
+
   let actividadesSeleccionadasMap = [];
 
   useEffect(() => {
-    handelCargarActividadesSeleccionadas()
-  }, [])
-
-
+    handelCargarActividadesSeleccionadas();
+  }, []);
 
   function seleccionarActividad(event, result) {
     let seleccionada = result.options.filter((data) => data.value === result.value);
-    console.log(seleccionada[0])
+    console.log(seleccionada[0]);
     return setActividad(seleccionada[0]);
   }
 
@@ -209,7 +229,7 @@ export const Cronograma = () => {
         allDay: false,
       },
     ];
-    setActividadesSeleccionadas(actividadesSeleccionadas.filter((i) => i !== actividad))
+    setActividadesSeleccionadas(actividadesSeleccionadas.filter((i) => i !== actividad));
     return setEventosCalendar(events);
     // return calendarApi.addEvent({
     //   id: id,
@@ -243,42 +263,41 @@ export const Cronograma = () => {
     await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado las actividades al cronograma");
     return history.push("/documentos");
   }
-  
+
   const handelCargarActividadesSeleccionadas = async () => {
     console.log(idConvocatoria);
-    return await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
-    .then(({ data }) => {
-      actividadesSeleccionadasMap = data.data.map(ds => {
-        return {
-          key: ds.key,
-          value: ds.idactividad,
-          text: ds.nombre
-        }
-      })
+    return await axios
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
+      .then(({ data }) => {
+        actividadesSeleccionadasMap = data.data.map((ds) => {
+          return {
+            key: ds.key,
+            value: ds.idactividad,
+            text: ds.nombre,
+          };
+        });
 
-      setActividadesSeleccionadas(actividadesSeleccionadasMap)
-    })
-    .catch(function (error) {
-      console.error(error);
-    })
-  }
+        setActividadesSeleccionadas(actividadesSeleccionadasMap);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
 
   return (
     <div style={{ padding: "2%" }}>
       <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }}>
-        <Grid style={{ paddingRight: "2%" }}>
-          <Grid.Row columns={2}>
-            <Grid.Column>
-            <Header>Cronograma</Header>
-            </Grid.Column>
-            <Grid.Column>
-              <Header floated="right">
-                <span className="codigo_convovcatoria">Codigo convocarotia #{idConvocatoria}</span>
-              </Header>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <Divider className="divider-admin-convocatorias" />
+        <Header as="h4" className="font-size-14px font-color-1B1C1D font-family-Montserrat-SemiBold"  style={{ marginBottom: "0.5%" }} floated="left">
+          Cronograma
+        </Header>
+        <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
+          <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
+            Codigo de convocatoria {idConvocatoria}
+          </span>
+        </Header>
+
+        <Divider clearing style={{ marginTop: "0", marginBottom: "0%" }} />
+
         <StyleWrapper style={{ padding: "1%" }}>
           <FullCalendar
             plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
@@ -288,7 +307,7 @@ export const Cronograma = () => {
             locale="es"
             height={450}
             headerToolbar={{
-              start: "dayGridMonth,timeGridWeek,timeGridDay",
+              start: "timeGridDay,timeGridWeek,dayGridMonth",
               center: "title",
               end: "prev,next today",
             }}
@@ -308,14 +327,14 @@ export const Cronograma = () => {
             eventColor="#1FAEEF"
             ref={CalendarRef}
           />
-        </StyleWrapper> 
-        <Container textAlign='right'>
-          <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
+        </StyleWrapper>
+        <Container textAlign="right">
+          {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
             Atras
-          </Button>
+          </Button> */}
           <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
             Guardar y continuar
-            </Button>
+          </Button>
         </Container>
       </Segment>
       <Modal open={open} size="large">
@@ -323,12 +342,12 @@ export const Cronograma = () => {
           <Header>Seleccionar Actividades</Header>
           <Divider className="divider-admin-convocatorias" />
           <Header sub>Lista de actividades</Header>
-          <Select 
-            fluid 
-            label="Gender" 
-            options={actividadesSeleccionadas} 
-            placeholder="Seleccionar" 
-            onChange={seleccionarActividad} 
+          <Select
+            fluid
+            label="Gender"
+            options={actividadesSeleccionadas}
+            placeholder="Seleccionar"
+            onChange={seleccionarActividad}
           />
           <div className="container-modal-fechas-checkbox">
             <Form className="container-fechas-modal-actividades">

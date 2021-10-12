@@ -72,43 +72,50 @@ export const CronogramaActividades = () => {
     let todoJSON = JSON.parse(JSON.stringify(actividades));
     for (var i in todoJSON) {
       if (todoJSON[i]) {
-        todoJSON[i].check = !todoJSON[i].check
+        todoJSON[i].check = !todoJSON[i].check;
       }
     }
     return setActividades(todoJSON);
-  }
+  };
 
   return (
     <>
       <Grid style={{ height: "100vh", width: "100%", margin: 0 }}>
         <Grid.Column style={{ maxWidth: "100%" }}>
           <Form size="large" onSubmit={handelGuardarActiviadesConvocatorias} clasname="formulario">
-            <Segment>
-              <Header as="h4" floated="right">
-                <span className="codigo_convovcatoria">Codigo de convocatoria #: {idConvocatoria}</span>
+            <Segment className="segment-shadow">
+              <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
+                <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
+                  Codigo de convocatoria {idConvocatoria}
+                </span>
               </Header>
-              <Header as="h4" floated="left">
-                Cronograma de actividades
+              <Header as="h4" style={{ marginBottom: "0.5%" }} floated="left">
+                Seleccionar actividades
               </Header>
-              <Divider clearing />
+
+              <Divider clearing style={{ marginTop: "0", marginBottom: '2%' }} />
 
               <Grid columns={4}>
                 <Grid.Row>
                   <Grid.Column>
-                    <Input icon="search" placeholder="Codigo/Nombre" fluid onChange={filtradodeinformacion} />
+                    <Input icon="search" placeholder="Buscar Nombre/Código..." fluid onChange={filtradodeinformacion} />
                   </Grid.Column>
                   <Grid.Column></Grid.Column>
                 </Grid.Row>
               </Grid>
 
               <Grid columns={2}>
-                <Grid.Row>
+                <Grid.Row style={{ paddingBottom:'0.3%' }}>
                   <Grid.Column>
-                    <label>Seleccionar actividades</label>
+                    <label className="font-color-4B4B4B font-size-12px">Seleccionar actividades</label>
                   </Grid.Column>
                   <Grid.Column>
                     <Header as="h4" floated="right">
-                      <Form.Checkbox onChange={seleccionarTodo} label="Seleccionar todo" name="dinamico" />
+                      <Form.Checkbox onChange={seleccionarTodo} label={
+                    <label className="font-color-4B4B4B font-size-13px">
+                      Seleccionar Todo
+                    </label>
+                  } name="dinamico" />
                     </Header>
                   </Grid.Column>
                 </Grid.Row>
@@ -122,7 +129,7 @@ export const CronogramaActividades = () => {
                           <Checkbox
                             label={actividad.nombre}
                             key={actividad.key}
-                            value={actividad.idactividad }
+                            value={actividad.idactividad}
                             name={actividad.nombre}
                             checked={actividad.check}
                             className="check"

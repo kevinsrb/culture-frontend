@@ -97,7 +97,7 @@ export const AdminConvocatorias = () => {
 
   function handletoggleChange(data) {
     let datosActualesDiff = JSON.parse(JSON.stringify(datosActuales));
-    datosActualesDiff[data.key - 1].publicada = !datosActualesDiff[data.key - 1].publicada;
+    datosActualesDiff[data.idconvocatorias - 1].publico = !datosActualesDiff[data.idconvocatorias - 1].publico;
     setDatosActuales(datosActualesDiff);
   }
 
@@ -168,13 +168,12 @@ export const AdminConvocatorias = () => {
           <Grid.Column></Grid.Column>
           <Grid.Column className="container-pagination-adminconvocatorias">
             <Button
-              style={{ fontSize: "14px" }}
-              icon="plus circle"
-              content="Crear"
-              labelPosition="right"
-              className="button-filtro-adminconvocatorias"
+              className="button-filtro-adminconvocatorias font-family-Montserrat-Medium font-size-12px"
               onClick={consultarconvocatioria}
-            />
+            >
+              Crear
+              <Icon style={{ paddingLeft:"25%" }} size="big" name="plus circle" />
+            </Button>
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -188,7 +187,7 @@ export const AdminConvocatorias = () => {
           <Divider className="divider-admin-convocatorias" />
           <Grid.Row>
             <Grid.Column className="no-padding-rigth">
-              <Input icon="search" placeholder="Codigo/Nombre" fluid onChange={filtradodeinformacion} />
+              <Input icon="search" placeholder="Buscar Nombre/Código" className="font-family-Work-Sans font-size-14px" fluid onChange={filtradodeinformacion} />
             </Grid.Column>
             <Grid.Column>
               <Button
@@ -219,28 +218,29 @@ export const AdminConvocatorias = () => {
                   <Form.Group widths="equal">
                     <Form.Field>
                       <Select
-                        placeholder="Perfil"
+                        className="font-family-Work-Sans"
+                        placeholder="Seleccionar..."
                         options={tiposidentificacion}
                         onChange={(e, { value }) => setFiltroPerfil(value.toString())}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Select
-                        placeholder="Entidad"
+                        placeholder="Seleccionar..."
                         options={tiposidentificacion}
                         onChange={(e, { value }) => setFiltroEntidad(value.toString())}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Select
-                        placeholder="Linea estratégica"
+                        placeholder="Seleccionar..."
                         options={tiposidentificacion}
                         onChange={(e, { value }) => setFiltroLineaestrategica(value.toString())}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Select
-                        placeholder="Área"
+                        placeholder="Seleccionar..."
                         options={tiposidentificacion}
                         onChange={(e, { value }) => setFiltroArea(value.toString())}
                       />
@@ -249,31 +249,20 @@ export const AdminConvocatorias = () => {
                 </Form>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row>
-              <Grid.Column className="container-pagination-adminconvocatorias">
-                <Button
-                  color="blue"
-                  className="button-filtro-adminconvocatorias"
-                  onClick={() => console.log("aplicando filtros")}
-                >
-                  Aplicar filtros
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
           </Grid>
         ) : null}
         <Grid>
           <Grid.Row className="container-scrollable-adminconvocatorias">
             <Grid.Column width={5} className="no-padding-left no-padding-rigth">
-              <Table className="table-adminconvocatorias-fixed" striped singleLine>
+              <Table className="table-adminconvocatorias-fixed table-header-tabla" striped singleLine>
                 <Table.Header>
-                  <Table.HeaderCell width={1}>No.</Table.HeaderCell>
-                  <Table.HeaderCell width={2}>Nombre</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>No.</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={2}>Nombre</Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
-                      <Table.Row key={datos.idconvocatorias}>
+                      <Table.Row>
                         <Table.Cell width={1}>{datos.idconvocatorias}</Table.Cell>
                         <Table.Cell width={2}>{datos.numero_convocatoria}</Table.Cell>
                       </Table.Row>
@@ -287,21 +276,20 @@ export const AdminConvocatorias = () => {
               </Table>
             </Grid.Column>
             <Grid.Column className="container-scroll no-padding-left no-padding-rigth" width={8}>
-              <Table className="table-adminconvocatorias-scrollable" striped singleLine>
+              <Table className="table-adminconvocatorias-scrollable table-header-tabla" striped singleLine>
                 <Table.Header>
-                  <Table.HeaderCell width={1}>Codigo</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Fecha</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Estado</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Publicada</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Entidad</Table.HeaderCell>
-                  <Table.HeaderCell width={2}>Linea estratégica</Table.HeaderCell>
-                  <Table.HeaderCell width={2}>Area</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Creado por</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Codigo</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Fecha inicio</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Estado</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Publicada</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Entidad</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={2}>Linea estratégica</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Creado por</Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
-                    datosActuales.map((datos) => (
-                      <Table.Row key={datos.value}>
+                    datosActuales.map((datos, index) => (
+                      <Table.Row>
                         <Table.Cell width={1}>{datos.codigo}</Table.Cell>
                         <Table.Cell width={1}>{datos.fecha_creacion}</Table.Cell>
                         <Table.Cell width={1} style={{ color: coloresEstado[datos.estado] }}>
@@ -310,14 +298,13 @@ export const AdminConvocatorias = () => {
                         <Table.Cell width={1}>
                           <Checkbox
                             toggle
-                            name="publicada"
-                            checked={datos.publicada}
+                            name="publico"
+                            checked={datos.publico}
                             onChange={() => handletoggleChange(datos)}
                           />
                         </Table.Cell>
                         <Table.Cell width={1}>{datos.entidad}</Table.Cell>
                         <Table.Cell width={2}>{datos.linea_estrategica}</Table.Cell>
-                        <Table.Cell width={2}>{datos.area}</Table.Cell>
                         <Table.Cell width={1}>{datos.creadopor}</Table.Cell>
                       </Table.Row>
                     ))
@@ -330,16 +317,16 @@ export const AdminConvocatorias = () => {
               </Table>
             </Grid.Column>
             <Grid.Column width={3} className="no-padding-left no-padding-rigth">
-              <Table className="table-adminconvocatorias-fixed" striped singleLine>
+              <Table className="table-adminconvocatorias-fixed table-header-tabla table-header-tabla" striped singleLine>
                 <Table.Header>
-                  <Table.HeaderCell width={1}>Ver</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Editar</Table.HeaderCell>
-                  <Table.HeaderCell width={1}>Borrar</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Ver</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Editar</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>Borrar</Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
-                      <Table.Row key={datos.value}>
+                      <Table.Row key={datos.idconvocatorias}>
                         <Table.Cell>
                           <Button className="botones-acciones" icon="eye" />
                         </Table.Cell>
