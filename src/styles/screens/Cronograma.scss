@@ -1,3 +1,12 @@
+.container-fecha-inicio-cronograma {
+    width: 39%!important;
+    padding-top: 1.5%;
+}
+
+.column-without-padding-rigth {
+    padding-right: 0% !important;
+}
+
 .container-modal-description {
     padding: 3%;
 }
@@ -73,4 +82,9 @@
 
 .botones-redondos {
     border-radius: 2rem !important;
+}
+
+.boton-cancelar-ghost {
+    box-shadow: none !important;
+    color: black;
 }

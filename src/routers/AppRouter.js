@@ -12,9 +12,6 @@ import Home from "../screens/Home";
 import { DocumentacionTecnica } from "../screens/Documentacion/documentacionTecnica";
 import { DocumentacionConvocatoria } from "../screens/Documentacion/documentacionGeneral";
 import { CargarArchivos } from "../screens/CargarArchivos/CargarArchivos";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
 import { Documentos } from "../screens/Documentos/Documentos";
 import { PublicarConvocatoria } from "../screens/Convocatorias/publicarConvocatoria";
 import { AdminMaestras } from "../screens/Maestras/Maestros";
@@ -22,11 +19,6 @@ import { VentanaCreacionMaestras } from "../screens/Maestras/creandoMaestros";
 
 
 export const AppRouter = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(consultarIdConvocatoria());
-  }, [dispatch]);
-
   return (
     <Router>
       <div className="App">

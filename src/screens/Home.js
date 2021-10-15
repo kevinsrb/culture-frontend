@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import * as actions from "./../store/actions/userAction";
+import { useDispatch } from "react-redux";
+import { user_token } from "../store/actions/userAction";
 import axios from "axios";
 import { Form, Image, Header, Input, Checkbox, Button, Grid, Divider } from "semantic-ui-react";
 import loginimage from "../assets/login.png";
@@ -8,6 +9,8 @@ import logo from "../assets/escudoAlcaldia.png";
 
 export default function Home() {
   const history = useHistory();
+  const dispatch = useDispatch();
+
   const initialState = {
     idusuario: "",
     contraseña: "",
@@ -78,6 +81,7 @@ export default function Home() {
         contraseña,
       });
       localStorage.setItem("token", token.data);
+      dispatch(user_token(token.data));
       history.push("/adminconvocatorias");
     } catch (error) {
       console.error(error);

@@ -1,9 +1,9 @@
 import React from "react";
 import axios from "axios";
-import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { edicionConvocatoria, consultarIdConvocatoria } from "../../store/actions/convocatoriaAction";
+import { useDispatch, useSelector } from "react-redux";
+import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
+import { ObjConstanst } from "../../config/utils/constanst";
 import {
   Segment,
   Modal,
@@ -18,6 +18,7 @@ import {
   Pagination,
   Divider,
   Select,
+  Dropdown,
 } from "semantic-ui-react";
 
 const cantidadRegistros = [
@@ -44,6 +45,7 @@ const tiposidentificacion = [
 export const AdminConvocatorias = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state);
   //  DATOS QUE VAN HACER MOSTRADOS EN LA TABLA
   React.useEffect(() => {
     primeroDatostabla();
@@ -63,6 +65,7 @@ export const AdminConvocatorias = () => {
   const [idBorrar, setIdBorrrar] = React.useState("");
 
   async function primeroDatostabla() {
+    console.log(user);
     try {
       let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/`);
       console.log(response);
@@ -148,15 +151,23 @@ export const AdminConvocatorias = () => {
     }
   }
 
-  function abrirEditar(e, datos) {
-    console.log("dicspatch");
-    dispatch(edicionConvocatoria(datos));
-    return history.push("/infoconvocatorias");
+  function abrirEditar(route, datos) {
+    console.log("dispatch", route, datos);
+    console.log(datos.idconvocatorias, 'id convocatorias');
+    dispatch(edicionConvocatoria(true));
+    dispatch(idConvocatorias(datos.idconvocatorias));
+    return history.push(`/${route}`);
   }
 
-  const consultarconvocatioria = () => {
-    dispatch(consultarIdConvocatoria());
-    history.push("/infoconvocatorias");
+  const consultarconvocatioria = async () => {
+    return await axios
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/numero`)
+      .then(({ data }) => {
+        dispatch(idConvocatorias(data.data));
+        dispatch(edicionConvocatoria(undefined));
+        history.push("/infoconvocatorias");
+      })
+      .catch(function (error) {});
   };
 
   return (
@@ -172,7 +183,7 @@ export const AdminConvocatorias = () => {
               onClick={consultarconvocatioria}
             >
               Crear
-              <Icon style={{ paddingLeft:"25%" }} size="big" name="plus circle" />
+              <Icon style={{ paddingLeft: "25%" }} size="big" name="plus circle" />
             </Button>
           </Grid.Column>
         </Grid.Row>
@@ -187,7 +198,13 @@ export const AdminConvocatorias = () => {
           <Divider className="divider-admin-convocatorias" />
           <Grid.Row>
             <Grid.Column className="no-padding-rigth">
-              <Input icon="search" placeholder="Buscar Nombre/Código" className="font-family-Work-Sans font-size-14px" fluid onChange={filtradodeinformacion} />
+              <Input
+                icon="search"
+                placeholder="Buscar Nombre/Código"
+                className="font-family-Work-Sans font-size-14px"
+                fluid
+                onChange={filtradodeinformacion}
+              />
             </Grid.Column>
             <Grid.Column>
               <Button
@@ -256,8 +273,12 @@ export const AdminConvocatorias = () => {
             <Grid.Column width={5} className="no-padding-left no-padding-rigth">
               <Table className="table-adminconvocatorias-fixed table-header-tabla" striped singleLine>
                 <Table.Header>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>No.</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={2}>Nombre</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    No.
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={2}>
+                    Nombre
+                  </Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
@@ -278,13 +299,27 @@ export const AdminConvocatorias = () => {
             <Grid.Column className="container-scroll no-padding-left no-padding-rigth" width={8}>
               <Table className="table-adminconvocatorias-scrollable table-header-tabla" striped singleLine>
                 <Table.Header>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Codigo</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Fecha inicio</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Estado</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Publicada</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Entidad</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={2}>Linea estratégica</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Creado por</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Codigo
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Fecha inicio
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Estado
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Publicada
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Entidad
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={2}>
+                    Linea estratégica
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Creado por
+                  </Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
@@ -305,7 +340,7 @@ export const AdminConvocatorias = () => {
                         </Table.Cell>
                         <Table.Cell width={1}>{datos.entidad}</Table.Cell>
                         <Table.Cell width={2}>{datos.linea_estrategica}</Table.Cell>
-                        <Table.Cell width={1}>{datos.creadopor}</Table.Cell>
+                        <Table.Cell width={1}>{datos.usuario_creacion}</Table.Cell>
                       </Table.Row>
                     ))
                   ) : (
@@ -317,11 +352,21 @@ export const AdminConvocatorias = () => {
               </Table>
             </Grid.Column>
             <Grid.Column width={3} className="no-padding-left no-padding-rigth">
-              <Table className="table-adminconvocatorias-fixed table-header-tabla table-header-tabla" striped singleLine>
+              <Table
+                className="table-adminconvocatorias-fixed table-header-tabla table-header-tabla"
+                striped
+                singleLine
+              >
                 <Table.Header>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Ver</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Editar</Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>Borrar</Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Ver
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Editar
+                  </Table.HeaderCell>
+                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                    Borrar
+                  </Table.HeaderCell>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
@@ -331,7 +376,30 @@ export const AdminConvocatorias = () => {
                           <Button className="botones-acciones" icon="eye" />
                         </Table.Cell>
                         <Table.Cell>
-                          <Button className="botones-acciones" icon="pencil" onClick={(e) => abrirEditar(e, datos)} />
+                          {/* <Dropdown icon={{ name:'remove', onClick: (e) => abrirEditar(e, datos)}}  options={} /> */}
+                          <Dropdown icon="pencil">
+                            <Dropdown.Menu>
+                              <Dropdown.Item onClick={(e) => abrirEditar("infoconvocatorias", datos)}>
+                                Información General
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={(e) => abrirEditar("cronograma", datos)}>
+                                Cronograma
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={(e) => abrirEditar("documentos", datos)}>
+                                Doc. Administrativos
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={(e) => abrirEditar("documentacionTecnica", datos)}>
+                                Doc. Técnicos
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={(e) => abrirEditar("documentacionConvocatoria", datos)}>
+                                Doc. General
+                              </Dropdown.Item>
+                              <Dropdown.Item onClick={(e) => abrirEditar("publicarConvocatoria", datos)}>
+                                Públicación
+                              </Dropdown.Item>
+                            </Dropdown.Menu>
+                          </Dropdown>
+                          {/* <Button className="botones-acciones" icon="pencil" onClick={(e) => abrirEditar(e, datos)} /> */}
                         </Table.Cell>
                         <Table.Cell>
                           <Button

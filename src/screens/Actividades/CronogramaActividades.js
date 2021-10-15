@@ -6,11 +6,13 @@ import { Button, Container, Form, Grid, Header, Divider, Segment, Input, Checkbo
 import { useSelector } from "react-redux";
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 import { useHistory } from "react-router";
+import { editarConvocatoria } from "../../store/actions/convocatoriaAction";
 
 export const CronogramaActividades = () => {
   const [actividades, setActividades] = useState([]);
   const [actividadessource, setActividadessource] = useState([]);
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
+  const { editarConvocatoria } = useSelector((state) => state.edicion);
   const history = useHistory();
 
   useEffect(() => {
@@ -31,10 +33,25 @@ export const CronogramaActividades = () => {
         });
         setActividades(actividadesmap);
         setActividadessource(actividadesmap);
+        if (editarConvocatoria !== undefined) {
+          return obtenerConvocatoria();
+        }
       })
       .catch(function (error) {
         console.error(error);
       });
+  };
+
+  const obtenerConvocatoria = async () => {
+    let convocatoria = await axios
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${editarConvocatoria.idnumero_convocatoria}`)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.console.error((error));
+      });
+    console.log(convocatoria);
   };
 
   const handletoggleChange = (event, result, actividad) => {
@@ -93,7 +110,7 @@ export const CronogramaActividades = () => {
                 Seleccionar actividades
               </Header>
 
-              <Divider clearing style={{ marginTop: "0", marginBottom: '2%' }} />
+              <Divider clearing style={{ marginTop: "0", marginBottom: "2%" }} />
 
               <Grid columns={4}>
                 <Grid.Row>
@@ -105,17 +122,17 @@ export const CronogramaActividades = () => {
               </Grid>
 
               <Grid columns={2}>
-                <Grid.Row style={{ paddingBottom:'0.3%' }}>
+                <Grid.Row style={{ paddingBottom: "0.3%" }}>
                   <Grid.Column>
                     <label className="font-color-4B4B4B font-size-12px">Seleccionar actividades</label>
                   </Grid.Column>
                   <Grid.Column>
                     <Header as="h4" floated="right">
-                      <Form.Checkbox onChange={seleccionarTodo} label={
-                    <label className="font-color-4B4B4B font-size-13px">
-                      Seleccionar Todo
-                    </label>
-                  } name="dinamico" />
+                      <Form.Checkbox
+                        onChange={seleccionarTodo}
+                        label={<label className="font-color-4B4B4B font-size-13px">Seleccionar Todo</label>}
+                        name="dinamico"
+                      />
                     </Header>
                   </Grid.Column>
                 </Grid.Row>

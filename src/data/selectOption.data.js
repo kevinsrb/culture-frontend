@@ -97,7 +97,8 @@ export const RequisitosOptions = [
 
 export const TipodocumentosOptions = [
   { key: 1, value: "Anexo", text: "Anexo" },
-  { key: 2, value: "Hoja de vida", text: "Hoja de vida" },
+  { key: 2, value: "Formato", text: "Formato" },
+  { key: 3, value: "Resolución", text: "Resolución" },
 ];
 
 
