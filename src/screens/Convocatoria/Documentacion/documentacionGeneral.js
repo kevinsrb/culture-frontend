@@ -386,7 +386,7 @@ export const DocumentacionConvocatoria = () => {
                   placeholder="Seleccionar"
                   name="tipo_documento"
                   value={principalState.tipo_documento}
-                  options={TipodocumentosOptions}
+                  options={RequisitosOptions}
                   onChange={CambiarValor}
                   error={principalErrores.tipo_documento}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}

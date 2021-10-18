@@ -95,14 +95,54 @@ export const RequisitosOptions = [
   { key: 4, value: "Presupuesto", text: "Presupuesto" },
 ];
 
-export const TipodocumentosOptions = [
-  { key: 1, value: "Anexo", text: "Anexo" },
-  { key: 2, value: "Formato", text: "Formato" },
-  { key: 3, value: "Resolución", text: "Resolución" },
+
+export const TipoDocumentosOptions = [
+  { key: 1, value: "CC", text: "Cedula de ciudadania" },
+  { key: 2, value: "CE", text: "Cedula extrangera" },
+  { key: 3, value: "CV", text: "Certificado de vinculacion al pais" },
+  { key: 4, value: "PA", text: "Pasaporte" },
+  { key: 5, value: "RC", text: "Registro civil" },
+  { key: 6, value: "TI", text: "Tarjeta de identidad" }
+];
+
+export const SexoOptions = [
+  { key: 1, value: 'M',  text: 'Masculino' },
+  { key: 2, value: 'F',  text: 'Femenino' },
+  { key: 3, value: 'I',  text: 'Intersexual' }
+];
+
+export const EtniaOptions = [
+  { key: 1, value: 'palenqueros',  text: 'Palenqueros' },
+  { key: 2, value: 'comunidadesNegras',  text: 'Comunidades Negras o Afrocolombianas' },
+  { key: 3, value: 'comunidadRazial',  text: 'Comunidad raizal' },
+  { key: 4, value: 'pueblos&comunidades',  text: 'Pueblos y Comunidades Indígenas' },
+  { key: 5, value: 'Pueblo',  text: 'Pueblo Rom o Gitano' },
+  { key: 6, value: 'Ninguno',  text: 'Ninguno' }
+]
+
+export const IdentidadGeneroOptions = [
+  { key: 1, value: 'M',  text: 'Hombre' },
+  { key: 2, value: 'F',  text: 'Mujer' },
+  { key: 3, value: 'T',  text: 'Transgénero' },
+  { key: 4, value: 'N',  text: 'No Deseo Responder' }
+]
+
+export const OrientacionSexualoOptions = [
+  { key: 1, value: 'Heterosexual',  text: 'Heterosexual' },
+  { key: 2, value: 'Homosexual',  text: 'Homosexual' },
+  { key: 3, value: 'Bisexual',  text: 'Bisexual' },
+  { key: 4, value: 'N',  text: 'No Deseo Responder' }
 ];
 
 
- 
+export const EstratoOptions = [
+  { key: 1, value: 1,  text: 'Uno' },
+  { key: 2, value: 2,  text: 'Dos' },
+  { key: 3, value: 3,  text: 'Tres' },
+  { key: 4, value: 4,  text: 'Cuatro' },
+  { key: 5, value: 5,  text: 'Cinco' },
+  { key: 6, value: 6,  text: 'Seis' }
+]
 
 
 

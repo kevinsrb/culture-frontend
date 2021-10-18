@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import Browse from '../../assets/Browse.png'
+import Browse from '../../../assets/Browse.png'
 import { Form, Grid, Header, Divider, Segment, Input, Button, Dropdown , Select} from "semantic-ui-react";
 
 

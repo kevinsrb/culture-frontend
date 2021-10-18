@@ -1,9 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
-import { ObjConstanst } from "../../config/utils/constanst";
+import { useDispatch } from "react-redux";
+import { edicionConvocatoria, consultarIdConvocatoria } from "../../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,

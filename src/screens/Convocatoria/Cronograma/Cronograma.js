@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import { ObjConstanst } from "../../config/utils/constanst";
+import { useDispatch, useSelector } from "react-redux";
+import { ObjConstanst } from '../../../config/utils/constanst'
 
 import {
   Segment,

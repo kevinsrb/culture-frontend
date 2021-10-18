@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
-import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjConstanst } from "../../../config/utils/constanst";
 import DatePicker, { registerLocale } from "react-datepicker";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { Grid, Segment, Header, Form, Button, Icon, Divider, Input, Label, Container, Radio } from "semantic-ui-react";
 import { useHistory } from 'react-router';
 
