@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { edicionConvocatoria, consultarIdConvocatoria } from "../../store/actions/convocatoriaAction";
+import { edicionConvocatoria, consultarIdConvocatoria } from "../../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,

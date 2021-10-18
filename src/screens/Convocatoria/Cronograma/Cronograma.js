@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { ObjConstanst } from '../../config/utils/constanst'
+import { ObjConstanst } from '../../../config/utils/constanst'
 
 
 import { Segment, Modal, Button, Header, Grid, Form, Select, Input, Checkbox, Icon, Divider, Container } from "semantic-ui-react";
@@ -18,7 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
 import '@fullcalendar/daygrid/main.css';
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 
 
 registerLocale("es", es);

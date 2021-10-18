@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { consultarIdConvocatoria, edicionConvocatoria } from "../../store/actions/convocatoriaAction";
+import { consultarIdConvocatoria, edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
 import axios from "axios";
 
-import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjConstanst } from "../../../config/utils/constanst";
 import { Form, Grid, Header, Divider, Segment, Button } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
@@ -16,10 +16,10 @@ import {
   TipoEstimuloOptions,
   NumeroConvocatoiriaOptions,
   QuienParticipaOptions,
-} from "../../data/selectOption.data";
+} from "../../../data/selectOption.data";
 
 //Alertas y notificaciones
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 
 export function InfoConvocatoria() {
   const objConvocatoria = {

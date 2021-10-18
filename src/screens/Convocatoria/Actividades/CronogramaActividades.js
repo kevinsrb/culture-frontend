@@ -1,10 +1,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-import { ObjConstanst } from "../../config/utils/constanst";
-import { CrearActividades } from "./CrearActividades";
+import { ObjConstanst } from "../../../config/utils/constanst";
 import { Button, Container, Form, Grid, Header, Divider, Segment, Input, Checkbox } from "semantic-ui-react";
 import { useSelector } from "react-redux";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { useHistory } from "react-router";
 
 export const CronogramaActividades = () => {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { RequisitosOptions } from '../../data/selectOption.data'
+import { RequisitosOptions } from '../../../data/selectOption.data'
 import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label } from "semantic-ui-react";
 import { useSelector } from "react-redux";
-import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjConstanst } from "../../../config/utils/constanst";
 import { useHistory } from "react-router";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 
 export const DocumentacionTecnica = () => {
   // STATE PRINCIPAL

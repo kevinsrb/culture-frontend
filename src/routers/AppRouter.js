@@ -1,22 +1,26 @@
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
-import CreateNotice from "../screens/Notices/CreateNotice";
-import { InfoConvocatoria } from "../screens/Convocatorias/InfoConvocatoria";
-import { Cronograma } from "../screens/Cronograma/Cronograma";
-import { CreateCategoria } from "../screens/Categorias/CreateCategoria";
-import { CronogramaActividades } from "../screens/Actividades/CronogramaActividades";
-import { AdminConvocatorias } from "../screens/Convocatorias/adminConvicatoria";
+import CreateNotice from "../screens/Convocatoria/Notices/CreateNotice";
+import { InfoConvocatoria } from "../screens/Convocatoria/Convocatorias/InfoConvocatoria";
+import { Cronograma } from "../screens/Convocatoria/Cronograma/Cronograma";
+import { CreateCategoria } from "../screens/Convocatoria/Categorias/CreateCategoria";
+import { CronogramaActividades } from "../screens/Convocatoria/Actividades/CronogramaActividades";
+import { AdminConvocatorias } from "../screens/Convocatoria/Convocatorias/adminConvicatoria";
 import OlvidoContraseña from "../screens/Login/OlvidoContraseña";
 import CrearUsuario from "../screens/Login/CrearUsuario";
 import Navbar from "../components/NavBar";
 import Home from "../screens/Home";
-import { DocumentacionTecnica } from "../screens/Documentacion/documentacionTecnica";
-import { DocumentacionConvocatoria } from "../screens/Documentacion/documentacionGeneral";
-import { CargarArchivos } from "../screens/CargarArchivos/CargarArchivos";
+import { DocumentacionTecnica } from "../screens/Convocatoria/Documentacion/documentacionTecnica";
+import { DocumentacionConvocatoria } from "../screens/Convocatoria/Documentacion/documentacionGeneral";
+import { CargarArchivos } from "../screens/Convocatoria/CargarArchivos/CargarArchivos";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
-import { Documentos } from "../screens/Documentos/Documentos";
-import { PublicarConvocatoria } from "../screens/Convocatorias/publicarConvocatoria";
+import { Documentos } from "../screens/Convocatoria/Documentos/Documentos";
+import { PublicarConvocatoria } from "../screens/Convocatoria/Convocatorias/publicarConvocatoria";
+import { Inscripcion } from "../screens/Participantes/InscripcionParticipantes/Inscripcion";
+import { SeleccionarRoles } from "../screens/Participantes/SeleccionarRoles/SeleccionarRoles";
+import { AgregarPaticipante } from "../screens/Participantes/AgregarParticiantes/AgregarPaticipante";
+import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatoria";
 
 
 export const AppRouter = () => {
@@ -41,7 +45,7 @@ export const AppRouter = () => {
             <Navbar />
             <InfoConvocatoria />
           </Route>
-          <Route path="/cronograma">
+          {/* <Route path="/cronograma">
             <Navbar />
             <Cronograma />
           </Route>
@@ -68,10 +72,23 @@ export const AppRouter = () => {
           <Route path="/documentacionConvocatoria">
             <Navbar />
             <DocumentacionConvocatoria />
-          </Route>
+          </Route> 
           <Route path="/publicarConvocatoria">
             <Navbar />
             <PublicarConvocatoria />
+          </Route>*/}
+
+          <Route path="/bucarConvocatoria">
+            <Navbar />
+            <BuscarConvocatoria />
+          </Route>         
+          <Route path="/Inscripcion">
+            <Navbar />
+            <Inscripcion />
+          </Route>
+          <Route path="/agregarParticipantes">
+            <Navbar />
+            <AgregarPaticipante />
           </Route>
           <Route path="/OlvidoContraseña">
             <OlvidoContraseña />

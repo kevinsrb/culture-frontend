@@ -1,0 +1,47 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor_pricipal{
+    border: 1px solid black;
+    height: 200px !important;
+    background-color: #6DA3FC;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important; 
+}
+
+.contenerdor_roles{
+    width: 70% !important;
+    position: relative;
+    top: -60px;
+    right: -200px;
+}
+
+.check_roles{
+    margin: 10px !important;
+}
+
+.conteiner_roles{
+    display: flex ;
+    justify-content: center ;
+    align-items: center ; 
+    border: 1px solid black;
+    width: 50%;
+}
+
+.titulo{
+   // font-family: Montserrat, Arial, Helvetica, sans-serif;
+    font-weight: semibold ;
+    font-size: 18px;
+    font: normal normal 600 18px/22px Montserrat;
+}
+
+.sub_titulo{
+    color: #4B4B4B ;
+    font-family: Montserrat, Arial, Helvetica, sans-serif;
+    font-weight: regular;
+    font-size: 14px;
+}

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import SubirArchivo from "../../components/Archivos/SubirArchivos";
-import { TipodocumentosOptions } from "../../data/selectOption.data";
-import { ObjConstanst } from "../../config/utils/constanst";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import SubirArchivo from "../../../components/Archivos/SubirArchivos";
+import { RequisitosOptions } from "../../../data/selectOption.data";
+import { ObjConstanst } from "../../../config/utils/constanst";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { Document, Page } from "react-pdf";
@@ -289,7 +289,7 @@ export const DocumentacionConvocatoria = () => {
                   placeholder="Seleccionar"
                   name="tipo_documento"
                   value={principalState.tipo_documento}
-                  options={TipodocumentosOptions}
+                  options={RequisitosOptions}
                   onChange={CambiarValor}
                   error={principalState.errors.tipo_documento}
                 />

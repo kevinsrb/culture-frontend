@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Grid, Segment, Header, Accordion, Icon, Table, Button, Checkbox, Divider } from "semantic-ui-react";
-import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjConstanst } from "../../../config/utils/constanst";
 
 var conteoDocumentos = 0;
 
