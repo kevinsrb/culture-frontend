@@ -4,7 +4,7 @@ import * as AiIcons from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IconContext } from "react-icons";
 import { SidebarData } from "../data/Sidedata";
-import escudoAlcaldia from '../assets/escudoAlcaldia.png'
+// import escudoAlcaldia from '../assets/escudoAlcaldia.png'
 import './Header.css';
 
 export default function Navbar() {

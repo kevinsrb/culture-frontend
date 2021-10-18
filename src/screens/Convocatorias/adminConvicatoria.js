@@ -21,6 +21,8 @@ import {
   Dropdown,
 } from "semantic-ui-react";
 
+import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../data/selectOption.data";
+
 const cantidadRegistros = [
   { key: 1, value: 10, text: "10" },
   { key: 2, value: 20, text: "20" },
@@ -31,15 +33,9 @@ const cantidadRegistros = [
 const coloresEstado = { Abierta: "#21BA45", "En proceso": "#EFC236", Cerrada: "#9F0505" };
 
 const tiposidentificacion = [
-  { key: "CC", value: "CC", text: "CEDULA DE CIUDADANIA" },
-  { key: "TI", value: "TI", text: "TARJETA IDENTIDAD" },
-  { key: "CE", value: "CE", text: "CEDULA EXTRANJERIA" },
-  { key: "TE", value: "TE", text: "TARJETA EXTRANGERIA" },
-  { key: "NI", value: "NI", text: "NIT" },
-  { key: "PA", value: "PA", text: "PASAPORTE" },
-  { key: "TDE", value: "TDE", text: "TIPO DE DOCUMENTO EXTRANJERO" },
-  { key: "RG", value: "RG", text: "REGISTRO CIVIL" },
-  { key: "SIN", value: "SIN", text: "SIN IDENTIFICACION" },
+  { key: 1, value: 1, text: "Persona natural" },
+  { key: 2, value: 2, text: "Persona juridica" },
+  { key: 3, value: 3, text: "Grupo conformado" },
 ];
 
 export const AdminConvocatorias = () => {
@@ -51,7 +47,12 @@ export const AdminConvocatorias = () => {
     primeroDatostabla();
   }, []);
 
+  const initialState = {
+    datossinfiltro: [],
+  };
+
   const [datosActuales, setDatosActuales] = React.useState([]);
+  const [principalState, setPrincipalState] = React.useState(initialState);
   const [paginacionActual, setPaginacionActual] = React.useState(1);
   const [paginacionTotal, setPaginacionTotal] = React.useState(0);
   const [cantidadPáginas, setCantidadPáginas] = React.useState(10);
@@ -79,6 +80,7 @@ export const AdminConvocatorias = () => {
         response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
       }
       if (response.data.convocatorias.length > 0) {
+        setPrincipalState({ datossinfiltro: response.data.convocatorias });
         let copy = response.data.convocatorias.map((data) => data);
         console.log(copy);
         let datos = copy.slice(0, cantidadPáginas);
@@ -90,6 +92,8 @@ export const AdminConvocatorias = () => {
 
       let datos = [];
       setDatosActuales(datos);
+      console.log(datos, "datos cargados");
+      setPrincipalState({ datossinfiltro: datos });
       let x = 1;
       x = Math.ceil(x);
       return setPaginacionTotal(x);
@@ -98,9 +102,9 @@ export const AdminConvocatorias = () => {
     }
   }
 
-  function handletoggleChange(data) {
+  function handletoggleChange(data, index) {
     let datosActualesDiff = JSON.parse(JSON.stringify(datosActuales));
-    datosActualesDiff[data.idconvocatorias - 1].publico = !datosActualesDiff[data.idconvocatorias - 1].publico;
+    datosActualesDiff[index].publico = !datosActualesDiff[index].publico;
     setDatosActuales(datosActualesDiff);
   }
 
@@ -153,7 +157,7 @@ export const AdminConvocatorias = () => {
 
   function abrirEditar(route, datos) {
     console.log("dispatch", route, datos);
-    console.log(datos.idconvocatorias, 'id convocatorias');
+    console.log(datos.idconvocatorias, "id convocatorias");
     dispatch(edicionConvocatoria(true));
     dispatch(idConvocatorias(datos.idconvocatorias));
     return history.push(`/${route}`);
@@ -168,6 +172,43 @@ export const AdminConvocatorias = () => {
         history.push("/infoconvocatorias");
       })
       .catch(function (error) {});
+  };
+
+  const filtrarTablaMultiple = (data) => {
+    console.log(data, data.value.length, principalState.datossinfiltro);
+    let filtrado = [];
+    if (data.value.length === 0) {
+      let copy = principalState.datossinfiltro.map((data) => data);
+      console.log(copy);
+      let datos = copy.slice(0, cantidadPáginas);
+      setDatosActuales(datos);
+      let x = principalState.datossinfiltro.length / cantidadPáginas;
+      x = Math.ceil(x);
+      return setPaginacionTotal(x);
+    }
+    for (var i in datosActuales) {
+      if (typeof datosActuales[i][data.input] === 'object') {
+        if (datosActuales[i][data.input]) {
+          for (var x in datosActuales[i][data.input]) {
+            for (var y in data.value) {
+              if (datosActuales[i][data.input][x].value === data.value[y]) filtrado.push(datosActuales[i]);
+            }
+          }
+        }
+      } else {
+        for (var y2 in data.value) {
+          console.log(datosActuales[i][data.input]);
+          if (datosActuales[i][data.input] === data.value[y2]) filtrado.push(datosActuales[i]);
+        }
+      }
+    }
+    let copy = filtrado.map((data) => data);
+      console.log(copy);
+      let datos = copy.slice(0, cantidadPáginas);
+      setDatosActuales(datos);
+      let z = filtrado.length / cantidadPáginas;
+      z = Math.ceil(z);
+      return setPaginacionTotal(z);
   };
 
   return (
@@ -235,31 +276,39 @@ export const AdminConvocatorias = () => {
                   <Form.Group widths="equal">
                     <Form.Field>
                       <Select
+                        multiple
                         className="font-family-Work-Sans"
+                        label={<label className="font-color-4B4B4B">Perfil</label>}
                         placeholder="Seleccionar..."
                         options={tiposidentificacion}
-                        onChange={(e, { value }) => setFiltroPerfil(value.toString())}
+                        onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "tipo_participante" })}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Select
+                        multiple
                         placeholder="Seleccionar..."
-                        options={tiposidentificacion}
-                        onChange={(e, { value }) => setFiltroEntidad(value.toString())}
+                        options={EntidadOptions}
+                        label={<label className="font-color-4B4B4B">Entidad</label>}
+                        onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "entidad" })}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Select
+                        multiple
                         placeholder="Seleccionar..."
-                        options={tiposidentificacion}
-                        onChange={(e, { value }) => setFiltroLineaestrategica(value.toString())}
+                        options={LineaEstrategicaOptions}
+                        label={<label className="font-color-4B4B4B">Línea estratégica</label>}
+                        onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "linea_estrategica" })}
                       />
                     </Form.Field>
                     <Form.Field>
                       <Select
+                        multiple
                         placeholder="Seleccionar..."
-                        options={tiposidentificacion}
-                        onChange={(e, { value }) => setFiltroArea(value.toString())}
+                        options={AreaOptions}
+                        label={<label className="font-color-4B4B4B">Área</label>}
+                        onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "area" })}
                       />
                     </Form.Field>
                   </Form.Group>
@@ -335,7 +384,7 @@ export const AdminConvocatorias = () => {
                             toggle
                             name="publico"
                             checked={datos.publico}
-                            onChange={() => handletoggleChange(datos)}
+                            onChange={() => handletoggleChange(datos, index)}
                           />
                         </Table.Cell>
                         <Table.Cell width={1}>{datos.entidad}</Table.Cell>

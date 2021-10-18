@@ -24,10 +24,11 @@ export const DocumentacionTecnica = () => {
     openModalViewer: "",
     conteodescripcion: "0/250",
     index: 0,
-    errors: {
-      tipo_documento: false,
-      descripcion: false,
-    },
+  };
+
+  const StateErrores = {
+    tipo_documento: false,
+    descripcion: false,
   };
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export const DocumentacionTecnica = () => {
 
   const fileInputRef = React.useRef();
   const [principalState, setPrincipalState] = useState(State);
+  const [principalError, setPrincipalError] = useState(StateErrores);
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const history = useHistory();
@@ -59,47 +61,72 @@ export const DocumentacionTecnica = () => {
 
   const CambiarValor = (event, result) => {
     const { name, value } = result || event.target;
+    setPrincipalError({ ...principalError, [name]: false });
     return setPrincipalState({ ...principalState, [name]: value });
   };
 
   const agregarFila = () => {
+    let arrayErrores = StateErrores;
+    let error = false;
+
     if (principalState.tipo_documento.trim() === "") {
-      return setPrincipalState({ ...principalState, errors: { tipo_documento: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_documento: true,
+      };
     }
 
     if (principalState.descripcion.trim() === "") {
-      return setPrincipalState({ ...principalState, errors: { descripcion: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        descripcion: true,
+      };
+    }
+
+    if (error) {
+      return setPrincipalError(arrayErrores);
     }
 
     let array = [];
-    array = [
-      ...principalState.documentacion,
-      {
-        index: principalState.documentacion.length,
-        url_documento: principalState.url_documento,
-        descripcion: principalState.descripcion,
-        activo: principalState.activo,
-      },
-    ];
-    if (principalState.editar) {
+    if (!principalState.editar) {
+      console.log("esta agregando");
       array = [
         ...principalState.documentacion,
         {
-          index: principalState.index,
+          index: principalState.documentacion.length,
+          tipo_documento: principalState.tipo_documento,
           url_documento: principalState.url_documento,
           descripcion: principalState.descripcion,
           activo: principalState.activo,
         },
       ];
+      return setPrincipalState({
+        ...principalState,
+        tipo_documento: "",
+        descripcion: "",
+        documentacion: array,
+        filename: "",
+        url_documento: "",
+        editar: false,
+      });
     }
+    console.log("esta editando");
+    let documentacionJSON = JSON.parse(JSON.stringify(principalState.documentacion));
+    documentacionJSON[principalState.index].tipo_documento = principalState.tipo_documento;
+    documentacionJSON[principalState.index].url_documento = principalState.url_documento;
+    documentacionJSON[principalState.index].descripcion = principalState.descripcion;
+    documentacionJSON[principalState.index].activo = principalState.activo;
 
     return setPrincipalState({
       ...principalState,
       tipo_documento: "",
       descripcion: "",
-      documentacion: array,
+      documentacion: documentacionJSON,
       filename: "",
       url_documento: "",
+      editar: false,
     });
   };
 
@@ -111,7 +138,13 @@ export const DocumentacionTecnica = () => {
 
   const Editardocumentacion = (data) => {
     console.log(data);
-    return setPrincipalState({ ...principalState, descripcion: data.descripcion, tipo_documento: data.tipo_documento });
+    return setPrincipalState({
+      ...principalState,
+      index: data.index,
+      descripcion: data.data.descripcion,
+      tipo_documento: data.data.tipo_documento,
+      editar: true,
+    });
   };
 
   const Eliminardocumentacion = async ({ data }) => {
@@ -320,10 +353,10 @@ export const DocumentacionTecnica = () => {
                   name="tipo_documento"
                   options={RequisitosOptions}
                   onChange={CambiarValor}
-                  error={principalState.errors.tipo_documento}
+                  error={principalError.tipo_documento}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
-                {principalState.errors.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
+                {principalError.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -340,12 +373,12 @@ export const DocumentacionTecnica = () => {
                   maxLength="250"
                   onChange={CambiarValor}
                   value={principalState.descripcion}
-                  error={principalState.errors.descripcion}
+                  error={principalError.descripcion}
                 />
                 <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
                   {principalState.conteodescripcion}
                 </label>
-                {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
+                {principalError.descripcion ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
               <Grid.Column>
                 <Form.Field style={{ height: "74%" }}>

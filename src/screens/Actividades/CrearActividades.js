@@ -7,6 +7,7 @@ export const CrearActividades = () => {
 
     const handleInputChange = (event, result) => {
         const { name, value } = result || event.target;
+        console.log(name, value);
     };
 
     return (

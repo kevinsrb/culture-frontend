@@ -35,7 +35,15 @@ export const DocumentacionConvocatoria = () => {
     openModalViewer: false,
   };
 
+  const stateErrores = {
+    nombre: false,
+    tipo_documento: false,
+    descripcion: false,
+    filename: false,
+  };
+
   const [principalState, setPrincipalState] = useState(State);
+  const [principalErrores, setPrincipalErrores] = useState(stateErrores);
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const history = useHistory();
@@ -101,26 +109,40 @@ export const DocumentacionConvocatoria = () => {
 
   const CambiarValor = (event, result) => {
     const { name, value } = result || event.target;
+    setPrincipalErrores({ ...principalErrores, [name]: false });
     return setPrincipalState({ ...principalState, [name]: value });
   };
   const agregarFila = () => {
+    let arrayErrores = stateErrores;
+    let error = false;
     if (principalState.nombre.trim() === "") {
-      return setPrincipalState({ ...principalState, errors: { nombre: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        nombre: true,
+      };
     }
 
     if (principalState.tipo_documento.trim() === "") {
-      // errores = true;
-      setPrincipalState({ ...principalState, errors: { tipo_documento: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_documento: true,
+      };
     }
 
     if (principalState.descripcion.trim() === "") {
-      // errores = true;
-      setPrincipalState({ ...principalState, errors: { descripcion: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        descripcion: true,
+      };
     }
 
-    // if (errores) {
-    //   return;
-    // }
+    if (error) {
+      return setPrincipalErrores(arrayErrores);
+    }
+
     let array = [];
     console.log(principalState.editar);
     array = [
@@ -352,9 +374,9 @@ export const DocumentacionConvocatoria = () => {
                   className="select-registros-adminconvocatoria"
                   value={principalState.nombre}
                   onChange={CambiarValor}
-                  error={principalState.errors.nombre}
+                  error={principalErrores.nombre}
                 />
-                {principalState.errors.nombre ? <Label color="red">Campo requerido</Label> : null}
+                {principalErrores.nombre ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
               <Grid.Column>
                 <Form.Select
@@ -366,10 +388,10 @@ export const DocumentacionConvocatoria = () => {
                   value={principalState.tipo_documento}
                   options={TipodocumentosOptions}
                   onChange={CambiarValor}
-                  error={principalState.errors.tipo_documento}
+                  error={principalErrores.tipo_documento}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
-                {principalState.errors.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
+                {principalErrores.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
@@ -383,12 +405,12 @@ export const DocumentacionConvocatoria = () => {
                   onKeyDown={conteoCaracteres}
                   value={principalState.descripcion}
                   onChange={CambiarValor}
-                  error={principalState.errors.descripcion}
+                  error={principalErrores.descripcion}
                 />
                 <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
                   {principalState.conteodescripcion}
                 </label>
-                {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
+                {principalErrores.descripcion ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
               <Grid.Column>
                 <Form.Field style={{ height: "74%" }}>

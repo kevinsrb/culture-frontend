@@ -1,12 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ObjConstanst } from "../../config/utils/constanst";
-import { CrearActividades } from "./CrearActividades";
+// import { CrearActividades } from "./CrearActividades";
 import { Button, Container, Form, Grid, Header, Divider, Segment, Input, Checkbox } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 import { useHistory } from "react-router";
-import { editarConvocatoria } from "../../store/actions/convocatoriaAction";
+// import { editarConvocatoria } from "../../store/actions/convocatoriaAction";
 
 export const CronogramaActividades = () => {
   const [actividades, setActividades] = useState([]);

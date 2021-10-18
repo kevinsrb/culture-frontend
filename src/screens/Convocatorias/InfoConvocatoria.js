@@ -20,6 +20,7 @@ import {
 
 //Alertas y notificaciones
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { useIMask } from "react-imask";
 
 export function InfoConvocatoria() {
   const objConvocatoria = {
@@ -87,6 +88,9 @@ export function InfoConvocatoria() {
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const { user } = useSelector((state) => state);
+  // Mascara
+  const [opcionesMask, setOpcionesMask] = useState({ mask: Number, thousandsSeparator: "," });
+  const { ref, maskRef } = useIMask(opcionesMask);
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
@@ -754,6 +758,7 @@ export function InfoConvocatoria() {
                           name="valor_total_entg"
                           value={convocatoria.valor_total_entg}
                           onChange={handleInputChange}
+                          ref={ref}
                         />
                       </Grid.Column>
                       <Grid.Column>
@@ -868,7 +873,9 @@ export function InfoConvocatoria() {
           </Form>
           <Grid columns={1} className="container-absolute">
             <Grid.Row>
-              <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>Atras</Button>
+              <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>
+                Atras
+              </Button>
             </Grid.Row>
           </Grid>
         </Grid.Column>
