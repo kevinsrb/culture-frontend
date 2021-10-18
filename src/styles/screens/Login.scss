@@ -11,12 +11,13 @@
 }
 
 .container-form-login {
-  width: 70%;
+  width: 44%;
   align-items: center;
 }
 
 .sub-header-login {
   padding-top: 4% !important;
+  font-family: 'Montserrat-Bold';
 }
 
 .container-inputs-login {
@@ -107,4 +108,20 @@
 .image-logo-container-login {
   display: flex !important;
   width: 50%;
+}
+
+.button-contraseña-login-hide {
+  color: #D1D0D0 !important;
+  background-color: transparent !important;
+  border-top: 0.5px solid #D1D0D0 !important;
+  border-bottom: 0.4px solid #D1D0D0 !important;
+  border-right: 0.4px solid #D1D0D0 !important;
+}
+
+.button-contraseña-login-show {
+  color: #1FAEEF !important;
+  background-color: transparent !important;
+  border-top: 0.5px solid #D1D0D0 !important;
+  border-bottom: 0.4px solid #D1D0D0 !important;
+  border-right: 0.4px solid #D1D0D0 !important;
 }

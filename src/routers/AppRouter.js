@@ -24,11 +24,6 @@ import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/
 
 
 export const AppRouter = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(consultarIdConvocatoria());
-  }, [dispatch]);
-
   return (
     <Router>
       <div className="App">
@@ -89,6 +84,14 @@ export const AppRouter = () => {
           <Route path="/agregarParticipantes">
             <Navbar />
             <AgregarPaticipante />
+          </Route>
+          <Route path="/adminMaestras">
+            <Navbar />
+            <AdminMaestras />
+          </Route>
+          <Route path="/seleccionarMaestra">
+            <Navbar />
+            <VentanaCreacionMaestras />
           </Route>
           <Route path="/OlvidoContraseña">
             <OlvidoContraseña />

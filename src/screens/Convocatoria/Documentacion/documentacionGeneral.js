@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import SubirArchivo from "../../../components/Archivos/SubirArchivos";
-import { RequisitosOptions } from "../../../data/selectOption.data";
-import { ObjConstanst } from "../../../config/utils/constanst";
-import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
-import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal } from "semantic-ui-react";
-import { useSelector } from "react-redux";
+// import SubirArchivo from "../../components/Archivos/SubirArchivos";
+import { TipodocumentosOptions } from "../../data/selectOption.data";
+import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal, Icon } from "semantic-ui-react";
+import { useDispatch, useSelector } from "react-redux";
 import { Document, Page } from "react-pdf";
+import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
 
 export const DocumentacionConvocatoria = () => {
   // STATE PRINCIPAL
@@ -25,6 +26,7 @@ export const DocumentacionConvocatoria = () => {
     tipo_documento_file: "",
     pdf: "",
     namepdf: "",
+    conteodescripcion: "0/250",
     errors: {
       nombre: false,
       tipo_documento: false,
@@ -33,12 +35,38 @@ export const DocumentacionConvocatoria = () => {
     openModalViewer: false,
   };
 
-  
+  const stateErrores = {
+    nombre: false,
+    tipo_documento: false,
+    descripcion: false,
+    filename: false,
+  };
 
   const [principalState, setPrincipalState] = useState(State);
-  const [files, setFiles] = useState();
+  const [principalErrores, setPrincipalErrores] = useState(stateErrores);
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
+  const { editarConvocatoria } = useSelector((state) => state.edicion);
   const history = useHistory();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    cargarDocumentosGenerales();
+  }, []);
+
+  const cargarDocumentosGenerales = async () => {
+    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
+    if (response.data.data.documentos === null) return;
+    console.log(response.data.data);
+    let array = [];
+    if (editarConvocatoria !== undefined) {
+      for (var i in response.data.data.documentos) {
+        if (response.data.data.documentos[i].tipo_documento_id === 2) {
+          array.push(response.data.data.documentos[i]);
+        }
+      }
+      return setPrincipalState({ ...principalState, documentacion: array });
+    }
+  };
 
   const fileInputRef = React.useRef();
 
@@ -70,8 +98,9 @@ export const DocumentacionConvocatoria = () => {
   const subirArchivo = async (e) => {
     try {
       let data = new FormData();
+      console.log(e.target.files[0]);
       data.append("pdf", e.target.files[0]);
-      let response = await axios.post(`http://127.0.0.1:3334/v1/docs/upload`, data);
+      let response = await axios.post(`http://127.0.0.1:80/v1/docs/upload`, data);
       console.log(response);
     } catch (error) {
       return console.error(error);
@@ -80,26 +109,40 @@ export const DocumentacionConvocatoria = () => {
 
   const CambiarValor = (event, result) => {
     const { name, value } = result || event.target;
+    setPrincipalErrores({ ...principalErrores, [name]: false });
     return setPrincipalState({ ...principalState, [name]: value });
   };
   const agregarFila = () => {
+    let arrayErrores = stateErrores;
+    let error = false;
     if (principalState.nombre.trim() === "") {
-      return setPrincipalState({ ...principalState, errors: { nombre: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        nombre: true,
+      };
     }
 
     if (principalState.tipo_documento.trim() === "") {
-      // errores = true;
-      setPrincipalState({ ...principalState, errors: { tipo_documento: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_documento: true,
+      };
     }
 
     if (principalState.descripcion.trim() === "") {
-      // errores = true;
-      setPrincipalState({ ...principalState, errors: { descripcion: true } });
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        descripcion: true,
+      };
     }
 
-    // if (errores) {
-    //   return;
-    // }
+    if (error) {
+      return setPrincipalErrores(arrayErrores);
+    }
+
     let array = [];
     console.log(principalState.editar);
     array = [
@@ -115,11 +158,11 @@ export const DocumentacionConvocatoria = () => {
     ];
     if (principalState.editar) {
       let todoJSON = JSON.parse(JSON.stringify(principalState.documentacion));
-      todoJSON[principalState.index].nombre = principalState.nombre
-      todoJSON[principalState.index].tipo_documento = principalState.tipo_documento
-      todoJSON[principalState.index].descripcion = principalState.descripcion
-      todoJSON[principalState.index].url_documento = principalState.filename
-      todoJSON[principalState.index].activo = principalState.activo
+      todoJSON[principalState.index].nombre = principalState.nombre;
+      todoJSON[principalState.index].tipo_documento = principalState.tipo_documento;
+      todoJSON[principalState.index].descripcion = principalState.descripcion;
+      todoJSON[principalState.index].url_documento = principalState.filename;
+      todoJSON[principalState.index].activo = principalState.activo;
       array = todoJSON;
     }
 
@@ -185,45 +228,42 @@ export const DocumentacionConvocatoria = () => {
     }
   };
 
-  let i = 0;
+  let conteoDocumentosGeneral = 0;
   const handelAsociarDocumentosGenerales = async () => {
-    console.log(principalState);
-    let arrDocumentos = principalState.documentacion;
-    let documento = 0;
-    let ArrayFilter = arrDocumentos.map((data) => data);
-    for (documento in arrDocumentos) {
-      if (arrDocumentos[documento]) {
-        let documentosExiste = await verificarExisteDocumento(arrDocumentos[documento].id_documentos_tecnico);
-        if (documentosExiste) {
-          ArrayFilter = ArrayFilter.filter(
-            (element) => element.id_documentos_tecnico !== documentosExiste[0].id_documentos_tecnico
-          );
-          console.log(ArrayFilter);
-        }
-      }
+    if (principalState.documentacion.length === 0) {
+      return console.error("NO PUEDO GUARDAR");
     }
-
-    arrDocumentos = ArrayFilter;
-
-    if (arrDocumentos.length === 0) return;
-    if (arrDocumentos[i]) {
-      console.log(arrDocumentos[i].activo);
+    if (principalState.documentacion[conteoDocumentosGeneral]) {
       try {
-        await axios.post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/`, {
-          nombre: arrDocumentos[i].nombre,
-          activo: arrDocumentos[i].activo,
-          descripcion: arrDocumentos[i].descripcion,
-          tipo_documento: arrDocumentos[i].tipo_documento,
-          url_documento: arrDocumentos[i].url_documento,
-          convocatoria_id: idConvocatoria,
-        });
-        i++;
+        let tipo_documento_id = 2;
+        if (editarConvocatoria !== undefined) {
+          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosConvocatorias/editar`, {
+            nombre: principalState.documentacion[conteoDocumentosGeneral].nombre,
+            activo: principalState.documentacion[conteoDocumentosGeneral].activo,
+            descripcion: principalState.documentacion[conteoDocumentosGeneral].descripcion,
+            tipo_documento: principalState.documentacion[conteoDocumentosGeneral].tipo_documento,
+            tipo_documento_id,
+            url_documento: principalState.documentacion[conteoDocumentosGeneral].url_documento,
+            idconvocatoria: idConvocatoria,
+          });
+        } else {
+          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosConvocatorias`, {
+            nombre: principalState.documentacion[conteoDocumentosGeneral].nombre,
+            activo: principalState.documentacion[conteoDocumentosGeneral].activo,
+            descripcion: principalState.documentacion[conteoDocumentosGeneral].descripcion,
+            tipo_documento: principalState.documentacion[conteoDocumentosGeneral].tipo_documento,
+            tipo_documento_id,
+            url_documento: principalState.documentacion[conteoDocumentosGeneral].url_documento,
+            idconvocatoria: idConvocatoria,
+          });
+        }
+        conteoDocumentosGeneral++;
         return handelAsociarDocumentosGenerales();
       } catch (error) {
         return console.error(error);
       }
     }
-    // subirArchivo()
+
     await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
     return history.push("/publicarConvocatoria");
   };
@@ -251,19 +291,76 @@ export const DocumentacionConvocatoria = () => {
       });
   };
 
+  const conteoCaracteres = (event) => {
+    if (event.target.name === "descripcion") {
+      if (
+        event.keyCode === 27 ||
+        event.keyCode === 112 ||
+        event.keyCode === 113 ||
+        event.keyCode === 114 ||
+        event.keyCode === 115 ||
+        event.keyCode === 116 ||
+        event.keyCode === 117 ||
+        event.keyCode === 118 ||
+        event.keyCode === 119 ||
+        event.keyCode === 120 ||
+        event.keyCode === 121 ||
+        event.keyCode === 122 ||
+        event.keyCode === 123 ||
+        event.keyCode === 9 ||
+        event.keyCode === 13 ||
+        event.keyCode === 20 ||
+        event.keyCode === 16 ||
+        event.keyCode === 17 ||
+        event.keyCode === 91 ||
+        event.keyCode === 93 ||
+        event.keyCode === 17 ||
+        event.keyCode === 45 ||
+        event.keyCode === 33 ||
+        event.keyCode === 36 ||
+        event.keyCode === 46 ||
+        event.keyCode === 35 ||
+        event.keyCode === 34 ||
+        event.keyCode === 37 ||
+        event.keyCode === 38 ||
+        event.keyCode === 39 ||
+        event.keyCode === 40
+      ) {
+        return;
+      }
+      let numero = principalState[event.target.name].length + 1;
+      if (event.keyCode === 8) numero = principalState[event.target.name].length - 1;
+      if (numero === -1) numero = 0;
+      return setPrincipalState({ ...principalState, [`conteo${event.target.name}`]: `${numero}/250` });
+    }
+  };
+
+  const backComponente = () => {
+    dispatch(edicionConvocatoria(true));
+    dispatch(idConvocatorias(idConvocatoria));
+    return history.push("/documentacionTecnica");
+  };
+
   return (
     <div style={{ padding: "2%" }}>
       {/* <SubirArchivo file={file => setPrincipalState({...principalState, file: file})} type={type => setPrincipalState({...principalState, tipo_documento_file: type})} /> */}
-      <Segment>
+      <Segment className="segment-shadow">
         <Form>
           <Grid style={{ paddingRight: "2%" }}>
-            <Grid.Row columns={2}>
+            <Grid.Row columns={2} style={{ paddingBottom: "0.5%" }}>
               <Grid.Column>
-                <Header>Documentación general convocatoria</Header>
+                <Header style={{ marginBottom: "0" }} className="font-size-14px font-family-Montserrat-SemiBold">
+                  Documentación general convocatoria
+                </Header>
               </Grid.Column>
               <Grid.Column>
                 <Header floated="right">
-                  <span className="codigo_convovcatoria">Codigo convocarotia #{idConvocatoria}</span>
+                  <span
+                    style={{ marginBottom: "0" }}
+                    className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px"
+                  >
+                    Codigo convocarotia {idConvocatoria}
+                  </span>
                 </Header>
               </Grid.Column>
             </Grid.Row>
@@ -271,15 +368,15 @@ export const DocumentacionConvocatoria = () => {
             <Grid.Row columns={2}>
               <Grid.Column>
                 <Form.Input
-                  label="Nombre"
+                  label={<label className="font-color-4B4B4B">Nombre</label>}
                   name="nombre"
                   placeholder="Nombre"
                   className="select-registros-adminconvocatoria"
                   value={principalState.nombre}
                   onChange={CambiarValor}
-                  error={principalState.errors.nombre}
+                  error={principalErrores.nombre}
                 />
-                {principalState.errors.nombre ? <Label color="red">Campo requerido</Label> : null}
+                {principalErrores.nombre ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
               <Grid.Column>
                 <Form.Select
@@ -291,30 +388,35 @@ export const DocumentacionConvocatoria = () => {
                   value={principalState.tipo_documento}
                   options={RequisitosOptions}
                   onChange={CambiarValor}
-                  error={principalState.errors.tipo_documento}
+                  error={principalErrores.tipo_documento}
+                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
-                {principalState.errors.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
+                {principalErrores.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
             </Grid.Row>
             <Grid.Row columns={2}>
               <Grid.Column>
                 <Form.TextArea
-                  label="Descripción"
+                  label={<label className="font-color-4B4B4B">Descripcion</label>}
                   name="descripcion"
                   placeholder="Descripcion"
                   className="select-registros-adminconvocatoria"
+                  maxLength="250"
+                  onKeyDown={conteoCaracteres}
                   value={principalState.descripcion}
                   onChange={CambiarValor}
-                  error={principalState.errors.descripcion}
-                >
-                  {principalState.errors.descripcion ? <Label color="red">Campo requerido</Label> : null}
-                </Form.TextArea>
+                  error={principalErrores.descripcion}
+                />
+                <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
+                  {principalState.conteodescripcion}
+                </label>
+                {principalErrores.descripcion ? <Label color="red">Campo requerido</Label> : null}
               </Grid.Column>
               <Grid.Column>
                 <Form.Field style={{ height: "74%" }}>
-                  <label>Adjuntar archivo</label>
+                  <label className="font-color-4B4B4B">Adjuntar archivo</label>
                   <div className="constiner_documentacion_general">
-                    {principalState.filename == "" && (
+                    {principalState.filename.trim() === "" && (
                       <Button
                         content="Seleccionar archivo"
                         className="btn button_archivo"
@@ -327,44 +429,60 @@ export const DocumentacionConvocatoria = () => {
                 </Form.Field>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={4}>
-              <Grid.Column></Grid.Column>
-              <Grid.Column></Grid.Column>
-              <Grid.Column></Grid.Column>
+            <Grid.Row>
               <Grid.Column className="container-pagination-adminconvocatorias">
                 <Button className="botones-redondos" color="blue" onClick={agregarFila}>
                   Agregar
                 </Button>
               </Grid.Column>
             </Grid.Row>
-            <Grid.Row columns={1}>
-              <Grid.Column>
-                <Header>Documentación generales asociados</Header>
-              </Grid.Column>
-            </Grid.Row>
             <Grid.Row>
               <Grid.Column>
-                <Table striped singleLine>
+                <Header className="font-family-Montserrat-Regular font-size-14px font-color-1B1C1D">
+                  Documentación generales asociados
+                </Header>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row style={{ paddingTop: "0.2%" }}>
+              <Grid.Column>
+                <Table className="table-header-tabla" striped singleLine>
                   <Table.Header>
                     <Table.Row>
-                      <Table.HeaderCell width={1} rowSpan="2">
+                      <Table.HeaderCell className="table-header-tabla" width={1} rowSpan="2">
                         No.
                       </Table.HeaderCell>
-                      <Table.HeaderCell width={4} rowSpan="2">
+                      <Table.HeaderCell className="table-header-tabla" width={4} rowSpan="2">
                         Tipo documento
                       </Table.HeaderCell>
-                      <Table.HeaderCell width={5} rowSpan="2">
+                      <Table.HeaderCell className="table-header-tabla" width={5} rowSpan="2">
                         Descripción
                       </Table.HeaderCell>
-                      <Table.HeaderCell width={1} rowSpan="2">
+                      <Table.HeaderCell className="table-header-tabla" width={1} rowSpan="2">
                         ¿Activo?
                       </Table.HeaderCell>
-                      <Table.HeaderCell colSpan="3">Acciones</Table.HeaderCell>
+                      <Table.HeaderCell className="table-header-tabla" textAlign="center" colSpan="3">
+                        Acciones
+                      </Table.HeaderCell>
                     </Table.Row>
                     <Table.Row>
-                      <Table.HeaderCell>Ver</Table.HeaderCell>
-                      <Table.HeaderCell>Editar</Table.HeaderCell>
-                      <Table.HeaderCell>Eliminar</Table.HeaderCell>
+                      <Table.HeaderCell
+                        className="table-header-tabla font-size-9px font-color-707070"
+                        textAlign="center"
+                      >
+                        Ver
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        className="table-header-tabla font-size-9px font-color-707070"
+                        textAlign="center"
+                      >
+                        Editar
+                      </Table.HeaderCell>
+                      <Table.HeaderCell
+                        className="table-header-tabla font-size-9px font-color-707070"
+                        textAlign="center"
+                      >
+                        Eliminar
+                      </Table.HeaderCell>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
@@ -418,6 +536,13 @@ export const DocumentacionConvocatoria = () => {
           </Grid>
         </Form>
       </Segment>
+      <Grid columns={1} className="container-absolute">
+        <Grid.Row>
+          <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>
+            Atras
+          </Button>
+        </Grid.Row>
+      </Grid>
       <Modal
         onClose={() => setPrincipalState({ ...principalState, openModalViewer: !principalState.openModalViewer })}
         closeIcon

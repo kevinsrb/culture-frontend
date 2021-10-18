@@ -1,40 +1,103 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
-import * as actions from './../store/actions/userAction';
+import { useDispatch } from "react-redux";
+import { user_token } from "../store/actions/userAction";
 import axios from "axios";
-import { Form, Image, Header, Input, Checkbox, Button, Grid } from "semantic-ui-react";
+import { Form, Image, Header, Input, Checkbox, Button, Grid, Divider } from "semantic-ui-react";
 import loginimage from "../assets/login.png";
 import logo from "../assets/escudoAlcaldia.png";
 
 export default function Home() {
   const history = useHistory();
-  const [idusuario, setIdusuario] = React.useState("");
-  const [contraseña, setContraseña] = React.useState("");
-  const [contenidopassword, setContenidopassword] = React.useState("VER");
-  const [tipopassword, setTipoPassword] = React.useState("password");
+  const dispatch = useDispatch();
 
-  async function ingresarUsuario() {
-    console.log("ingreso el usuario");
+  const initialState = {
+    idusuario: "",
+    contraseña: "",
+    tipopassword: "password",
+    disbledIngresar: false,
+    buttonVER: "button-contraseña-login-hide",
+  };
+
+  const initialerrorState = {
+    idusuario: false,
+    contraseña: false,
+  };
+
+  const initialBorderState = {
+    idusuario: "border-color-707070",
+    contraseña: "border-color-707070",
+  };
+
+  const [principalState, setPrincipalState] = React.useState(initialState);
+  const [errorState, setErrorState] = React.useState(initialerrorState);
+  const [borderState, setBoderState] = React.useState(initialBorderState);
+
+  const onChangeInput = (e) => {
+    setBoderState({ ...borderState, [e.target.name]: "border-color-707070" });
+    setErrorState({ ...errorState, [e.target.name]: false });
+    return setPrincipalState({ ...principalState, [e.target.name]: e.target.value });
+  };
+
+  const ingresarUsuario = async () => {
+    let idusuario = principalState.idusuario;
+    let contraseña = principalState.contraseña;
+    let error = 0;
+    let arrayErrores = initialerrorState;
+    let arrayBordes = initialBorderState;
+
+    if (principalState.idusuario.trim() === "") {
+      error++;
+      arrayBordes = {
+        ...arrayBordes,
+        idusuario: "border-color-AD0808",
+      };
+      arrayErrores = {
+        ...arrayErrores,
+        idusuario: true,
+      };
+    }
+
+    if (principalState.contraseña.trim() === "") {
+      error++;
+      arrayBordes = {
+        ...arrayBordes,
+        contraseña: "border-color-AD0808",
+      };
+      arrayErrores = {
+        ...arrayErrores,
+        contraseña: true,
+      };
+    }
+
+    if (error > 0) {
+      setBoderState(arrayBordes);
+      return setErrorState(arrayErrores);
+    }
+
     try {
       let token = await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/autenticacion`, {
         idusuario,
         contraseña,
       });
-      localStorage.setItem('token', token.data)
-      history.push('/adminconvocatorias')
+      localStorage.setItem("token", token.data);
+      dispatch(user_token(token.data));
+      history.push("/adminconvocatorias");
     } catch (error) {
       console.error(error);
     }
-  }
+  };
   function mostrarContraseña() {
-    if (contraseña.trim() === "") return;
-    if (contenidopassword.trim() === "VER") {
-      setTipoPassword("input");
-      setContenidopassword("OCULTAR");
-    } else {
-      setTipoPassword("password");
-      setContenidopassword("VER");
+    if (principalState.contraseña.trim() === "") return;
+    if (principalState.tipopassword.trim() === "input") {
+      return setPrincipalState({
+        ...principalState,
+        tipopassword: "password",
+        buttonVER: "button-contraseña-login-hide",
+      });
     }
+
+    return setPrincipalState({ ...principalState, tipopassword: "input", buttonVER: "button-contraseña-login-show" });
   }
   return (
     <div>
@@ -49,50 +112,78 @@ export default function Home() {
                 <Image className="image-logo-container-login" src={logo} />
               </Form.Field>
               <Form.Field>
-                <Header as="h2" className="sub-header-login">
+                <Header
+                  as="h2"
+                  className="font-color-632264 font-size-14px font-family-Montserrat-Thin texto-alineado-centro"
+                >
                   Convocatorias de fomento y estimulos para el arte y la cultura
-                  <Header.Subheader className="sub-header-login">
-                    Inicie sesion o registrese para acceder al sistema
-                  </Header.Subheader>
+                </Header>
+                <Header className="font-family-Montserrat-Bold font-size-14px">
+                  Ingrese sus datos para inciar sesión
                 </Header>
               </Form.Field>
               <Form.Field className="container-inputs-login usuario-item-login">
-                <label>Usuario</label>
-                <Input onChange={(e) => setIdusuario(e.target.value)} value={idusuario} />
+                <label className="font-color-4B4B4B font-size-12px">Numero de identificación</label>
+                <Input
+                  name="idusuario"
+                  onChange={onChangeInput}
+                  value={principalState.idusuario}
+                  className={borderState.idusuario}
+                />
+                {errorState.idusuario ? (
+                  <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
+                    Campo obligatorio
+                  </Header>
+                ) : null}
               </Form.Field>
               <Form.Field className="container-inputs-login">
-                <label>Contraseña</label>
+                <label className="font-color-4B4B4B font-size-12px">Digite su contraseña</label>
                 <Input
-                  onChange={(e) => setContraseña(e.target.value)}
-                  value={contraseña}
-                  type={tipopassword}
-                  action={<Button basic color="blue" content={contenidopassword} onClick={mostrarContraseña} />}
+                  name="contraseña"
+                  onChange={onChangeInput}
+                  value={principalState.contraseña}
+                  className={borderState.contraseña}
+                  type={principalState.tipopassword}
+                  action={<Button className={principalState.buttonVER} content="VER" onClick={mostrarContraseña} />}
                 />
+                {errorState.contraseña ? (
+                  <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
+                    Campo obligatorio
+                  </Header>
+                ) : null}
               </Form.Field>
               <Form.Field className="container-checkbox-login">
-                <Checkbox label="Recordar" className="sub-container-checkbox-login checkbox-login" />
-                <Header
-                  size="small"
+                <Checkbox
+                  label="Recordar datos de acceso"
+                  className="sub-container-checkbox-login checkbox-login font-family-Montserrat-Regular font-size-12px"
+                />
+              </Form.Field>
+              <Form.Field className="container-space-between" style={{ paddingTop: "10%", paddingBottom: "10%" }}>
+                <Button
+                  basic
                   color="blue"
-                  className="sub-container-checkbox-login login-olvido-contraseña"
-                  onClick={() => history.push("/OlvidoContraseña")}
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/CrearUsuario")}
                 >
-                  ¿Olvido la contraseña?
-                </Header>
-              </Form.Field>
-              <Form.Field className="container-flex-end">
-                <Header size="small" color="blue" className="login-olvido-contraseña">
-                  Valida tu código de verificación
-                </Header>
-              </Form.Field>
-              <Form.Field className="container-space-between">
-                <Button color="black" className="boton-ingresar-login" onClick={() => history.push("/CrearUsuario")}>
-                  Registrarme
+                  Registrarse
                 </Button>
-                <Button color="blue" className="boton-ingresar-login" onClick={ingresarUsuario}>
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={ingresarUsuario}
+                >
                   Ingresar
                 </Button>
               </Form.Field>
+              <Divider clearing />
+              <Header
+                as="h2"
+                className="font-color-632264 font-size-12px font-family-Montserrat-Thin texto-alineado-centro"
+              >
+                ¿Olvido la contraseña?&nbsp;&nbsp;&nbsp;&nbsp;
+                <a>Recupérala AQUI</a>
+              </Header>
             </Form>
           </Grid.Column>
         </Grid.Row>

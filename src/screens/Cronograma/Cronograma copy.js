@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
-import { ObjConstanst } from '../../../config/utils/constanst'
+import { ObjConstanst } from "../../config/utils/constanst";
 
 import {
   Segment,
@@ -32,7 +31,6 @@ import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
 import "@fullcalendar/daygrid/main.css";
 import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
-import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
 
 registerLocale("es", es);
 
@@ -126,10 +124,6 @@ export const StyleWrapper = styled.div`
 export const Cronograma = () => {
   const CalendarRef = React.useRef();
   const history = useHistory();
-  const dispatch = useDispatch();
-  const { idConvocatoria } = useSelector((state) => state.convocatoria);
-  const { editarConvocatoria } = useSelector((state) => state.edicion);
-
   const [actividad, setActividad] = React.useState({ text: "" });
   const [open, setOpen] = React.useState(false);
   const [openDatepicker1, setOpenDatepicker1] = React.useState(false);
@@ -154,64 +148,48 @@ export const Cronograma = () => {
   const [eventosCalendario, setEventosCalendar] = React.useState([]);
   // PRINCIPAL STATE
   const stateInitial = {
-    rango_fechassi: false,
-    rango_fechasno: true,
-    hora_cierresi: false,
-    hora_cierreno: true,
-    verFechas: false,
-    verHoras: false,
-    hora: "23",
-    minuto: "59",
-  };
-  const stateErrores = {
-    actividad: false,
+    rango_fechassi: true,
+    rango_fechasno: false,
+    hora_cierresi: true,
+    hora_cierreno: false,
   };
   const [principalState, setPrincipalState] = React.useState(stateInitial);
-  const [errorState, setErrorState] = React.useState(stateErrores);
-  const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
-
-  React.useEffect(() => {
-    handelCargarActividadesSeleccionadas();
-  }, []);
 
   React.useEffect(() => {
     primerasFechas();
   }, []);
 
   async function primerasFechas() {
-    if (editarConvocatoria === undefined) return;
-
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
+    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/1`);
     if (response.data.data.length === 0) return;
 
-    var events = [];
-    if (response.data.data.fechas === null) return;
-    for (var i in response.data.data.fechas) {
-      let fechainicio = moment(response.data.data.fechas[i].valormin).format("YYYY-MM-DD HH:mm");
-      let fechafin = moment(response.data.data.fechas[i].valormax).format("YYYY-MM-DD HH:mm");
-      if (fechafin.trim() === "Invalid date") fechafin = null;
-      if (response.data.data.fechas[i]) {
-        events = [
-          ...events,
-          {
-            id: i,
-            title: response.data.data.fechas[i].clave,
-            start: fechainicio,
-            end: fechafin,
-            allDay: true,
-          },
-        ];
-      }
-    }
-    return setEventosCalendar(events);
+    return console.log(response);
+    // let events = [
+    //   ...eventosCalendario,
+    //   {
+    //     id: id,
+    //     title: actividad.text,
+    //     start: `${fechainicioaño}-${fechainiciomes}-${fechainiciodia} 06:00`,
+    //     end: `${fechafinalaño}-${fechafinalmes}-${fechafinaldia} ${hora}:${minuto}`,
+    //     allDay: false,
+    //   },
+    // ];
+    // return setEventosCalendar(events);
   }
 
+  const [actividadesSeleccionadas, setActividadesSeleccionadas] = useState([]);
+
+  const { idConvocatoria } = useSelector((state) => state.convocatoria);
+
   let actividadesSeleccionadasMap = [];
+
+  useEffect(() => {
+    handelCargarActividadesSeleccionadas();
+  }, []);
 
   function seleccionarActividad(event, result) {
     let seleccionada = result.options.filter((data) => data.value === result.value);
     console.log(seleccionada[0]);
-    setErrorState({ actividad: false });
     return setActividad(seleccionada[0]);
   }
 
@@ -243,7 +221,7 @@ export const Cronograma = () => {
     let id = eventosCalendario.length;
     const calendarApi = CalendarRef.current.getApi();
     if (actividad.text.trim() === "") {
-      return setErrorState({ actividad: true });
+      return console.error("falta diligenciar la actividad");
     }
     calendarApi.unselect();
     setOpen(false);
@@ -268,21 +246,13 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    console.log("grabó");
-    if (editarConvocatoria !== undefined)
-      await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/fechas/${idConvocatoria}`);
-    grabandoActividades();
-  }
-
-  const grabandoActividades = async () => {
     let id_convocatoria = idConvocatoria;
     let calendaroptions = CalendarRef.current.getApi();
     let events = calendaroptions.getEvents();
+    console.log(events.length, "total de eventos");
     if (events.length === 0) return;
-    console.log(events, eventosCalendario, "estos son los eventos");
     if (events[conteoFechas]) {
       try {
-        console.log("grabe", events[conteoFechas]);
         await axios.post(`${ObjConstanst.IP_CULTURE}fechas`, {
           id_convocatoria,
           clave: events[conteoFechas].title,
@@ -290,16 +260,18 @@ export const Cronograma = () => {
           valormax: events[conteoFechas].end,
         });
         conteoFechas++;
-        return grabandoActividades();
+        console.log(conteoFechas);
+        return grabarActividades();
       } catch (error) {
         return console.error(error);
       }
     }
     await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado las actividades al cronograma");
     return history.push("/documentos");
-  };
+  }
 
   const handelCargarActividadesSeleccionadas = async () => {
+    console.log(idConvocatoria);
     return await axios
       .get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
       .then(({ data }) => {
@@ -310,21 +282,8 @@ export const Cronograma = () => {
             text: ds.nombre,
           };
         });
-        if (eventosCalendario.length > 0) {
-          console.log(eventosCalendario);
-          for (var x in eventosCalendario) {
-            console.log(eventosCalendario[x].title, actividadesSeleccionadas);
-            let actividad = eventosCalendario[x].title;
-            if (actividad !== "Fecha publicacion convocatoria") {
-              setActividadesSeleccionadas(
-                actividadesSeleccionadas.filter((data) => data.text.trim() !== actividad.trim())
-              );
-            }
-          }
-          return;
-        } else {
-          return setActividadesSeleccionadas(actividadesSeleccionadasMap);
-        }
+
+        setActividadesSeleccionadas(actividadesSeleccionadasMap);
       })
       .catch(function (error) {
         console.error(error);
@@ -348,16 +307,9 @@ export const Cronograma = () => {
     }
   };
 
-  const backComponente = () => {
-    dispatch(edicionConvocatoria(true));
-    console.log(idConvocatoria);
-    dispatch(idConvocatorias(idConvocatoria));
-    return history.push("/infoconvocatorias");
-  };
-
   return (
     <div style={{ padding: "2%" }}>
-      <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }} className="segment-shadow">
+      <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }}>
         <Header
           as="h4"
           className="font-size-14px font-color-1B1C1D font-family-Montserrat-SemiBold"
@@ -413,13 +365,6 @@ export const Cronograma = () => {
           </Button>
         </Container>
       </Segment>
-      <Grid columns={1} className="container-absolute">
-        <Grid.Row>
-          <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>
-            Atras
-          </Button>
-        </Grid.Row>
-      </Grid>
       <Modal centered={false} open={open} size="small">
         <Modal.Description className="container-modal-description">
           <Header className="font-color-1B1C1D font-family-Montserrat-Regular font-size-14px">
@@ -433,7 +378,6 @@ export const Cronograma = () => {
             Lista de Actividades
           </Header>
           <Select
-            error={errorState.actividad}
             fluid
             label="Gender"
             options={actividadesSeleccionadas}
@@ -441,15 +385,15 @@ export const Cronograma = () => {
             onChange={seleccionarActividad}
             icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
           />
-          <Grid style={{ width: "100%" }}>
+          <Grid>
             <Grid.Row columns={3}>
-              <Grid.Column style={{ paddingTop: "1.5%" }} width={4}>
+              <Grid.Column style={{ paddingTop: "1.5%" }}>
                 <label className="font-color-454545 font-family-Montserrat-Regular font-size-12px">
                   Rango de Fechas
                 </label>
                 <Grid>
-                  <Grid.Row style={{ paddingTop: "14%" }}>
-                    <Grid.Column style={{ width: "40%" }}>
+                  <Grid.Row style={{ paddingTop: "8%" }}>
+                    <Grid.Column style={{ width:"20%" }}>
                       <Form.Checkbox
                         className="font-color-4B4B4B"
                         radio
@@ -460,7 +404,7 @@ export const Cronograma = () => {
                         onChange={handletoggleChange}
                       />
                     </Grid.Column>
-                    <Grid.Column style={{ paddingLeft: "2%" }}>
+                    <Grid.Column style={{ paddingLeft: "15%" }}>
                       <Form.Checkbox
                         className="font-color-4B4B4B"
                         radio
@@ -474,11 +418,12 @@ export const Cronograma = () => {
                   </Grid.Row>
                 </Grid>
               </Grid.Column>
-              <Grid.Column width={6} style={{ paddingTop: "1.5%" }}>
+              <Grid.Column>
                 <label>Fecha</label>
                 <Grid>
                   <Grid.Row columns={4}>
-                    <Grid.Column width={4} className="column-without-padding-rigth">
+                    <Grid.Column style={{ width:"20%" }}
+                    >
                       <Input
                         placeholder="DD"
                         onChange={(e) => setFechainiciodia(e.target.value)}
@@ -487,7 +432,7 @@ export const Cronograma = () => {
                         value={fechainiciodia}
                       />
                     </Grid.Column>
-                    <Grid.Column width={4} className="column-without-padding-rigth">
+                    <Grid.Column>
                       <Input
                         placeholder="MM"
                         onChange={(e) => setFechainiciomes(e.target.value)}
@@ -496,7 +441,7 @@ export const Cronograma = () => {
                         value={fechainiciomes}
                       />
                     </Grid.Column>
-                    <Grid.Column width={5} className="column-without-padding-rigth">
+                    <Grid.Column>
                       <Input
                         placeholder="AAAA"
                         onChange={(e) => setFechainicioaño(e.target.value)}
@@ -505,84 +450,128 @@ export const Cronograma = () => {
                         value={fechainicioaño}
                       />
                     </Grid.Column>
-                    <Grid.Column width={2} verticalAlign="middle">
-                      <Icon
-                        name="calendar alternate"
-                        size="large"
-                        color="blue"
-                        className="icono-fechas-actividades"
-                        onClick={() => setOpenDatepicker1(!openDatepicker1)}
-                      />
-                      {openDatepicker1 ? (
-                        <div className="container-datepicker">
-                          <DatePicker locale="es" selected={startDate1} onChange={onFechaSeleccionada1} inline />
-                        </div>
-                      ) : null}
-                    </Grid.Column>
                   </Grid.Row>
                 </Grid>
+                <Icon
+                  name="calendar alternate"
+                  size="large"
+                  color="blue"
+                  className="icono-fechas-actividades"
+                  onClick={() => setOpenDatepicker1(!openDatepicker1)}
+                />
+                {openDatepicker1 ? (
+                  <div className="container-datepicker">
+                    <DatePicker locale="es" selected={startDate1} onChange={onFechaSeleccionada1} inline />
+                  </div>
+                ) : null}
               </Grid.Column>
-              {principalState.verFechas ? (
-                <Grid.Column width={6} style={{ paddingTop: "1.5%" }}>
-                  <label>Fecha</label>
-                  <Grid>
-                    <Grid.Row columns={4}>
-                      <Grid.Column width={4} className="column-without-padding-rigth">
-                        <Input
-                          placeholder="DD"
-                          onChange={(e) => setFechafinaldia(e.target.value)}
-                          maxLength="2"
-                          fluid
-                          value={fechafinaldia}
-                        />
-                      </Grid.Column>
-                      <Grid.Column width={4} className="column-without-padding-rigth">
-                        <Input
-                          placeholder="MM"
-                          onChange={(e) => setFechafinalmes(e.target.value)}
-                          maxLength="2"
-                          fluid
-                          value={fechafinalmes}
-                        />
-                      </Grid.Column>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
-                        <Input
-                          placeholder="AAAA"
-                          onChange={(e) => setFechafinalaño(e.target.value)}
-                          maxLength="4"
-                          fluid
-                          value={fechafinalaño}
-                        />
-                      </Grid.Column>
-                      <Grid.Column width={2} verticalAlign="middle">
-                        <Icon
-                          name="calendar alternate"
-                          size="large"
-                          color="blue"
-                          className="icono-fechas-actividades"
-                          onClick={() => setOpenDatepicker2(!openDatepicker2)}
-                        />
-                        {openDatepicker2 ? (
-                          <div className="container-datepicker">
-                            <DatePicker selected={startDate2} onChange={onFechaSeleccionada2} inline />
-                          </div>
-                        ) : null}
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                </Grid.Column>
-              ) : null}
             </Grid.Row>
           </Grid>
+          <div className="container-modal-fechas-checkbox">
+            <Form className="container-fechas-modal-actividades">
+              <div className="container-clasefecha-modal">
+                {verFechas ? (
+                  <React.Fragment>
+                    <Form.Field className="primer-input-fecha">
+                      <label>Inicio</label>
+                      <Input
+                        placeholder="DD"
+                        onChange={(e) => setFechainiciodia(e.target.value)}
+                        maxLength="2"
+                        value={fechainiciodia}
+                      />
+                    </Form.Field>
+                    <Form.Field className="input-container-sin-label">
+                      <Input
+                        placeholder="MM"
+                        onChange={(e) => setFechainiciomes(e.target.value)}
+                        maxLength="2"
+                        value={fechainiciomes}
+                      />
+                    </Form.Field>
+                    <Form.Field className="input-container-sin-label-año">
+                      <Input
+                        placeholder="AAAA"
+                        onChange={(e) => setFechainicioaño(e.target.value)}
+                        maxLength="4"
+                        value={fechainicioaño}
+                      />
+                    </Form.Field>
+                    <Icon
+                      name="calendar alternate"
+                      size="large"
+                      color="blue"
+                      className="icono-fechas-actividades"
+                      onClick={() => setOpenDatepicker1(!openDatepicker1)}
+                    />
+                    {openDatepicker1 ? (
+                      <div className="container-datepicker">
+                        <DatePicker locale="es" selected={startDate1} onChange={onFechaSeleccionada1} inline />
+                      </div>
+                    ) : null}
+                  </React.Fragment>
+                ) : null}
+              </div>
+              <div className="container-clasefecha-modal">
+                {verFechas ? (
+                  <React.Fragment>
+                    <Form.Field className="primer-input-fecha">
+                      <label>Fin</label>
+                      <Input
+                        placeholder="DD"
+                        onChange={(e) => setFechafinaldia(e.target.value)}
+                        maxLength="2"
+                        value={fechafinaldia}
+                      />
+                    </Form.Field>
+                    <Form.Field className="input-container-sin-label">
+                      <Input
+                        placeholder="MM"
+                        onChange={(e) => setFechafinalmes(e.target.value)}
+                        maxLength="2"
+                        value={fechafinalmes}
+                      />
+                    </Form.Field>
+                    <Form.Field className="input-container-sin-label-año">
+                      <Input
+                        placeholder="AAAA"
+                        onChange={(e) => setFechafinalaño(e.target.value)}
+                        maxLength="4"
+                        value={fechafinalaño}
+                      />
+                    </Form.Field>
+                    <Icon
+                      name="calendar alternate"
+                      size="large"
+                      color="blue"
+                      className="icono-fechas-actividades"
+                      onClick={() => setOpenDatepicker2(!openDatepicker2)}
+                    />
+                    {openDatepicker2 ? (
+                      <div className="container-datepicker">
+                        <DatePicker selected={startDate2} onChange={onFechaSeleccionada2} inline />
+                      </div>
+                    ) : null}
+                  </React.Fragment>
+                ) : null}
+              </div>
+            </Form>
+            <Form className="container-checkbox-modal-actividades">
+              <Form.Field>
+                <label>Rango de fechas</label>
+                <Checkbox toggle onChange={() => setVerFechas(!verFechas)} checked={verFechas} />
+              </Form.Field>
+            </Form>
+          </div>
           <Grid>
             <Grid.Row columns={3}>
-              <Grid.Column width={4}>
+              <Grid.Column>
                 <label className="font-color-454545 font-family-Montserrat-Regular font-size-12px">
                   Hora de Cierre
                 </label>
                 <Grid>
-                  <Grid.Row style={{ paddingTop: "14%" }}>
-                    <Grid.Column style={{ width: "40%" }}>
+                  <Grid.Row>
+                    <Grid.Column>
                       <Form.Checkbox
                         className="font-color-4B4B4B"
                         radio
@@ -593,7 +582,7 @@ export const Cronograma = () => {
                         onChange={handletoggleChange}
                       />
                     </Grid.Column>
-                    <Grid.Column style={{ paddingLeft: "2%" }}>
+                    <Grid.Column style={{ paddingLeft: "15%" }}>
                       <Form.Checkbox
                         className="font-color-4B4B4B"
                         radio
@@ -607,57 +596,47 @@ export const Cronograma = () => {
                   </Grid.Row>
                 </Grid>
               </Grid.Column>
-              {principalState.verHoras ? (
-                <Grid.Column width={6}>
-                  <Grid className="no-padding">
-                    <Grid.Row columns={3} style={{ paddingBottom: "0%" }}>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
-                        <label>Hora</label>
-                      </Grid.Column>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
-                        <label>Minutos</label>
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                  <Grid>
-                    <Grid.Row columns={3} style={{ paddingTop: "0%" }}>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
-                        <Input
-                          placeholder="HH"
-                          onChange={(e) => setPrincipalState({ ...principalState, hora: e.target.value })}
-                          maxLength="2"
-                          fluid
-                          value={principalState.hora}
-                        />
-                      </Grid.Column>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
-                        <Input
-                          placeholder="mm"
-                          onChange={(e) => setPrincipalState({ ...principalState, minuto: e.target.value })}
-                          maxLength="2"
-                          fluid
-                          value={principalState.minuto}
-                        />
-                      </Grid.Column>
-                    </Grid.Row>
-                  </Grid>
-                </Grid.Column>
-              ) : null}
             </Grid.Row>
           </Grid>
+          <div className="container-modal-fechas-checkbox">
+            <Form className="container-fechas-modal-actividades">
+              <div className="container-clasefecha-modal"></div>
+              <div className="container-clasefecha-modal">
+                {verHoras ? (
+                  <React.Fragment>
+                    <Form.Field className="input-container-horas">
+                      <label>Hora</label>
+                      <Input placeholder="HH" maxLength="2" onChange={(e) => setHora(e.target.value)} value={hora} />
+                    </Form.Field>
+                    <Form.Field className="input-container-horas">
+                      <label>Minutos</label>
+                      <Input
+                        placeholder="MM"
+                        maxLength="2"
+                        onChange={(e) => setMinuto(e.target.value)}
+                        value={minuto}
+                      />
+                    </Form.Field>
+                  </React.Fragment>
+                ) : null}
+              </div>
+            </Form>
+            <Form className="container-checkbox-modal-actividades">
+              <Form.Field>
+                <label>Definir horario fin</label>
+                <Checkbox toggle onChange={() => setVerHoras(!verHoras)} checked={verHoras} />
+              </Form.Field>
+            </Form>
+          </div>
         </Modal.Description>
         <Modal.Actions>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column>
-                <Button className="botones-redondos boton-cancelar-ghost" basic onClick={() => setOpen(false)}>
-                  Cancelar
-                </Button>
-                <Button className="botones-redondos" color="blue" onClick={adicionarActividad}>
-                  Asignar Actividades
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
+          <Grid className="contenido-acciones-modal-actividades" centered>
+            <Button className="botones-redondos" basic color="blue" onClick={() => setOpen(false)}>
+              Cancelar
+            </Button>
+            <Button className="botones-redondos" color="blue" onClick={adicionarActividad}>
+              Asignar Actividades
+            </Button>
           </Grid>
         </Modal.Actions>
       </Modal>
