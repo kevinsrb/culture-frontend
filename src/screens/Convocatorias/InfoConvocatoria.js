@@ -90,7 +90,7 @@ export function InfoConvocatoria() {
   const { user } = useSelector((state) => state);
   // Mascara
   const [opcionesMask, setOpcionesMask] = useState({ mask: Number, thousandsSeparator: "," });
-  const { ref, maskRef } = useIMask(opcionesMask);
+  const { refNumber, maskRef } = useIMask(opcionesMask);
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
@@ -367,9 +367,9 @@ export function InfoConvocatoria() {
     const { name, value } = result || event.target;
     setErrores({ ...errores, [name]: false });
     if (name === "valor_total_entg") {
-      if (isNaN(event.target.value)) {
-        return;
-      }
+      event.target.value = event.target.value.toString().replace(/[^0-9]/g, "");
+      event.target.value = event.target.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return setConvocatoria({ ...convocatoria, [name]: event.target.value });
     }
     return setConvocatoria({ ...convocatoria, [name]: value });
   };
@@ -758,7 +758,8 @@ export function InfoConvocatoria() {
                           name="valor_total_entg"
                           value={convocatoria.valor_total_entg}
                           onChange={handleInputChange}
-                          ref={ref}
+                          innerRef={refNumber}
+                          ref={refNumber}
                         />
                       </Grid.Column>
                       <Grid.Column>
