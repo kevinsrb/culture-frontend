@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
 import { ObjConstanst } from '../../../config/utils/constanst'
 
 import {
@@ -31,8 +30,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import "@fullcalendar/timegrid/main.css";
 import "semantic-ui-css/semantic.min.css";
 import "@fullcalendar/daygrid/main.css";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
-import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
+import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 
 registerLocale("es", es);
 

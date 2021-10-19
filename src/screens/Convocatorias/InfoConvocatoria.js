@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { consultarIdConvocatoria, edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
+import { edicionConvocatoria } from "../../store/actions/convocatoriaAction";
 import axios from "axios";
 
-import { ObjConstanst } from "../../../config/utils/constanst";
+import { ObjConstanst } from "../../config/utils/constanst";
 import { Form, Grid, Header, Divider, Segment, Button, Icon } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
@@ -16,10 +16,10 @@ import {
   TipoEstimuloOptions,
   NumeroConvocatoiriaOptions,
   QuienParticipaOptions,
-} from "../../../data/selectOption.data";
+} from "../../data/selectOption.data";
 
 //Alertas y notificaciones
-import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
+import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
 
 export function InfoConvocatoria() {
   const objConvocatoria = {
@@ -90,9 +90,6 @@ export function InfoConvocatoria() {
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const { user } = useSelector((state) => state);
-  // Mascara
-  const [opcionesMask, setOpcionesMask] = useState({ mask: Number, thousandsSeparator: "," });
-  // const { refNumber, maskRef } = useIMask(opcionesMask);
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
@@ -164,7 +161,7 @@ export function InfoConvocatoria() {
 
   //funciones
   const cargarSelectLineaConvocatoria = async () => {
-    const response = await axios
+    return await axios
       .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
       .then(({ data }) => {
         LineaConvocatoriaOptionsMap = data.data.map((ds) => {
@@ -679,7 +676,7 @@ export function InfoConvocatoria() {
 
               <Divider clearing />
 
-              <Grid columns={1}>
+              <Grid columns={4}>
                 <Grid.Row>
                   <Grid.Column>
                     <label>
@@ -712,15 +709,10 @@ export function InfoConvocatoria() {
                       </Grid.Row>
                     </Grid>
                   </Grid.Column>
-                </Grid.Row>
-              </Grid>
-
-              <Divider clearing />
-
-              <Grid columns={1}>
-                <Grid.Row>
                   <Grid.Column>
-                    <label>¿Mayor de edad?</label>
+                    <label>
+                      ¿Mayor de edad?
+                    </label>
                     <Grid>
                       <Grid.Row>
                         <Grid.Column>

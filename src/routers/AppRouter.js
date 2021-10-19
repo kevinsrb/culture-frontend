@@ -40,7 +40,7 @@ export const AppRouter = () => {
             <Navbar />
             <InfoConvocatoria />
           </Route>
-          {/* <Route path="/cronograma">
+          <Route path="/cronograma">
             <Navbar />
             <Cronograma />
           </Route>
@@ -71,7 +71,7 @@ export const AppRouter = () => {
           <Route path="/publicarConvocatoria">
             <Navbar />
             <PublicarConvocatoria />
-          </Route>*/}
+          </Route>
 
           <Route path="/bucarConvocatoria">
             <Navbar />
@@ -85,14 +85,14 @@ export const AppRouter = () => {
             <Navbar />
             <AgregarPaticipante />
           </Route>
-          <Route path="/adminMaestras">
+          {/* <Route path="/adminMaestras">
             <Navbar />
             <AdminMaestras />
-          </Route>
-          <Route path="/seleccionarMaestra">
+          </Route> */}
+          {/* <Route path="/seleccionarMaestra">
             <Navbar />
             <VentanaCreacionMaestras />
-          </Route>
+          </Route> */}
           <Route path="/OlvidoContraseña">
             <OlvidoContraseña />
           </Route>

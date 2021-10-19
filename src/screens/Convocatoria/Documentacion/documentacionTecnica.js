@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { RequisitosOptions } from "../../data/selectOption.data";
+import { RequisitosOptions } from "../../../data/selectOption.data";
 import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal, Icon } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
-import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjConstanst } from "../../../config/utils/constanst";
 import { useHistory } from "react-router";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
-import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
+import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 
 export const DocumentacionTecnica = () => {
   // STATE PRINCIPAL
@@ -143,6 +143,8 @@ export const DocumentacionTecnica = () => {
       index: data.index,
       descripcion: data.data.descripcion,
       tipo_documento: data.data.tipo_documento,
+      url_documento: data.data.url_documento,
+      filename: data.data.url_documento,
       editar: true,
     });
   };
@@ -218,28 +220,31 @@ export const DocumentacionTecnica = () => {
   };
 
   const saveFile = async (e) => {
-    let file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("archivo", file);
-    await axios
-      .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData, {
-        headers: { "content-type": "multipart/form-data" },
-      })
-      .then((data) => {
-        console.log(data);
-        //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-        //history.push("/cronogramaActividades");
-      })
-      .catch(function (error) {
-        console.log(error);
+    console.log(e.target.files.length);
+    if (e.target.files.length > 0) {
+      let file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("archivo", file);
+      await axios
+        .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData, {
+          headers: { "content-type": "multipart/form-data" },
+        })
+        .then((data) => {
+          console.log(data);
+          //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
+          //history.push("/cronogramaActividades");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      return setPrincipalState({
+        ...principalState,
+        url_documento: e.target.files[0].name,
+        file: e.target.files[0],
+        filename: e.target.files[0].name,
+        tipo_documento_file: e.target.files[0].type,
       });
-    return setPrincipalState({
-      ...principalState,
-      url_documento: e.target.files[0].name,
-      file: e.target.files[0],
-      filename: e.target.files[0].name,
-      tipo_documento_file: e.target.files[0].type,
-    });
+    }
   };
 
   const Verdocumentacion = async (data) => {
@@ -391,7 +396,17 @@ export const DocumentacionTecnica = () => {
                         onClick={() => fileInputRef.current.click()}
                       />
                     )}
-                    <span className="nombreArchivo">{principalState.filename}</span>
+                    {principalState.filename !== "" && (
+                      <Grid>
+                        <span className="nombreArchivo">{principalState.filename}</span>
+                        <Header
+                          onClick={() => setPrincipalState({ ...principalState, filename: "" })}
+                          className="font-size-10px font-color-AD0808 no-margin"
+                        >
+                          Eliminar
+                        </Header>
+                      </Grid>
+                    )}
                     <input ref={fileInputRef} type="file" hidden onChange={saveFile} />
                   </div>
                 </Form.Field>

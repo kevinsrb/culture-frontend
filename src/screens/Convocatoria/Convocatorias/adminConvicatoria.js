@@ -1,8 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { edicionConvocatoria, consultarIdConvocatoria } from "../../../store/actions/convocatoriaAction";
+import { useDispatch, useSelector } from "react-redux";
+import { edicionConvocatoria, consultarIdConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,
@@ -19,8 +19,8 @@ import {
   Select,
   Dropdown,
 } from "semantic-ui-react";
-
-import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../data/selectOption.data";
+import { ObjConstanst } from "../../../config/utils/constanst";
+import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../../data/selectOption.data";
 
 const cantidadRegistros = [
   { key: 1, value: 10, text: "10" },
@@ -41,6 +41,7 @@ export const AdminConvocatorias = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
+  const { idConvocatoria } = useSelector((state) => state.convocatoria);
   //  DATOS QUE VAN HACER MOSTRADOS EN LA TABLA
   React.useEffect(() => {
     primeroDatostabla();
