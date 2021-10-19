@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
-import { ObjConstanst } from '../../../config/utils/constanst'
+import { ObjConstanst } from "../../../config/utils/constanst";
 
 import {
   Segment,
@@ -18,6 +18,7 @@ import {
   Icon,
   Divider,
   Container,
+  Label,
 } from "semantic-ui-react";
 import es from "date-fns/locale/es";
 import styled from "@emotion/styled";
@@ -123,12 +124,19 @@ export const StyleWrapper = styled.div`
 `;
 
 export const Cronograma = () => {
+  const stateError = {
+    apertura: false,
+    cierre: false,
+    otorgamiento: false,
+  };
+
   const CalendarRef = React.useRef();
   const history = useHistory();
   const dispatch = useDispatch();
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
 
+  const [principalError, setPrincipalError] = useState(stateError);
   const [actividad, setActividad] = React.useState({ text: "" });
   const [open, setOpen] = React.useState(false);
   const [openDatepicker1, setOpenDatepicker1] = React.useState(false);
@@ -180,7 +188,7 @@ export const Cronograma = () => {
   async function primerasFechas() {
     if (editarConvocatoria === undefined) return;
 
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
+    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
     if (response.data.data.length === 0) return;
 
     var events = [];
@@ -244,6 +252,15 @@ export const Cronograma = () => {
     if (actividad.text.trim() === "") {
       return setErrorState({ actividad: true });
     }
+    if (actividad.text.trim() === 'Apertura') {
+      setPrincipalError({...principalError, apertura: false})
+    }
+    if (actividad.text.trim() === 'Cierre') {
+      setPrincipalError({...principalError, cierre: false})
+    }
+    if (actividad.text.trim() === 'Resolución de otorgamiento') {
+      setPrincipalError({...principalError, otorgamiento: false})
+    }
     calendarApi.unselect();
     setOpen(false);
     let events = [
@@ -267,9 +284,42 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    console.log("grabó");
+    conteoFechas= 0;
+    let calendaroptions = CalendarRef.current.getApi();
+    let events = calendaroptions.getEvents();
+    console.log(events);
+    let apertura = events.filter((data) => data.title === "Apertura");
+    let cierre = events.filter((data) => data.title === "Cierre");
+    let otorgamiento = events.filter((data) => data.title === "Resolución de otorgamiento");
+    let arrayErrores = stateError;
+    let error = false;
+    console.log(apertura.length, cierre.length, otorgamiento.length);
+    if (apertura.length === 0) {
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        apertura: true,
+      }
+    }
+    if (cierre.length === 0) {
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        cierre: true,
+      }
+    }
+    if (otorgamiento.length === 0) {
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        otorgamiento: true,
+      }
+    }
+    if (error) {
+      return setPrincipalError(arrayErrores);
+    }
     if (editarConvocatoria !== undefined)
-      await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/fechas/${idConvocatoria}`);
+      await axios.post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/fechas/${idConvocatoria}`);
     grabandoActividades();
   }
 
@@ -279,10 +329,11 @@ export const Cronograma = () => {
     let events = calendaroptions.getEvents();
     if (events.length === 0) return;
     console.log(events, eventosCalendario, "estos son los eventos");
+    console.log(conteoFechas, 'conteo de fechas', events[conteoFechas]);
     if (events[conteoFechas]) {
       try {
         console.log("grabe", events[conteoFechas]);
-        await axios.post(`${ObjConstanst.IP_CULTURE}fechas`, {
+        await axios.post(`${process.env.REACT_APP_SERVER_CONV}fechas`, {
           id_convocatoria,
           clave: events[conteoFechas].title,
           valormin: events[conteoFechas].start,
@@ -300,7 +351,7 @@ export const Cronograma = () => {
 
   const handelCargarActividadesSeleccionadas = async () => {
     return await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/actividades/${idConvocatoria}`)
       .then(({ data }) => {
         actividadesSeleccionadasMap = data.data.map((ds) => {
           return {
@@ -404,6 +455,11 @@ export const Cronograma = () => {
           />
         </StyleWrapper>
         <Container textAlign="right">
+          {principalError.apertura ? <Label color="red">Falta seleccionar la Apertura</Label> : null}
+          {principalError.cierre ? <Label color="red">Falta seleccionar el Cierre</Label> : null}
+          {principalError.otorgamiento ? (
+            <Label color="red">Falta seleccionar la Resolución de otorgamiento</Label>
+          ) : null}
           {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
             Atras
           </Button> */}

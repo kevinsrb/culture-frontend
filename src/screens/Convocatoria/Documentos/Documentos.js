@@ -3,6 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
+import axios from "axios";
 import { Grid, Segment, Header, Accordion, Icon, Table, Button, Checkbox, Divider } from "semantic-ui-react";
 import { ObjConstanst } from "../../../config/utils/constanst";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
@@ -18,6 +19,7 @@ export const Documentos = () => {
         sustentable: false,
         obligatorio: false,
         source: "Persona_Natural",
+        url_documento: "",
       },
       1: {
         id: 1,
@@ -25,6 +27,7 @@ export const Documentos = () => {
         sustentable: false,
         obligatorio: false,
         source: "Persona_Natural",
+        url_documento: "",
       },
       2: {
         id: 2,
@@ -32,6 +35,7 @@ export const Documentos = () => {
         sustentable: false,
         obligatorio: false,
         source: "Persona_Natural",
+        url_documento: "",
       },
       3: {
         id: 3,
@@ -39,6 +43,7 @@ export const Documentos = () => {
         sustentable: false,
         obligatorio: false,
         source: "Persona_Natural",
+        url_documento: "",
       },
       4: {
         id: 4,
@@ -46,6 +51,7 @@ export const Documentos = () => {
         sustentable: false,
         obligatorio: false,
         source: "Persona_Juridica",
+        url_documento: "",
       },
       5: {
         id: 5,
@@ -53,6 +59,7 @@ export const Documentos = () => {
         sustentable: false,
         obligatorio: false,
         source: "Grupo_Conformado",
+        url_documento: "",
       },
     },
     data: {
@@ -95,13 +102,14 @@ export const Documentos = () => {
       3: "Grupo_Conformado",
     };
 
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}documentos/tiposdocumentos/`);
+    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}documentos/tiposdocumentos/`);
     let documentacionresponse = response.data.data.map((data, index) => {
       return {
         id: index,
         descripcion_del_documento: data.nombre,
         sustentable: false,
         obligatorio: false,
+        url_documento: "",
         source: persona[data.tipo_participante_id],
       };
     });
@@ -125,8 +133,9 @@ export const Documentos = () => {
     todosJSON.data.Persona_Juridica.documentos = arraypersonajuridica;
     todosJSON.data.Grupo_Conformado.documentos = arraygrupoconformado;
     todosJSON.documentacion = documentacionresponse;
-    setDocumentos(todosJSON);
-    return consultarDocumentosConvocatoria();
+    console.log(todosJSON);
+    consultarDocumentosConvocatoria();
+    return setDocumentos(todosJSON);
   };
 
   const consultarDocumentosConvocatoria = async () => {
@@ -138,7 +147,7 @@ export const Documentos = () => {
     setDocumentos(info);
     // TRAER LOS DOCUMENTOS SELECCIONADOS EN LA CONVOCATORIA
     if (editarConvocatoria !== undefined) {
-      let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
+      let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
       if (response.data.data.documentos === null) return;
       console.log(response.data.data);
       console.log(documentos);
@@ -162,6 +171,7 @@ export const Documentos = () => {
             let change = documentos.data[persona[response.data.data.documentos[i].tipo_persona]];
             let changeDataFilter = change.documentos.filter((id) => id !== documentos.documentacion[x].id);
             change.documentos = changeDataFilter;
+            // let todosJSON = JSON.parse(JSON.stringify(documentos));
             let todosJSON = JSON.parse(JSON.stringify(documentos));
             todosJSON.data[persona[response.data.data.documentos[i].tipo_persona]] = change;
             todosJSON.data["Documentos_Seleccionados"] = source;
@@ -169,7 +179,33 @@ export const Documentos = () => {
           }
         }
       }
+      // revisarArchivosConvocatoria(response.data.data);
     }
+  };
+
+  const revisarArchivosConvocatoria = (convo) => {
+    var persona = {
+      0: "Persona_Natural",
+      1: "Persona_Juridica",
+      2: "Grupo_Conformado",
+    };
+    let todosJSON = JSON.parse(JSON.stringify(documentos));
+    for (var i in convo.documentos) {
+      for (var x in documentos.documentacion) {
+        if (
+          documentos.documentacion[x].descripcion_del_documento.trim() === convo.documentos[i].descripcion.trim() &&
+          documentos.documentacion[x].source === persona[convo.documentos[i].tipo_persona] &&
+          convo.documentos[i].tipo_documento_id === 0
+        ) {
+          console.log(convo.documentos[i].id, convo.documentos[i].url_documento, "este es el id");
+          if (convo.documentos[i].url_documento !== undefined) {
+            todosJSON.documentacion[convo.documentos[i].id].url_documento = convo.documentos[i].url_documento;
+          }
+        }
+      }
+    }
+    console.log(todosJSON);
+    return setDocumentos(todosJSON);
   };
 
   const handleClickAccordion = (e, Titulo) => {
@@ -209,8 +245,16 @@ export const Documentos = () => {
   };
 
   const guardardocumentacionadministrativa = async () => {
+    conteoDocumentos = 0;
     console.log("grabó");
     grabandodocumentacionAdministrativa();
+  };
+
+  const handlecheckboxChange = (doc, name) => {
+    console.log(doc.id);
+    let todosJSON = JSON.parse(JSON.stringify(documentos));
+    todosJSON.documentacion[doc.id][name] = !todosJSON.documentacion[doc.id][name];
+    return setDocumentos(todosJSON);
   };
 
   const grabandodocumentacionAdministrativa = async () => {
@@ -232,8 +276,9 @@ export const Documentos = () => {
         let tipo_persona = tipo[documentos.documentacion[documento].source];
         console.log(tipo_persona);
         if (editarConvocatoria !== undefined) {
-          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosAdministrativos/editar`, {
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosAdministrativos/editar`, {
             idconvocatoria,
+            url_documento: documentos.documentacion[documento].url_documento,
             descripcion: documentos.documentacion[documento].descripcion_del_documento,
             sustentable: documentos.documentacion[documento].sustentable,
             obligatorio: documentos.documentacion[documento].obligatorio,
@@ -241,8 +286,9 @@ export const Documentos = () => {
             tipo_persona,
           });
         } else {
-          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosAdministrativos`, {
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosAdministrativos`, {
             idconvocatoria,
+            url_documento: documentos.documentacion[documento].url_documento,
             descripcion: documentos.documentacion[documento].descripcion_del_documento,
             sustentable: documentos.documentacion[documento].sustentable,
             obligatorio: documentos.documentacion[documento].obligatorio,
@@ -264,7 +310,35 @@ export const Documentos = () => {
     dispatch(edicionConvocatoria(true));
     dispatch(idConvocatorias(idConvocatoria));
     return history.push("/cronograma");
-  }
+  };
+
+  const saveFile = async (e, doc) => {
+    console.log(doc.id, "este es el id que seleccione");
+    if (e.target.files.length > 0) {
+      let file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("archivo", file);
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_CONV}documentos/guardarArchivo`, formData, {
+          headers: { "content-type": "multipart/form-data" },
+        })
+        .then((data) => {
+          let todosJSON = JSON.parse(JSON.stringify(documentos));
+          todosJSON.documentacion[doc.id].url_documento = e.target.files[0].name;
+          return setDocumentos(todosJSON);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+  };
+
+  const eliminarArchivo = (doc) => {
+    console.log(doc.id, "este es el id que borre");
+    let todosJSON = JSON.parse(JSON.stringify(documentos));
+    todosJSON.documentacion[doc.id].url_documento = "";
+    return setDocumentos(todosJSON);
+  };
 
   return (
     <div style={{ padding: "2%", backgroundColor: "#F7FBFF" }}>
@@ -282,7 +356,6 @@ export const Documentos = () => {
               const datos = documentos.data[doc];
               if (datos.id === "Documentos_Seleccionados") return;
               const documentacion = datos.documentos.map((data) => documentos.documentacion[data]);
-              console.log(index);
 
               return (
                 <Segment className="no-margin">
@@ -316,8 +389,9 @@ export const Documentos = () => {
                 <Table striped singleLine>
                   <Table.Header>
                     <Table.HeaderCell>{datos.id}</Table.HeaderCell>
-                    <Table.HeaderCell>¿Sustentable?</Table.HeaderCell>
+                    <Table.HeaderCell>¿Subsanable?</Table.HeaderCell>
                     <Table.HeaderCell>¿Obligatorio?</Table.HeaderCell>
+                    <Table.HeaderCell>Subir archivo</Table.HeaderCell>
                     <Table.HeaderCell>Accion</Table.HeaderCell>
                   </Table.Header>
                   <Table.Body>
@@ -328,10 +402,40 @@ export const Documentos = () => {
                           {doc.descripcion_del_documento}
                         </Table.Cell>
                         <Table.Cell>
-                          <Checkbox checked={doc.sustentable} onChange={() => console.log("aca")} />
+                          <Checkbox
+                            checked={doc.sustentable}
+                            onChange={() => handlecheckboxChange(doc, "sustentable")}
+                          />
                         </Table.Cell>
                         <Table.Cell>
-                          <Checkbox checked={doc.obligatorio} onChange={() => console.log("aca")} />
+                          <Checkbox
+                            checked={doc.obligatorio}
+                            onChange={() => handlecheckboxChange(doc, "obligatorio")}
+                          />
+                        </Table.Cell>
+                        <Table.Cell>
+                          {doc.url_documento === "" && (
+                            <Button
+                              content="Seleccionar archivo"
+                              className="btn button_archivo"
+                              onClick={() => {
+                                var inputs = document.getElementsByClassName("inputs-ref");
+                                inputs[index].click();
+                              }}
+                            />
+                          )}
+                          {doc.url_documento !== "" && (
+                            <Grid>
+                              <span className="nombreArchivo">{doc.url_documento}</span>
+                              <Header
+                                onClick={() => eliminarArchivo(doc)}
+                                className="font-size-10px font-color-AD0808 no-margin"
+                              >
+                                Eliminar
+                              </Header>
+                            </Grid>
+                          )}
+                          <input className="inputs-ref" type="file" hidden onChange={(e) => saveFile(e, doc)} />
                         </Table.Cell>
                         <Table.Cell>
                           <Button

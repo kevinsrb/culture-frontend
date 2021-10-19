@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { consultarIdConvocatoria, edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
+import { edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
 import axios from "axios";
-import { ObjConstanst } from "../../../config/utils/constanst";
 import { Form, Grid, Header, Divider, Segment, Button, Icon } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
@@ -47,6 +46,9 @@ export function InfoConvocatoria() {
     descripcion_corta: "",
     perfil_participante: "",
     noparticipa: "",
+    mayoredadsi: true,
+    mayoredadno: false,
+    mayoredad: true,
     conteodescripcion_corta: "0/250",
     conteonoparticipa: "0/250",
     conteoperfil_participante: "0/250",
@@ -89,10 +91,6 @@ export function InfoConvocatoria() {
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const { user } = useSelector((state) => state);
 
-  // Mascara
-  // const [opcionesMask, setOpcionesMask] = useState({ mask: Number, thousandsSeparator: "," });
-  // const { ref, maskRef } = useIMask(opcionesMask);
-
   useEffect(() => {
     cargarSelectLineaConvocatoria();
   }, [dispatch]);
@@ -110,14 +108,14 @@ export function InfoConvocatoria() {
     let participantes = [];
     let categorias = [];
     let areas = [];
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
-    console.log(response);
+    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
+    console.log(response,'este es el response');
     for (var i in response.data.data.tipo_participante) {
       participantes.push(response.data.data.tipo_participante[i].value);
     }
     setTipoparticipanteseleccionado(participantes);
     let lineasconvocatorias = await axios.get(
-      `${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${idConvocatoria}`
+      `${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${response.data.data.linea_convocatoria}`
     );
     categoriaslineasconvocatoriaMap = lineasconvocatorias.data.data.map((ds) => {
       return {
@@ -164,7 +162,7 @@ export function InfoConvocatoria() {
   //funciones
   const cargarSelectLineaConvocatoria = async () => {
     const response = await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias`)
       .then(({ data }) => {
         LineaConvocatoriaOptionsMap = data.data.map((ds) => {
           return {
@@ -340,7 +338,7 @@ export function InfoConvocatoria() {
       e.preventDefault();
       console.log(convocatoria);
       return await axios
-        .post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
+        .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias`, convocatoria)
         .then((data) => {
           console.log(data);
           ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
@@ -352,7 +350,7 @@ export function InfoConvocatoria() {
     }
 
     await axios
-      .post(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`, convocatoria)
+      .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`, convocatoria)
       .then((data) => {
         console.log(data);
         ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
@@ -368,9 +366,9 @@ export function InfoConvocatoria() {
     const { name, value } = result || event.target;
     setErrores({ ...errores, [name]: false });
     if (name === "valor_total_entg") {
-      if (isNaN(event.target.value)) {
-        return;
-      }
+      event.target.value = event.target.value.toString().replace(/[^0-9]/g, "");
+      event.target.value = event.target.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      return setConvocatoria({ ...convocatoria, [name]: event.target.value });
     }
     return setConvocatoria({ ...convocatoria, [name]: value });
   };
@@ -427,7 +425,7 @@ export function InfoConvocatoria() {
     setErrores({ ...errores, linea_convocatoria: false });
     setConvocatoria({ ...convocatoria, [name]: value });
     const response = await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${value}`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${value}`)
       .then(({ data }) => {
         console.log(data);
         categoriaslineasconvocatoriaMap = data.data.map((ds) => {
@@ -456,6 +454,12 @@ export function InfoConvocatoria() {
     }
     if (name === "conveniono") {
       return setConvocatoria({ ...convocatoria, [name]: true, conveniosi: false, convenido: false });
+    }
+    if (name === "mayoredadsi") {
+      return setConvocatoria({ ...convocatoria, [name]: true, mayoredadno: false, mayoredad: true });
+    }
+    if (name === "mayoredadno") {
+      return setConvocatoria({ ...convocatoria, [name]: true, mayoredadsi: false, mayoredad: false });
     }
     return setConvocatoria({ ...convocatoria, [name]: checked });
   };
@@ -710,6 +714,42 @@ export function InfoConvocatoria() {
 
               <Divider clearing />
 
+              <Grid columns={1}>
+                <Grid.Row>
+                  <Grid.Column>
+                    <label>¿Mayor de edad?</label>
+                    <Grid>
+                      <Grid.Row>
+                        <Grid.Column>
+                          <Form.Checkbox
+                            className="font-color-4B4B4B"
+                            radio
+                            label="Si"
+                            name="mayoredadsi"
+                            value={convocatoria.mayoredadsi}
+                            checked={convocatoria.mayoredadsi}
+                            onChange={handletoggleChange}
+                          />
+                        </Grid.Column>
+                        <Grid.Column style={{ paddingLeft: "0%" }}>
+                          <Form.Checkbox
+                            className="font-color-4B4B4B"
+                            radio
+                            label="No"
+                            name="mayoredadno"
+                            value={convocatoria.mayoredadno}
+                            checked={convocatoria.mayoredadno}
+                            onChange={handletoggleChange}
+                          />
+                        </Grid.Column>
+                      </Grid.Row>
+                    </Grid>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+
+              <Divider clearing />
+
               <Grid columns={4}>
                 <Grid.Row>
                   <Grid.Column>
@@ -759,7 +799,6 @@ export function InfoConvocatoria() {
                           name="valor_total_entg"
                           value={convocatoria.valor_total_entg}
                           onChange={handleInputChange}
-                          //ref={ref}
                         />
                       </Grid.Column>
                       <Grid.Column>

@@ -8,13 +8,10 @@ import { AdminConvocatorias } from "../screens/Convocatoria/Convocatorias/adminC
 import OlvidoContraseña from "../screens/Login/OlvidoContraseña";
 import CrearUsuario from "../screens/Login/CrearUsuario";
 import Navbar from "../components/NavBar";
-import Home from "../screens/Home";
+import Login from "../screens/Login/Login";
 import { DocumentacionTecnica } from "../screens/Convocatoria/Documentacion/documentacionTecnica";
 import { DocumentacionConvocatoria } from "../screens/Convocatoria/Documentacion/documentacionGeneral";
 import { CargarArchivos } from "../screens/Convocatoria/CargarArchivos/CargarArchivos";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { consultarIdConvocatoria } from '../store/actions/convocatoriaAction'
 import { Documentos } from "../screens/Convocatoria/Documentos/Documentos";
 import { PublicarConvocatoria } from "../screens/Convocatoria/Convocatorias/publicarConvocatoria";
 import { Inscripcion } from "../screens/Participantes/InscripcionParticipantes/Inscripcion";
@@ -113,8 +110,8 @@ export const AppRouter = () => {
           {/* <Route path="/adminMaestras">
             <Navbar />
             <AdminMaestras />
-          </Route> 
-           <Route path="/seleccionarMaestra">
+          </Route> */}
+          {/* <Route path="/seleccionarMaestra">
             <Navbar />
             <VentanaCreacionMaestras />
           </Route> */}
@@ -125,7 +122,7 @@ export const AppRouter = () => {
             <CrearUsuario />
           </Route>
           <Route path="/">
-            <Home />
+            <Login />
           </Route>
         </Switch>
       </div>

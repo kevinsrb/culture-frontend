@@ -19,6 +19,8 @@ export const DocumentacionTecnica = () => {
     editar: false,
     filename: "",
     file: "",
+    pdf: "",
+    namepdf: "",
     url_documento: "",
     tipo_documento_file: "",
     openModalViewer: "",
@@ -44,7 +46,7 @@ export const DocumentacionTecnica = () => {
   const dispatch = useDispatch();
 
   const cargarDocumentosTecnicos = async () => {
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
+    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
     console.log(response.data.data);
     if (response.data.data.documentos === null) return;
     let array = [];
@@ -143,6 +145,8 @@ export const DocumentacionTecnica = () => {
       index: data.index,
       descripcion: data.data.descripcion,
       tipo_documento: data.data.tipo_documento,
+      url_documento: data.data.url_documento,
+      filename: data.data.url_documento,
       editar: true,
     });
   };
@@ -155,7 +159,7 @@ export const DocumentacionTecnica = () => {
     // console.log(existeDocumento);
     // if (existeDocumento !== undefined && existeDocumento.length) {
     //   await axios.delete(
-    //     `${ObjConstanst.IP_CULTURE}documentosTecnicos/delete/${existeDocumento[0].id_documentos_tecnico}`
+    //     `${process.env.REACT_APP_SERVER_CONV}documentosTecnicos/delete/${existeDocumento[0].id_documentos_tecnico}`
     //   );
     // }
 
@@ -170,7 +174,7 @@ export const DocumentacionTecnica = () => {
     const id_consultar = id_documento_tecnico != undefined ? id_documento_tecnico : index;
     if (id_consultar) {
       try {
-        let response = await axios.get(`${ObjConstanst.IP_CULTURE}documentosTecnicos/${id_consultar}`);
+        let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}documentosTecnicos/${id_consultar}`);
         return response.data.data;
       } catch (error) {
         console.error(error);
@@ -189,7 +193,7 @@ export const DocumentacionTecnica = () => {
       try {
         let tipo_documento_id = 1;
         if (editarConvocatoria !== undefined) {
-          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosTecnicos/editar`, {
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos/editar`, {
             idconvocatoria,
             descripcion: principalState.documentacion[conteoDocumentosTecnicos].descripcion,
             url_documento: principalState.documentacion[conteoDocumentosTecnicos].url_documento,
@@ -198,7 +202,7 @@ export const DocumentacionTecnica = () => {
             tipo_documento_id,
           });
         } else {
-          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosTecnicos`, {
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, {
             idconvocatoria,
             descripcion: principalState.documentacion[conteoDocumentosTecnicos].descripcion,
             url_documento: principalState.documentacion[conteoDocumentosTecnicos].url_documento,
@@ -218,41 +222,82 @@ export const DocumentacionTecnica = () => {
   };
 
   const saveFile = async (e) => {
-    let file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("archivo", file);
-    await axios
-      .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData, {
-        headers: { "content-type": "multipart/form-data" },
-      })
-      .then((data) => {
-        console.log(data);
-        //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-        //history.push("/cronogramaActividades");
-      })
-      .catch(function (error) {
-        console.log(error);
+    console.log(e.target.files.length);
+    if (e.target.files.length > 0) {
+      let file = e.target.files[0];
+      const formData = new FormData();
+      formData.append("archivo", file);
+      await axios
+        .post(`${process.env.REACT_APP_SERVER_CONV}documentos/guardarArchivo`, formData, {
+          headers: { "content-type": "multipart/form-data" },
+        })
+        .then((data) => {
+          console.log(data);
+          //ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
+          //history.push("/cronogramaActividades");
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      return setPrincipalState({
+        ...principalState,
+        url_documento: e.target.files[0].name,
+        file: e.target.files[0],
+        filename: e.target.files[0].name,
+        tipo_documento_file: e.target.files[0].type,
       });
-    return setPrincipalState({
-      ...principalState,
-      url_documento: e.target.files[0].name,
-      file: e.target.files[0],
-      filename: e.target.files[0].name,
-      tipo_documento_file: e.target.files[0].type,
-    });
+    }
   };
 
   const Verdocumentacion = async (data) => {
-    console.log(data);
+    console.log(data, "esta es la informacion");
     await axios
-      .get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/consultarArchivos/${data.url_documento}`, {
+      .get(`${process.env.REACT_APP_SERVER_CONV}documentos/consultarArchivos/${data.url_documento}`, {
         responseType: "blob",
       })
       .then((response) => {
-        var file = new Blob([response.data], {
-          type: "application/pdf",
-        });
-        const fileURL = URL.createObjectURL(file);
+        console.log(response);
+        let mimetype;
+        let tipo = data.url_documento.split(".");
+        var file, fileURL;
+        switch (tipo[1]) {
+          case "pdf":
+            mimetype = "application/pdf";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          case "docx":
+            mimetype = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          case "xlsx":
+            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          case "ppt":
+            mimetype = "application/vnd.ms-powerpoint";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          default:
+            mimetype = "application/pdf";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+        }
+
         return setPrincipalState({
           ...principalState,
           pdf: fileURL,
@@ -391,7 +436,17 @@ export const DocumentacionTecnica = () => {
                         onClick={() => fileInputRef.current.click()}
                       />
                     )}
-                    <span className="nombreArchivo">{principalState.filename}</span>
+                    {principalState.filename !== "" && (
+                      <Grid>
+                        <span className="nombreArchivo">{principalState.filename}</span>
+                        <Header
+                          onClick={() => setPrincipalState({ ...principalState, filename: "" })}
+                          className="font-size-10px font-color-AD0808 no-margin"
+                        >
+                          Eliminar
+                        </Header>
+                      </Grid>
+                    )}
                     <input ref={fileInputRef} type="file" hidden onChange={saveFile} />
                   </div>
                 </Form.Field>
@@ -510,7 +565,9 @@ export const DocumentacionTecnica = () => {
       >
         <Modal.Header>Previsualización: {principalState.namepdf}</Modal.Header>
         <Modal.Content>
-          {principalState.pdf && <iframe src={principalState.pdf} style={{ width: "100%", height: "500px" }} />}
+          {principalState.pdf.trim() !== "" ? (
+            <iframe src={principalState.pdf} style={{ width: "100%", height: "500px" }} />
+          ) : null}
         </Modal.Content>
       </Modal>
     </div>

@@ -1,8 +1,7 @@
-
 //Bases
-@import './base/settings';
-@import './base/base';
-@import './base/button';
+@import "./base/settings";
+@import "./base/base";
+@import "./base/button";
 
 // Components
 @import './components/Task.scss';
@@ -32,4 +31,7 @@
 @import './screens/global.scss';
 
 //Login
-@import './screens/Login.scss';
+@import "./screens/Login.scss";
+
+// GLOBAL
+@import "./screens/global.scss";
