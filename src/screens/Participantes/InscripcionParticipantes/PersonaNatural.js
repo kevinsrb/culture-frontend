@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from "react-datepicker";
 import { useHistory } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { ObjConstanst } from '../../../config/utils/constanst';
+import { id_Participante } from '../../../store/actions/participantesAction';
 import { ObjNotificaciones } from '../../../config/utils/notificaciones.utils';
 import { TipoDocumentosOptions, SexoOptions, EstratoOptions } from '../../../data/selectOption.data';
 import { Form, Grid, Header, Divider, Segment, Button, Container } from "semantic-ui-react";
-
 
 export const PersonaNatural = () => {
 
@@ -51,51 +52,90 @@ export const PersonaNatural = () => {
   const [show, setShow] = useState(false);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
+  const { idParticipante } = useSelector((state) => state.participantes);
+
+  useEffect(() => {
+    consultarIdParticipante();
+
+    if(idParticipante){
+      cargarInformacionParticipante();
+    }
+    
+  }, [])
 
   const handleCrearPersonaNatural = async() => {
-
-    validarFormulario()
-
     // console.log(principalState)
     // await axios
     // .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
-    // .then((data) => {
-    //   console.log(data);
-    //   ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-    //   history.push("/agregarParticipantes");
-    //   // dispatch(edicionConvocatoria());
+    // .then(({data}) => {
+    //   dispatch(id_Participante(data.data.id_participante));
+    //   ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+    //   history.push("/agregarParticipantes"); 
     // })
     // .catch(function (error) {
     //   console.log(error)
-    //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+    //  // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
     // });
+
+    ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+      history.push("/agregarParticipantes"); 
   }
 
-  const validarFormulario = () => {
-    let arrayErrores = stateErrores;
-    let error = false;
+  const consultarIdParticipante = async() => {
+    return await axios
+      .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/obtenerIdParticipante`)
+      .then(({ data }) => {
+        console.log(data.data)
+        dispatch(id_Participante(data.data));
+        localStorage.setItem("id_participante", JSON.stringify(data.data));
+      })
+      .catch(function (error) {});
+  }
 
-    for (let property in arrayErrores) {
-      console.log(property , arrayErrores[property]);
-
-      if (principalState.property === "") {
-        arrayErrores = {
-          ...arrayErrores,
-          property: true,
-        };
-        error = true;
-      }
-
+  const cargarInformacionParticipante = async() => {
+    console.log(idParticipante)
+    let id_participante = idParticipante ? idParticipante : JSON.parse(localStorage.getItem("id_participante"));
+    console.log(id_participante)
+    if(id_participante != undefined){
+      await axios
+      .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`,)
+      .then(({data}) => {
+        setPrincipalState(data.data)
+      })
+      .catch(function (error) {
+        console.log(error)
+        ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+      });
     }
-
-    console.log(arrayErrores)
+   
   }
+
+  
+
+  // const validarFormulario = () => {
+  //   let arrayErrores = stateErrores;
+  //   let error = false;
+
+  //   for (let property in arrayErrores) {
+  //     console.log(property , arrayErrores[property]);
+
+  //     if (principalState.property === "") {
+  //       arrayErrores = {
+  //         ...arrayErrores,
+  //         property: true,
+  //       };
+  //       error = true;
+  //     }
+
+  //   }
+
+  //   console.log(arrayErrores)
+  // }
  
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
-    console.log(value, name);
-    //setErrores({...errores, [name]: false});
     return setPrincipalState({ ...principalState, [name]: value });
   };
 
@@ -117,6 +157,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Tipo documento" 
                     name="tipo_identificacion"
+                    value={principalState.tipo_identificacion}
                     options={TipoDocumentosOptions}
                     onChange={handleInputChange}
                     error={errores.tipo_identificacion}
@@ -126,6 +167,8 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Numero documento" 
                     name="numero_documento"
+                    type="number"
+                    value={principalState.numero_documento}
                     onChange={handleInputChange}
                     error={errores.numero_documento}
                   />
@@ -134,6 +177,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Primer nombre" 
                     name="primer_nombre"
+                    value={principalState.primer_nombre}
                     onChange={handleInputChange}
                     error={errores.primer_nombre}
                   />
@@ -142,6 +186,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Segundo nombre"
                     name="segundo_nombre"
+                    value={principalState.segundo_nombre}
                     onChange={handleInputChange}
                    />
 
@@ -152,6 +197,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Primer apellido" 
                     name="primer_apellido"
+                    value={principalState.primer_apellido}
                     onChange={handleInputChange}
                     error={errores.primer_apellido}
                   />
@@ -160,6 +206,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="segundo apellido" 
                     name="segundo_apellido"
+                    value={principalState.segundo_apellido}
                     onChange={handleInputChange}
                   />
 
@@ -176,6 +223,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Sexo" 
                     name="sexo"
+                    value={principalState.sexo}
                     options={SexoOptions}
                     onChange={handleInputChange}
                     error={errores.sexo}
@@ -188,6 +236,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Pais de nacimiento" 
                     name="pais_nacimiento"
+                    value={principalState.pais_nacimiento}
                     onChange={handleInputChange}
                   />
 
@@ -195,6 +244,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Pais de residencia" 
                     name="pais_residencia"
+                    value={principalState.pais_residencia}
                     onChange={handleInputChange}
                     error={errores.pais_residencia}
                   />
@@ -203,6 +253,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Departamento" 
                     name="departamento"
+                    value={principalState.departamento}
                     onChange={handleInputChange}
                   />
 
@@ -210,6 +261,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Municipio de residencia" 
                     name="municipio"
+                    value={principalState.municipio}
                     onChange={handleInputChange}
                   />
                  
@@ -220,6 +272,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Comuna de residencia" 
                     name="comuna"
+                    value={principalState.comuna}
                     onChange={handleInputChange}
                   />
 
@@ -227,6 +280,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Barrio de residencia" 
                     name="barrio"
+                    value={principalState.barrio}
                     onChange={handleInputChange}
                   />
                 </Form.Group>
@@ -236,6 +290,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Estrato" 
                     name="estrato"
+                    value={principalState.estrato}
                     options={EstratoOptions}
                     onChange={handleInputChange}
                   />
@@ -244,6 +299,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Telefono fijo" 
                     name="telefono_fijo"
+                    value={principalState.telefono_fijo}
                     onChange={handleInputChange}
                   />
 
@@ -251,6 +307,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Telefono celular" 
                     name="telefono_celular"
+                    value={principalState.telefono_celular}
                     onChange={handleInputChange}
                     error={errores.telefono_celular}
                   />
@@ -259,6 +316,7 @@ export const PersonaNatural = () => {
                     fluid 
                     label="Correo electronico" 
                     name="correo_electronico"
+                    value={principalState.correo_electronico}
                     onChange={handleInputChange}
                   />
 

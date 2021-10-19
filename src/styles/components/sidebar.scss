@@ -1,0 +1,45 @@
+.navbar_edit{
+    height: 40px !important;
+}
+
+.sidebar_container{
+    background-color: $azulClaro;
+    border: 1px solid transparent;
+    height: 150px;
+    width: 100%;
+}
+
+.sidebar_logo{
+    width: 100%;
+    height: 85px;
+}
+
+.sidebar_sub_titulo{
+    color: white;
+    font-size: 12px;
+    font-family: Montserrat;
+    text-align: center;
+    align-items: center;
+}
+
+.sidebar_items{
+    color: black !important;
+    padding: 20px !important;
+}
+
+.sidebar_items a{
+    color: black !important;
+}
+
+.sidebar_items:hover{
+    background-color: #632264 !important;
+    color: white !important;
+}
+
+.sidebar_items:hover a{
+    color: white !important;
+}
+
+.sidebar_items_title{
+    color:  #632264 !important;
+}

@@ -8,5 +8,7 @@ export const types = {
 
     idConvocatoria: '[Cvt] id convocatoria',
     edicion: '[Cvt] edicion',
-    eliminar: '[Cvt] eliminar'
+    eliminar: '[Cvt] eliminar',
+
+    idParticipante: '[Prt] id participante'
 }

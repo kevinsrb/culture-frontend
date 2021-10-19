@@ -8,6 +8,7 @@ import loginimage from "../assets/login.png";
 import logo from "../assets/escudoAlcaldia.png";
 
 export default function Home() {
+
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -80,13 +81,17 @@ export default function Home() {
         idusuario,
         contraseña,
       });
+      console.log(token)
       localStorage.setItem("token", token.data);
+
       dispatch(user_token(token.data));
-      history.push("/adminconvocatorias");
+      history.push('/homeParticipantes');
+
     } catch (error) {
       console.error(error);
     }
   };
+
   function mostrarContraseña() {
     if (principalState.contraseña.trim() === "") return;
     if (principalState.tipopassword.trim() === "input") {

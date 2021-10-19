@@ -6,6 +6,8 @@
 
 // Components
 @import './components/Task.scss';
+@import './components/sidebar.scss';
+@import './components/verConvocatoria.scss';
 
 
 // Screen
@@ -22,9 +24,12 @@
 
     //participantes
     @import './screens/Participantes/SeleccionarRoles.scss';
+    @import './screens/Participantes/AgregarPaticipante.scss';
+    @import './screens/Participantes/BuscarConvocatoria.scss';
 
 
-
+//Global
+@import './screens/global.scss';
 
 //Login
 @import './screens/Login.scss';

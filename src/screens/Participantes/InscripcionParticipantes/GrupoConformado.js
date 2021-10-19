@@ -2,9 +2,13 @@ import React, { useState } from 'react'
 import axios from 'axios';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useDispatch, useSelector } from 'react-redux';
 import { ObjConstanst } from '../../../config/utils/constanst';
-import { TipoDocumentosOptions, SexoOptions } from '../../../data/selectOption.data';
+import { id_Participante } from '../../../store/actions/participantesAction';
+import { ObjNotificaciones, } from '../../../config/utils/notificaciones.utils';
+import { TipoDocumentosOptions, SexoOptions, EstratoOptions } from '../../../data/selectOption.data';
 import { Form, Grid, Header, Divider, Segment, Button, Container } from "semantic-ui-react";
+import { useHistory } from 'react-router';
 
 export const GrupoConformado = () => {
 
@@ -33,19 +37,24 @@ export const GrupoConformado = () => {
   const [principalState, setPrincipalState] = useState(initialState)
   const [startDate, setStartDate] = useState(new Date());
 
-  const handleCrearPersonaNatural = async() => {
-    await axios
-    .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
-    .then((data) => {
-      console.log(data);
-      // ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-      // history.push("/adminconvocatorias");
-      // dispatch(edicionConvocatoria());
-    })
-    .catch(function (error) {
-      console.log(error)
-      //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-    });
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  const handleCrearGrupoConformado = async() => {
+    // await axios
+    // .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
+    // .then((data) => {
+    //   console.log(data);
+    //   ObjNotificaciones.MSG_SUCCESS("success", "se ha creado correctamente el grupo conformado");
+    //   history.push("/homeParticipantes");
+    // })
+    // .catch(function (error) {
+    //   console.log(error)
+    //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+    // });
+    ObjNotificaciones.MSG_SUCCESS("success", "se ha creado correctamente el grupo conformado");
+    history.push("/homeParticipantes");
+
   }
  
   const handleInputChange = (event, result) => {
@@ -55,10 +64,7 @@ export const GrupoConformado = () => {
     return setPrincipalState({ ...principalState, [name]: value });
   };
 
-	const handleCrearGrupoConformado = () => {
-		console.log(principalState)
-	}
- 
+
 
     return (
 			<>
@@ -69,7 +75,7 @@ export const GrupoConformado = () => {
 						<Segment>
 							
 							<Header as="h4" floated="left">
-								Datos persona natural - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
+								Grupo conformado - <span className="text_campo_obligatorios">Todos los campos son obligatorios</span>
 							</Header>
 							<Divider clearing />
 
@@ -84,6 +90,7 @@ export const GrupoConformado = () => {
 
                   <Form.Input 
                     fluid 
+                    type="number"
                     label="Numero documento" 
                     name="numero_documento"
                     onChange={handleInputChange}
@@ -186,15 +193,18 @@ export const GrupoConformado = () => {
                 </Form.Group>
 
                 <Form.Group widths="equal">
-                  <Form.Input 
+                  <Form.Select 
                     fluid 
                     label="Estrato" 
                     name="estrato"
+                    value={principalState.estrato}
+                    options={EstratoOptions}
                     onChange={handleInputChange}
                   />
 
                   <Form.Input 
                     fluid 
+                    type="number"
                     label="Telefono fijo" 
                     name="telefono_fijo"
                     onChange={handleInputChange}
@@ -202,6 +212,7 @@ export const GrupoConformado = () => {
 
                   <Form.Input 
                     fluid 
+                    type="number"
                     label="Telefono celular" 
                     name="telefono_celular"
                     onChange={handleInputChange}
@@ -219,7 +230,7 @@ export const GrupoConformado = () => {
 							<Divider clearing />
 
 							<Container textAlign="right">
-								<Button content="Guardar y continuar" className="btn btn-primary" />
+								<Button content="Guardar y continuar" className="btn btn-primary" onClick={handleCrearGrupoConformado} />
 							</Container>
 						</Segment>
 					</Form>

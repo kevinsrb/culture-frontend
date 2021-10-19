@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { RequisitosOptions } from "../../data/selectOption.data";
+import { RequisitosOptions } from "../../../data/selectOption.data";
 import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal, Icon } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
-import { ObjConstanst } from "../../config/utils/constanst";
+import { ObjConstanst } from "../../../config/utils/constanst";
 import { useHistory } from "react-router";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
-import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
+import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 
 export const DocumentacionTecnica = () => {
   // STATE PRINCIPAL

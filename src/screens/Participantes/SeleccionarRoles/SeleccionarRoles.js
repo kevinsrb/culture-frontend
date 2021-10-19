@@ -1,29 +1,29 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router';
 import { ObjNotificaciones } from '../../../config/utils/notificaciones.utils';
-import { Form, Grid, Header, Divider, Segment, Checkbox, Container, Button } from "semantic-ui-react";
+import {  Header, Divider, Segment, Container, Button, Radio } from "semantic-ui-react";
 
 export const SeleccionarRoles = () => {
 
-  const initialState = {
-    persona_natural: 0,
-    persona_juridica: 0,
-    grupo_conformado: 0
-  }
 
-  const [principalState, setPrincipalState] = useState(initialState);
+  const [principalState, setPrincipalState] = useState("persona_natural");
 
   const handletoggleChange = (event, result) => {
     const { name, checked } = result || event.target;
     console.log(name, checked);
-    setPrincipalState({ ...principalState, [name]: checked });
+    setPrincipalState({[name]: checked });
   };
 
   const  history = useHistory();
 
   const asociarRoles = () => {
-    ObjNotificaciones.MSG_SUCCESS("success", "Rol seleccionado");
-    history.push('/Inscripcion')
+    if(principalState == 'persona_natural'){
+      history.push('/personaNatural')
+    }else if(principalState == 'persona_juridica'){
+      history.push('/personaJuridica')
+    }else{
+      history.push('/grupoConformado')
+    }
   }
 
     return (
@@ -46,9 +46,36 @@ export const SeleccionarRoles = () => {
         <Divider clearing />
 
         <div className="check_roles">
-          <Checkbox label='Persona natural' name="persona_natural"  onChange={handletoggleChange} />
-          <Checkbox label='Perona juridica' name="persona_juridica" onChange={handletoggleChange} />
-          <Checkbox label='Grupo conformado' name="grupo_conformado" onChange={handletoggleChange} />
+          <Radio 
+          label='Persona natural'
+           name="rol"
+           value={principalState}
+           checked={principalState == "persona_natural"}
+           onClick={() => {
+            setPrincipalState("persona_natural");
+           }}
+          />
+
+          <Radio 
+            label='Perona juridica' 
+            name="rol"  
+            value={principalState}
+            checked={principalState == "persona_juridica"}
+            onClick={() => {
+              setPrincipalState("persona_juridica");
+            }}
+         />
+
+          <Radio 
+            label='Grupo conformado' 
+            name="rol"  
+            value={principalState}
+            checked={principalState == "grupo_conformador"}
+            onClick={() => {
+              setPrincipalState("grupo_conformador");
+            }} 
+          />
+
         </div>
       
 

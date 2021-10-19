@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { edicionConvocatoria, consultarIdConvocatoria } from "../../../store/actions/convocatoriaAction";
+import { useSelector, useDispatch } from "react-redux";
+import { ObjConstanst } from "../../../config/utils/constanst";
+import { edicionConvocatoria, consultarIdConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,
@@ -20,7 +21,7 @@ import {
   Dropdown,
 } from "semantic-ui-react";
 
-import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../data/selectOption.data";
+import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../../data/selectOption.data";
 
 const cantidadRegistros = [
   { key: 1, value: 10, text: "10" },
@@ -67,7 +68,7 @@ export const AdminConvocatorias = () => {
   async function primeroDatostabla() {
     console.log(user);
     try {
-      let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/`);
+      let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/`);
       console.log(response);
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
       console.log(copynombres);
@@ -185,6 +186,8 @@ export const AdminConvocatorias = () => {
       x = Math.ceil(x);
       return setPaginacionTotal(x);
     }
+
+    console.log(datosActuales, 'actuales')
     for (var i in datosActuales) {
       if (typeof datosActuales[i][data.input] === 'object') {
         if (datosActuales[i][data.input]) {
@@ -274,10 +277,10 @@ export const AdminConvocatorias = () => {
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Field>
+                      <label>Perfil</label>
                       <Select
                         multiple
                         className="font-family-Work-Sans"
-                        label={<label className="font-color-4B4B4B">Perfil</label>}
                         placeholder="Seleccionar..."
                         options={tiposidentificacion}
                         onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "tipo_participante" })}

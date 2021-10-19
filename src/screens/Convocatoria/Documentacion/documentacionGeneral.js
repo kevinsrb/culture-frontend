@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 // import SubirArchivo from "../../components/Archivos/SubirArchivos";
-import { TipodocumentosOptions } from "../../data/selectOption.data";
-import { ObjConstanst } from "../../config/utils/constanst";
-import { ObjNotificaciones } from "../../config/utils/notificaciones.utils";
+import { TipodocumentosOptions, RequisitosOptions } from "../../../data/selectOption.data";
+import { ObjConstanst } from "../../../config/utils/constanst";
+import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal, Icon } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Document, Page } from "react-pdf";
-import { edicionConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
+import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 
 export const DocumentacionConvocatoria = () => {
   // STATE PRINCIPAL
