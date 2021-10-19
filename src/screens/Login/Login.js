@@ -1,13 +1,13 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { user_token } from "../store/actions/userAction";
+import { user_token } from "../../store/actions/userAction";
 import axios from "axios";
 import { Form, Image, Header, Input, Checkbox, Button, Grid, Divider } from "semantic-ui-react";
-import loginimage from "../assets/login.png";
-import logo from "../assets/escudoAlcaldia.png";
+import loginimage from "../../assets/login.png";
+import logo from "../../assets/escudoAlcaldia.png";
 
-export default function Home() {
+export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -76,7 +76,7 @@ export default function Home() {
     }
 
     try {
-      let token = await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/autenticacion`, {
+      let token = await axios.post(`${process.env.REACT_APP_SERVER_USER}autenticacion`, {
         idusuario,
         contraseña,
       });

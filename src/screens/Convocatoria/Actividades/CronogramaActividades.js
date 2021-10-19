@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ObjConstanst } from "../../../config/utils/constanst";
-import { Button, Container, Form, Grid, Header, Divider, Segment, Input, Checkbox } from "semantic-ui-react";
+import { Button, Container, Form, Grid, Header, Divider, Segment, Input, Checkbox, Label } from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { useHistory } from "react-router";
 // import { editarConvocatoria } from "../../store/actions/convocatoriaAction";
 
 export const CronogramaActividades = () => {
+  const stateError = {
+    apertura: false,
+    cierre: false,
+    otorgamiento: false,
+  };
+  const [principalError, setPrincipalError] = useState(stateError);
   const [actividades, setActividades] = useState([]);
   const [actividadessource, setActividadessource] = useState([]);
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
@@ -20,7 +26,7 @@ export const CronogramaActividades = () => {
 
   const handleCargarActividades = async () => {
     return await axios
-      .get(`${ObjConstanst.IP_CULTURE}actividades`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}actividades`)
       .then(({ data }) => {
         let actividadesmap = data.data.map((ds) => {
           return {
@@ -30,8 +36,18 @@ export const CronogramaActividades = () => {
             key: ds.idactividad,
           };
         });
-        setActividades(actividadesmap);
-        setActividadessource(actividadesmap);
+        let todoJSON = JSON.parse(JSON.stringify(actividadesmap));
+        for (var i in todoJSON) {
+          if (
+            todoJSON[i].nombre.trim() === "Apertura" ||
+            todoJSON[i].nombre.trim() === "Cierre" ||
+            todoJSON[i].nombre.trim() === "Resolución de otorgamiento"
+          ) {
+            todoJSON[i].check = !todoJSON[i].check;
+          }
+        }
+        setActividades(todoJSON);
+        setActividadessource(todoJSON);
         if (editarConvocatoria !== undefined) {
           return obtenerConvocatoria();
         }
@@ -43,12 +59,14 @@ export const CronogramaActividades = () => {
 
   const obtenerConvocatoria = async () => {
     let convocatoria = await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${editarConvocatoria.idnumero_convocatoria}`)
+      .get(
+        `${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${editarConvocatoria.idnumero_convocatoria}`
+      )
       .then(({ data }) => {
         console.log(data);
       })
       .catch(function (error) {
-        console.console.error((error));
+        console.console.error(error);
       });
     console.log(convocatoria);
   };
@@ -56,17 +74,61 @@ export const CronogramaActividades = () => {
   const handletoggleChange = (event, result, actividad) => {
     let actividadChange = JSON.parse(JSON.stringify(actividades));
     actividadChange[actividad.idactividad - 1].check = !actividadChange[actividad.idactividad - 1].check;
+    if (actividad.nombre.trim() === "Apertura" && actividadChange[actividad.idactividad - 1].check) {
+      setPrincipalError({ ...principalError, apertura: false });
+    }
+    if (actividad.nombre.trim() === "Cierre" && actividadChange[actividad.idactividad - 1].check) {
+      setPrincipalError({ ...principalError, cierre: false });
+    }
+    if (actividad.nombre.trim() === "Resolución de otorgamiento" && actividadChange[actividad.idactividad - 1].check) {
+      setPrincipalError({ ...principalError, otorgamiento: false });
+    }
     return setActividades(actividadChange);
   };
 
   const handelGuardarActiviadesConvocatorias = async () => {
     let actividadesSeleccionadas = actividades.filter((data) => data.check);
+    let apertura = actividades.filter((data) => data.nombre === "Apertura" && data.check === true);
+    let cierre = actividades.filter((data) => data.nombre === "Cierre" && data.check === true);
+    let otorgamiento = actividades.filter(
+      (data) => data.nombre === "Resolución de otorgamiento" && data.check === true
+    );
+    let arrayErrores = stateError;
+    let error = false;
+    if (apertura.length === 0) {
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        apertura: true,
+      };
+    }
+
+    if (cierre.length === 0) {
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        cierre: true,
+      };
+    }
+
+    if (otorgamiento.length === 0) {
+      error = true;
+      arrayErrores = {
+        ...arrayErrores,
+        otorgamiento: true,
+      };
+    }
+
+    if (error) {
+      return setPrincipalError(arrayErrores);
+    }
+
     const objActividades = {
       actividades: actividadesSeleccionadas,
     };
 
     return await axios
-      .post(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`, objActividades)
+      .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/actividades/${idConvocatoria}`, objActividades)
       .then(({ data }) => {
         ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
         history.push("/Cronograma");
@@ -140,8 +202,8 @@ export const CronogramaActividades = () => {
               <Segment className="container_checks">
                 <Grid columns={2}>
                   {actividades.length > 0
-                    ? actividades.map((actividad) => (
-                        <Grid.Column>
+                    ? actividades.map((actividad, index) => (
+                        <Grid.Column key={index}>
                           <Checkbox
                             label={actividad.nombre}
                             key={actividad.key}
@@ -156,6 +218,12 @@ export const CronogramaActividades = () => {
                     : null}
                 </Grid>
               </Segment>
+
+              {principalError.apertura ? <Label color="red">Falta seleccionar la Apertura</Label> : null}
+              {principalError.cierre ? <Label color="red">Falta seleccionar el Cierre</Label> : null}
+              {principalError.otorgamiento ? (
+                <Label color="red">Falta seleccionar la Resolución de otorgamiento</Label>
+              ) : null}
 
               <Container textAlign="right">
                 <Button content="Guardar y continuar" className="btn btn-disable" />

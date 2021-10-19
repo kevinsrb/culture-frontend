@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { consultarIdConvocatoria, edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
+import { edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
 import axios from "axios";
 
-import { ObjConstanst } from "../../../config/utils/constanst";
 import { Form, Grid, Header, Divider, Segment, Button, Icon } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
@@ -90,9 +89,6 @@ export function InfoConvocatoria() {
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const { user } = useSelector((state) => state);
-  // Mascara
-  const [opcionesMask, setOpcionesMask] = useState({ mask: Number, thousandsSeparator: "," });
-  // const { refNumber, maskRef } = useIMask(opcionesMask);
 
   useEffect(() => {
     cargarSelectLineaConvocatoria();
@@ -111,14 +107,14 @@ export function InfoConvocatoria() {
     let participantes = [];
     let categorias = [];
     let areas = [];
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
-    console.log(response);
+    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
+    console.log(response,'este es el response');
     for (var i in response.data.data.tipo_participante) {
       participantes.push(response.data.data.tipo_participante[i].value);
     }
     setTipoparticipanteseleccionado(participantes);
     let lineasconvocatorias = await axios.get(
-      `${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${idConvocatoria}`
+      `${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${response.data.data.linea_convocatoria}`
     );
     categoriaslineasconvocatoriaMap = lineasconvocatorias.data.data.map((ds) => {
       return {
@@ -165,7 +161,7 @@ export function InfoConvocatoria() {
   //funciones
   const cargarSelectLineaConvocatoria = async () => {
     const response = await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias`)
       .then(({ data }) => {
         LineaConvocatoriaOptionsMap = data.data.map((ds) => {
           return {
@@ -341,7 +337,7 @@ export function InfoConvocatoria() {
       e.preventDefault();
       console.log(convocatoria);
       return await axios
-        .post(`${ObjConstanst.IP_CULTURE}convocatorias`, convocatoria)
+        .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias`, convocatoria)
         .then((data) => {
           console.log(data);
           ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
@@ -353,7 +349,7 @@ export function InfoConvocatoria() {
     }
 
     await axios
-      .post(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`, convocatoria)
+      .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`, convocatoria)
       .then((data) => {
         console.log(data);
         ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
@@ -428,7 +424,7 @@ export function InfoConvocatoria() {
     setErrores({ ...errores, linea_convocatoria: false });
     setConvocatoria({ ...convocatoria, [name]: value });
     const response = await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/lineasConvocatorias/${value}`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${value}`)
       .then(({ data }) => {
         console.log(data);
         categoriaslineasconvocatoriaMap = data.data.map((ds) => {

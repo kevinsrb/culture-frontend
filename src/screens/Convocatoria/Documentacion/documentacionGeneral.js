@@ -54,7 +54,7 @@ export const DocumentacionConvocatoria = () => {
   }, []);
 
   const cargarDocumentosGenerales = async () => {
-    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
+    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
     if (response.data.data.documentos === null) return;
     console.log(response.data.data);
     let array = [];
@@ -76,7 +76,7 @@ export const DocumentacionConvocatoria = () => {
       const formData = new FormData();
       formData.append("archivo", file);
       await axios
-        .post(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/guardarArchivo`, formData, {
+        .post(`${process.env.REACT_APP_SERVER_CONV}documentos/guardarArchivo`, formData, {
           headers: { "content-type": "multipart/form-data" },
         })
         .then((data) => {
@@ -218,7 +218,7 @@ export const DocumentacionConvocatoria = () => {
     console.log(existeDocumento);
     if (existeDocumento !== undefined && existeDocumento.length) {
       await axios.delete(
-        `${ObjConstanst.IP_CULTURE}documentosConvocatoria/delete/${existeDocumento[0].id_documentos_tecnico}`
+        `${process.env.REACT_APP_SERVER_CONV}documentosConvocatoria/delete/${existeDocumento[0].id_documentos_tecnico}`
       );
     }
 
@@ -233,7 +233,7 @@ export const DocumentacionConvocatoria = () => {
     const id_consultar = id_documento_tecnico != undefined ? id_documento_tecnico : index;
     if (id_consultar) {
       try {
-        let response = await axios.get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/${id_consultar}`);
+        let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}documentosConvocatoria/${id_consultar}`);
         return response.data.data;
       } catch (error) {
         console.error(error);
@@ -251,7 +251,7 @@ export const DocumentacionConvocatoria = () => {
       try {
         let tipo_documento_id = 2;
         if (editarConvocatoria !== undefined) {
-          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosConvocatorias/editar`, {
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosConvocatorias/editar`, {
             nombre: principalState.documentacion[conteoDocumentosGeneral].nombre,
             activo: principalState.documentacion[conteoDocumentosGeneral].activo,
             descripcion: principalState.documentacion[conteoDocumentosGeneral].descripcion,
@@ -261,7 +261,7 @@ export const DocumentacionConvocatoria = () => {
             idconvocatoria: idConvocatoria,
           });
         } else {
-          await axios.post(`${ObjConstanst.IP_CULTURE}documentos/documentosConvocatorias`, {
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosConvocatorias`, {
             nombre: principalState.documentacion[conteoDocumentosGeneral].nombre,
             activo: principalState.documentacion[conteoDocumentosGeneral].activo,
             descripcion: principalState.documentacion[conteoDocumentosGeneral].descripcion,
@@ -279,13 +279,13 @@ export const DocumentacionConvocatoria = () => {
     }
 
     await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
-    return history.push("/publicarConvocatoria");
+    return history.push("/adminconvocatorias");
   };
 
   const Verdocumentacion = async (data) => {
     console.log(data);
     await axios
-      .get(`${ObjConstanst.IP_CULTURE}documentosConvocatoria/consultarArchivos/${data.url_documento}`, {
+      .get(`${process.env.REACT_APP_SERVER_CONV}documentos/consultarArchivos/${data.url_documento}`, {
         responseType: "blob",
       })
       .then((response) => {
@@ -578,7 +578,9 @@ export const DocumentacionConvocatoria = () => {
       >
         <Modal.Header>Previsualización: {principalState.namepdf}</Modal.Header>
         <Modal.Content>
-          {principalState.pdf && <iframe src={principalState.pdf} style={{ width: "100%", height: "500px" }} />}
+          {principalState.pdf.trim() !== "" ? (
+            <iframe src={principalState.pdf} style={{ width: "100%", height: "500px" }} />
+          ) : null}
         </Modal.Content>
       </Modal>
     </div>

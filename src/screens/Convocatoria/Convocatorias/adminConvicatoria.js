@@ -1,8 +1,9 @@
 import React from "react";
 import axios from "axios";
+import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { edicionConvocatoria, consultarIdConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
+import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 import {
   Segment,
   Modal,
@@ -19,7 +20,6 @@ import {
   Select,
   Dropdown,
 } from "semantic-ui-react";
-import { ObjConstanst } from "../../../config/utils/constanst";
 import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../../data/selectOption.data";
 
 const cantidadRegistros = [
@@ -32,16 +32,15 @@ const cantidadRegistros = [
 const coloresEstado = { Abierta: "#21BA45", "En proceso": "#EFC236", Cerrada: "#9F0505" };
 
 const tiposidentificacion = [
-  { key: 1, value: 1, text: "Persona natural" },
+  { key: 3, value: 3, text: "Persona natural" },
   { key: 2, value: 2, text: "Persona juridica" },
-  { key: 3, value: 3, text: "Grupo conformado" },
+  { key: 1, value: 1, text: "Grupo conformado" },
 ];
 
 export const AdminConvocatorias = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state);
-  const { idConvocatoria } = useSelector((state) => state.convocatoria);
   //  DATOS QUE VAN HACER MOSTRADOS EN LA TABLA
   React.useEffect(() => {
     primeroDatostabla();
@@ -57,10 +56,6 @@ export const AdminConvocatorias = () => {
   const [paginacionTotal, setPaginacionTotal] = React.useState(0);
   const [cantidadPáginas, setCantidadPáginas] = React.useState(10);
   const [filtroAvanzado, setFiltroAvanzado] = React.useState(false);
-  const [filtroperfil, setFiltroPerfil] = React.useState("");
-  const [filtroentidad, setFiltroEntidad] = React.useState("");
-  const [filtrolineaestrategica, setFiltroLineaestrategica] = React.useState("");
-  const [filtroarea, setFiltroArea] = React.useState("");
   const [openModalBorrar, setOpenModalBorrar] = React.useState(false);
   const [nombreBorrar, setNombreBorrrar] = React.useState("");
   const [idBorrar, setIdBorrrar] = React.useState("");
@@ -68,21 +63,38 @@ export const AdminConvocatorias = () => {
   async function primeroDatostabla() {
     console.log(user);
     try {
-      let response = await axios.get(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/`);
+      let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/`);
       console.log(response);
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
-      console.log(copynombres);
+      let fechaactual = moment().format('YYYY-MM-DD');
       for (var i in response.data.convocatorias) {
+        let nomconvo = response.data.convocatorias[i].numero_convocatoria
         let nombreconvocatoria = copynombres.filter(
-          (data) => data.idlineaconvocatoria === response.data.convocatorias[i].numero_convocatoria
+          (data) => data.idlineaconvocatoria === nomconvo
         );
         response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
         response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
+        for (var y in response.data.convocatorias[i].fechas) {
+          console.log(response.data.convocatorias[i].fechas[y].id);
+          console.log(moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin))
+          if (response.data.convocatorias[i].fechas[y].clave === 'Apertura' && moment(fechaactual).isSameOrBefore(response.data.convocatorias[i].fechas[y].valormin)) {
+            response.data.convocatorias[i].estado = "No publicada"
+          }
+          if (response.data.convocatorias[i].fechas[y].clave === 'Apertura' && moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)) {
+            response.data.convocatorias[i].estado = "Abierta"
+          }
+          if (response.data.convocatorias[i].fechas[y].clave === 'Cierre' && moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)) {
+            response.data.convocatorias[i].estado = "En proceso"
+          }
+          if (response.data.convocatorias[i].fechas[y].clave === 'Resolución de otorgamiento' && moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)) {
+            response.data.convocatorias[i].estado = "Cerrada"
+          }
+        }
       }
       if (response.data.convocatorias.length > 0) {
         setPrincipalState({ datossinfiltro: response.data.convocatorias });
         let copy = response.data.convocatorias.map((data) => data);
-        console.log(copy);
+        console.log(copy, 'este es el copy');
         let datos = copy.slice(0, cantidadPáginas);
         setDatosActuales(datos);
         let x = response.data.convocatorias.length / cantidadPáginas;
@@ -144,7 +156,7 @@ export const AdminConvocatorias = () => {
   async function borrarConvocatoria() {
     console.log(idBorrar, nombreBorrar);
     try {
-      await axios.delete(`${process.env.REACT_APP_PAGE_HOST}api/convocatorias/delete/${idBorrar}`);
+      await axios.delete(`${process.env.REACT_APP_SERVER_CONV}api/convocatorias/delete/${idBorrar}`);
       let copy = datosActuales.map((data) => data);
       let eliminar = copy.filter((data) => data.idconvocatorias !== idBorrar);
       setDatosActuales(eliminar);
@@ -165,7 +177,7 @@ export const AdminConvocatorias = () => {
 
   const consultarconvocatioria = async () => {
     return await axios
-      .get(`${ObjConstanst.IP_CULTURE}convocatorias/numero`)
+      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/numero`)
       .then(({ data }) => {
         dispatch(idConvocatorias(data.data));
         dispatch(edicionConvocatoria(undefined));
