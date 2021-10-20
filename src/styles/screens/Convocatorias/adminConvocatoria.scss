@@ -93,7 +93,7 @@
 }
 
 .container-grid-filtros {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .button-filtro-adminconvocatorias {
@@ -116,15 +116,18 @@
   overflow-y: scroll;
   overflow-x: hidden;
   height: 380px;
+  margin-left: 1.3% !important;
+  margin-right: 1.3% !important;
+  padding-bottom: 0.5% !important;
 }
 
 .container-scrollable-adminconvocatorias::-webkit-scrollbar-thumb {
-  background: #245E8E;
+  background: #245e8e;
   border-radius: 10px;
 }
 
 .container-scroll::-webkit-scrollbar-thumb {
-  background: #245E8E;
+  background: #245e8e;
   border-radius: 10px;
 }
 
@@ -133,33 +136,34 @@
 }
 
 .containar-header-eliminar-adminconvocatoria {
-    margin-top: 2% !important;
-    color: #9F0505 !important;
-    font-weight: 600 !important;
-    font-size: 25px !important;
-    font-style: normal;
+  margin-top: 2% !important;
+  color: #9f0505 !important;
+  font-weight: 600 !important;
+  font-size: 25px !important;
+  font-style: normal;
 }
 
 .container-subheader-eliminar-adminconvocatoria {
-    margin: 0 !important;
-    color: #1B1C1D;
-    font-size: 14px;
-    line-height: 16px;
-    letter-spacing: 0;
-    font-style: normal;
+  margin: 0 !important;
+  color: #1b1c1d;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+  font-style: normal;
 }
 
 .container-convocatoria-eliminar-adminconvocatoria {
-    margin: 0 !important;
-    font-size: 14px;
-    line-height: 16px;
-    letter-spacing: 0;
-    color: #1B1C1D;
-    padding-top: 18px !important;
-    padding-bottom: 18px !important;
+  margin: 0 !important;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0;
+  color: #1b1c1d;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
 }
 
-.ui.labeled.icon.button>.icon, .ui.labeled.icon.buttons>.button>.icon {
+.ui.labeled.icon.button > .icon,
+.ui.labeled.icon.buttons > .button > .icon {
   background-color: transparent !important;
 }
 
@@ -168,8 +172,16 @@
 }
 
 .table-header-tabla {
-  background-color: #FFFFFF !important;
+  background-color: #ffffff !important;
   border-bottom: none !important;
   border-right: none !important;
   border-left: none !important;
+}
+
+.container-primeratabla-adminconvocatorias {
+  border-right: 1px solid #c4c4c4;
+}
+
+tr:nth-child(2n) {
+  background-color: #F0F6FB !important;
 }

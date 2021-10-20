@@ -93,14 +93,13 @@ export const Documentos = () => {
   const [documentos, setDocumentos] = useState(initialState);
   const [activeaccordion, setActiveAccordion] = React.useState(0);
   const history = useHistory();
+  const persona = {
+    1: "Persona_Natural",
+    2: "Persona_Juridica",
+    3: "Grupo_Conformado",
+  };
 
   const cargarDocumentos = async () => {
-    var persona = {
-      1: "Persona_Natural",
-      2: "Persona_Juridica",
-      3: "Grupo_Conformado",
-    };
-
     let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}documentos/tiposdocumentos/`);
     let documentacionresponse = response.data.data.map((data, index) => {
       return {
@@ -132,52 +131,61 @@ export const Documentos = () => {
     todosJSON.data.Persona_Juridica.documentos = arraypersonajuridica;
     todosJSON.data.Grupo_Conformado.documentos = arraygrupoconformado;
     todosJSON.documentacion = documentacionresponse;
-    console.log(todosJSON);
+    todosJSON.data["Documentos_Seleccionados"].documentos = [];
+    setDocumentos(todosJSON);
     consultarDocumentosConvocatoria();
-    return setDocumentos(todosJSON);
   };
 
   const consultarDocumentosConvocatoria = async () => {
     // INICIALIZAR DOCUMENTOS SELECCIONADOS
-    let documentosseleccionados = documentos.data["Documentos_Seleccionados"];
-    documentosseleccionados.documentos = [];
-    let info = JSON.parse(JSON.stringify(documentos));
-    info.data["Documentos_Seleccionados"] = documentosseleccionados;
-    setDocumentos(info);
-    // TRAER LOS DOCUMENTOS SELECCIONADOS EN LA CONVOCATORIA
     if (editarConvocatoria !== undefined) {
-      let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
-      if (response.data.data.documentos === null) return;
-      console.log(response.data.data);
-      console.log(documentos);
-      var persona = {
-        0: "Persona_Natural",
-        1: "Persona_Juridica",
-        2: "Grupo_Conformado",
-      };
-      for (var i in response.data.data.documentos) {
-        for (var x in documentos.documentacion) {
-          if (
-            documentos.documentacion[x].descripcion_del_documento.trim() ===
-              response.data.data.documentos[i].descripcion.trim() &&
-            documentos.documentacion[x].source === persona[response.data.data.documentos[i].tipo_persona] &&
-            response.data.data.documentos[i].tipo_documento_id === 0
-          ) {
-            let source = documentos.data["Documentos_Seleccionados"];
-            let sourceData = source.documentos;
-            sourceData.push(documentos.documentacion[x].id);
-            source.documentos = sourceData;
-            let change = documentos.data[persona[response.data.data.documentos[i].tipo_persona]];
-            let changeDataFilter = change.documentos.filter((id) => id !== documentos.documentacion[x].id);
-            change.documentos = changeDataFilter;
-            // let todosJSON = JSON.parse(JSON.stringify(documentos));
-            let todosJSON = JSON.parse(JSON.stringify(documentos));
-            todosJSON.data[persona[response.data.data.documentos[i].tipo_persona]] = change;
-            todosJSON.data["Documentos_Seleccionados"] = source;
-            setDocumentos(todosJSON);
+      try {
+        let todosDocumentos = JSON.parse(JSON.stringify(documentos));
+        let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
+        if (response.data.data.documentos === null) return;
+        let convocatoria = response.data.data;
+        for (var i in documentos.documentacion) {
+          let doc = documentos.documentacion[i];
+          for (var x in convocatoria.documentos) {
+            let convdoc = convocatoria.documentos[x];
+            if (
+              doc.descripcion_del_documento.trim() === convdoc.descripcion.trim() &&
+              doc.source === persona[convdoc.tipo_persona + 1] &&
+              convdoc.tipo_documento_id === 0
+            ) {
+              todosDocumentos.data["Documentos_Seleccionados"].documentos.push(doc.id);
+              todosDocumentos.data[persona[convocatoria.documentos[i].tipo_persona + 1]].documentos.filter(data => data !== doc.id)
+              if (convdoc.url_documento) todosDocumentos.documentacion[doc.id].url_documento = convdoc.url_documento;
+            }
           }
         }
+        return setDocumentos(todosDocumentos);
+      } catch (error) {
+        console.error(error);
       }
+      // for (var i in response.data.data.documentos) {
+      //   for (var x in documentos.documentacion) {
+      //     if (
+      //       documentos.documentacion[x].descripcion_del_documento.trim() ===
+      //         response.data.data.documentos[i].descripcion.trim() &&
+      //       documentos.documentacion[x].source === persona[response.data.data.documentos[i].tipo_persona] &&
+      //       response.data.data.documentos[i].tipo_documento_id === 0
+      //     ) {
+      //       let source = documentos.data["Documentos_Seleccionados"];
+      //       let sourceData = source.documentos;
+      //       sourceData.push(documentos.documentacion[x].id);
+      //       source.documentos = sourceData;
+      //       let change = documentos.data[persona[response.data.data.documentos[i].tipo_persona]];
+      //       let changeDataFilter = change.documentos.filter((id) => id !== documentos.documentacion[x].id);
+      //       change.documentos = changeDataFilter;
+      //       // let todosJSON = JSON.parse(JSON.stringify(documentos));
+      //       let todosJSON = JSON.parse(JSON.stringify(documentos));
+      //       todosJSON.data[persona[response.data.data.documentos[i].tipo_persona]] = change;
+      //       todosJSON.data["Documentos_Seleccionados"] = source;
+      //       setDocumentos(todosJSON);
+      //     }
+      //   }
+      // }
       // revisarArchivosConvocatoria(response.data.data);
     }
   };
@@ -196,26 +204,22 @@ export const Documentos = () => {
           documentos.documentacion[x].source === persona[convo.documentos[i].tipo_persona] &&
           convo.documentos[i].tipo_documento_id === 0
         ) {
-          console.log(convo.documentos[i].id, convo.documentos[i].url_documento, "este es el id");
           if (convo.documentos[i].url_documento !== undefined) {
             todosJSON.documentacion[convo.documentos[i].id].url_documento = convo.documentos[i].url_documento;
           }
         }
       }
     }
-    console.log(todosJSON);
     return setDocumentos(todosJSON);
   };
 
   const handleClickAccordion = (e, Titulo) => {
-    console.log(Titulo, activeaccordion, "activar acordeon");
     let { index } = Titulo;
     let newIndex = activeaccordion === index ? -1 : index;
     return setActiveAccordion(newIndex);
   };
 
   const agregarDocumentacion = (data) => {
-    console.log(documentos);
     let source = documentos.data["Documentos_Seleccionados"];
     let sourceData = source.documentos;
     sourceData.push(data.id);
@@ -245,12 +249,10 @@ export const Documentos = () => {
 
   const guardardocumentacionadministrativa = async () => {
     conteoDocumentos = 0;
-    console.log("grabó");
     grabandodocumentacionAdministrativa();
   };
 
   const handlecheckboxChange = (doc, name) => {
-    console.log(doc.id);
     let todosJSON = JSON.parse(JSON.stringify(documentos));
     todosJSON.documentacion[doc.id][name] = !todosJSON.documentacion[doc.id][name];
     return setDocumentos(todosJSON);
@@ -261,10 +263,8 @@ export const Documentos = () => {
     if (documentos.data["Documentos_Seleccionados"].documentos.length === 0) {
       return console.error("NO PUEDO GUARDAR");
     }
-    console.log(documentos.data["Documentos_Seleccionados"].documentos[conteoDocumentos]);
     if (documentos.data["Documentos_Seleccionados"].documentos[conteoDocumentos] >= 0) {
       let documento = documentos.data["Documentos_Seleccionados"].documentos[conteoDocumentos];
-      console.log(documento, "este es el documento");
       try {
         let tipo_documento_id = 0;
         let tipo = {
@@ -273,7 +273,6 @@ export const Documentos = () => {
           Grupo_Conformado: 2,
         };
         let tipo_persona = tipo[documentos.documentacion[documento].source];
-        console.log(tipo_persona);
         if (editarConvocatoria !== undefined) {
           await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosAdministrativos/editar`, {
             idconvocatoria,
@@ -312,7 +311,6 @@ export const Documentos = () => {
   };
 
   const saveFile = async (e, doc) => {
-    console.log(doc.id, "este es el id que seleccione");
     if (e.target.files.length > 0) {
       let file = e.target.files[0];
       const formData = new FormData();
@@ -327,13 +325,12 @@ export const Documentos = () => {
           return setDocumentos(todosJSON);
         })
         .catch(function (error) {
-          console.log(error);
+          return console.error(error);
         });
     }
   };
 
   const eliminarArchivo = (doc) => {
-    console.log(doc.id, "este es el id que borre");
     let todosJSON = JSON.parse(JSON.stringify(documentos));
     todosJSON.documentacion[doc.id].url_documento = "";
     return setDocumentos(todosJSON);
@@ -357,7 +354,7 @@ export const Documentos = () => {
               const documentacion = datos.documentos.map((data) => documentos.documentacion[data]);
 
               return (
-                <Segment className="no-margin">
+                <Segment className="no-margin" key={index}>
                   <Accordion>
                     <Accordion.Title active={activeaccordion === index} index={index} onClick={handleClickAccordion}>
                       {datos.id}
@@ -366,7 +363,11 @@ export const Documentos = () => {
                     <Accordion.Content active={activeaccordion === index}>
                       <div className="listado-container-documentacion">
                         {documentacion.map((docu, index) => (
-                          <div className="container-documentacion" onClick={() => agregarDocumentacion(docu)}>
+                          <div
+                            className="container-documentacion"
+                            onClick={() => agregarDocumentacion(docu)}
+                            key={index}
+                          >
                             <Icon name="hdd" />
                             {docu.descripcion_del_documento}
                           </div>
@@ -385,7 +386,7 @@ export const Documentos = () => {
               const documentacion = datos.documentos.map((data) => documentos.documentacion[data]);
 
               return (
-                <Table striped singleLine>
+                <Table striped singleLine key={index}>
                   <Table.Header>
                     <Table.HeaderCell>{datos.id}</Table.HeaderCell>
                     <Table.HeaderCell>¿Subsanable?</Table.HeaderCell>
@@ -395,7 +396,7 @@ export const Documentos = () => {
                   </Table.Header>
                   <Table.Body>
                     {documentacion.map((doc, index) => (
-                      <Table.Row>
+                      <Table.Row key={doc.descripcion_del_documento}>
                         <Table.Cell>
                           <Icon name="hdd" />
                           {doc.descripcion_del_documento}

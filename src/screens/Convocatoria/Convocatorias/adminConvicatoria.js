@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 import {
   Segment,
@@ -40,7 +40,7 @@ const tiposidentificacion = [
 export const AdminConvocatorias = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state);
+  // const { user } = useSelector((state) => state);
   //  DATOS QUE VAN HACER MOSTRADOS EN LA TABLA
   React.useEffect(() => {
     primeroDatostabla();
@@ -60,41 +60,46 @@ export const AdminConvocatorias = () => {
   const [nombreBorrar, setNombreBorrrar] = React.useState("");
   const [idBorrar, setIdBorrrar] = React.useState("");
 
-  async function primeroDatostabla() {
-    console.log(user);
+  const primeroDatostabla = async () => {
     try {
       let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/`);
-      console.log(response);
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
-      let fechaactual = moment().format('YYYY-MM-DD');
+      let fechaactual = moment().format("YYYY-MM-DD");
       for (var i in response.data.convocatorias) {
-        let nomconvo = response.data.convocatorias[i].numero_convocatoria
-        let nombreconvocatoria = copynombres.filter(
-          (data) => data.idlineaconvocatoria === nomconvo
-        );
+        let nomconvo = response.data.convocatorias[i].numero_convocatoria;
+        let nombreconvocatoria = copynombres.filter((data) => data.idlineaconvocatoria === nomconvo);
         response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
         response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
         for (var y in response.data.convocatorias[i].fechas) {
-          console.log(response.data.convocatorias[i].fechas[y].id);
-          console.log(moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin))
-          if (response.data.convocatorias[i].fechas[y].clave === 'Apertura' && moment(fechaactual).isSameOrBefore(response.data.convocatorias[i].fechas[y].valormin)) {
-            response.data.convocatorias[i].estado = "No publicada"
+          if (
+            response.data.convocatorias[i].fechas[y].clave === "Apertura" &&
+            moment(fechaactual).isSameOrBefore(response.data.convocatorias[i].fechas[y].valormin)
+          ) {
+            response.data.convocatorias[i].estado = "No publicada";
           }
-          if (response.data.convocatorias[i].fechas[y].clave === 'Apertura' && moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)) {
-            response.data.convocatorias[i].estado = "Abierta"
+          if (
+            response.data.convocatorias[i].fechas[y].clave === "Apertura" &&
+            moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)
+          ) {
+            response.data.convocatorias[i].estado = "Abierta";
           }
-          if (response.data.convocatorias[i].fechas[y].clave === 'Cierre' && moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)) {
-            response.data.convocatorias[i].estado = "En proceso"
+          if (
+            response.data.convocatorias[i].fechas[y].clave === "Cierre" &&
+            moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)
+          ) {
+            response.data.convocatorias[i].estado = "En proceso";
           }
-          if (response.data.convocatorias[i].fechas[y].clave === 'Resolución de otorgamiento' && moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)) {
-            response.data.convocatorias[i].estado = "Cerrada"
+          if (
+            response.data.convocatorias[i].fechas[y].clave === "Resolución de otorgamiento" &&
+            moment(fechaactual).isSameOrAfter(response.data.convocatorias[i].fechas[y].valormin)
+          ) {
+            response.data.convocatorias[i].estado = "Cerrada";
           }
         }
       }
       if (response.data.convocatorias.length > 0) {
         setPrincipalState({ datossinfiltro: response.data.convocatorias });
         let copy = response.data.convocatorias.map((data) => data);
-        console.log(copy, 'este es el copy');
         let datos = copy.slice(0, cantidadPáginas);
         setDatosActuales(datos);
         let x = response.data.convocatorias.length / cantidadPáginas;
@@ -104,15 +109,14 @@ export const AdminConvocatorias = () => {
 
       let datos = [];
       setDatosActuales(datos);
-      console.log(datos, "datos cargados");
       setPrincipalState({ datossinfiltro: datos });
       let x = 1;
       x = Math.ceil(x);
       return setPaginacionTotal(x);
     } catch (error) {
-      console.error(error);
+      return console.error(error);
     }
-  }
+  };
 
   function handletoggleChange(data, index) {
     let datosActualesDiff = JSON.parse(JSON.stringify(datosActuales));
@@ -154,7 +158,6 @@ export const AdminConvocatorias = () => {
   }
 
   async function borrarConvocatoria() {
-    console.log(idBorrar, nombreBorrar);
     try {
       await axios.delete(`${process.env.REACT_APP_SERVER_CONV}api/convocatorias/delete/${idBorrar}`);
       let copy = datosActuales.map((data) => data);
@@ -168,8 +171,6 @@ export const AdminConvocatorias = () => {
   }
 
   function abrirEditar(route, datos) {
-    console.log("dispatch", route, datos);
-    console.log(datos.idconvocatorias, "id convocatorias");
     dispatch(edicionConvocatoria(true));
     dispatch(idConvocatorias(datos.idconvocatorias));
     return history.push(`/${route}`);
@@ -187,11 +188,9 @@ export const AdminConvocatorias = () => {
   };
 
   const filtrarTablaMultiple = (data) => {
-    console.log(data, data.value.length, principalState.datossinfiltro);
     let filtrado = [];
     if (data.value.length === 0) {
       let copy = principalState.datossinfiltro.map((data) => data);
-      console.log(copy);
       let datos = copy.slice(0, cantidadPáginas);
       setDatosActuales(datos);
       let x = principalState.datossinfiltro.length / cantidadPáginas;
@@ -199,7 +198,7 @@ export const AdminConvocatorias = () => {
       return setPaginacionTotal(x);
     }
     for (var i in datosActuales) {
-      if (typeof datosActuales[i][data.input] === 'object') {
+      if (typeof datosActuales[i][data.input] === "object") {
         if (datosActuales[i][data.input]) {
           for (var x in datosActuales[i][data.input]) {
             for (var y in data.value) {
@@ -209,18 +208,16 @@ export const AdminConvocatorias = () => {
         }
       } else {
         for (var y2 in data.value) {
-          console.log(datosActuales[i][data.input]);
           if (datosActuales[i][data.input] === data.value[y2]) filtrado.push(datosActuales[i]);
         }
       }
     }
     let copy = filtrado.map((data) => data);
-      console.log(copy);
-      let datos = copy.slice(0, cantidadPáginas);
-      setDatosActuales(datos);
-      let z = filtrado.length / cantidadPáginas;
-      z = Math.ceil(z);
-      return setPaginacionTotal(z);
+    let datos = copy.slice(0, cantidadPáginas);
+    setDatosActuales(datos);
+    let z = filtrado.length / cantidadPáginas;
+    z = Math.ceil(z);
+    return setPaginacionTotal(z);
   };
 
   return (
@@ -241,7 +238,7 @@ export const AdminConvocatorias = () => {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      <Segment>
+      <Segment className="segment-shadow">
         <Grid columns={4}>
           <Grid.Row>
             <Grid.Column>
@@ -267,7 +264,7 @@ export const AdminConvocatorias = () => {
               />
             </Grid.Column>
             <Grid.Column></Grid.Column>
-            <Grid.Column className="registos-adminconvocatoria">
+            <Grid.Column className="registos-adminconvocatoria font-family-Montserrat-Regular font-size-9px">
               <label style={{ flex: 0.6 }}>Registros por página</label>
               <Select
                 fluid
@@ -331,13 +328,20 @@ export const AdminConvocatorias = () => {
         ) : null}
         <Grid>
           <Grid.Row className="container-scrollable-adminconvocatorias">
-            <Grid.Column width={5} className="no-padding-left no-padding-rigth">
-              <Table className="table-adminconvocatorias-fixed table-header-tabla" striped singleLine>
+            <Grid.Column
+              width={5}
+              className="no-padding-left no-padding-rigth container-primeratabla-adminconvocatorias"
+            >
+              <Table striped singleLine className="table-adminconvocatorias-fixed table-header-tabla font-size-12px">
                 <Table.Header>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                  <Table.HeaderCell rowSpan="2" className="table-header-tabla">
                     No.
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={2}>
+                  <Table.HeaderCell
+                    rowSpan="2"
+                    style={{ overflow: "hidden", textOverflow: "ellipsis", width: "300px", lineHeight: "30px", }}
+                    className="table-header-tabla"
+                  >
                     Nombre
                   </Table.HeaderCell>
                 </Table.Header>
@@ -345,8 +349,19 @@ export const AdminConvocatorias = () => {
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos) => (
                       <Table.Row>
-                        <Table.Cell width={1}>{datos.idconvocatorias}</Table.Cell>
-                        <Table.Cell width={2}>{datos.numero_convocatoria}</Table.Cell>
+                        <Table.Cell className="font-family-Work-Sans">{datos.idconvocatorias}</Table.Cell>
+                        <Table.Cell
+                          style={{
+                            display: "block",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            maxWidth: "320px",
+                            lineHeight: "26px",
+                          }}
+                          className="font-family-Work-Sans"
+                        >
+                          {datos.numero_convocatoria}
+                        </Table.Cell>
                       </Table.Row>
                     ))
                   ) : (
@@ -358,37 +373,39 @@ export const AdminConvocatorias = () => {
               </Table>
             </Grid.Column>
             <Grid.Column className="container-scroll no-padding-left no-padding-rigth" width={8}>
-              <Table className="table-adminconvocatorias-scrollable table-header-tabla" striped singleLine>
+              <Table className="table-adminconvocatorias-scrollable table-header-tabla font-size-12px" striped singleLine>
                 <Table.Header>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
-                    Codigo
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
-                    Fecha inicio
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
-                    Estado
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
-                    Publicada
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
-                    Entidad
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={2}>
-                    Linea estratégica
-                  </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
-                    Creado por
-                  </Table.HeaderCell>
+                  <Table.Row>
+                    <Table.HeaderCell style={{ "line-height": "30px" }} className="table-header-tabla">
+                      Codigo
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="table-header-tabla">
+                      Fecha inicio
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="table-header-tabla">
+                      Estado
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="table-header-tabla">
+                      Publicada
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="table-header-tabla">
+                      Entidad
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="table-header-tabla">
+                      Linea estratégica
+                    </Table.HeaderCell>
+                    <Table.HeaderCell className="table-header-tabla">
+                      Creado por
+                    </Table.HeaderCell>
+                  </Table.Row>
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
                     datosActuales.map((datos, index) => (
                       <Table.Row>
-                        <Table.Cell width={1}>{datos.codigo}</Table.Cell>
-                        <Table.Cell width={1}>{datos.fecha_creacion}</Table.Cell>
-                        <Table.Cell width={1} style={{ color: coloresEstado[datos.estado] }}>
+                        <Table.Cell className="font-family-Work-Sans" width={1}>{datos.codigo}</Table.Cell>
+                        <Table.Cell className="font-family-Work-Sans" width={1}>{datos.fecha_creacion}</Table.Cell>
+                        <Table.Cell className="font-family-Work-Sans" width={1} style={{ color: coloresEstado[datos.estado] }}>
                           {datos.estado}
                         </Table.Cell>
                         <Table.Cell width={1}>
@@ -399,9 +416,9 @@ export const AdminConvocatorias = () => {
                             onChange={() => handletoggleChange(datos, index)}
                           />
                         </Table.Cell>
-                        <Table.Cell width={1}>{datos.entidad}</Table.Cell>
-                        <Table.Cell width={2}>{datos.linea_estrategica}</Table.Cell>
-                        <Table.Cell width={1}>{datos.usuario_creacion}</Table.Cell>
+                        <Table.Cell className="font-family-Work-Sans" width={1}>{datos.entidad}</Table.Cell>
+                        <Table.Cell className="font-family-Work-Sans" width={2}>{datos.linea_estrategica}</Table.Cell>
+                        <Table.Cell className="font-family-Work-Sans" width={1}>{datos.usuario_creacion}</Table.Cell>
                       </Table.Row>
                     ))
                   ) : (
@@ -414,18 +431,23 @@ export const AdminConvocatorias = () => {
             </Grid.Column>
             <Grid.Column width={3} className="no-padding-left no-padding-rigth">
               <Table
-                className="table-adminconvocatorias-fixed table-header-tabla table-header-tabla"
+                className="table-adminconvocatorias-fixed table-header-tabla table-header-tabla font-size-12px"
                 striped
                 singleLine
               >
                 <Table.Header>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                  <Table.Row>
+                    <Table.HeaderCell style={{ lineHeight: "0px", }} className="table-header-tabla" textAlign="center" colSpan="3">
+                      Acciones
+                    </Table.HeaderCell>
+                  </Table.Row>
+                  <Table.HeaderCell style={{ lineHeight: "0px", }} className="table-header-tabla">
                     Ver
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                  <Table.HeaderCell style={{ lineHeight: "0px", }} className="table-header-tabla">
                     Editar
                   </Table.HeaderCell>
-                  <Table.HeaderCell className="table-header-tabla" width={1}>
+                  <Table.HeaderCell style={{ lineHeight: "0px", }} className="table-header-tabla">
                     Borrar
                   </Table.HeaderCell>
                 </Table.Header>
