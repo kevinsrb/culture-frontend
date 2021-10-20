@@ -65,6 +65,7 @@ export default function Navbar() {
             direction='left'
             vertical
             visible={sidebar}
+            className="sidebar"
           >
             <Menu.Item as='a' disabled={!sidebar} onClick={showSidebar}>
               X 

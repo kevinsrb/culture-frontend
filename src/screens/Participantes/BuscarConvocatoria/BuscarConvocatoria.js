@@ -211,6 +211,7 @@ export const BuscarConvocatoria = () => {
                 <label className="font-color-4B4B4B">Área</label>
                 <Select
                   multiple
+                  search
                   placeholder="Seleccionar..."
                   options={AreaOptions}
                   onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "area" })}

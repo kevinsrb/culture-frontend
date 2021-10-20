@@ -3,7 +3,6 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
-import axios from "axios";
 import { Grid, Segment, Header, Accordion, Icon, Table, Button, Checkbox, Divider } from "semantic-ui-react";
 import { ObjConstanst } from "../../../config/utils/constanst";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";

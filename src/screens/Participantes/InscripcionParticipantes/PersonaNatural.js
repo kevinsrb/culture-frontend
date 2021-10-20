@@ -66,21 +66,21 @@ export const PersonaNatural = () => {
   }, [])
 
   const handleCrearPersonaNatural = async() => {
-    // console.log(principalState)
-    // await axios
-    // .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
-    // .then(({data}) => {
-    //   dispatch(id_Participante(data.data.id_participante));
-    //   ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-    //   history.push("/agregarParticipantes"); 
-    // })
-    // .catch(function (error) {
-    //   console.log(error)
-    //  // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-    // });
-
-    ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+    console.log(principalState)
+    await axios
+    .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
+    .then(({data}) => {
+      dispatch(id_Participante(data.data.id_participante));
+      ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
       history.push("/agregarParticipantes"); 
+    })
+    .catch(function (error) {
+      console.log(error)
+     // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+    });
+
+    // ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+    //   history.push("/agregarParticipantes"); 
   }
 
   const consultarIdParticipante = async() => {

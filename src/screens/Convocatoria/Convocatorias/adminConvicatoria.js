@@ -345,9 +345,9 @@ export const AdminConvocatorias = () => {
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
-                    datosActuales.map((datos) => (
+                    datosActuales.map((datos, index) => (
                       <Table.Row>
-                        <Table.Cell width={1}>{datos.idconvocatorias}</Table.Cell>
+                        <Table.Cell width={1}>{index + 1}</Table.Cell>
                         <Table.Cell width={2}>{datos.numero_convocatoria}</Table.Cell>
                       </Table.Row>
                     ))
