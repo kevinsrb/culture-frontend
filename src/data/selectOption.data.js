@@ -83,9 +83,9 @@ export const NumeroConvocatoiriaOptions = [
 ]
 
 export const QuienParticipaOptions = [
-  { value: 1,  text: 'Grupo conformador' },
-  { value: 2,  text: 'Persona natural' },
-  { value: 3,  text: 'Persona juridica' }
+  { key: 1, value: 1,  text: 'Persona natural' },
+  { key: 2, value: 2,  text: 'Persona juridica' },
+  { key: 3, value: 3,  text: 'Grupo conformador' },
 ]
 
 export const RequisitosOptions = [

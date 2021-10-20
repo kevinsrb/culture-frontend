@@ -80,13 +80,17 @@ export default function Login() {
         idusuario,
         contraseña,
       });
+      console.log(token)
       localStorage.setItem("token", token.data);
+
       dispatch(user_token(token.data));
-      history.push("/adminconvocatorias");
+      history.push('/homeParticipantes');
+
     } catch (error) {
       console.error(error);
     }
   };
+
   function mostrarContraseña() {
     if (principalState.contraseña.trim() === "") return;
     if (principalState.tipopassword.trim() === "input") {

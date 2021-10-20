@@ -4,12 +4,12 @@ import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 
 export const SidebarData = [
-  {
-    title: 'Announcement',
-    path: '/infoconvocatorias',
-    icon: <AiIcons.AiFillHome />,
-    cName: 'nav-text'
-  },
+  // {
+  //   title: 'Announcement',
+  //   path: '/infoconvocatorias',
+  //   icon: <AiIcons.AiFillHome />,
+  //   cName: 'nav-text'
+  // },
   // {
   //   title: 'Cronograma',
   //   path: '/Cronograma',
@@ -52,33 +52,17 @@ export const SidebarData = [
   //   icon: <IoIcons.IoIosPaper />,
   //   cName: 'nav-text'
   // },
+  // {
+  //   title: 'Publicar convocatoria',
+  //   path: '/publicarConvocatoria',
+  //   icon: <IoIcons.IoIosPaper />,
+  //   cName: 'nav-text'
+  // },
+  
   {
-    title: 'Publicar convocatoria',
-    path: '/publicarConvocatoria',
-    icon: <IoIcons.IoIosPaper />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Inscripcion',
-    path: '/Inscripcion',
-    icon: <IoIcons.IoIosPaper />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'agregar participantes',
-    path: '/agregarParticipantes',
-    icon: <IoIcons.IoIosPaper />,
-    cName: 'nav-text'
-  },
-  {
-    title: 'Buscar convocatoria',
+    title: 'Convocatorias',
     path: '/bucarConvocatoria',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
-  }
-
-  
-
-
-  
+  }  
 ];

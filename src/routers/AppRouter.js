@@ -19,6 +19,11 @@ import { SeleccionarRoles } from "../screens/Participantes/SeleccionarRoles/Sele
 import { AgregarPaticipante } from "../screens/Participantes/AgregarParticiantes/AgregarPaticipante";
 import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatoria";
 
+import { PersonaNatural } from "../screens/Participantes/InscripcionParticipantes/PersonaNatural";
+import { PersonaJuridica } from "../screens/Participantes/InscripcionParticipantes/PersonaJuridica";
+import { GrupoConformado } from "../screens/Participantes/InscripcionParticipantes/GrupoConformado";
+import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
+
 
 export const AppRouter = () => {
   return (
@@ -81,6 +86,26 @@ export const AppRouter = () => {
           <Route path="/agregarParticipantes">
             <Navbar />
             <AgregarPaticipante />
+          </Route>
+          <Route path="/personaNatural">
+            <Navbar />
+            <PersonaNatural />
+          </Route>
+          <Route path="/personaJuridica">
+            <Navbar />
+            <PersonaJuridica />
+          </Route>
+          <Route path="/grupoConformado">
+            <Navbar />
+            <GrupoConformado />
+          </Route>
+          <Route path="/seleccionarRol">
+            <Navbar />
+            <SeleccionarRoles />
+          </Route>
+          <Route path="/homeParticipantes">
+            <Navbar />
+            <HomeParticipantes />
           </Route>
           {/* <Route path="/adminMaestras">
             <Navbar />

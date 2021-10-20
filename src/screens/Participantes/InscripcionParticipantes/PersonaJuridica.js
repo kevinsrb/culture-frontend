@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import { useHistory } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { ObjConstanst } from '../../../config/utils/constanst';
+import { ObjNotificaciones, } from '../../../config/utils/notificaciones.utils';
 import { TipoDocumentosOptions, EstratoOptions, SexoOptions } from '../../../data/selectOption.data';
 import { Form, Grid, Header, Divider, Segment, Button, Container } from "semantic-ui-react";
 
@@ -51,6 +52,8 @@ export const PersonaJuridica = () => {
 	const [principalState, setPrincipalState] = useState(initialState)
 	const [startDate, setStartDate] = useState(new Date());
 
+  const history = useHistory();
+
 	const handleInputChangeEmpresa = (event, result) => {
     const { name, value } = result || event.target;
     console.log(value, name);
@@ -66,7 +69,8 @@ export const PersonaJuridica = () => {
   };
 
 	const handleCrearPersonaJuridica = ()=> {
-		console.log(principalState)
+    ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+		history.push("/agregarParticipantes"); 
 	}
     return (
 			<>

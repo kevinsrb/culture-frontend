@@ -3,7 +3,6 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
 import axios from "axios";
-
 import { Form, Grid, Header, Divider, Segment, Button, Icon } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
@@ -19,6 +18,8 @@ import {
 
 //Alertas y notificaciones
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
+
+
 
 export function InfoConvocatoria() {
   const objConvocatoria = {

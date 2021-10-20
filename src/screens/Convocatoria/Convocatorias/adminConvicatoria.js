@@ -197,6 +197,8 @@ export const AdminConvocatorias = () => {
       x = Math.ceil(x);
       return setPaginacionTotal(x);
     }
+
+    console.log(datosActuales, 'actuales')
     for (var i in datosActuales) {
       if (typeof datosActuales[i][data.input] === "object") {
         if (datosActuales[i][data.input]) {
@@ -284,10 +286,10 @@ export const AdminConvocatorias = () => {
                 <Form>
                   <Form.Group widths="equal">
                     <Form.Field>
+                      <label>Perfil</label>
                       <Select
                         multiple
                         className="font-family-Work-Sans"
-                        label={<label className="font-color-4B4B4B">Perfil</label>}
                         placeholder="Seleccionar..."
                         options={tiposidentificacion}
                         onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "tipo_participante" })}
@@ -347,7 +349,7 @@ export const AdminConvocatorias = () => {
                 </Table.Header>
                 <Table.Body>
                   {datosActuales.length > 0 ? (
-                    datosActuales.map((datos) => (
+                    datosActuales.map((datos, index) => (
                       <Table.Row>
                         <Table.Cell className="font-family-Work-Sans">{datos.idconvocatorias}</Table.Cell>
                         <Table.Cell
