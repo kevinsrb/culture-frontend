@@ -50,6 +50,7 @@ export function InfoConvocatoria() {
     conteodescripcion_corta: "0/250",
     conteonoparticipa: "0/250",
     conteoperfil_participante: "0/250",
+    usuario: "",
   };
 
   const stateErrores = {
@@ -101,7 +102,7 @@ export function InfoConvocatoria() {
     console.log(user);
     console.log(editarConvocatoria);
     if (editarConvocatoria === undefined) {
-      return;
+      return setConvocatoria({ ...convocatoria, usuario_creacion: user.idusuario });
     }
     let participantes = [];
     let categorias = [];
@@ -134,6 +135,7 @@ export function InfoConvocatoria() {
     setAreaSeleccionada(areas);
     console.log(tipocategoriasseleccionado);
     return setConvocatoria({
+      ...convocatoria,
       numero_convocatoria: response.data.data.numero_convocatoria,
       linea_convocatoria: response.data.data.linea_convocatoria,
       categoria_linea_convocatoria: response.data.data.categoria_linea_convocatoria,
@@ -153,6 +155,7 @@ export function InfoConvocatoria() {
       descripcion_corta: response.data.data.descripcion_corta,
       perfil_participante: response.data.data.perfil_participante,
       noparticipa: response.data.data.noparticipa,
+      usuario_creacion: user.idusuario,
     });
     // console.log(convocatoria, tipoparticipanteseleccionado);
   };
@@ -326,9 +329,9 @@ export function InfoConvocatoria() {
 
     delete axios.defaults.headers.common["Authorization"];
 
-    if (user.trim() !== "") {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${user}`;
-    }
+    // if (user.trim() !== "") {
+    //   axios.defaults.headers.common["Authorization"] = `Bearer ${user}`;
+    // }
 
     console.log(user, "user");
 
