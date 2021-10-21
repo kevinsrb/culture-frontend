@@ -70,7 +70,7 @@ export const PersonaJuridica = () => {
 
 	const handleCrearPersonaJuridica = ()=> {
     ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-		history.push("/agregarParticipantes"); 
+		history.push("/Administrador/agregarParticipantes"); 
 	}
     return (
 			<>

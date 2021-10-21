@@ -40,7 +40,7 @@ export const DocumentosAdministrativos = () => {
       }
     }
 
-const saveFile = async (datos, e) => {     
+    const saveFile = async (datos, e) => {     
 
     const { idconvocatoria, tipo_documento, descripcion } = datos;
     const { name } = e.target.files[0];

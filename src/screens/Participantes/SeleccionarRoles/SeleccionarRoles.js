@@ -18,11 +18,11 @@ export const SeleccionarRoles = () => {
 
   const asociarRoles = () => {
     if(principalState == 'persona_natural'){
-      history.push('/personaNatural')
+      history.push('/Administrador/personaNatural')
     }else if(principalState == 'persona_juridica'){
-      history.push('/personaJuridica')
+      history.push('/Administrador/personaJuridica')
     }else{
-      history.push('/grupoConformado')
+      history.push('/Administrador/grupoConformado')
     }
   }
 

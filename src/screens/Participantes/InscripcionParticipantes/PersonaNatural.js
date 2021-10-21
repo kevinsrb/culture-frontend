@@ -31,7 +31,8 @@ export const PersonaNatural = () => {
     telefono_fijo: '',
     telefono_celular: '',
     correo_electronico: '',
-    tipo_participante: 1
+    tipo_participante: 1,
+    usuario_id: ''
   }
 
   const stateErrores = {
@@ -57,82 +58,116 @@ export const PersonaNatural = () => {
   const { idParticipante } = useSelector((state) => state.participantes);
 
   useEffect(() => {
-    consultarIdParticipante();
-
-    if(idParticipante){
-      cargarInformacionParticipante();
-    }
-    
+    cargarInformacionParticipante();
   }, [])
 
   const handleCrearPersonaNatural = async() => {
-    console.log(principalState)
-    await axios
-    .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
-    .then(({data}) => {
-      dispatch(id_Participante(data.data.id_participante));
-      ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-      history.push("/agregarParticipantes"); 
-    })
-    .catch(function (error) {
-      console.log(error)
-     // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-    });
 
-    // ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-    //   history.push("/agregarParticipantes"); 
+
+    if(idParticipante != undefined){
+
+      const existeParticipante = await consularExisteParticipante();
+      if(!Array.isArray(existeParticipante)){
+
+        await axios
+        .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`, principalState)
+        .then(({data}) => {
+          ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
+        })
+        .catch(function (error) {
+          console.log(error)
+         // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+        });
+
+        const { primer_nombre: nombres, primer_apellido: apellidos, correo_electronico: email, telefono: telefono_celular, tipo_identificacion }  = principalState;
+        const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
+
+        await axios
+        .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
+        .then(({data}) => {
+          ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
+        })
+        .catch(function (error) {
+          console.log(error)
+         // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+        });
+
+      }else{
+
+        await axios
+        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
+        .then(({data}) => {
+          ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+          //history.push("/Administrador/agregarParticipantes"); 
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
+
+        const { primer_nombre: nombres, primer_apellido: apellidos, correo_electronico: email, telefono: telefono_celular, tipo_identificacion }  = principalState;
+        const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
+
+        await axios
+        .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
+        .then(({data}) => {
+          ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
+        })
+        .catch(function (error) {
+          console.log(error)
+        });
+      }
+    }
   }
 
-  const consultarIdParticipante = async() => {
+  const consularExisteParticipante = async() => {
     return await axios
-      .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/obtenerIdParticipante`)
+      .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`)
       .then(({ data }) => {
-        console.log(data.data)
-        dispatch(id_Participante(data.data));
-        localStorage.setItem("id_participante", JSON.stringify(data.data));
+        return data.data
       })
       .catch(function (error) {});
   }
 
   const cargarInformacionParticipante = async() => {
-    console.log(idParticipante)
-    let id_participante = idParticipante ? idParticipante : JSON.parse(localStorage.getItem("id_participante"));
-    console.log(id_participante)
-    if(id_participante != undefined){
-      await axios
-      .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`,)
-      .then(({data}) => {
-        setPrincipalState(data.data)
-      })
-      .catch(function (error) {
-        console.log(error)
-        ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-      });
+
+    if(idParticipante != undefined){
+
+      const existeParticipante = await consularExisteParticipante();
+      console.log(existeParticipante)
+      
+      if(!Array.isArray(existeParticipante)){
+        return setPrincipalState(existeParticipante)
+      }else{
+        await axios
+        .get(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`,)
+        .then(({data}) => {
+
+          console.log(data.data)
+          const { nombres , apellidos, direccion, email, telefono, tipo_identificacion, idusuario } = data.data;
+      
+          const objUsuario = {
+            tipo_identificacion: tipo_identificacion,
+            numero_documento: idusuario,
+            primer_nombre: nombres,
+            primer_apellido: apellidos,
+            telefono_celular: telefono,
+            correo_electronico: email,
+            tipo_participante: 1,
+            usuario_id: idParticipante
+          }
+
+          console.log(objUsuario)
+
+          return setPrincipalState(objUsuario)
+
+        })
+        .catch(function (error) {
+          console.log(error)
+          //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+        });
+      } 
     }
-   
   }
-
-  
-
-  // const validarFormulario = () => {
-  //   let arrayErrores = stateErrores;
-  //   let error = false;
-
-  //   for (let property in arrayErrores) {
-  //     console.log(property , arrayErrores[property]);
-
-  //     if (principalState.property === "") {
-  //       arrayErrores = {
-  //         ...arrayErrores,
-  //         property: true,
-  //       };
-  //       error = true;
-  //     }
-
-  //   }
-
-  //   console.log(arrayErrores)
-  // }
  
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
