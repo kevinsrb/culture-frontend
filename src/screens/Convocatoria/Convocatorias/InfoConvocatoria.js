@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { edicionConvocatoria } from "../../../store/actions/convocatoriaAction";
 import axios from "axios";
-import { Form, Grid, Header, Divider, Segment, Button, Icon } from "semantic-ui-react";
+import { Form, Grid, Header, Divider, Segment, Button, Icon, Breadcrumb, Dropdown } from "semantic-ui-react";
 import {
   LineaEstrategicaOptions,
   CicloOptions,
@@ -18,8 +18,6 @@ import {
 
 //Alertas y notificaciones
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
-
-
 
 export function InfoConvocatoria() {
   const objConvocatoria = {
@@ -109,7 +107,7 @@ export function InfoConvocatoria() {
     let categorias = [];
     let areas = [];
     let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
-    console.log(response,'este es el response');
+    console.log(response, "este es el response");
     for (var i in response.data.data.tipo_participante) {
       participantes.push(response.data.data.tipo_participante[i].value);
     }
@@ -342,7 +340,7 @@ export function InfoConvocatoria() {
         .then((data) => {
           console.log(data);
           ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-          history.push("/cronogramaActividades");
+          history.push("/Administrador/cronogramaActividades");
         })
         .catch(function (error) {
           //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
@@ -354,7 +352,7 @@ export function InfoConvocatoria() {
       .then((data) => {
         console.log(data);
         ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-        history.push("/cronograma");
+        history.push("/Administrador/cronograma");
         dispatch(edicionConvocatoria());
       })
       .catch(function (error) {
@@ -468,19 +466,59 @@ export function InfoConvocatoria() {
   const onChange = (event, data) => setNewDate(data.value);
 
   const backComponente = () => {
-    history.push("/adminconvocatorias");
+    history.push("/Administrador/");
   };
 
   return (
     <React.Fragment>
-      <Grid>
+      <Grid className="no-margin">
+        <Grid.Column className="background-color-6DA3FC no-margin no-padding-top no-padding-bottom">
+          <Breadcrumb style={{ paddingLeft: "4%" }}>
+            <Breadcrumb.Section>
+              <Icon name="home" className="font-color-FFFFFF" size="small" />
+            </Breadcrumb.Section>
+            <Breadcrumb.Divider className="font-color-FFFFFF font-size-8px">/</Breadcrumb.Divider>
+            <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
+              Crear convocatoria
+            </Breadcrumb.Section>
+          </Breadcrumb>
+        </Grid.Column>
+      </Grid>
+      <Grid className="no-margin">
+        <Grid.Column
+          className="background-color-6DA3FC-opacity-025 no-margin"
+          style={{ display: "flex", justifyContent: "flex-end", paddingTop: "2% !important" }}
+        >
+          <span className="font-color-1B1C1D font-size-14px">Crear convocatoria :</span>
+          <Dropdown
+            text={<span className="font-color-1B1C1D font-family-Montserrat-Regular">Informacion general</span>}
+            icon={
+              <Icon style={{ float: "right", paddingLeft: "5%" }} className="font-color-1FAEEF" name="angle down" />
+            }
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Información General
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Doc. Administrativos
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. Técnicos</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. General</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Públicación</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Grid.Column>
+      </Grid>
+      <Grid style={{ marginBottom: "8%", marginLeft: "0", marginTop: "0", marginRight: "0" }}>
         <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
           <Form size="large" onSubmit={handleCreateConvocatoria} autoComplete="off">
             <Segment className="segment-shadow">
               <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
                 <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
                   {" "}
-                  Codigo de convocatoria {idConvocatoria}
+                  Código de convocatoria {idConvocatoria}
                 </span>
               </Header>
               <Header
@@ -488,7 +526,7 @@ export function InfoConvocatoria() {
                 floated="left"
                 style={{ marginBottom: "0" }}
               >
-                Informacion general&nbsp;-&nbsp;
+                Información general&nbsp;-&nbsp;
                 <span
                   style={{ marginBottom: "0" }}
                   className="font-color-DB2828 font-size-10px font-family-Montserrat-SemiBold no-margin"
@@ -560,7 +598,7 @@ export function InfoConvocatoria() {
                     <Form.Dropdown
                       error={errores.tipo_participante}
                       className="font-color-4B4B4B"
-                      label={<label className="font-color-4B4B4B">¿Quien puede participar?</label>}
+                      label={<label className="font-color-4B4B4B">¿Quién puede participar?</label>}
                       placeholder="Seleccionar..."
                       value={tipoparticipanteseleccionado}
                       fluid
@@ -575,7 +613,7 @@ export function InfoConvocatoria() {
                   </Grid.Column>
                   <Grid.Column>
                     <label>
-                      ¿Seudonimos?&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                      ¿Seudónimos?&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
                     </label>
                     <Grid>
                       <Grid.Row>
@@ -628,7 +666,7 @@ export function InfoConvocatoria() {
                 <Form.Dropdown
                   error={errores.linea_estrategica}
                   className="font-color-4B4B4B"
-                  label={<label className="font-color-4B4B4B">Linea estrategica</label>}
+                  label={<label className="font-color-4B4B4B">Linea estratégica</label>}
                   placeholder="Seleccionar..."
                   fluid
                   search
@@ -840,7 +878,7 @@ export function InfoConvocatoria() {
                       className="no-margin"
                       label={
                         <label className="font-color-4B4B4B">
-                          Descripcion corta&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                          Descripción corta&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
                         </label>
                       }
                       name="descripcion_corta"
@@ -859,7 +897,7 @@ export function InfoConvocatoria() {
                       className="no-margin"
                       label={
                         <label className="font-color-4B4B4B">
-                          ¿Quien no puede participar?&nbsp;-&nbsp;
+                          ¿Quién no puede participar?&nbsp;-&nbsp;
                           <span className="font-size-10px no-margin font-color-4B4B4B">opcional</span>
                         </label>
                       }
@@ -904,21 +942,23 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <p align="right">
-                      <Button type="submit">Guardar y continuar</Button>
+                      <Button className="border-radius-16 font-color-B0B0B0" type="submit">
+                        Guardar y continuar
+                      </Button>
                     </p>
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
             </Segment>
           </Form>
-          <Grid columns={1} className="container-absolute">
-            <Grid.Row>
-              <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>
-                Atras
-              </Button>
-            </Grid.Row>
-          </Grid>
         </Grid.Column>
+      </Grid>
+      <Grid columns={1} className="container-absolute">
+        <Grid.Row>
+          <Button className="font-size-12px button-back" onClick={backComponente}>
+            Atrás
+          </Button>
+        </Grid.Row>
       </Grid>
     </React.Fragment>
   );

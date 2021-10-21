@@ -3,11 +3,23 @@ import { useHistory } from "react-router-dom";
 import axios from "axios";
 // import SubirArchivo from "../../components/Archivos/SubirArchivos";
 import { TipodocumentosOptions, RequisitosOptions } from "../../../data/selectOption.data";
-import { ObjConstanst } from "../../../config/utils/constanst";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
-import { Grid, Segment, Header, Form, Button, Table, Divider, Checkbox, Label, Modal, Icon } from "semantic-ui-react";
+import {
+  Grid,
+  Segment,
+  Header,
+  Form,
+  Button,
+  Table,
+  Divider,
+  Checkbox,
+  Label,
+  Modal,
+  Icon,
+  Dropdown,
+  Breadcrumb,
+} from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Document, Page } from "react-pdf";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 
 export const DocumentacionConvocatoria = () => {
@@ -279,7 +291,7 @@ export const DocumentacionConvocatoria = () => {
     }
 
     await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
-    return history.push("/adminconvocatorias");
+    return history.push("/Administrador/");
   };
 
   const Verdocumentacion = async (data) => {
@@ -352,218 +364,259 @@ export const DocumentacionConvocatoria = () => {
   const backComponente = () => {
     dispatch(edicionConvocatoria(true));
     dispatch(idConvocatorias(idConvocatoria));
-    return history.push("/documentacionTecnica");
+    return history.push("/Administrador/documentacionTecnica");
   };
 
   return (
-    <div style={{ padding: "2%" }}>
+    <div>
       {/* <SubirArchivo file={file => setPrincipalState({...principalState, file: file})} type={type => setPrincipalState({...principalState, tipo_documento_file: type})} /> */}
-      <Segment className="segment-shadow">
-        <Form>
-          <Grid style={{ paddingRight: "2%" }}>
-            <Grid.Row columns={2} style={{ paddingBottom: "0.5%" }}>
-              <Grid.Column>
-                <Header style={{ marginBottom: "0" }} className="font-size-14px font-family-Montserrat-SemiBold">
-                  Documentación general convocatoria
-                </Header>
-              </Grid.Column>
-              <Grid.Column>
-                <Header floated="right">
-                  <span
-                    style={{ marginBottom: "0" }}
-                    className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px"
-                  >
-                    Codigo convocarotia {idConvocatoria}
-                  </span>
-                </Header>
-              </Grid.Column>
-            </Grid.Row>
-            <Divider className="divider-admin-convocatorias" />
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <Form.Input
-                  label={<label className="font-color-4B4B4B">Nombre</label>}
-                  name="nombre"
-                  placeholder="Nombre"
-                  className="select-registros-adminconvocatoria"
-                  value={principalState.nombre}
-                  onChange={CambiarValor}
-                  error={principalErrores.nombre}
-                />
-                {principalErrores.nombre ? <Label color="red">Campo requerido</Label> : null}
-              </Grid.Column>
-              <Grid.Column>
-                <Form.Select
-                  fluid
-                  className="select-registros-adminconvocatoria"
-                  label="Tipo de documento"
-                  placeholder="Seleccionar"
-                  name="tipo_documento"
-                  value={principalState.tipo_documento}
-                  options={RequisitosOptions}
-                  onChange={CambiarValor}
-                  error={principalErrores.tipo_documento}
-                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
-                />
-                {principalErrores.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <Form.TextArea
-                  label={<label className="font-color-4B4B4B">Descripcion</label>}
-                  name="descripcion"
-                  placeholder="Descripcion"
-                  className="select-registros-adminconvocatoria"
-                  maxLength="250"
-                  onKeyDown={conteoCaracteres}
-                  value={principalState.descripcion}
-                  onChange={CambiarValor}
-                  error={principalErrores.descripcion}
-                />
-                <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
-                  {principalState.conteodescripcion}
-                </label>
-                {principalErrores.descripcion ? <Label color="red">Campo requerido</Label> : null}
-              </Grid.Column>
-              <Grid.Column>
-                <Form.Field style={{ height: "74%" }}>
-                  <label className="font-color-4B4B4B">Adjuntar archivo</label>
-                  <div className="constiner_documentacion_general">
-                    {principalState.filename.trim() === "" && (
-                      <Button
-                        content="Seleccionar archivo"
-                        className="btn button_archivo"
-                        onClick={() => fileInputRef.current.click()}
-                      />
-                    )}
-                    {principalState.filename !== "" && (
-                      <Grid>
-                        <span className="nombreArchivo">{principalState.filename}</span>
-                        <Header
-                          onClick={() => setPrincipalState({ ...principalState, filename: "" })}
-                          className="font-size-10px font-color-AD0808 no-margin"
-                        >
-                          Eliminar
-                        </Header>
-                      </Grid>
-                    )}
-                    <input ref={fileInputRef} type="file" hidden onChange={saveFile} />
-                  </div>
-                </Form.Field>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column className="container-pagination-adminconvocatorias">
-                <Button className="botones-redondos" color="blue" onClick={agregarFila}>
-                  Agregar
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-              <Grid.Column>
-                <Header className="font-family-Montserrat-Regular font-size-14px font-color-1B1C1D">
-                  Documentación generales asociados
-                </Header>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row style={{ paddingTop: "0.2%" }}>
-              <Grid.Column>
-                <Table className="table-header-tabla" striped singleLine>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell className="table-header-tabla" width={1} rowSpan="2">
-                        No.
-                      </Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla" width={2} rowSpan="2">
-                        Nombre
-                      </Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla" width={2} rowSpan="2">
-                        Tipo documento
-                      </Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla" width={5} rowSpan="2">
-                        Descripción
-                      </Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla" width={1} rowSpan="2">
-                        ¿Activo?
-                      </Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla" textAlign="center" colSpan="3">
-                        Acciones
-                      </Table.HeaderCell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.HeaderCell
-                        className="table-header-tabla font-size-9px font-color-707070"
-                        textAlign="center"
-                      >
-                        Ver
-                      </Table.HeaderCell>
-                      <Table.HeaderCell
-                        className="table-header-tabla font-size-9px font-color-707070"
-                        textAlign="center"
-                      >
-                        Editar
-                      </Table.HeaderCell>
-                      <Table.HeaderCell
-                        className="table-header-tabla font-size-9px font-color-707070"
-                        textAlign="center"
-                      >
-                        Eliminar
-                      </Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {principalState.documentacion.length > 0 ? (
-                      principalState.documentacion.map((data, index) => (
-                        <Table.Row key={index}>
-                          <Table.Cell width={1}>{index + 1}</Table.Cell>
-                          <Table.Cell width={2}>{data.nombre}</Table.Cell>
-                          <Table.Cell width={2}>{data.tipo_documento}</Table.Cell>
-                          <Table.Cell width={5}>{data.descripcion}</Table.Cell>
-                          <Table.Cell width={1}>
-                            <Checkbox checked={data.activo} onChange={() => cambiaChecktabla(data)} />
-                          </Table.Cell>
-                          <Table.Cell width={1}>
-                            <Button className="botones-acciones" icon="eye" onClick={() => Verdocumentacion(data)} />
-                          </Table.Cell>
-                          <Table.Cell width={1}>
-                            <Button
-                              className="botones-acciones"
-                              icon="pencil"
-                              onClick={() => Editardocumentacion({ data, index })}
-                            />
-                          </Table.Cell>
-                          <Table.Cell width={1}>
-                            <Button
-                              className="botones-acciones boton-borrar-adminconvocatorias"
-                              icon="trash alternate outline"
-                              onClick={() => Eliminardocumentacion({ data, index })}
-                            />
-                          </Table.Cell>
+      <Grid className="no-margin">
+        <Grid.Column className="background-color-6DA3FC no-margin no-padding-top no-padding-bottom">
+          <Breadcrumb style={{ paddingLeft: "4%" }}>
+            <Breadcrumb.Section>
+              <Icon name="home" className="font-color-FFFFFF" size="small" />
+            </Breadcrumb.Section>
+            <Breadcrumb.Divider className="font-color-FFFFFF font-size-8px">/</Breadcrumb.Divider>
+            <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
+              Crear convocatoria
+            </Breadcrumb.Section>
+          </Breadcrumb>
+        </Grid.Column>
+      </Grid>
+      <Grid className="no-margin">
+        <Grid.Column
+          className="background-color-6DA3FC-opacity-025 no-margin"
+          style={{ display: "flex", justifyContent: "flex-end", paddingTop: "2% !important" }}
+        >
+          <span className="font-color-1B1C1D font-size-14px">Crear convocatoria :</span>
+          <Dropdown
+            text={<span className="font-color-1B1C1D font-family-Montserrat-Regular">Documentación</span>}
+            icon={
+              <Icon style={{ float: "right", paddingLeft: "5%" }} className="font-color-1FAEEF" name="angle down" />
+            }
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Información General
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Doc. Administrativos
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. Técnicos</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. General</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Públicación</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Grid.Column>
+      </Grid>
+      <Grid style={{ marginBottom: "8%", marginLeft: "0", marginTop: "0", marginRight: "0" }}>
+        <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
+          <Form size="large">
+            <Segment className="segment-shadow">
+              <Header
+                className="font-size-14px font-family-Montserrat-SemiBold"
+                floated="left"
+                style={{ marginBottom: "0" }}
+              >
+                Documentación general convocatoria
+              </Header>
+              <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
+                <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
+                  {" "}
+                  Codigo de convocatoria {idConvocatoria}
+                </span>
+              </Header>
+              <Divider clearing style={{ marginTop: "0", marginBottom: "1%" }} />
+              <Grid className="no-margin">
+                <Grid.Row columns={2} className="no-padding-top no-padding-bottom">
+                  <Grid.Column>
+                    <Form.Input
+                      label={<label className="font-color-4B4B4B">Nombre</label>}
+                      name="nombre"
+                      placeholder="Nombre"
+                      value={principalState.nombre}
+                      onChange={CambiarValor}
+                      error={principalErrores.nombre}
+                    />
+                    {principalErrores.nombre ? <Label color="red">Campo requerido</Label> : null}
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Form.Select
+                      fluid
+                      label="Tipo de documento"
+                      placeholder="Seleccionar"
+                      name="tipo_documento"
+                      value={principalState.tipo_documento}
+                      options={RequisitosOptions}
+                      onChange={CambiarValor}
+                      error={principalErrores.tipo_documento}
+                      icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                    />
+                    {principalErrores.tipo_documento ? <Label color="red">Campo requerido</Label> : null}
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={2} className="no-padding-top no-padding-bottom">
+                  <Grid.Column>
+                    <Form.TextArea
+                      label={<label className="font-color-4B4B4B">Descripcion</label>}
+                      name="descripcion"
+                      placeholder="Descripcion"
+                      maxLength="250"
+                      onKeyDown={conteoCaracteres}
+                      value={principalState.descripcion}
+                      onChange={CambiarValor}
+                      error={principalErrores.descripcion}
+                    />
+                    <label style={{ float: "right" }} className="no-margin no-padding font-color-F28C02 font-size-10px">
+                      {principalState.conteodescripcion}
+                    </label>
+                    {principalErrores.descripcion ? <Label color="red">Campo requerido</Label> : null}
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Form.Field style={{ height: "74%" }}>
+                      <label className="font-color-4B4B4B">Adjuntar archivo</label>
+                      <div className="constiner_documentacion_general">
+                        {principalState.filename.trim() === "" && (
+                          <Button
+                            content="Seleccionar archivo"
+                            className="btn button_archivo"
+                            onClick={() => fileInputRef.current.click()}
+                          />
+                        )}
+                        {principalState.filename !== "" && (
+                          <Grid>
+                            <span className="nombreArchivo">{principalState.filename}</span>
+                            <Header
+                              onClick={() => setPrincipalState({ ...principalState, filename: "" })}
+                              className="font-size-10px font-color-AD0808 no-margin"
+                            >
+                              Eliminar
+                            </Header>
+                          </Grid>
+                        )}
+                        <input ref={fileInputRef} type="file" hidden onChange={saveFile} />
+                      </div>
+                    </Form.Field>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row className="no-padding-top no-padding-bottom">
+                  <Grid.Column className="container-pagination-adminconvocatorias">
+                    <Button className="botones-redondos" color="blue" onClick={agregarFila}>
+                      Agregar
+                    </Button>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row className="no-padding-top">
+                  <Grid.Column>
+                    <Header className="font-family-Montserrat-Regular font-size-14px font-color-1B1C1D">
+                      Documentación generales asociados
+                    </Header>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row style={{ paddingTop: "0.2%" }}>
+                  <Grid.Column>
+                    <Table className="border-right-left-none" striped singleLine>
+                      <Table.Header>
+                        <Table.Row>
+                          <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-size-12px" width={1} rowSpan="2">
+                            No.
+                          </Table.HeaderCell>
+                          <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-size-12px" width={2} rowSpan="2">
+                            Nombre
+                          </Table.HeaderCell>
+                          <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-size-12px" width={2} rowSpan="2">
+                            Tipo documento
+                          </Table.HeaderCell>
+                          <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-size-12px" width={5} rowSpan="2">
+                            Descripción
+                          </Table.HeaderCell>
+                          <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-size-12px" width={1} rowSpan="2">
+                            ¿Activo?
+                          </Table.HeaderCell>
+                          <Table.HeaderCell className="background-color-FFFFFF line-height-0 border-bottom-none font-size-12px" textAlign="center" colSpan="3">
+                            Acciones
+                          </Table.HeaderCell>
                         </Table.Row>
-                      ))
-                    ) : (
-                      <Table.Row>
-                        <Table.Cell>No hay datos por mostrar</Table.Cell>
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-            </Grid.Row>
-            <Grid.Row columns={4}>
-              <Grid.Column></Grid.Column>
-              <Grid.Column></Grid.Column>
-              <Grid.Column></Grid.Column>
-              <Grid.Column className="container-pagination-adminconvocatorias">
-                <Button className="botones-redondos" color="blue" onClick={handelAsociarDocumentosGenerales}>
-                  Guardar y continuar
-                </Button>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Form>
-      </Segment>
+                        <Table.Row>
+                          <Table.HeaderCell
+                            className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070"
+                            textAlign="center"
+                          >
+                            Ver
+                          </Table.HeaderCell>
+                          <Table.HeaderCell
+                            className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070"
+                            textAlign="center"
+                          >
+                            Editar
+                          </Table.HeaderCell>
+                          <Table.HeaderCell
+                            className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070"
+                            textAlign="center"
+                          >
+                            Eliminar
+                          </Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Header>
+                      <Table.Body>
+                        {principalState.documentacion.length > 0 ? (
+                          principalState.documentacion.map((data, index) => (
+                            <Table.Row key={index}>
+                              <Table.Cell width={1}>{index + 1}</Table.Cell>
+                              <Table.Cell width={2}>{data.nombre}</Table.Cell>
+                              <Table.Cell width={2}>{data.tipo_documento}</Table.Cell>
+                              <Table.Cell width={5}>{data.descripcion}</Table.Cell>
+                              <Table.Cell width={1}>
+                                <Checkbox checked={data.activo} onChange={() => cambiaChecktabla(data)} />
+                              </Table.Cell>
+                              <Table.Cell width={1}>
+                                <Button
+                                  className="botones-acciones"
+                                  icon="eye"
+                                  onClick={() => Verdocumentacion(data)}
+                                />
+                              </Table.Cell>
+                              <Table.Cell width={1}>
+                                <Button
+                                  className="botones-acciones"
+                                  icon="pencil"
+                                  onClick={() => Editardocumentacion({ data, index })}
+                                />
+                              </Table.Cell>
+                              <Table.Cell width={1}>
+                                <Button
+                                  className="botones-acciones boton-borrar-adminconvocatorias"
+                                  icon="trash alternate outline"
+                                  onClick={() => Eliminardocumentacion({ data, index })}
+                                />
+                              </Table.Cell>
+                            </Table.Row>
+                          ))
+                        ) : (
+                          <Table.Row>
+                            <Table.Cell>No hay datos por mostrar</Table.Cell>
+                          </Table.Row>
+                        )}
+                      </Table.Body>
+                    </Table>
+                  </Grid.Column>
+                </Grid.Row>
+                <Grid.Row columns={4}>
+                  <Grid.Column></Grid.Column>
+                  <Grid.Column></Grid.Column>
+                  <Grid.Column></Grid.Column>
+                  <Grid.Column className="container-pagination-adminconvocatorias">
+                    <Button className="botones-redondos" color="blue" onClick={handelAsociarDocumentosGenerales}>
+                      Guardar y continuar
+                    </Button>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Segment>
+          </Form>
+        </Grid.Column>
+      </Grid>
       <Grid columns={1} className="container-absolute">
         <Grid.Row>
           <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>

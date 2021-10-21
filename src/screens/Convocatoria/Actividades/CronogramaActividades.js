@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ObjConstanst } from "../../../config/utils/constanst";
-import { Button, Container, Form, Grid, Header, Divider, Segment, Input, Checkbox, Label } from "semantic-ui-react";
+import {
+  Button,
+  Container,
+  Form,
+  Grid,
+  Header,
+  Divider,
+  Segment,
+  Input,
+  Checkbox,
+  Label,
+  Breadcrumb,
+  Dropdown,
+  Icon,
+} from "semantic-ui-react";
 import { useSelector } from "react-redux";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { useHistory } from "react-router";
@@ -131,7 +145,7 @@ export const CronogramaActividades = () => {
       .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/actividades/${idConvocatoria}`, objActividades)
       .then(({ data }) => {
         ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
-        history.push("/Cronograma");
+        history.push("/Administrador/cronograma");
       })
       .catch(function (error) {
         console.error(error);
@@ -156,12 +170,56 @@ export const CronogramaActividades = () => {
     return setActividades(todoJSON);
   };
 
+  const backComponente = () => {
+    history.push("/Administrador/infoConvocatorias");
+  };
+
   return (
     <>
+      <Grid className="no-margin">
+        <Grid.Column className="background-color-6DA3FC no-margin no-padding-top no-padding-bottom">
+          <Breadcrumb style={{ paddingLeft: "4%" }}>
+            <Breadcrumb.Section>
+              <Icon name="home" className="font-color-FFFFFF" size="small" />
+            </Breadcrumb.Section>
+            <Breadcrumb.Divider className="font-color-FFFFFF font-size-8px">/</Breadcrumb.Divider>
+            <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
+              Crear convocatoria
+            </Breadcrumb.Section>
+          </Breadcrumb>
+        </Grid.Column>
+      </Grid>
+      <Grid className="no-margin">
+        <Grid.Column
+          className="background-color-6DA3FC-opacity-025 no-margin"
+          style={{ display: "flex", justifyContent: "flex-end", paddingTop: "2% !important" }}
+        >
+          <span className="font-color-1B1C1D font-size-14px">Crear convocatoria :</span>
+          <Dropdown
+            text={<span className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</span>}
+            icon={
+              <Icon style={{ float: "right", paddingLeft: "5%" }} className="font-color-1FAEEF" name="angle down" />
+            }
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Información General
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Doc. Administrativos
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. Técnicos</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. General</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Públicación</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Grid.Column>
+      </Grid>
       <Grid style={{ height: "100vh", width: "100%", margin: 0 }}>
-        <Grid.Column style={{ maxWidth: "100%" }}>
+        <Grid.Column style={{ maxWidth: "100%", padding: '2%' }}>
           <Form size="large" onSubmit={handelGuardarActiviadesConvocatorias} clasname="formulario">
-            <Segment className="segment-shadow">
+            <Segment className="segment-shadow" style={{ paddingLeft: '3%', paddingRight: '3%' }}>
               <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
                 <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
                   Codigo de convocatoria {idConvocatoria}
@@ -191,7 +249,7 @@ export const CronogramaActividades = () => {
                     <Header as="h4" floated="right">
                       <Form.Checkbox
                         onChange={seleccionarTodo}
-                        label={<label className="font-color-4B4B4B font-size-13px">Seleccionar Todo</label>}
+                        label={<label className="font-color-4B4B4B font-size-13px font-weight-600">Seleccionar todo</label>}
                         name="dinamico"
                       />
                     </Header>
@@ -200,12 +258,12 @@ export const CronogramaActividades = () => {
               </Grid>
 
               <Segment className="container_checks">
-                <Grid columns={2}>
+                <Grid columns={2} style={{ paddingTop: '1%' }}>
                   {actividades.length > 0
                     ? actividades.map((actividad, index) => (
-                        <Grid.Column key={index}>
+                        <Grid.Column className="checkbox-padding" key={index}>
                           <Checkbox
-                            label={actividad.nombre}
+                            label={<label className="font-color-4B4B4B font-family-Work-Sans font-size-12px font-weight-normal">{actividad.nombre}</label>}
                             key={actividad.key}
                             value={actividad.idactividad}
                             name={actividad.nombre}
@@ -226,11 +284,18 @@ export const CronogramaActividades = () => {
               ) : null}
 
               <Container textAlign="right">
-                <Button content="Guardar y continuar" className="btn btn-disable" />
+                <Button content="Guardar y continuar" className="btn btn-disable font-color-B0B0B0 background-color-E0E1E2" />
               </Container>
             </Segment>
           </Form>
         </Grid.Column>
+      </Grid>
+      <Grid columns={1} className="container-absolute">
+        <Grid.Row>
+          <Button className="font-size-12px button-back" onClick={backComponente}>
+            Atrás
+          </Button>
+        </Grid.Row>
       </Grid>
     </>
   );

@@ -71,6 +71,14 @@
   src: url("../../assets/Fonts/WorkSans-Regular.ttf");
 }
 
+.font-weight-600 {
+  font-weight: 600 !important;
+}
+
+.font-color-FFFFFF {
+  color: #ffffff !important;
+}
+
 .font-color-632264 {
   color: #632264 !important;
 }
@@ -92,11 +100,11 @@
 }
 
 .font-color-B0B0B0 {
-  color: #B0B0B0 !important;
+  color: #b0b0b0 !important;
 }
 
 .font-color-1B1C1D {
-  color: #1B1C1D !important;
+  color: #1b1c1d !important;
 }
 
 .font-color-454545 {
@@ -105,6 +113,22 @@
 
 .font-color-707070 {
   color: #707070 !important;
+}
+
+.font-color-1FAEEF {
+  color: #1faeef !important;
+}
+
+.font-color-FF8900 {
+  color: #ff8900 !important;
+}
+
+.font-color-7E7E7E {
+  color: #7e7e7e !important;
+}
+
+.font-color-8796A5 {
+  color: #8796A5 !important;
 }
 
 .font-size-14px {
@@ -125,6 +149,10 @@
 
 .font-size-9px {
   font-size: 9px !important;
+}
+
+.font-size-8px {
+  font-size: 8px !important;
 }
 
 .font-family-Montserrat-Thin {
@@ -167,4 +195,50 @@
 
 * {
   font-family: "Montserrat-SemiBold";
+}
+
+.background-color-6DA3FC {
+  background-color: #6da3fc !important;
+}
+
+.background-color-E0E1E2 {
+  background-color: #e0e1e2 !important;
+}
+
+.background-color-FFFFFF {
+  background-color: #ffffff !important;
+}
+
+.background-color-6DA3FC-opacity-025 {
+  background-color: rgba(109, 163, 252, 0.25) !important;
+}
+
+.background-color-F5FAFC {
+  background-color: #F5FAFC !important;
+}
+
+.border-radius-16 {
+  border-radius: 16px !important;
+}
+
+input:checked ~ label:after {
+  color: #1faeef !important;
+  // background-color: #1FAEEF !important;
+}
+
+.font-weight-normal {
+  font-weight: normal !important;
+}
+
+.border-right-left-none {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+.line-height-0 {
+  line-height: 0px !important;
+}
+
+.border-bottom-none {
+  border-bottom: none !important;
 }
