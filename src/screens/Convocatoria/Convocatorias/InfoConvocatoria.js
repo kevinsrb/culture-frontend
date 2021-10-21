@@ -435,7 +435,7 @@ export function InfoConvocatoria() {
         });
         setCategoriasLineaconvocatoria(categoriaslineasconvocatoriaMap);
       })
-      .catch(function (error) {});
+      .catch(function (error) { });
   };
 
   const handletoggleChange = (event, result) => {
@@ -712,17 +712,17 @@ export function InfoConvocatoria() {
                 />
               </Form.Group>
 
-              <Divider clearing />
+              {/* <Divider clearing /> */}
 
-              <Grid columns={1}>
-                <Grid.Row>
-                  <Grid.Column>
+              <Grid columns={2}>
+                <Grid.Row >
+                  <Grid.Column width={3}>
                     <label>
                       ¿Es convenio?&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
                     </label>
-                    <Grid>
+                    <Grid columns={1}>
                       <Grid.Row>
-                        <Grid.Column>
+                        <Form.Group style={{ marginLeft: '10px' }}>
                           <Form.Checkbox
                             className="font-color-4B4B4B"
                             radio
@@ -732,8 +732,6 @@ export function InfoConvocatoria() {
                             checked={convocatoria.conveniosi}
                             onChange={handletoggleChange}
                           />
-                        </Grid.Column>
-                        <Grid.Column style={{ paddingLeft: "0%" }}>
                           <Form.Checkbox
                             className="font-color-4B4B4B"
                             radio
@@ -743,22 +741,15 @@ export function InfoConvocatoria() {
                             checked={convocatoria.conveniono}
                             onChange={handletoggleChange}
                           />
-                        </Grid.Column>
+                        </Form.Group>
                       </Grid.Row>
                     </Grid>
                   </Grid.Column>
-                </Grid.Row>
-              </Grid>
-
-              <Divider clearing />
-
-              <Grid columns={1}>
-                <Grid.Row>
-                  <Grid.Column>
+                  <Grid.Column style={{marginLeft: '100px'}}>
                     <label>¿Mayor de edad?</label>
-                    <Grid>
-                      <Grid.Row>
-                        <Grid.Column>
+                    <Grid columns={1} >
+                      <Grid.Row style={{ marginLeft: '15px' }}>
+                        <Form.Group>
                           <Form.Checkbox
                             className="font-color-4B4B4B"
                             radio
@@ -768,8 +759,6 @@ export function InfoConvocatoria() {
                             checked={convocatoria.mayoredadsi}
                             onChange={handletoggleChange}
                           />
-                        </Grid.Column>
-                        <Grid.Column style={{ paddingLeft: "0%" }}>
                           <Form.Checkbox
                             className="font-color-4B4B4B"
                             radio
@@ -779,7 +768,8 @@ export function InfoConvocatoria() {
                             checked={convocatoria.mayoredadno}
                             onChange={handletoggleChange}
                           />
-                        </Grid.Column>
+                        </Form.Group>
+
                       </Grid.Row>
                     </Grid>
                   </Grid.Column>
@@ -787,6 +777,7 @@ export function InfoConvocatoria() {
               </Grid>
 
               <Divider clearing />
+
 
               <Grid columns={4}>
                 <Grid.Row>
