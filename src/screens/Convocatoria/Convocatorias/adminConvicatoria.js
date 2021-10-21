@@ -450,7 +450,7 @@ export const AdminConvocatorias = () => {
                           </Table.Cell>
                           <Table.Cell style={{ display: "flex", width: "140px", lineHeight: "20px" }} className="no-padding-top">
                             <Grid className="no-margin">
-                              <Grid.Column width={8} style={{ paddingTop: "0" }}>
+                              <Grid.Column width={8} style={{ paddingTop: "0", paddingLeft: '0' }}>
                                 <Form.Checkbox
                                   className="font-color-4B4B4B"
                                   radio

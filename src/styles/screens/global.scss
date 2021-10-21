@@ -91,6 +91,10 @@
   color: #db2828 !important;
 }
 
+.font-color-9F0505 {
+  color: #9F0505 !important;
+}
+
 .font-color-4B4B4B {
   color: #4b4b4b !important;
 }
@@ -129,6 +133,14 @@
 
 .font-color-8796A5 {
   color: #8796A5 !important;
+}
+
+.font-color-000000CC {
+  color: #000000CC !important;
+}
+
+.font-size-18px {
+  font-size: 18px !important;
 }
 
 .font-size-14px {
@@ -209,6 +221,10 @@
   background-color: #ffffff !important;
 }
 
+.background-color-1FAEEF {
+  background-color: #1FAEEF !important;
+}
+
 .background-color-6DA3FC-opacity-025 {
   background-color: rgba(109, 163, 252, 0.25) !important;
 }
@@ -235,10 +251,27 @@ input:checked ~ label:after {
   border-left: none !important;
 }
 
+.border-bottom-none {
+  border-bottom: none !important;
+}
+
+.border-top-none {
+  border-top: none !important;
+}
+
 .line-height-0 {
   line-height: 0px !important;
 }
 
 .border-bottom-none {
   border-bottom: none !important;
+}
+
+.justify-content-flex-end {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
+
+.display-flex {
+  display: flex !important;
 }
