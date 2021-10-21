@@ -5,7 +5,17 @@
 }
 
 .select-registros-adminconvocatoria {
-  flex: 0.1;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  text-align: center;
+  border-radius: 4px;
+  flex: 0.2;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  padding-left: 2% !important;
+  padding-right: 2% !important;
+  height: 25px !important;
+  justify-content: center;
+  align-items: center;
 }
 
 .celda-estatica-adminconvocatoria {
@@ -183,5 +193,19 @@
 }
 
 tr:nth-child(2n) {
-  background-color: #F0F6FB !important;
+  background-color: #f0f6fb !important;
+}
+
+.ui.dropdown > .text {
+  font-family: "Work-Sans-Regular";
+}
+
+.item span {
+  font-family: "Work-Sans-Regular";
+  // font-size: 12px;
+  margin-left: 0;
+}
+
+.ui.radio.checkbox label:after {
+  background-color: #1FAEEF !important;
 }

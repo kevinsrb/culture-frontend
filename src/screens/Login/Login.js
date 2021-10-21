@@ -84,7 +84,7 @@ export default function Login() {
       localStorage.setItem("token", token.data);
 
       dispatch(user_token(token.data));
-      history.push('/homeParticipantes');
+      history.push('/Administrador');
 
     } catch (error) {
       console.error(error);

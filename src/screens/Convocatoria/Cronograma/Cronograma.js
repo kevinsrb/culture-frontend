@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
-import { ObjConstanst } from "../../../config/utils/constanst";
 
 import {
   Segment,
@@ -14,11 +13,12 @@ import {
   Form,
   Select,
   Input,
-  Checkbox,
   Icon,
   Divider,
   Container,
   Label,
+  Breadcrumb,
+  Dropdown,
 } from "semantic-ui-react";
 import es from "date-fns/locale/es";
 import styled from "@emotion/styled";
@@ -37,14 +37,6 @@ import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/con
 registerLocale("es", es);
 
 var conteoFechas = 0;
-
-const options = [
-  { key: 1, value: 1, text: "Observaciones a los lineamientos" },
-  { key: 2, value: 2, text: "Observaciones al informe final de verificación de documentos" },
-  { key: 3, value: 3, text: "Informe evaluación" },
-  { key: 4, value: 4, text: "Cierre" },
-  { key: 5, value: 5, text: "Observaciones al informe de evaluación" },
-];
 
 export const StyleWrapper = styled.div`
   .fc-button.fc-button-primary {
@@ -74,7 +66,7 @@ export const StyleWrapper = styled.div`
     padding-right: 18%;
   }
   .fc-toolbar-title {
-    font-family: ""
+    font-family: "Montserrat-Regular";
     text-transform: capitalize;
     font-weight: normal;
     font-size: 22px;
@@ -88,7 +80,7 @@ export const StyleWrapper = styled.div`
   .fc-col-header-cell.fc-day.fc-day-fri,
   .fc-col-header-cell.fc-day.fc-day-sat {
     background: #632264;
-    border-right: 1px solid #632264;
+    border: 1px solid #632264;
   }
   .fc-col-header-cell-cushion {
     color: white;
@@ -118,8 +110,16 @@ export const StyleWrapper = styled.div`
   }
   .fc-today-button {
     border-radius: 19px;
-    padding-left: 7% !important;
-    padding-right: 7% !important;
+    padding-left: 20% !important;
+    padding-right: 20% !important;
+  }
+  .fc-toolbar-chunk:nth-child(2) {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .fc-daygrid-day-frame {
+    background-color: #FFFFFF;
   }
 `;
 
@@ -252,14 +252,14 @@ export const Cronograma = () => {
     if (actividad.text.trim() === "") {
       return setErrorState({ actividad: true });
     }
-    if (actividad.text.trim() === 'Apertura') {
-      setPrincipalError({...principalError, apertura: false})
+    if (actividad.text.trim() === "Apertura") {
+      setPrincipalError({ ...principalError, apertura: false });
     }
-    if (actividad.text.trim() === 'Cierre') {
-      setPrincipalError({...principalError, cierre: false})
+    if (actividad.text.trim() === "Cierre") {
+      setPrincipalError({ ...principalError, cierre: false });
     }
-    if (actividad.text.trim() === 'Resolución de otorgamiento') {
-      setPrincipalError({...principalError, otorgamiento: false})
+    if (actividad.text.trim() === "Resolución de otorgamiento") {
+      setPrincipalError({ ...principalError, otorgamiento: false });
     }
     calendarApi.unselect();
     setOpen(false);
@@ -284,7 +284,7 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    conteoFechas= 0;
+    conteoFechas = 0;
     let calendaroptions = CalendarRef.current.getApi();
     let events = calendaroptions.getEvents();
     console.log(events);
@@ -299,21 +299,21 @@ export const Cronograma = () => {
       arrayErrores = {
         ...arrayErrores,
         apertura: true,
-      }
+      };
     }
     if (cierre.length === 0) {
       error = true;
       arrayErrores = {
         ...arrayErrores,
         cierre: true,
-      }
+      };
     }
     if (otorgamiento.length === 0) {
       error = true;
       arrayErrores = {
         ...arrayErrores,
         otorgamiento: true,
-      }
+      };
     }
     if (error) {
       return setPrincipalError(arrayErrores);
@@ -329,7 +329,7 @@ export const Cronograma = () => {
     let events = calendaroptions.getEvents();
     if (events.length === 0) return;
     console.log(events, eventosCalendario, "estos son los eventos");
-    console.log(conteoFechas, 'conteo de fechas', events[conteoFechas]);
+    console.log(conteoFechas, "conteo de fechas", events[conteoFechas]);
     if (events[conteoFechas]) {
       try {
         console.log("grabe", events[conteoFechas]);
@@ -346,7 +346,7 @@ export const Cronograma = () => {
       }
     }
     await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado las actividades al cronograma");
-    return history.push("/documentos");
+    return history.push("/Administrador/documentos");
   };
 
   const handelCargarActividadesSeleccionadas = async () => {
@@ -402,76 +402,120 @@ export const Cronograma = () => {
     dispatch(edicionConvocatoria(true));
     console.log(idConvocatoria);
     dispatch(idConvocatorias(idConvocatoria));
-    return history.push("/infoconvocatorias");
+    return history.push("/Administrador/infoconvocatorias");
   };
 
   return (
-    <div style={{ padding: "2%" }}>
-      <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }} className="segment-shadow">
-        <Header
-          as="h4"
-          className="font-size-14px font-color-1B1C1D font-family-Montserrat-SemiBold"
-          style={{ marginBottom: "0.5%" }}
-          floated="left"
+    <div>
+      <Grid className="no-margin">
+        <Grid.Column className="background-color-6DA3FC no-margin no-padding-top no-padding-bottom">
+          <Breadcrumb style={{ paddingLeft: "4%" }}>
+            <Breadcrumb.Section>
+              <Icon name="home" className="font-color-FFFFFF" size="small" />
+            </Breadcrumb.Section>
+            <Breadcrumb.Divider className="font-color-FFFFFF font-size-8px">/</Breadcrumb.Divider>
+            <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
+              Crear convocatoria
+            </Breadcrumb.Section>
+          </Breadcrumb>
+        </Grid.Column>
+      </Grid>
+      <Grid className="no-margin">
+        <Grid.Column
+          className="background-color-6DA3FC-opacity-025 no-margin"
+          style={{ display: "flex", justifyContent: "flex-end", paddingTop: "2% !important" }}
         >
-          Cronograma
-        </Header>
-        <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
-          <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
-            Codigo de convocatoria {idConvocatoria}
-          </span>
-        </Header>
+          <span className="font-color-1B1C1D font-size-14px">Crear convocatoria :</span>
+          <Dropdown
+            text={<span className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</span>}
+            icon={
+              <Icon style={{ float: "right", paddingLeft: "5%" }} className="font-color-1FAEEF" name="angle down" />
+            }
+          >
+            <Dropdown.Menu>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Información General
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
+                Doc. Administrativos
+              </Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. Técnicos</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. General</Dropdown.Item>
+              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Públicación</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Grid.Column>
+      </Grid>
+      <Grid className="no-margin">
+        <Grid.Column style={{ padding: "2%", marginBottom: '8%' }}>
+          <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }} className="segment-shadow">
+            <Header
+              as="h4"
+              className="font-size-14px font-color-1B1C1D font-family-Montserrat-SemiBold"
+              style={{ marginBottom: "0.5%" }}
+              floated="left"
+            >
+              Cronograma
+            </Header>
+            <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
+              <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
+                Codigo de convocatoria {idConvocatoria}
+              </span>
+            </Header>
 
-        <Divider clearing style={{ marginTop: "0", marginBottom: "0%" }} />
+            <Divider clearing style={{ marginTop: "0", marginBottom: "0%" }} />
 
-        <StyleWrapper style={{ padding: "1%" }}>
-          <FullCalendar
-            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
-            initialView="dayGridMonth"
-            weekends={true}
-            droppable={true}
-            locale="es"
-            height={450}
-            headerToolbar={{
-              start: "timeGridDay,timeGridWeek,dayGridMonth",
-              center: "title",
-              end: "prev,next today",
-            }}
-            buttonText={{
-              today: "Hoy",
-              month: "Mes",
-              week: "Semana",
-              day: "Día",
-            }}
-            dateClick={(info) => {
-              setFechainicioaño(moment(info.date).format("YYYY"));
-              setFechainiciomes(moment(info.date).format("MM"));
-              setFechainiciodia(moment(info.date).format("DD"));
-              return setOpen(true);
-            }}
-            events={eventosCalendario}
-            eventColor="#1FAEEF"
-            ref={CalendarRef}
-          />
-        </StyleWrapper>
-        <Container textAlign="right">
-          {principalError.apertura ? <Label color="red">Falta seleccionar la Apertura</Label> : null}
-          {principalError.cierre ? <Label color="red">Falta seleccionar el Cierre</Label> : null}
-          {principalError.otorgamiento ? (
-            <Label color="red">Falta seleccionar la Resolución de otorgamiento</Label>
-          ) : null}
-          {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
+            <StyleWrapper style={{ padding: "1%" }}>
+              <FullCalendar
+                plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+                initialView="dayGridMonth"
+                weekends={true}
+                droppable={true}
+                locale="es"
+                height={895}
+                headerToolbar={{
+                  start: "timeGridDay,timeGridWeek,dayGridMonth",
+                  center: "title",
+                  end: "prev,next today",
+                }}
+                buttonText={{
+                  today: "Hoy",
+                  month: "Mes",
+                  week: "Semana",
+                  day: "Día",
+                }}
+                dateClick={(info) => {
+                  setFechainicioaño(moment(info.date).format("YYYY"));
+                  setFechainiciomes(moment(info.date).format("MM"));
+                  setFechainiciodia(moment(info.date).format("DD"));
+                  return setOpen(true);
+                }}
+                events={eventosCalendario}
+                eventColor="#1FAEEF"
+                ref={CalendarRef}
+              />
+            </StyleWrapper>
+            <Container textAlign="right">
+              {principalError.apertura ? <Label color="red">Falta seleccionar la Apertura</Label> : null}
+              {principalError.cierre ? <Label color="red">Falta seleccionar el Cierre</Label> : null}
+              {principalError.otorgamiento ? (
+                <Label color="red">Falta seleccionar la Resolución de otorgamiento</Label>
+              ) : null}
+              {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
             Atras
           </Button> */}
-          <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
-            Guardar y continuar
-          </Button>
-        </Container>
-      </Segment>
+              <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
+                Guardar y continuar
+              </Button>
+            </Container>
+          </Segment>
+        </Grid.Column>
+      </Grid>
       <Grid columns={1} className="container-absolute">
         <Grid.Row>
           <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>
-            Atras
+            Atrás
           </Button>
         </Grid.Row>
       </Grid>

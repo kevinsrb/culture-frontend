@@ -59,20 +59,26 @@
 }
 
 .segment-shadow {
-  box-shadow: 0px 0px 6px #0000004d !important;
+  box-shadow: 0px 3px 10px #00000029 !important;
+  border-radius: 10px !important;
 }
 
 .container-absolute {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   width: 100%;
   height: 56px;
   position: fixed;
   bottom: 9px;
-  border-top: 1px solid #AAAAAA;
+  border-top: 1px solid #aaaaaa;
   flex-wrap: nowrap !important;
   align-items: center !important;
+  z-index: 2;
 }
 
 .button-back {
   margin-left: 2% !important;
+  border-radius: 16px !important;
+  border: 1px solid #1faeef !important;
+  background-color: transparent !important;
+  color: #1faeef !important;
 }
