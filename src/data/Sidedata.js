@@ -61,7 +61,7 @@ export const SidebarData = [
   
   {
     title: 'Convocatorias',
-    path: '/bucarConvocatoria',
+    path: '/Administrador/bucarConvocatoria',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   }  

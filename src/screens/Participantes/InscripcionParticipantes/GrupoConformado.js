@@ -52,7 +52,7 @@ export const GrupoConformado = () => {
     //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
     // });
     ObjNotificaciones.MSG_SUCCESS("success", "se ha creado correctamente el grupo conformado");
-    history.push("/homeParticipantes");
+    history.push("/Administrador/homeParticipantes");
   };
 
   const handleInputChange = (event, result) => {

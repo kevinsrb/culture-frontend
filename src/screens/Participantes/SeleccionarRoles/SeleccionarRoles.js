@@ -15,12 +15,12 @@ export const SeleccionarRoles = () => {
   const history = useHistory();
 
   const asociarRoles = () => {
-    if (principalState == "persona_natural") {
-      history.push("/personaNatural");
-    } else if (principalState == "persona_juridica") {
-      history.push("/personaJuridica");
-    } else {
-      history.push("/grupoConformado");
+    if(principalState == 'persona_natural'){
+      history.push('/Administrador/personaNatural')
+    }else if(principalState == 'persona_juridica'){
+      history.push('/Administrador/personaJuridica')
+    }else{
+      history.push('/Administrador/grupoConformado')
     }
   };
 

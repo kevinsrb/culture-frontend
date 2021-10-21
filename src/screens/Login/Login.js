@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { user_token } from "../../store/actions/userAction";
@@ -6,6 +6,7 @@ import axios from "axios";
 import { Form, Image, Header, Input, Checkbox, Button, Grid, Divider } from "semantic-ui-react";
 import loginimage from "../../assets/login.png";
 import logo from "../../assets/escudoAlcaldia.png";
+import { id_Participante } from "../../store/actions/participantesAction";
 
 export default function Login() {
   const history = useHistory();
@@ -34,6 +35,7 @@ export default function Login() {
   const [principalState, setPrincipalState] = React.useState(initialState);
   const [errorState, setErrorState] = React.useState(initialerrorState);
   const [borderState, setBoderState] = React.useState(initialBorderState);
+  const [isLoginFailed, setIsLoginFailed] = useState(false);
 
   const onChangeInput = (e) => {
     setBoderState({ ...borderState, [e.target.name]: "border-color-707070" });
@@ -83,8 +85,10 @@ export default function Login() {
         contraseña,
       });
       console.log(token)
-      // localStorage.setItem("token", token.data);
 
+      localStorage.setItem("token", token.data);
+      localStorage.setItem("userLogeado", idusuario);
+      dispatch(id_Participante(idusuario))
       dispatch(user_token(token.data));
 
       if (user.id_tipo === 'ADMI') {
@@ -94,6 +98,7 @@ export default function Login() {
       return history.push('/Administrador');
 
     } catch (error) {
+      setIsLoginFailed(true);
       console.error(error);
     }
   };
@@ -169,6 +174,13 @@ export default function Login() {
                   className="sub-container-checkbox-login checkbox-login font-family-Montserrat-Regular font-size-12px"
                 />
               </Form.Field>
+
+              {isLoginFailed &&
+                <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
+                  Identificación o contraseña incorrectos
+                </Header>
+              }
+
               <Form.Field className="container-space-between" style={{ paddingTop: "10%", paddingBottom: "10%" }}>
                 <Button
                   basic

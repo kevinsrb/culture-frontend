@@ -1,0 +1,22 @@
+.cards_container{
+    width: 48% !important;
+}
+
+
+.container_botones{
+    display: inline-block;
+    align-items: center;
+    margin-top: 20px !important;
+    width: 90% !important;
+}
+
+.plantilla{
+    margin-top: 10px !important;
+    color: $naranja !important;
+    cursor: pointer;
+}
+
+.card_archivo_subido{
+    background-color: #00904C !important;
+    opacity: 90%;
+}
