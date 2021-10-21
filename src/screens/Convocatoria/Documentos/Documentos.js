@@ -503,14 +503,14 @@ export const Documentos = () => {
                             />
                           )}
                           {doc.url_documento !== "" && (
-                            <Grid>
+                            <Grid columns={1} centered>
                               <span className="nombreArchivo">{doc.url_documento}</span>
-                              <Header
+                              <span
                                 onClick={() => eliminarArchivo(doc)}
                                 className="font-size-10px font-color-AD0808 no-margin"
                               >
                                 Eliminar
-                              </Header>
+                              </span>
                             </Grid>
                           )}
                           <input className="inputs-ref" type="file" hidden onChange={(e) => saveFile(e, doc)} />
