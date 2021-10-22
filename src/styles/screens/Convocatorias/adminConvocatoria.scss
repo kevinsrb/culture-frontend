@@ -80,26 +80,33 @@
 //   top: 0;
 // }
 
-.table-adminconvocatorias-scrollable tbody tr td {
-  white-space: nowrap;
-}
+// .table-adminconvocatorias-scrollable tbody tr td {
+//   white-space: nowrap;
+// }
 
-.table-adminconvocatorias-scrollable thead th {
-  white-space: nowrap;
-}
+// .table-adminconvocatorias-scrollable thead th {
+//   white-space: nowrap;
+// }
 
-.table-adminconvocatorias-scrollable tr {
-  line-height: 12px;
-}
+// .table-adminconvocatorias-scrollable tr {
+//   line-height: 12px;
+// }
 
-.container-scroll {
-  width: 200px;
-  overflow-x: scroll;
-}
+// .container-scroll {
+//   width: 200px;
+//   overflow-x: scroll;
+// }
 
-.container-pagination-adminconvocatorias {
-  display: flex !important;
-  justify-content: flex-end !important;
+// .container-pagination-adminconvocatorias {
+//   display: flex !important;
+//   justify-content: flex-end !important;
+// }
+
+.ant-table-thead tr {
+  background-color: #ffffff !important;
+  border-bottom: none !important;
+  border-right: none !important;
+  border-left: none !important;
 }
 
 .container-grid-filtros {
@@ -208,4 +215,20 @@ tr:nth-child(2n) {
 
 .ui.radio.checkbox label:after {
   background-color: #1FAEEF !important;
+}
+
+
+.sizeTable {
+  max-width: 1500px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.titleAcciones {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 3px;
 }
