@@ -14,13 +14,14 @@ import {
   Input,
   Checkbox,
   Icon,
-  Table,
   Pagination,
   Divider,
   Select,
   Dropdown,
   Breadcrumb,
 } from "semantic-ui-react";
+import { Table } from 'antd'
+
 import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../../data/selectOption.data";
 
 const cantidadRegistros = [
@@ -38,7 +39,148 @@ const tiposidentificacion = [
   { key: 1, value: 1, text: "Grupo conformado" },
 ];
 
+
+
 export const AdminConvocatorias = () => {
+
+  const columns = [
+    {
+      title: 'No.',
+      width: 60,
+      dataIndex: 'idconvocatorias',
+      key: 'idconvocatorias',
+      fixed: 'left'
+    },
+    {
+      title: 'numero_convocatoria',
+      width: 250,
+      dataIndex: 'numero_convocatoria',
+      key: 'name',
+      fixed: 'left',
+    },
+    {
+      title: 'Codigo',
+      width: 100,
+      dataIndex: 'codigo',
+      key: 'codigo'
+    },
+    {
+      title: 'Fecha',
+      width: 150,
+      dataIndex: 'fecha_creacion',
+      key: 'fecha_creacion'
+    },
+    {
+      title: 'Estado',
+      width: 140,
+      dataIndex: 'estado',
+      key: 'estado'
+    },
+    {
+      title: () => 'Publicada',
+      width: 150,
+      key: 'publicada',
+      render: (datos, index) => (
+        <Form>
+          <Form.Group>
+            <Form.Checkbox
+              // className="font-color-4B4B4B"
+              radio
+              label="Si"
+              name="publicosi"
+              value={datos.publicosi}
+              checked={datos.publicosi}
+              onChange={(e, r) => handletoggleChange(datos, index, e, r)}
+            />
+
+            <Form.Checkbox
+              // className="font-color-4B4B4B"
+              radio
+              label="No"
+              name="publicono"
+              value={datos.publicono}
+              checked={datos.publicono}
+              onChange={(e, r) => handletoggleChange(datos, index, e, r)}
+            />
+          </Form.Group>
+        </Form>
+      )
+    },
+    {
+      title: 'Entidad',
+      width: 150,
+      dataIndex: 'entidad',
+      key: 'entidad'
+    },
+    {
+      title: 'Linea estratégica',
+      width: 169,
+      dataIndex: 'linea_estrategica',
+      key: 'linea_estrategica'
+    },
+    {
+      title: 'Creado por',
+      width: 169,
+      dataIndex: 'usuario_creacion',
+      key: 'usuario_creacion',
+    },
+    {
+      title: () => (
+        <div>
+          <div className="titleAcciones">
+            Acciones
+          </div>
+          <div className="controls">
+            <div className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070">
+              Ver
+            </div>
+            <div className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070">
+              Editar
+            </div>
+            <div className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070">
+              Borrar
+            </div>
+          </div>
+        </div>
+      ),
+      width: 200,
+      key: 'operations',
+      fixed: 'right',
+      render: (datos) => (
+        <div className="controls">
+          <Button className="botones-acciones" icon="eye" />
+          <Dropdown icon="pencil">
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={(e) => abrirEditar("infoconvocatorias", datos)}>
+                Información General
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => abrirEditar("cronograma", datos)}>
+                Cronograma
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => abrirEditar("documentos", datos)}>
+                Doc. Administrativos
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => abrirEditar("documentacionTecnica", datos)}>
+                Doc. Técnicos
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => abrirEditar("documentacionConvocatoria", datos)}>
+                Doc. General
+              </Dropdown.Item>
+              <Dropdown.Item onClick={(e) => abrirEditar("publicarConvocatoria", datos)}>
+                Públicación
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+          <Button
+            className="botones-acciones boton-borrar-adminconvocatorias"
+            icon="trash alternate outline"
+            onClick={(e) => abrirmodalEliminar(e, datos)}
+          />
+        </div>
+      )
+    }
+  ];
+
   const history = useHistory();
   const dispatch = useDispatch();
   // const { user } = useSelector((state) => state);
@@ -203,7 +345,7 @@ export const AdminConvocatorias = () => {
         dispatch(edicionConvocatoria(undefined));
         history.push("/Administrador/infoconvocatorias");
       })
-      .catch(function (error) {});
+      .catch(function (error) { });
   };
 
   const filtrarTablaMultiple = (data) => {
@@ -369,215 +511,11 @@ export const AdminConvocatorias = () => {
               </Grid.Row>
             </Grid>
           ) : null}
-          <Grid>
-            <Grid.Row className="container-scrollable-adminconvocatorias">
-              <Grid.Column
-                width={5}
-                className="no-padding-left no-padding-rigth container-primeratabla-adminconvocatorias"
-              >
-                <Table striped singleLine className="table-adminconvocatorias-fixed table-header-tabla font-size-12px">
-                  <Table.Header>
-                    <Table.HeaderCell rowSpan="2" className="table-header-tabla">
-                      No.
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                      rowSpan="2"
-                      style={{ width: "300px", lineHeight: "30px" }}
-                      className="table-header-tabla"
-                    >
-                      Nombre
-                    </Table.HeaderCell>
-                  </Table.Header>
-                  <Table.Body>
-                    {datosActuales.length > 0 ? (
-                      datosActuales.map((datos, index) => (
-                        <Table.Row>
-                          <Table.Cell className="font-family-Work-Sans">{datos.idconvocatorias}</Table.Cell>
-                          <Table.Cell
-                            style={{
-                              maxWidth: "250px",
-                              lineHeight: "20px",
-                            }}
-                            className="font-family-Work-Sans"
-                          >
-                            {datos.numero_convocatoria}
-                          </Table.Cell>
-                        </Table.Row>
-                      ))
-                    ) : (
-                      <Table.Row>
-                        <Table.Cell>No hay datos por mostrar</Table.Cell>
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-              <Grid.Column className="container-scroll no-padding-left no-padding-rigth" width={8}>
-                <Table
-                  className="table-adminconvocatorias-scrollable table-header-tabla font-size-12px"
-                  striped
-                  singleLine
-                >
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell style={{ "line-height": "30px" }} className="table-header-tabla">
-                        Codigo
-                      </Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla">Fecha inicio</Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla">Estado</Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla">Publicada</Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla">Entidad</Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla">Linea estratégica</Table.HeaderCell>
-                      <Table.HeaderCell className="table-header-tabla">Creado por</Table.HeaderCell>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {datosActuales.length > 0 ? (
-                      datosActuales.map((datos, index) => (
-                        <Table.Row>
-                          <Table.Cell style={{ lineHeight: "20px" }} className="font-family-Work-Sans no-padding-top" width={1}>
-                            {datos.codigo}
-                          </Table.Cell>
-                          <Table.Cell style={{ lineHeight: "20px" }} className="font-family-Work-Sans no-padding-top" width={1}>
-                            {datos.fecha_creacion}
-                          </Table.Cell>
-                          <Table.Cell
-                            className="font-family-Work-Sans no-padding-top"
-                            width={1}
-                            style={{ color: coloresEstado[datos.estado], lineHeight: "20px" }}
-                          >
-                            {datos.estado}
-                          </Table.Cell>
-                          <Table.Cell style={{ display: "flex", width: "140px", lineHeight: "20px" }} className="no-padding-top">
-                            <Grid className="no-margin">
-                              <Grid.Column width={8} style={{ paddingTop: "0" }}>
-                                <Form.Checkbox
-                                  className="font-color-4B4B4B"
-                                  radio
-                                  label="Si"
-                                  name="publicosi"
-                                  value={datos.publicosi}
-                                  checked={datos.publicosi}
-                                  onChange={(e,r) => handletoggleChange(datos, index, e, r)}
-                                />
-                              </Grid.Column>
-                              <Grid.Column width={8} style={{ paddingTop: "0", paddingLeft: "0" }}>
-                                <Form.Checkbox
-                                  className="font-color-4B4B4B"
-                                  radio
-                                  label="No"
-                                  name="publicono"
-                                  value={datos.publicono}
-                                  checked={datos.publicono}
-                                  onChange={(e, r) => handletoggleChange(datos, index, e, r)}
-                                />
-                              </Grid.Column>
-                            </Grid>
-                            {/* <Checkbox
-                              toggle
-                              name="publico"
-                              checked={datos.publico}
-                              onChange={() => handletoggleChange(datos, index)}
-                            /> */}
-                          </Table.Cell>
-                          <Table.Cell style={{ lineHeight: "20px" }} className="font-family-Work-Sans no-padding-top" width={1}>
-                            {datos.entidad}
-                          </Table.Cell>
-                          <Table.Cell style={{ lineHeight: "20px" }} className="font-family-Work-Sans no-padding-top" width={2}>
-                            {datos.linea_estrategica}
-                          </Table.Cell>
-                          <Table.Cell style={{ lineHeight: "20px" }} className="font-family-Work-Sans no-padding-top" width={1}>
-                            {datos.usuario_creacion}
-                          </Table.Cell>
-                        </Table.Row>
-                      ))
-                    ) : (
-                      <Table.Row>
-                        <Table.Cell style={{ "line-height": "26px" }}>No hay datos por mostrar</Table.Cell>
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-              <Grid.Column width={3} className="no-padding-left no-padding-rigth">
-                <Table
-                  className="table-adminconvocatorias-fixed table-header-tabla table-header-tabla font-size-12px"
-                  striped
-                  singleLine
-                >
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.HeaderCell
-                        style={{ lineHeight: "0px" }}
-                        className="table-header-tabla"
-                        textAlign="center"
-                        colSpan="3"
-                      >
-                        Acciones
-                      </Table.HeaderCell>
-                    </Table.Row>
-                    <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070" textAlign="center">
-                      Ver
-                    </Table.HeaderCell>
-                    <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070" textAlign="center">
-                      Editar
-                    </Table.HeaderCell>
-                    <Table.HeaderCell className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070" textAlign="center">
-                      Borrar
-                    </Table.HeaderCell>
-                  </Table.Header>
-                  <Table.Body>
-                    {datosActuales.length > 0 ? (
-                      datosActuales.map((datos) => (
-                        <Table.Row key={datos.idconvocatorias}>
-                          <Table.Cell textAlign="center">
-                            <Button className="botones-acciones" icon="eye" />
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            {/* <Dropdown icon={{ name:'remove', onClick: (e) => abrirEditar(e, datos)}}  options={} /> */}
-                            <Dropdown icon="pencil">
-                              <Dropdown.Menu>
-                                <Dropdown.Item onClick={(e) => abrirEditar("infoconvocatorias", datos)}>
-                                  Información General
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={(e) => abrirEditar("cronograma", datos)}>
-                                  Cronograma
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={(e) => abrirEditar("documentos", datos)}>
-                                  Doc. Administrativos
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={(e) => abrirEditar("documentacionTecnica", datos)}>
-                                  Doc. Técnicos
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={(e) => abrirEditar("documentacionConvocatoria", datos)}>
-                                  Doc. General
-                                </Dropdown.Item>
-                                <Dropdown.Item onClick={(e) => abrirEditar("publicarConvocatoria", datos)}>
-                                  Públicación
-                                </Dropdown.Item>
-                              </Dropdown.Menu>
-                            </Dropdown>
-                            {/* <Button className="botones-acciones" icon="pencil" onClick={(e) => abrirEditar(e, datos)} /> */}
-                          </Table.Cell>
-                          <Table.Cell textAlign="center">
-                            <Button
-                              className="botones-acciones boton-borrar-adminconvocatorias"
-                              icon="trash alternate outline"
-                              onClick={(e) => abrirmodalEliminar(e, datos)}
-                            />
-                          </Table.Cell>
-                        </Table.Row>
-                      ))
-                    ) : (
-                      <Table.Row>
-                        <Table.Cell>No hay datos por mostrar</Table.Cell>
-                      </Table.Row>
-                    )}
-                  </Table.Body>
-                </Table>
-              </Grid.Column>
-            </Grid.Row>
+          <Grid columns={1}>
             <Grid.Row>
+              <Grid.Column >
+                <Table columns={columns} dataSource={datosActuales} scroll={{ x: 1500, y: 300 }} size="large" className="sizeTable" bordered={false} />
+              </Grid.Column>
               <Grid.Column className="container-pagination-adminconvocatorias">
                 <Pagination
                   totalPages={paginacionTotal}
