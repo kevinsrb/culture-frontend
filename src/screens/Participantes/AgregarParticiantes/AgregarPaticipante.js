@@ -152,7 +152,7 @@ export const AgregarPaticipante = () => {
     //   }
 
       await ObjNotificaciones.MSG_SUCCESS("success", "Se guardaron correctamente todos los participantes");
-      history.push("/homeParticipantes");
+      history.push("/Administrador/cargarDocumentos");
     // }else{
     //   await ObjNotificaciones.MSG_SUCCESS("success", "Se guardaron correctamente los cambios");
     //   //return history.push("/publicarConvocatoria");
@@ -179,7 +179,7 @@ export const AgregarPaticipante = () => {
     .then((data) => {
       console.log(data);
       // ObjNotificaciones.MSG_SUCCESS("success", data.data.mensaje);
-      history.push("/homeParticipantes");
+      //history.push("/homeParticipantes");
       // dispatch(edicionConvocatoria());
     })
     .catch(function (error) {

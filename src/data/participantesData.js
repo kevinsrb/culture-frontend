@@ -6,19 +6,19 @@ import * as IoIcons from 'react-icons/io';
 export const participantesData = [
   {
     title: 'Persona natural',
-    path: '/personaNatural',
+    path: '/Administrador/personaNatural',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   },
   {
     title: 'Persona Juridica',
-    path: '/personaJuridica',
+    path: '/Administrador/personaJuridica',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   },
   {
     title: 'Grupo conformador',
-    path: '/grupoConformado',
+    path: '/Administrador/grupoConformado',
     icon: <IoIcons.IoIosPaper />,
     cName: 'nav-text'
   }

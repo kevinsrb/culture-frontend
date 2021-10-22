@@ -10,5 +10,6 @@ export const types = {
     edicion: '[Cvt] edicion',
     eliminar: '[Cvt] eliminar',
 
-    idParticipante: '[Prt] id participante'
+    idParticipante: '[Prt] id participante',
+    documentos_convocatoria: '[Prt] documentos convocatoria'
 }

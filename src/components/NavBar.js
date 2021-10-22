@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { SidebarData } from "../data/Sidedata";
 import { participantesData } from "../data/participantesData";
@@ -10,7 +11,7 @@ import escudoAlcaldia from "../assets/escudoAlcaldia.png";
 
 export default function Navbar() {
   const sidebar = true;
-  const [state, setState] = useState({ activeIndex: 0 });
+  const [state, setState] = React.useState({ activeIndex: 0 });
   const handleClick = (e, titleProps) => {
     const { index } = titleProps;
     const { activeIndex } = state;

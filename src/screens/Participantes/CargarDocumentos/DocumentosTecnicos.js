@@ -61,6 +61,14 @@ export const DocumentosTecnicos = () => {
         console.log(error);
       });
 
+      await axios.post(`${ObjConstanst.IP_PARTICIPANTES}documentos/documentosTecnicos`, guardarDocumento )
+      .then((data) => {
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
     if (e.target.files.length > 0) {
       let file = e.target.files[0];
       const formData = new FormData();

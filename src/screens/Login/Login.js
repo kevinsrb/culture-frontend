@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { user_token } from "../../store/actions/userAction";
 import axios from "axios";
 import { Form, Image, Header, Input, Checkbox, Button, Grid, Divider } from "semantic-ui-react";
 import loginimage from "../../assets/login.png";
 import logo from "../../assets/escudoAlcaldia.png";
+import { id_Participante } from "../../store/actions/participantesAction";
 
 export default function Login() {
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state);
 
   const initialState = {
     idusuario: "",
@@ -82,10 +85,17 @@ export default function Login() {
         contraseña,
       });
       console.log(token)
-      localStorage.setItem("token", token.data);
 
+      localStorage.setItem("token", token.data);
+      localStorage.setItem("userLogeado", idusuario);
+      dispatch(id_Participante(idusuario))
       dispatch(user_token(token.data));
-      history.push('/Administrador');
+
+      if (user.id_tipo === 'ADMI') {
+        return history.push('/Administrador');
+      }
+
+      return history.push('/Administrador');
 
     } catch (error) {
       setIsLoginFailed(true);

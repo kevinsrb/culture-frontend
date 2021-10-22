@@ -1,20 +1,29 @@
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { Modal, Button, Header, Image } from 'semantic-ui-react'
+import { documentosConvocatoria } from '../../store/actions/convocatoriaAction'
 
 
 
 export const VerConvocatoria = (props) => {
 
+    
+    const dispatch = useDispatch();
     const history = useHistory();
-
-    const continuar = () =>{
-        history.push('/seleccionarRol')
-    }
 
     const [open, setOpen] = useState(false)
 
-    const { numero_convocatoria, descripcion_corta } = props.datos;
+    const { numero_convocatoria, descripcion_corta, documentos } = props.datos;
+
+    console.log(documentos)
+
+    const continuar = () =>{
+
+      dispatch(documentosConvocatoria(documentos))
+
+      history.push('/Administrador/seleccionarRol')
+  }
 
     return (
         <Modal
