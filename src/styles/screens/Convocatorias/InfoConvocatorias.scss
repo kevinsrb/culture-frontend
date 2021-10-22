@@ -83,3 +83,26 @@
   background-color: transparent !important;
   color: #1faeef !important;
 }
+
+.ant-table-thead {
+  font-family: "Montserrat-SemiBold";
+  font-size: 12px;
+}
+
+.ant-table-thead > tr > th {
+  padding: 0.5% 1%;
+}
+
+.ant-table-tbody > tr > td {
+  font-family: "Work-Sans-Regular";
+  font-size: 12px;
+  padding: 0% 1%;
+}
+
+tr:nth-child(2n) {
+  background-color: #f0f6fb !important;
+}
+
+.ant-table-tbody > tr:nth-child(2n) td {
+  background-color: #f0f6fb !important;
+}

@@ -501,7 +501,7 @@ export const DocumentacionConvocatoria = () => {
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row className="no-padding-top no-padding-bottom">
-                  <Grid.Column className="container-pagination-adminconvocatorias">
+                  <Grid.Column className="container-pagination-adminconvocatorias justify-content-flex-end">
                     <Button className="botones-redondos" color="blue" onClick={agregarFila}>
                       Agregar
                     </Button>

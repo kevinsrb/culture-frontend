@@ -139,6 +139,10 @@
   color: #000000CC !important;
 }
 
+.font-color-000000 {
+  color: #000000 !important;
+}
+
 .font-size-18px {
   font-size: 18px !important;
 }
@@ -229,12 +233,20 @@
   background-color: rgba(109, 163, 252, 0.25) !important;
 }
 
+.background-color-EAEBEC {
+  background-color: #EAEBEC !important;
+}
+
 .background-color-F5FAFC {
   background-color: #F5FAFC !important;
 }
 
 .border-radius-16 {
   border-radius: 16px !important;
+}
+
+.border-radius19 {
+  border-radius: 19px !important;
 }
 
 input:checked ~ label:after {
@@ -274,4 +286,33 @@ input:checked ~ label:after {
 
 .display-flex {
   display: flex !important;
+}
+
+.ui.secondary.pointing.menu {
+  // border: none !important;
+  border-bottom: 1px solid #AAAAAA;
+  background-color: #ffffff;
+}
+
+.ui.secondary.pointing.menu .active.item {
+  font-family: "Montserrat-Bold" !important;
+  color: #000000 !important;
+  padding-left: 1%;
+  padding-right: 1%;
+  margin-left: 2.4%;
+  border-bottom: 3px solid #1FAEEF;
+}
+
+.ui.secondary.pointing.menu .item {
+  font-family: "Montserrat-Regular";
+  color: #ABAFB3 !important;
+  font-size: 13px;
+}
+
+.ui.secondary.pointing.menu .active.item:hover {
+  border-color: #1FAEEF;
+}
+
+.ant-btn:empty {
+  display: none !important;
 }

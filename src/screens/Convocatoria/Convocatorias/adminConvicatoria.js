@@ -17,10 +17,10 @@ import {
   Pagination,
   Divider,
   Select,
-  Dropdown,
+  Dropdown as DropdownSemantic,
   Breadcrumb,
 } from "semantic-ui-react";
-import { Table } from 'antd'
+import { Table, Dropdown as DropdownAnt, Menu } from "antd";
 
 import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../../data/selectOption.data";
 
@@ -39,47 +39,66 @@ const tiposidentificacion = [
   { key: 1, value: 1, text: "Grupo conformado" },
 ];
 
-
-
 export const AdminConvocatorias = () => {
-
+  const menu = (datos) => {
+    return (
+      <Menu>
+        <Menu.Item key="1" onClick={() => abrirEditar("infoconvocatorias", datos)}>
+          Información General
+        </Menu.Item>
+        <Menu.Item key="2" onClick={() => abrirEditar("cronograma", datos)}>
+          Cronograma
+        </Menu.Item>
+        <Menu.Item key="3" onClick={() => abrirEditar("documentos", datos)}>
+          Doc. Administrativos
+        </Menu.Item>
+        <Menu.Item key="4" onClick={() => abrirEditar("documentacionTecnica", datos)}>
+          Doc. Técnicos
+        </Menu.Item>
+        <Menu.Item key="5" onClick={() => abrirEditar("documentacionConvocatoria", datos)}>
+          Doc. General
+        </Menu.Item>
+      </Menu>
+    );
+  };
   const columns = [
     {
-      title: 'No.',
+      title: "No.",
       width: 60,
-      dataIndex: 'idconvocatorias',
-      key: 'idconvocatorias',
-      fixed: 'left'
+      dataIndex: "idconvocatorias",
+      key: "idconvocatorias",
+      fixed: "left",
     },
     {
-      title: 'numero_convocatoria',
-      width: 250,
-      dataIndex: 'numero_convocatoria',
-      key: 'name',
-      fixed: 'left',
+      title: "Nombre",
+      width: 200,
+      dataIndex: "numero_convocatoria",
+      key: "name",
+      fixed: "left",
     },
     {
-      title: 'Codigo',
+      title: "Codigo",
       width: 100,
-      dataIndex: 'codigo',
-      key: 'codigo'
+      dataIndex: "codigo",
+      key: "codigo",
     },
     {
-      title: 'Fecha',
+      title: "Fecha inicio",
+      width: 100,
+      dataIndex: "fecha_creacion",
+      key: "fecha_creacion",
+    },
+    {
+      title: "Estado",
+      width: 100,
+      dataIndex: "estado",
+      key: "estado",
+      render: (datos) => <span style={{ color: coloresEstado[datos], marginLeft: '0' }}>{datos}</span>,
+    },
+    {
+      title: () => "Publicada",
       width: 150,
-      dataIndex: 'fecha_creacion',
-      key: 'fecha_creacion'
-    },
-    {
-      title: 'Estado',
-      width: 140,
-      dataIndex: 'estado',
-      key: 'estado'
-    },
-    {
-      title: () => 'Publicada',
-      width: 150,
-      key: 'publicada',
+      key: "publicada",
       render: (datos, index) => (
         <Form>
           <Form.Group>
@@ -104,32 +123,30 @@ export const AdminConvocatorias = () => {
             />
           </Form.Group>
         </Form>
-      )
+      ),
     },
     {
-      title: 'Entidad',
+      title: "Entidad",
       width: 150,
-      dataIndex: 'entidad',
-      key: 'entidad'
+      dataIndex: "entidad",
+      key: "entidad",
     },
     {
-      title: 'Linea estratégica',
+      title: "Linea estratégica",
       width: 169,
-      dataIndex: 'linea_estrategica',
-      key: 'linea_estrategica'
+      dataIndex: "linea_estrategica",
+      key: "linea_estrategica",
     },
     {
-      title: 'Creado por',
+      title: "Creado por",
       width: 169,
-      dataIndex: 'usuario_creacion',
-      key: 'usuario_creacion',
+      dataIndex: "usuario_creacion",
+      key: "usuario_creacion",
     },
     {
       title: () => (
         <div>
-          <div className="titleAcciones">
-            Acciones
-          </div>
+          <div className="titleAcciones">Acciones</div>
           <div className="controls">
             <div className="background-color-FFFFFF line-height-0 font-family-Montserrat-Regular font-size-9px font-color-707070">
               Ver
@@ -143,42 +160,26 @@ export const AdminConvocatorias = () => {
           </div>
         </div>
       ),
-      width: 200,
-      key: 'operations',
-      fixed: 'right',
+      width: 100,
+      key: "operations",
+      fixed: "right",
       render: (datos) => (
         <div className="controls">
           <Button className="botones-acciones" icon="eye" />
-          <Dropdown icon="pencil">
-            <Dropdown.Menu>
-              <Dropdown.Item onClick={(e) => abrirEditar("infoconvocatorias", datos)}>
-                Información General
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => abrirEditar("cronograma", datos)}>
-                Cronograma
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => abrirEditar("documentos", datos)}>
-                Doc. Administrativos
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => abrirEditar("documentacionTecnica", datos)}>
-                Doc. Técnicos
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => abrirEditar("documentacionConvocatoria", datos)}>
-                Doc. General
-              </Dropdown.Item>
-              <Dropdown.Item onClick={(e) => abrirEditar("publicarConvocatoria", datos)}>
-                Públicación
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <DropdownAnt.Button
+            onClick={(e) => abrirEditar("cronograma", datos)}
+            overlay={() => menu(datos)}
+            className="button-ant-ant"
+            icon={<Icon name="pencil" />}
+          />
           <Button
             className="botones-acciones boton-borrar-adminconvocatorias"
             icon="trash alternate outline"
             onClick={(e) => abrirmodalEliminar(e, datos)}
           />
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   const history = useHistory();
@@ -272,12 +273,12 @@ export const AdminConvocatorias = () => {
   function handletoggleChange(data, index, e, r) {
     console.log(e.target, r);
     let datosActualesDiff = JSON.parse(JSON.stringify(datosActuales));
-    if (r.name === 'publicosi') {
+    if (r.name === "publicosi") {
       datosActualesDiff[index].publicosi = true;
       datosActualesDiff[index].publicono = false;
       datosActualesDiff[index].publico = true;
     }
-    if (r.name === 'publicono') {
+    if (r.name === "publicono") {
       datosActualesDiff[index].publicosi = false;
       datosActualesDiff[index].publicono = true;
       datosActualesDiff[index].publico = false;
@@ -332,6 +333,7 @@ export const AdminConvocatorias = () => {
   }
 
   function abrirEditar(route, datos) {
+    console.log("aca");
     dispatch(edicionConvocatoria(true));
     dispatch(idConvocatorias(datos.idconvocatorias));
     return history.push(`/Administrador/${route}`);
@@ -345,7 +347,7 @@ export const AdminConvocatorias = () => {
         dispatch(edicionConvocatoria(undefined));
         history.push("/Administrador/infoconvocatorias");
       })
-      .catch(function (error) { });
+      .catch(function (error) {});
   };
 
   const filtrarTablaMultiple = (data) => {
@@ -395,8 +397,8 @@ export const AdminConvocatorias = () => {
         </Grid.Column>
       </Grid>
       <Grid className="no-margin" style={{ paddingTop: "0.5%" }}>
-        <Grid.Row className="no-padding-bottom">
-          <Grid.Column className="container-pagination-adminconvocatorias" floated="right">
+        <Grid.Row className="no-padding-bottom justify-content-flex-end">
+          <Grid.Column className="container-pagination-adminconvocatorias">
             <Button
               className="button-filtro-adminconvocatorias font-family-Montserrat-Medium font-size-12px"
               onClick={consultarconvocatioria}
@@ -443,7 +445,7 @@ export const AdminConvocatorias = () => {
                 <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E" style={{ flex: 0.5 }}>
                   Registros por página
                 </label>
-                <Dropdown
+                <DropdownSemantic
                   fluid
                   className="select-registros-adminconvocatoria no-margin"
                   defaultValue={cantidadPáginas}
@@ -513,14 +515,14 @@ export const AdminConvocatorias = () => {
           ) : null}
           <Grid columns={1}>
             <Grid.Row>
-              <Grid.Column >
-                <Table columns={columns} dataSource={datosActuales} scroll={{ x: 1500, y: 300 }} size="large" className="sizeTable" bordered={false} />
-              </Grid.Column>
-              <Grid.Column className="container-pagination-adminconvocatorias">
-                <Pagination
-                  totalPages={paginacionTotal}
-                  activePage={paginacionActual}
-                  onPageChange={cambioPaginación}
+              <Grid.Column>
+                <Table
+                  columns={columns}
+                  dataSource={datosActuales}
+                  scroll={{ x: 1500, y: 300 }}
+                  size="large"
+                  rowClassName="sizeTable table-row"
+                  bordered={false}
                 />
               </Grid.Column>
             </Grid.Row>

@@ -63,7 +63,7 @@ export const PersonaNatural = () => {
   const handleCrearPersonaNatural = async() => {
 
 
-    if(idParticipante != undefined){
+    if(idParticipante !== undefined){
 
       const existeParticipante = await consularExisteParticipante();
       if(!Array.isArray(existeParticipante)){
@@ -115,6 +115,8 @@ export const PersonaNatural = () => {
           console.log(error)
         });
       }
+
+      history.push('/Administrador/agregarParticipantes')
     }
   }
 

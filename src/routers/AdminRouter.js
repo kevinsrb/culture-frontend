@@ -30,10 +30,10 @@ export default function AdminRouter() {
   return (
     <React.Fragment>
       <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#F7FBFF" }}>
-        <div style={{ flex: "0 0 240px" }}>
+        <div style={{ width:'18.75%' }}>
           <Navbar />
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ width:'81.25%' }}>
           <Grid className="menu-usuario-principal no-margin">
             <Grid.Row>
               <Grid.Column style={{ display: "flex", justifyContent: "flex-end" }}>

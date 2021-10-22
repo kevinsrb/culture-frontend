@@ -110,8 +110,8 @@ export const StyleWrapper = styled.div`
   }
   .fc-today-button {
     border-radius: 19px;
-    padding-left: 20% !important;
-    padding-right: 20% !important;
+    padding-left: 17% !important;
+    padding-right: 17% !important;
   }
   .fc-toolbar-chunk:nth-child(2) {
     width: 50%;

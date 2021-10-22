@@ -14,6 +14,7 @@ import {
   Checkbox,
   Breadcrumb,
   Dropdown,
+  Modal,
 } from "semantic-ui-react";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 
@@ -100,6 +101,14 @@ export const Documentos = () => {
     cargarDocumentos();
   }, []);
 
+  const stateInitial = {
+    namepdf: "",
+    pdf: "",
+    openModalViewer: false,
+  };
+
+  const [principalState, setPrincipalState] = useState(stateInitial);
+
   const [documentos, setDocumentos] = useState(initialState);
   const [activeaccordion, setActiveAccordion] = React.useState(0);
   const history = useHistory();
@@ -121,7 +130,7 @@ export const Documentos = () => {
         source: persona[data.tipo_participante_id],
       };
     });
-    console.log(response.data.data)
+    console.log(response.data.data);
     documentacionresponse = Object.assign({}, documentacionresponse);
     let arraypersonanatural = [];
     let arraypersonajuridica = [];
@@ -148,7 +157,7 @@ export const Documentos = () => {
   };
 
   const consultarDocumentosConvocatoria = async () => {
-    console.log('inicia consulta de documentos convocatoria', editarConvocatoria);
+    console.log("inicia consulta de documentos convocatoria", editarConvocatoria);
     // INICIALIZAR DOCUMENTOS SELECCIONADOS
     if (editarConvocatoria !== undefined) {
       try {
@@ -156,19 +165,20 @@ export const Documentos = () => {
         let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
         if (response.data.data.documentos === null) return;
         let convocatoria = response.data.data;
+        console.log(convocatoria);
         for (var i in documentos.documentacion) {
           let doc = documentos.documentacion[i];
+          console.log(doc, "documentacion");
           for (var x in convocatoria.documentos) {
             let convdoc = convocatoria.documentos[x];
+            console.log(convdoc, "convocatoria");
             if (
               doc.descripcion_del_documento.trim() === convdoc.descripcion.trim() &&
               doc.source === persona[convdoc.tipo_persona + 1] &&
               convdoc.tipo_documento_id === 0
             ) {
               todosDocumentos.data["Documentos_Seleccionados"].documentos.push(doc.id);
-              todosDocumentos.data[persona[convocatoria.documentos[i].tipo_persona + 1]].documentos.filter(
-                (data) => data !== doc.id
-              );
+              todosDocumentos.data[persona[convdoc.tipo_persona + 1]].documentos.filter((data) => data !== doc.id);
               if (convdoc.url_documento) todosDocumentos.documentacion[doc.id].url_documento = convdoc.url_documento;
             }
           }
@@ -350,6 +360,67 @@ export const Documentos = () => {
     return setDocumentos(todosJSON);
   };
 
+  const verDocumentacion = async (data) => {
+    console.log(data, "esta es la informacion");
+    await axios
+      .get(`${process.env.REACT_APP_SERVER_CONV}documentos/consultarArchivos/${data.url_documento}`, {
+        responseType: "blob",
+      })
+      .then((response) => {
+        console.log(response);
+        let mimetype;
+        let tipo = data.url_documento.split(".");
+        var file, fileURL;
+        switch (tipo[1]) {
+          case "pdf":
+            mimetype = "application/pdf";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          case "docx":
+            mimetype = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          case "xlsx":
+            mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          case "ppt":
+            mimetype = "application/vnd.ms-powerpoint";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+          default:
+            mimetype = "application/pdf";
+            file = new Blob([response.data], {
+              type: mimetype,
+            });
+            fileURL = URL.createObjectURL(file);
+            break;
+        }
+
+        return setPrincipalState({
+          ...principalState,
+          pdf: fileURL,
+          namepdf: data.url_documento,
+          openModalViewer: !principalState.openModalViewer,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <div>
       <Grid className="no-margin">
@@ -445,10 +516,18 @@ export const Documentos = () => {
                     <Table.HeaderCell style={{ width: "30%" }} className="background-color-FFFFFF font-size-12px">
                       Documentos seleccionados
                     </Table.HeaderCell>
-                    <Table.HeaderCell textAlign="center" style={{ width: "18%" }} className="background-color-FFFFFF font-size-12px">
+                    <Table.HeaderCell
+                      textAlign="center"
+                      style={{ width: "18%" }}
+                      className="background-color-FFFFFF font-size-12px"
+                    >
                       ¿Subsanable?
                     </Table.HeaderCell>
-                    <Table.HeaderCell textAlign="center" style={{ width: "18%" }} className="background-color-FFFFFF font-size-12px">
+                    <Table.HeaderCell
+                      textAlign="center"
+                      style={{ width: "18%" }}
+                      className="background-color-FFFFFF font-size-12px"
+                    >
                       ¿Obligatorio?
                     </Table.HeaderCell>
                     <Table.HeaderCell
@@ -458,7 +537,11 @@ export const Documentos = () => {
                     >
                       Archivo
                     </Table.HeaderCell>
-                    <Table.HeaderCell style={{ width: "11%" }} className="background-color-FFFFFF font-size-12px" textAlign="center">
+                    <Table.HeaderCell
+                      style={{ width: "11%" }}
+                      className="background-color-FFFFFF font-size-12px"
+                      textAlign="center"
+                    >
                       Acción
                     </Table.HeaderCell>
                   </Table.Header>
@@ -516,11 +599,18 @@ export const Documentos = () => {
                           <input className="inputs-ref" type="file" hidden onChange={(e) => saveFile(e, doc)} />
                         </Table.Cell>
                         <Table.Cell textAlign="center" style={{ width: "11%" }}>
-                          <Button
-                            className="botones-acciones boton-borrar-adminconvocatorias"
-                            icon="trash alternate outline"
-                            onClick={(e) => eliminarDocumento({ e, doc })}
-                          />
+                          <Grid className="no-margin no-padding-top no-padding-bottom" columns={2}>
+                            <Grid.Column className="no-padding-top no-padding-bottom">
+                              <Button className="botones-acciones" icon="eye" onClick={(e) => verDocumentacion(doc)} />
+                            </Grid.Column>
+                            <Grid.Column className="no-padding-top no-padding-bottom">
+                              <Button
+                                className="botones-acciones boton-borrar-adminconvocatorias"
+                                icon="trash alternate outline"
+                                onClick={(e) => eliminarDocumento({ e, doc })}
+                              />
+                            </Grid.Column>
+                          </Grid>
                         </Table.Cell>
                       </Table.Row>
                     ))}
@@ -551,6 +641,18 @@ export const Documentos = () => {
           </Button>
         </Grid.Row>
       </Grid>
+      <Modal
+        onClose={() => setPrincipalState({ ...principalState, openModalViewer: !principalState.openModalViewer })}
+        closeIcon
+        open={principalState.openModalViewer}
+      >
+        <Modal.Header>Previsualización: {principalState.namepdf}</Modal.Header>
+        <Modal.Content>
+          {principalState.pdf.trim() !== "" ? (
+            <iframe src={principalState.pdf} style={{ width: "100%", height: "500px" }} />
+          ) : null}
+        </Modal.Content>
+      </Modal>
     </div>
   );
 };
