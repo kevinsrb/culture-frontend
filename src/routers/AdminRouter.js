@@ -23,6 +23,9 @@ import { GrupoConformado } from "../screens/Participantes/InscripcionParticipant
 import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
 import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
 
+// POSTULACIONES
+import GestionarPostulaciones from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
+
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
 
@@ -99,6 +102,9 @@ export default function AdminRouter() {
           </Route>
           <Route path="/Administrador/cargarDocumentos">
             <CargarDocumentos />
+          </Route>
+          <Route path="/Administrador/gestionarPostulaciones">
+            <GestionarPostulaciones />
           </Route>
           <Route path="/Administrador/Homeparticipantes">
             <HomeParticipantes />
