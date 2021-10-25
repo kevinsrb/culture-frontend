@@ -497,10 +497,10 @@ export const Cronograma = () => {
               />
             </StyleWrapper>
             <Container textAlign="right">
-              {principalError.apertura ? <Label color="red">Falta seleccionar la Apertura</Label> : null}
-              {principalError.cierre ? <Label color="red">Falta seleccionar el Cierre</Label> : null}
+              {principalError.apertura ? <Label color="red">Falta asignar la Apertura</Label> : null}
+              {principalError.cierre ? <Label color="red">Falta asignar el Cierre</Label> : null}
               {principalError.otorgamiento ? (
-                <Label color="red">Falta seleccionar la Resolución de otorgamiento</Label>
+                <Label color="red">Falta asignar la Resolución de otorgamiento</Label>
               ) : null}
               {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
             Atras

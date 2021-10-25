@@ -85,16 +85,16 @@ export const CronogramaActividades = () => {
     console.log(convocatoria);
   };
 
-  const handletoggleChange = (event, result, actividad) => {
+  const handletoggleChange = (event, result, actividad, index) => {
     let actividadChange = JSON.parse(JSON.stringify(actividades));
-    actividadChange[actividad.idactividad - 1].check = !actividadChange[actividad.idactividad - 1].check;
-    if (actividad.nombre.trim() === "Apertura" && actividadChange[actividad.idactividad - 1].check) {
+    actividadChange[index].check = !actividadChange[index].check;
+    if (actividad.nombre.trim() === "Apertura" && actividadChange[index].check) {
       setPrincipalError({ ...principalError, apertura: false });
     }
-    if (actividad.nombre.trim() === "Cierre" && actividadChange[actividad.idactividad - 1].check) {
+    if (actividad.nombre.trim() === "Cierre" && actividadChange[index].check) {
       setPrincipalError({ ...principalError, cierre: false });
     }
-    if (actividad.nombre.trim() === "Resolución de otorgamiento" && actividadChange[actividad.idactividad - 1].check) {
+    if (actividad.nombre.trim() === "Resolución de otorgamiento" && actividadChange[index].check) {
       setPrincipalError({ ...principalError, otorgamiento: false });
     }
     return setActividades(actividadChange);
@@ -269,7 +269,7 @@ export const CronogramaActividades = () => {
                             name={actividad.nombre}
                             checked={actividad.check}
                             className="check"
-                            onChange={(event, result) => handletoggleChange(event, result, actividad)}
+                            onChange={(event, result) => handletoggleChange(event, result, actividad, index)}
                           />
                         </Grid.Column>
                       ))

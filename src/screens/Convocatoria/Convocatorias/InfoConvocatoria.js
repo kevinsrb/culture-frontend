@@ -819,7 +819,7 @@ export function InfoConvocatoria() {
                     />
                   </Grid.Column>
 
-                  {convocatoria.tipo_estimulo == "economico" && (
+                  {convocatoria.tipo_estimulo === "Económico" && (
                     <>
                       <Grid.Column>
                         <Form.Input

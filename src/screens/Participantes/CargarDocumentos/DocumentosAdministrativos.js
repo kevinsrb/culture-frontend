@@ -26,11 +26,11 @@ export const DocumentosAdministrativos = () => {
 
   const { documentos_convocatoria } = useSelector((state) => state.participantes);
 
-  const documentosTecnicos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id == 2);
+  const documentosTecnicos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 2);
 
   const [documentos, setDocumentos] = useState(documentosTecnicos);
   const [principalState, setPrincipalState] = useState(State);
-  console.log(documentos);
+  console.log(documentos, 'estos son los documentos');
 
   const descargarPlantilla = async (url_documento, e) => {
     console.log(url_documento);

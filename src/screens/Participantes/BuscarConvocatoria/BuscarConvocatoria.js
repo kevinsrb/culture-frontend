@@ -34,9 +34,10 @@ export const BuscarConvocatoria = () => {
     tipo_participante: [],
     categoria_linea_convocatoria: [],
   };
-
+  
   const initialStateFiltros = {
     datossinfiltro: [],
+    numeroregistros: 0,
   };
 
   //variables
@@ -119,7 +120,7 @@ export const BuscarConvocatoria = () => {
         response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
       }
       if (response.data.convocatorias.length > 0) {
-        setPrincipalState({ datossinfiltro: response.data.convocatorias });
+        setPrincipalState({ datossinfiltro: response.data.convocatorias, numeroregistros: response.data.convocatorias.length });
         let copy = response.data.convocatorias.map((data) => data);
         console.log(copy);
         let datos = copy.slice(0, cantidadPáginas);
@@ -244,7 +245,7 @@ export const BuscarConvocatoria = () => {
                   search
                   selection
                   className="font-family-Work-Sans"
-                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                  icon={<Icon style={{ float: "right", paddingTop: '4%' }} color="blue" name="angle down" />}
                   placeholder="Seleccionar..."
                   options={QuienParticipaOptions}
                   onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "tipo_participante" })}
@@ -254,7 +255,7 @@ export const BuscarConvocatoria = () => {
                   <Select
                     multiple
                     search
-                    icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                    icon={<Icon style={{ float: "right", paddingTop: '4%' }} color="blue" name="angle down" />}
                     placeholder="Seleccionar..."
                     options={AreaOptions}
                     onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "area" })}
@@ -279,7 +280,7 @@ export const BuscarConvocatoria = () => {
                   selection
                   name="categoria_linea_convocatoria"
                   options={categoriasLineaconvocatoria}
-                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                  icon={<Icon style={{ float: "right", paddingTop: '4%' }} color="blue" name="angle down" />}
                   // onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "categoria")}
                 />
               </Form.Group>
@@ -313,19 +314,19 @@ export const BuscarConvocatoria = () => {
                         className="font-color-F28C02 font-family-Montserrat-Regular font-size-12px"
                         style={{ marginLeft: "1%" }}
                       >
-                        19
+                        {principalState.numeroregistros}
                       </span>
                     </span>
                   </Grid.Column>
                   <Grid.Column width={3} className="no-padding-left">
                     <Grid>
                       <Grid.Row columns={2}>
-                        <Grid.Column width={11} className="justify-content-flex-end">
+                        <Grid.Column width={10} className="justify-content-flex-end">
                           <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
                             Registros por página
                           </label>
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={6}>
                           <Dropdown
                             fluid
                             className="select-registros-adminconvocatoria no-margin"

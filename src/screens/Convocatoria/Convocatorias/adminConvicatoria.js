@@ -397,8 +397,8 @@ export const AdminConvocatorias = () => {
         </Grid.Column>
       </Grid>
       <Grid className="no-margin" style={{ paddingTop: "0.5%" }}>
-        <Grid.Row className="no-padding-bottom justify-content-flex-end">
-          <Grid.Column className="container-pagination-adminconvocatorias">
+        <Grid.Row className="no-padding-bottom">
+          <Grid.Column className="container-pagination-adminconvocatorias justify-content-flex-end">
             <Button
               className="button-filtro-adminconvocatorias font-family-Montserrat-Medium font-size-12px"
               onClick={consultarconvocatioria}

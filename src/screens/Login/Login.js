@@ -86,8 +86,6 @@ export default function Login() {
       });
       console.log(token)
 
-      localStorage.setItem("token", token.data);
-      localStorage.setItem("userLogeado", idusuario);
       dispatch(id_Participante(idusuario))
       dispatch(user_token(token.data));
 
