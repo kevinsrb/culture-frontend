@@ -12,6 +12,11 @@ export const participantesReducer = (state = {}, action) => {
                 ...state,
                 documentos_convocatoria: action.payload.documentos_convocatoria
             };
+        case types.documentos_cargados:
+            return {
+                ...state,
+                documentos_cargados: action.payload.documentos_cargados
+            };
         default:
             return state
     }
