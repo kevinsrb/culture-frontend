@@ -24,7 +24,7 @@ import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/Ho
 import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
 
 // POSTULACIONES
-import GestionarPostulaciones from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
+import {GestionarPostulaciones} from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
 
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
