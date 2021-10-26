@@ -25,6 +25,7 @@ import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/Carg
 
 // POSTULACIONES
 import GestionarPostulaciones from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
+import GestionarDocumentosPostulacion from "../screens/Postulaciones/GestionarDocumentos/GestionarDocumentosPostulacion";
 
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
@@ -105,6 +106,9 @@ export default function AdminRouter() {
           </Route>
           <Route path="/Administrador/gestionarPostulaciones">
             <GestionarPostulaciones />
+          </Route>
+          <Route path="/Administrador/gestionarPostulacionesdocumentos">
+            <GestionarDocumentosPostulacion />
           </Route>
           <Route path="/Administrador/Homeparticipantes">
             <HomeParticipantes />
