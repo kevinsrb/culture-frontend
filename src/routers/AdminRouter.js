@@ -22,6 +22,7 @@ import { PersonaJuridica } from "../screens/Participantes/InscripcionParticipant
 import { GrupoConformado } from "../screens/Participantes/InscripcionParticipantes/GrupoConformado";
 import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
 import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
+import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
 
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
@@ -102,6 +103,9 @@ export default function AdminRouter() {
           </Route>
           <Route path="/Administrador/Homeparticipantes">
             <HomeParticipantes />
+          </Route>
+          <Route path="/Administrador/AgregarLinks">
+            <AgregarLinks />
           </Route>
         </div>
       </div>

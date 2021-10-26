@@ -7,3 +7,10 @@ export const id_Participante = (idParticipante) => ({
     }
 })
 
+
+export const documentosCargados = (documentos_cargados) => ({
+    type: types.documentos_cargados,
+    payload:  {
+        documentos_cargados,
+    }
+})
