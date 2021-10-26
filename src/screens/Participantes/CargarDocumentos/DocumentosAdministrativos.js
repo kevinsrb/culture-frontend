@@ -182,7 +182,7 @@ export const DocumentosAdministrativos = () => {
                     </Grid>
                   </Card.Content>
                 </Card>
-                {datos.url_participante !== "" ? (
+                {datos.url_participante !== "" && datos.url_participante !== null ? (
                   <Card className="card_archivo_subido no-margin">
                     <Card.Content className="cards_content ">
                       <Card.Header className="font-family-Montserrat-Bold font-size-12px font-color-FFFFFF">

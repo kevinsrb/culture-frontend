@@ -6,6 +6,7 @@ import { ObjConstanst } from "../../../config/utils/constanst";
 import { Container, Card, Header, Button, Grid } from "semantic-ui-react";
 import styled from "@emotion/styled";
 import { documentosCargados } from "../../../store/actions/participantesAction";
+import { useHistory } from "react-router";
 
 const ContainerFragment = styled.div`
   padding: 1%;
@@ -25,6 +26,7 @@ export const DocumentosTecnicos = React.memo(() => {
 
   const fileInputRef = useRef();
   const dispatch = useDispatch();
+  const history = useHistory()
 
   const { documentos_convocatoria, idParticipante, documentos_cargados } = useSelector((state) => state.participantes);
   console.log(documentos_convocatoria)
@@ -143,6 +145,13 @@ export const DocumentosTecnicos = React.memo(() => {
     })
   }
 
+  const asociarDocumenttosTecnicos = () => {
+
+
+
+    history.push('/Administrador/AgregarLinks')
+  }
+
   return (
     <React.Fragment>
       <Grid className="no-margin" style={{ paddingTop: "1%" }}>
@@ -184,7 +193,7 @@ export const DocumentosTecnicos = React.memo(() => {
                     </Grid>
                   </Card.Content>
                 </Card>
-                {datos.url_participante !== "" ? (
+                {datos.url_participante !== "" && datos.url_participante ? (
                   <Card className="card_archivo_subido no-margin">
                     <Card.Content className="cards_content ">
                       <Card.Header className="font-family-Montserrat-Bold font-size-12px font-color-FFFFFF">
@@ -220,7 +229,7 @@ export const DocumentosTecnicos = React.memo(() => {
           <Button
             content="Guardar y continuar"
             className="btn btn-primary-outline background-color-EAEBEC font-color-FFFFFF border-radius19"
-            // onClick={() => fileInputRef.current.click()}
+            onClick={asociarDocumenttosTecnicos}
           />
         </Container>
       </Grid>
