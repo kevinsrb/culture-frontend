@@ -30,6 +30,7 @@ import {GestionarPostulaciones} from "../screens/Postulaciones/GestionarPostulac
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
 import { VerificacionPropuestas } from "../screens/Postulaciones/VerificacionPropuestas/VerificacionPropuestas";
+import { AdministrarJurados } from "../screens/Postulaciones/AdministrarJurados/AdministrarJurados";
 
 export default function AdminRouter() {
   return (
@@ -110,6 +111,9 @@ export default function AdminRouter() {
           </Route>
           <Route path="/Administrador/verificacionPropuestas">
             <VerificacionPropuestas />
+          </Route>
+          <Route path="/Administrador/administrarJurados">
+            <AdministrarJurados />
           </Route>
           <Route path="/Administrador/Homeparticipantes">
             <HomeParticipantes />
