@@ -42,8 +42,9 @@ export const DocumentosTecnicos = React.memo(() => {
   const consultarDocumentosCargados = () => {
     console.log(documentos_cargados);
     let copy = documentos.map((data) => {
+      console.log(data.url_participante, "este es el documentos antes de la url de participantes");
       let url_participante = "";
-      if (data.url_participante) url_participante = data.url_participante;
+      if (data.url_participante !== null) url_participante = data.url_participante;
       return {
         descripcion: data.descripcion,
         documentoActualizado: data.documentoActualizado,
@@ -59,6 +60,7 @@ export const DocumentosTecnicos = React.memo(() => {
         url_participante,
       };
     });
+    console.log(copy, 'estos son los datos con la url de participantes inicializada');
     let todosJSON = JSON.parse(JSON.stringify(copy));
     if (documentos_cargados !== null && documentos_cargados !== undefined) {
       //   const documentosTecnicosCargados = documentos_cargados.filter((doct) => doct.tipo_documento_id === 1);
