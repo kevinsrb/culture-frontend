@@ -3,6 +3,8 @@ import PostulacionesApi from "../../../../api/postulacionesApi";
 
 export const useGestionarPostulaciones = () => {
 
+    
+
     const [postulaciones, setPostulaciones] = useState([]);
     const getPostulaciones = async() => {
         try {

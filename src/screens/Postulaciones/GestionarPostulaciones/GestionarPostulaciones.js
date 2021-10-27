@@ -1,6 +1,6 @@
 import { Col, Row, Divider as DividerAntd, Table } from 'antd';
 import { FormProvider } from 'rc-field-form';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Segment,
     Modal,
@@ -18,7 +18,7 @@ import {
     Breadcrumb,
     GridColumn,
 } from "semantic-ui-react";
-import { columns } from './ColumnasTabla';
+import ModalPostulacion from '../ModalPostualcion';
 import { FiltrosTabla } from './FiltrosTabla';
 import { useGestionarPostulaciones } from './Hooks/useGestionarPostulaciones';
 
@@ -35,7 +35,7 @@ export const GestionarPostulaciones = () => {
 
     useEffect(() => {
         let mounted = true;
-        if(mounted) {
+        if (mounted) {
             getPostulaciones()
         }
         return () => {
@@ -43,7 +43,99 @@ export const GestionarPostulaciones = () => {
         }
     }, [])
 
-    console.log(postulaciones)
+    const columns = [
+        {
+            title: "Propuesta",
+            width: 120,
+            dataIndex: "id_participante",
+            key: "id_participante",
+            fixed: "left",
+        },
+        {
+            title: "Participante",
+            width: 120,
+            fixed: "left",
+            render: (datos, index) => {
+                return `${datos.primer_nombre} ${datos.segundo_nombre} ${datos.primer_apellido} ${datos.segundo_apellido};`
+            },
+        },
+        {
+            title: "Identificación participante",
+            width: 200,
+            dataIndex: "numero_documento",
+            key: "numero_documento",
+        },
+        {
+            title: "Estado",
+            width: 130,
+            dataIndex: "estado",
+            key: "estado",
+        },
+        {
+            title: "Barrio",
+            width: 150,
+            dataIndex: "barrio",
+            key: "barrio",
+        },
+        {
+            title: "Comuna",
+            width: 140,
+            dataIndex: "comuna",
+            key: "comuna",
+        },
+        {
+            title: "Teléfono Fijo",
+            width: 150,
+            dataIndex: "telefono_fijo",
+            key: "telefono_fijo",
+        },
+        {
+            title: "Teléfono Celular",
+            width: 169,
+            dataIndex: "telefono_celular",
+            key: "telefono_celular",
+        },
+        {
+            title: "Pais residencia",
+            width: 169,
+            dataIndex: "pais_residencia",
+            key: "pais_residencia",
+        },
+        {
+            title: "Consultar verficación",
+            width: 120,
+            key: "acciones",
+            fixed: "right",
+            render: (datos) => (
+                <>
+                    <Button className="botones-acciones" icon="search" onClick={() => showModal(datos)} />
+                </>
+            ),
+        },
+        {
+            title: "Modificar verficación",
+            width: 120,
+            key: "acciones",
+            fixed: "right",
+            render: (datos) => (
+                <>
+                    <Button className="botones-acciones" icon="pencil" />
+                </>
+            ),
+        },
+    ];
+
+    const [datos, setDatos] = useState({})
+    const [openModal, setOpenModal] = useState(false);
+    const showModal = (datos) => {
+        setDatos(datos)
+        setOpenModal(true);
+    }
+
+    const closeModal = () => {
+        setOpenModal(false);
+    }
+
 
     return (
         <>
@@ -78,9 +170,20 @@ export const GestionarPostulaciones = () => {
                     <Table
                         dataSource={postulaciones}
                         columns={columns}
+                        scroll={{ x: 1500, y: 300 }}
+                        size="large"
+                        rowClassName="sizeTable table-row"
+                        bordered={false}
                     />
                 </Col>
             </Row>
+
+            <ModalPostulacion
+                datos={datos}
+                openModal={openModal}
+                closeModal={closeModal}
+            // actionButton={}
+            />
         </>
 
     )

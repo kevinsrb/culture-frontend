@@ -100,8 +100,8 @@ export const ModalVerificar = ({ openModal, setOpenModal, datos }) => {
                     <Table columns={columns2} />
                 </Col>
             </Row>
-            <Row justify="end">
-                <Col span={24}>
+            <Row justify="end" style={{padding: '20px'}}>
+                <Col >
                     <Button
                         className="botones-redondos"
                         basic
