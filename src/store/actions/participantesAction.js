@@ -14,3 +14,34 @@ export const documentosCargados = (documentos_cargados) => ({
         documentos_cargados,
     }
 })
+
+export const categoriasLineasConvocatoria = (categoria_linea_convocatoria) => ({
+    type: types.categoria_linea_convocatoria,
+    payload:  {
+        categoria_linea_convocatoria,
+    }
+})
+
+
+export const fechasParticipantes = (fechas_participantes) => ({
+    type: types.fechas_participantes,
+    payload:  {
+        fechas_participantes,
+    }
+})
+
+
+export const nombreConvocatoria = (nombre_convocatoria) => ({
+    type: types.nombre_convocatoria,
+    payload:  {
+        nombre_convocatoria,
+    }
+})
+
+export const idConvocatoriaSelecionada = (idconvocatorias) => ({
+    type: types.id_convocatoria_seleccionada,
+    payload:  {
+        idconvocatorias,
+    }
+})
+

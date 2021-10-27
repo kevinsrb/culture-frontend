@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { ObjConstanst } from '../../../config/utils/constanst';
 import {
@@ -19,14 +19,20 @@ import { useSelector } from 'react-redux';
 
 export const AgregarLinks = () => {
 
+  useEffect(() => {
+    consultarLinks();
+  }, [])
+
   const initialState = {
     link: '',
     linksAgregado: [],
     index: 0
   }
 
-    const {  idParticipante } = useSelector((state) => state.participantes);
+    const { idParticipante, nombre_convocatoria,   categoria_linea_convocatoria, fechas_participantes } = useSelector((state) => state.participantes);
+    const { idConvocatoria  } = useSelector((state) => state.convocatoria);
     const [principalState, setPrincipalState] = useState(initialState);
+
 
     const agregarLink = async () => {
       console.log(principalState.linksAgregado);
@@ -48,68 +54,44 @@ export const AgregarLinks = () => {
     };
 
     const guardarLinks = async() => {
-  
       let arrLinks = principalState.linksAgregado;
-      const linksExistentes = await consultarLinks();
-      let ArrayFilter = [];
-      if(linksExistentes !== undefined){
-         ArrayFilter = arrLinks.map((data) => data.index !== linksExistentes.index);
-      }else{
-        console.log(arrLinks)
-        await axios
-        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarLinksParticipantes/${1000000001}`, arrLinks)
+      await axios
+        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarLinksParticipantes/${idParticipante}`, arrLinks)
         .then((res) => {
           console.log(res)
         });
-      }
+
+        const fechaApertura = fechas_participantes.filter((fec) => fec.clave == 'Apertura');
+
+       const postulaciones = [{
+        idConvocatoria,
+        nombre_convocatoria,
+        categoria_linea_convocatoria,
+        fechaApertura,
+        'postulacion': true
+       }]
+
+       console.log(postulaciones)
+
+      await axios
+        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarPostulacionParticipantes/${idParticipante}`, postulaciones)
+        .then((res) => {
+          console.log(res)
+        });
 
 
       
-
-      
-
-
-      // let i = 0;
-      // let ArrayFilter = arrLinks.map((data) => data);
-
-
-      
-      // for (i in arrLinks) {
-      //   if (arrLinks[i]) {
-      //     let linkExiste = await verificarExisteLink(arrLinks[i].index);
-      //     console.log(linkExiste)
-      //     if (linkExiste) {
-      //       ArrayFilter = ArrayFilter.filter(
-      //         (element) => element.index !== linkExiste[i].index
-      //       );
-      //       console.log(ArrayFilter);
-      //     }
-      //   }
-      // }
-
-      // arrLinks = ArrayFilter;
-
-      // if (arrLinks.length === 0) return;
-      
-        // try {
-        //   await axios.post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarLinksParticipantes/${1000000001}`, {
-        //     index: arrLinks[i].index,
-        //     link: arrLinks[i].link,
-        //   });
-        //   i++;
-        //   return guardarLinks();
-        // } catch (error) {
-        //   return console.error(error);
-        // }
-      
-
-    
-    }
+    }    
 
     const consultarLinks = async () => {
       try {
-        let response = await axios.get(`${ObjConstanst.IP_PARTICIPANTES}participantes/consultarLinks/${1000000001}`);
-        return response.data.data;
+        
+        await axios
+        .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/consultarLinks/${idParticipante}`)
+        .then(({data}) => {
+          // console.log()
+          return setPrincipalState({...principalState, linksAgregado : data.links[0].links})
+        });
       } catch (error) {
         console.error(error);
         return false;
@@ -128,16 +110,6 @@ export const AgregarLinks = () => {
 
     const eliminarlink = async ({ data }) => {
       const {  index } = data;
-      console.log( index);
-  
-      // const existeParticipante = await verificarExisteDocumento(id_participantes, index + 1);
-      // console.log(existeParticipante);
-      // if (existeParticipante && existeParticipante !== undefined && existeParticipante.length) {
-      //   await axios.delete(
-      //     `${ObjConstanst.IP_PARTICIPANTES}partipantesAgregados/${existeParticipante[0].id_participantes}`
-      //   );
-      // }
-  
       let array = [];
       let copy = principalState.linksAgregado.map((data) => data);
       array = copy.filter((par) => par.index !== data.index);

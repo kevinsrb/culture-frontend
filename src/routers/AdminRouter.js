@@ -25,19 +25,21 @@ import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/Carg
 import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
 
 // POSTULACIONES
-import {GestionarPostulaciones} from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
+import { GestionarPostulaciones } from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
 import GestionarDocumentosPostulacion from "../screens/Postulaciones/GestionarDocumentos/GestionarDocumentosPostulacion";
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
+import { VerificacionPropuestas } from "../screens/Postulaciones/VerificacionPropuestas/VerificacionPropuestas";
+import { AdministrarJurados } from "../screens/Postulaciones/AdministrarJurados/AdministrarJurados";
 
 export default function AdminRouter() {
   return (
     <React.Fragment>
       <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#F7FBFF" }}>
-        <div style={{ width:'18.75%' }}>
+        <div style={{ width: "18.75%" }}>
           <Navbar />
         </div>
-        <div style={{ width:'81.25%' }}>
+        <div style={{ width: "81.25%" }}>
           <Grid className="menu-usuario-principal no-margin">
             <Grid.Row>
               <Grid.Column style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -109,6 +111,12 @@ export default function AdminRouter() {
           </Route>
           <Route path="/Administrador/gestionarPostulacionesdocumentos">
             <GestionarDocumentosPostulacion />
+          </Route>
+          <Route path="/Administrador/verificacionPropuestas">
+            <VerificacionPropuestas />
+          </Route>
+          <Route path="/Administrador/administrarJurados">
+            <AdministrarJurados />
           </Route>
           <Route path="/Administrador/Homeparticipantes">
             <HomeParticipantes />
