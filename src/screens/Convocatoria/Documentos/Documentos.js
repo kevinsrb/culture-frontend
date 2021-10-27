@@ -26,7 +26,7 @@ export const Documentos = () => {
       0: {
         id: 0,
         descripcion_del_documento: "Carta de invitación",
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         source: "Persona_Natural",
         url_documento: "",
@@ -34,7 +34,7 @@ export const Documentos = () => {
       1: {
         id: 1,
         descripcion_del_documento: "Cédula de ciudadania",
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         source: "Persona_Natural",
         url_documento: "",
@@ -42,7 +42,7 @@ export const Documentos = () => {
       2: {
         id: 2,
         descripcion_del_documento: "Cronograma",
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         source: "Persona_Natural",
         url_documento: "",
@@ -50,7 +50,7 @@ export const Documentos = () => {
       3: {
         id: 3,
         descripcion_del_documento: "Declaración de residencia",
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         source: "Persona_Natural",
         url_documento: "",
@@ -58,7 +58,7 @@ export const Documentos = () => {
       4: {
         id: 4,
         descripcion_del_documento: "RUT",
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         source: "Persona_Juridica",
         url_documento: "",
@@ -66,7 +66,7 @@ export const Documentos = () => {
       5: {
         id: 5,
         descripcion_del_documento: "Declaración",
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         source: "Grupo_Conformado",
         url_documento: "",
@@ -124,13 +124,12 @@ export const Documentos = () => {
       return {
         id: index,
         descripcion_del_documento: data.nombre,
-        sustentable: false,
+        subsanable: false,
         obligatorio: false,
         url_documento: "",
         source: persona[data.tipo_participante_id],
       };
     });
-    console.log(response.data.data);
     documentacionresponse = Object.assign({}, documentacionresponse);
     let arraypersonanatural = [];
     let arraypersonajuridica = [];
@@ -165,13 +164,10 @@ export const Documentos = () => {
         let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
         if (response.data.data.documentos === null) return;
         let convocatoria = response.data.data;
-        console.log(convocatoria);
         for (var i in documentos.documentacion) {
           let doc = documentos.documentacion[i];
-          console.log(doc, "documentacion");
           for (var x in convocatoria.documentos) {
             let convdoc = convocatoria.documentos[x];
-            console.log(convdoc, "convocatoria");
             if (
               doc.descripcion_del_documento.trim() === convdoc.descripcion.trim() &&
               doc.source === persona[convdoc.tipo_persona + 1] &&
@@ -302,7 +298,7 @@ export const Documentos = () => {
             idconvocatoria,
             url_documento: documentos.documentacion[documento].url_documento,
             descripcion: documentos.documentacion[documento].descripcion_del_documento,
-            sustentable: documentos.documentacion[documento].sustentable,
+            subsanable: documentos.documentacion[documento].subsanable,
             obligatorio: documentos.documentacion[documento].obligatorio,
             tipo_documento_id,
             tipo_persona,
@@ -312,7 +308,7 @@ export const Documentos = () => {
             idconvocatoria,
             url_documento: documentos.documentacion[documento].url_documento,
             descripcion: documentos.documentacion[documento].descripcion_del_documento,
-            sustentable: documentos.documentacion[documento].sustentable,
+            subsanable: documentos.documentacion[documento].subsanable,
             obligatorio: documentos.documentacion[documento].obligatorio,
             tipo_documento_id,
             tipo_persona,
@@ -560,8 +556,8 @@ export const Documentos = () => {
                         </Table.Cell>
                         <Table.Cell textAlign="center" style={{ width: "18%" }}>
                           <Checkbox
-                            checked={doc.sustentable}
-                            onChange={() => handlecheckboxChange(doc, "sustentable")}
+                            checked={doc.subsanable}
+                            onChange={() => handlecheckboxChange(doc, "subsanable")}
                           />
                         </Table.Cell>
                         <Table.Cell textAlign="center" style={{ width: "18%" }}>

@@ -144,9 +144,27 @@ export const EstratoOptions = [
   { key: 6, value: 6,  text: 'Seis' }
 ]
 
+export const TiposIdentificacion = [
+  { key: 3, value: 3, text: "Persona natural" },
+  { key: 2, value: 2, text: "Persona juridica" },
+  { key: 1, value: 1, text: "Grupo conformado" },
+];
 
+export const cantidadRegistros = [
+  { key: 1, value: 10, text: "10" },
+  { key: 2, value: 20, text: "20" },
+  { key: 3, value: 50, text: "50" },
+  { key: 4, value: 100, text: "100" },
+];
 
-
+export const Years = [
+  { key: 1, value: 2021, text: "2021" },
+  { key: 2, value: 2020, text: "2020" },
+  { key: 3, value: 2019, text: "2019" },
+  { key: 4, value: 2018, text: "2018" },
+  { key: 5, value: 2017, text: "2017" },
+  { key: 6, value: 2016, text: "2016" },
+]
   
 
 

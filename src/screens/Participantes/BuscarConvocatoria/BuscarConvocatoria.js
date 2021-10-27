@@ -19,6 +19,7 @@ import {
 } from "semantic-ui-react";
 import { useHistory } from "react-router";
 import { VerConvocatoria } from "../../../components/Participantes/VerConvocatoria";
+import { useBuscarConvocatoria } from "./Hooks/useBuscarConvocatoria";
 
 const cantidadRegistros = [
   { key: 1, value: 10, text: "10" },

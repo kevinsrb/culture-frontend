@@ -92,7 +92,7 @@
 }
 
 .font-color-9F0505 {
-  color: #9F0505 !important;
+  color: #9f0505 !important;
 }
 
 .font-color-4B4B4B {
@@ -132,15 +132,23 @@
 }
 
 .font-color-8796A5 {
-  color: #8796A5 !important;
+  color: #8796a5 !important;
 }
 
 .font-color-000000CC {
-  color: #000000CC !important;
+  color: #000000cc !important;
 }
 
 .font-color-000000 {
   color: #000000 !important;
+}
+
+.font-color-6A6A6A {
+  color: #6A6A6A !important;
+}
+
+.font-size-24px {
+  font-size: 18px !important;
 }
 
 .font-size-18px {
@@ -226,7 +234,7 @@
 }
 
 .background-color-1FAEEF {
-  background-color: #1FAEEF !important;
+  background-color: #1faeef !important;
 }
 
 .background-color-6DA3FC-opacity-025 {
@@ -234,11 +242,11 @@
 }
 
 .background-color-EAEBEC {
-  background-color: #EAEBEC !important;
+  background-color: #eaebec !important;
 }
 
 .background-color-F5FAFC {
-  background-color: #F5FAFC !important;
+  background-color: #f5fafc !important;
 }
 
 .border-radius-16 {
@@ -290,7 +298,7 @@ input:checked ~ label:after {
 
 .ui.secondary.pointing.menu {
   // border: none !important;
-  border-bottom: 1px solid #AAAAAA;
+  border-bottom: 1px solid #aaaaaa;
   background-color: #ffffff;
 }
 
@@ -300,19 +308,23 @@ input:checked ~ label:after {
   padding-left: 1%;
   padding-right: 1%;
   margin-left: 2.4%;
-  border-bottom: 3px solid #1FAEEF;
+  border-bottom: 3px solid #1faeef;
 }
 
 .ui.secondary.pointing.menu .item {
   font-family: "Montserrat-Regular";
-  color: #ABAFB3 !important;
+  color: #abafb3 !important;
   font-size: 13px;
 }
 
 .ui.secondary.pointing.menu .active.item:hover {
-  border-color: #1FAEEF;
+  border-color: #1faeef;
 }
 
 .ant-btn:empty {
   display: none !important;
+}
+
+.border-left-1-gray-input {
+  border-left: 1px solid rgba(34, 36, 38, 0.15) !important;
 }

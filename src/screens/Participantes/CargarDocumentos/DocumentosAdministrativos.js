@@ -26,30 +26,59 @@ export const DocumentosAdministrativos = () => {
   const fileInputRef = useRef();
   const dispatch = useDispatch();
 
-  const { documentos_convocatoria, idParticipante,documentos_cargados } = useSelector((state) => state.participantes);
+  const { documentos_convocatoria, idParticipante, documentos_cargados } = useSelector((state) => state.participantes);
 
-  const documentosAdministrativos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id == 0);
+  const documentosAdministrativos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 0);
   const [documentos, setDocumentos] = useState(documentosAdministrativos);
 
   const [principalState, setPrincipalState] = useState(State);
-  console.log(documentos, 'estos son los documentos');
+  console.log(documentos, "estos son los documentos");
 
   useEffect(() => {
     consultarDocumentosCargados();
-  }, [])
+  }, []);
 
   const consultarDocumentosCargados = () => {
-    console.log(documentos_cargados )
-    if(documentos_cargados !== null && documentos_cargados !== undefined){
-      const documentosAdministrativosCargados = documentos_cargados.filter((doct) => doct.tipo_documento_id === 2);
-      setDocumentos(documentosAdministrativosCargados)
+    // console.log(copy, 'esta es la copia con la url de los participantes');
+    console.log(documentos_cargados, " documentos cargados");
+    let copy = documentos.map((data) => {
+      let url_participante = "";
+      if (data.url_participante) url_participante = data.url_participante;
+      return {
+        descripcion: data.descripcion,
+        documentoActualizado: data.documentoActualizado,
+        fecha_creacion: data.fecha_creacion,
+        id: data.id,
+        idconvocatoria: data.idconvocatoria,
+        obligatorio: data.obligatorio,
+        subsanable: data.subsanable,
+        tipo_documento: data.tipo_documento,
+        tipo_documento_id: data.tipo_documento_id,
+        tipo_persona: data.tipo_persona,
+        url_documento: data.url_documento,
+        url_participante,
+      };
+    });
+    let todosJSON = JSON.parse(JSON.stringify(copy));
+    if (documentos_cargados !== null && documentos_cargados !== undefined) {
+      const documentosAdministrativosCargados = documentos_cargados.filter((doct) => doct.tipo_documento_id === 0);
+      if (documentosAdministrativosCargados.length > 0) {
+        for (var i in documentosAdministrativosCargados) {
+          let doc = documentosAdministrativosCargados[i];
+          for (var x in todosJSON) {
+            if (todosJSON[x].id === doc.id) todosJSON[x].url_participante = doc.url_participante;
+          }
+        }
+      }
+      console.log(documentosAdministrativosCargados, "documentos cargados");
+      setDocumentos(todosJSON);
     }
-  }
+  };
 
   const descargarPlantilla = async (url_documento, e) => {
     console.log(url_documento);
 
-    if (url_documento != undefined) {
+    if (url_documento !== undefined) {
       await axios
         .get(`${ObjConstanst.IP_CULTURE}documentos/consultarArchivos/${url_documento}`, {
           responseType: "blob",
@@ -61,34 +90,33 @@ export const DocumentosAdministrativos = () => {
   };
 
   const saveFile = async (datos, e, index) => {
-    const { idconvocatoria, tipo_documento, descripcion } = datos;
-    const { name } = e.target.files[0];
-
-    const guardarDocumento = {
-      idconvocatoria: idconvocatoria,
-      descripcion: descripcion,
-      url_participante: name,
-      tipo_documento: tipo_documento,
-      tipo_documento_id: 0,
-    };
-
-    let todosJSON = JSON.parse(JSON.stringify(documentos));
-    todosJSON[index].url_participante = name;
-    todosJSON[index].tipo_documento_id = 0;
-
-    await axios
-      .post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, guardarDocumento)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
-
-    await guardarDocumentosParticipante(todosJSON);
-
     if (e.target.files.length > 0) {
+      const { idconvocatoria, tipo_documento, descripcion } = datos;
+      const { name } = e.target.files[0];
+
+      const guardarDocumento = {
+        idconvocatoria: idconvocatoria,
+        descripcion: descripcion,
+        url_participante: name,
+        tipo_documento: tipo_documento,
+        tipo_documento_id: 3,
+      };
+
+      let todosJSON1 = JSON.parse(JSON.stringify(documentos));
+      todosJSON1[index].url_participante = name;
+      todosJSON1[index].tipo_documento_id = 0;
+
+      // await axios
+      //   .post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, guardarDocumento)
+      //   .then((data) => {
+      //     console.log(data);
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
+
+      await guardarDocumentosParticipante(todosJSON1);
+
       let file = e.target.files[0];
       const formData = new FormData();
       formData.append("archivo", file);
@@ -103,46 +131,43 @@ export const DocumentosAdministrativos = () => {
       console.log(index, "documento a adjuntar");
       let todosJSON = JSON.parse(JSON.stringify(documentos));
       todosJSON[index].url_participante = name;
-      todosJSON[index].tipo_documento_id = 0;  
-      dispatch(documentosCargados(todosJSON))
+      todosJSON[index].tipo_documento_id = 0;
+      dispatch(documentosCargados(todosJSON));
       return setDocumentos(todosJSON);
     }
   };
 
   const eliminarArchivo = async (e, index) => {
-
     console.log(index, "este es el index a eliminar");
     let todosJSON = JSON.parse(JSON.stringify(documentos));
 
     await axios
-      .delete(`${ObjConstanst.IP_PARTICIPANTES}participantes/eliminarArchivo/${ todosJSON[index].url_participante}`)
+      .delete(`${ObjConstanst.IP_PARTICIPANTES}participantes/eliminarArchivo/${todosJSON[index].url_participante}`)
       .then((data) => {
-        console.log(data)
+        console.log(data);
       })
       .catch(function (error) {
         console.log(error);
-      })
+      });
 
     todosJSON[index].url_participante = "";
     todosJSON[index].tipo_documento_id = 0;
-    dispatch(documentosCargados(todosJSON))
-    guardarDocumentosParticipante(todosJSON)
+    dispatch(documentosCargados(todosJSON));
+    guardarDocumentosParticipante(todosJSON);
 
     return setDocumentos(todosJSON);
   };
 
-  const guardarDocumentosParticipante = async(documentos) => {
+  const guardarDocumentosParticipante = async (documentos) => {
     await axios
-    .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/documentos/${idParticipante}`, documentos )
-    .then(({data}) => {
-      console.log(data)
-
-    })
-    .catch(function (error) {
-      console.log(error);
-    })
-  }
-
+      .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/documentos/${idParticipante}`, documentos)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
 
   return (
     <React.Fragment>
@@ -158,7 +183,7 @@ export const DocumentosAdministrativos = () => {
                     <Card.Description>{datos.descripcion}</Card.Description>
 
                     <Grid className="no-margin" columns={2}>
-                      {datos.url_documento === '' ? (
+                      {datos.url_documento === "" ? (
                         <Grid.Column className="no-padding-left">
                           <Header
                             floated="left"
@@ -174,16 +199,19 @@ export const DocumentosAdministrativos = () => {
                         <Button
                           content="Cargar plantilla"
                           className="font-size-12px button-back font-family-Montserrat-SemiBold"
-                          onClick={() => fileInputRef.current.click()}
+                          onClick={() => {
+                            var inputs = document.getElementsByClassName("inputs-ref");
+                            inputs[index].click();
+                          }}
                         />
 
-                        <input ref={fileInputRef} type="file" hidden onChange={(e) => saveFile(datos, e, index)} />
+                        <input className="inputs-ref" type="file" hidden onChange={(e) => saveFile(datos, e, index)} />
                       </Grid.Column>
                     </Grid>
                   </Card.Content>
                 </Card>
                 {datos.url_participante !== "" ? (
-                  <Card className="card_archivo_subido no-margin">
+                  <Card className="card_archivo_subido_admin no-margin">
                     <Card.Content className="cards_content ">
                       <Card.Header className="font-family-Montserrat-Bold font-size-12px font-color-FFFFFF">
                         {datos.tipo_documento}
@@ -205,7 +233,7 @@ export const DocumentosAdministrativos = () => {
                       </Grid>
                     </Card.Content>
                   </Card>
-                ) : null }
+                ) : null}
               </ContainerFragment>
             ))
           ) : (

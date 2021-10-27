@@ -15,12 +15,20 @@
   cursor: pointer;
 }
 
-.card_archivo_subido {
+.card_archivo_subido_tecnicos {
   background-color: #00904c !important;
   opacity: 90%;
   position: absolute !important;
   width: 38% !important;
-  height: 16%;
+  height: 13%;
+}
+
+.card_archivo_subido_admin {
+  background-color: #00904c !important;
+  opacity: 90%;
+  position: absolute !important;
+  width: 38% !important;
+  height: 10.5%;
 }
 
 .box-card-participantes {
