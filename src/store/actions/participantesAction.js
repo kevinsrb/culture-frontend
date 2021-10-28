@@ -45,3 +45,11 @@ export const idConvocatoriaSelecionada = (idconvocatorias) => ({
     }
 })
 
+export const tipoParticipante = (tipo_participante) => ({
+    type: types.tipo_participante,
+    payload:  {
+        tipo_participante,
+    }
+  
+})
+

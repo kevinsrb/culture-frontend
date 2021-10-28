@@ -37,6 +37,11 @@ export const participantesReducer = (state = {}, action) => {
                 ...state,
                 nombre_convocatoria: action.payload.id_convocatoria_seleccionada
             };
+        case types.tipo_participante:
+            return {
+                ...state,
+                tipo_participante: action.payload.tipo_participante
+            };
         default:
             return state
     }

@@ -16,6 +16,7 @@ import {
     Icon,
   } from "semantic-ui-react";
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 export const AgregarLinks = () => {
 
@@ -29,7 +30,9 @@ export const AgregarLinks = () => {
     index: 0
   }
 
-    const { idParticipante, nombre_convocatoria,   categoria_linea_convocatoria, fechas_participantes } = useSelector((state) => state.participantes);
+    const history = useHistory();
+
+    const { idParticipante, nombre_convocatoria,   categoria_linea_convocatoria, fechas_participantes, tipo_participante } = useSelector((state) => state.participantes);
     const { idConvocatoria  } = useSelector((state) => state.convocatoria);
     const [principalState, setPrincipalState] = useState(initialState);
 
@@ -54,33 +57,53 @@ export const AgregarLinks = () => {
     };
 
     const guardarLinks = async() => {
-      let arrLinks = principalState.linksAgregado;
-      await axios
-        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarLinksParticipantes/${idParticipante}`, arrLinks)
-        .then((res) => {
-          console.log(res)
-        });
+      
+      // await axios
+      //   .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarLinksParticipantes/${idParticipante}`, arrLinks)
+      //   .then((res) => {
+      //     console.log(res)
+      //   });
 
         const fechaApertura = fechas_participantes.filter((fec) => fec.clave == 'Apertura');
 
-       const postulaciones = [{
-        idConvocatoria,
+      //  const postulaciones = [{
+      //   idConvocatoria,
+        
+      //   tipo_participante,
+      //   'postulacion': true
+      //  }]
+
+       
+
+      // await axios
+      //   .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarPostulacionParticipantes/${idParticipante}`, postulaciones)
+      //   .then((res) => {
+      //     console.log(res)
+      //   });  
+        
+        let arrLinks = principalState.linksAgregado;
+       console.log(fechaApertura[0].valormin)
+
+      const postulante = {
+        convocatoria_id: idConvocatoria,
+        numero_documento_participante: idParticipante,
+        nombre_propuesta: 'PRUEBA',
+        tipo_participante,
+        links: arrLinks,
         nombre_convocatoria,
         categoria_linea_convocatoria,
-        fechaApertura,
-        'postulacion': true
-       }]
+        fecha_apertura: fechaApertura[0].valormin,
+      }
 
-       console.log(postulaciones)
+      console.log(postulante)
 
       await axios
-        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarPostulacionParticipantes/${idParticipante}`, postulaciones)
+        .post(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/`, postulante)
         .then((res) => {
           console.log(res)
-        });
-
-
-      
+        });   
+        
+      // history.push('/Administrador/homeParticipantes')
     }    
 
     const consultarLinks = async () => {

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { Header, Divider, Segment, Container, Button, Radio, Grid, Breadcrumb, Icon } from "semantic-ui-react";
+import { tipoParticipante } from "../../../store/actions/participantesAction";
+import { useDispatch } from "react-redux";
 
 export const SeleccionarRoles = () => {
   const [principalState, setPrincipalState] = useState("persona_natural");
@@ -13,15 +15,18 @@ export const SeleccionarRoles = () => {
   };
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const asociarRoles = () => {
-    if(principalState == 'persona_natural'){
+    if(principalState == 1){
       history.push('/Administrador/personaNatural')
-    }else if(principalState == 'persona_juridica'){
+    }else if(principalState == 2){
       history.push('/Administrador/personaJuridica')
     }else{
       history.push('/Administrador/grupoConformado')
     }
+    console.log(principalState)
+    dispatch(tipoParticipante(principalState))
   };
 
   return (
@@ -68,9 +73,9 @@ export const SeleccionarRoles = () => {
                 label={<label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Persona natural</label>}
                 name="rol"
                 value={principalState}
-                checked={principalState === "persona_natural"}
+                checked={principalState === 1}
                 onClick={() => {
-                  setPrincipalState("persona_natural");
+                  setPrincipalState(1);
                 }}
               />
 
@@ -79,9 +84,9 @@ export const SeleccionarRoles = () => {
                 label={<label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Perona jurídica</label>}
                 name="rol"
                 value={principalState}
-                checked={principalState === "persona_juridica"}
+                checked={principalState === 2}
                 onClick={() => {
-                  setPrincipalState("persona_juridica");
+                  setPrincipalState(2);
                 }}
               />
 
@@ -90,9 +95,9 @@ export const SeleccionarRoles = () => {
                 label={<label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Grupo conformado</label>}
                 name="rol"
                 value={principalState}
-                checked={principalState === "grupo_conformador"}
+                checked={principalState === 3}
                 onClick={() => {
-                  setPrincipalState("grupo_conformador");
+                  setPrincipalState(3);
                 }}
               />
             </div>

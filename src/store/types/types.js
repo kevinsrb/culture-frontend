@@ -16,5 +16,6 @@ export const types = {
     documentos_cargados: '[Prt] documentos cargados',
     categoria_linea_convocatoria: '[Prt] categorias participante',
     fechas_participantes: '[Prt] fechas participante',
-    nombre_convocatoria: '[Prt] no0mbre convocatoria'
+    nombre_convocatoria: '[Prt] nombre convocatoria',
+    tipo_participante: '[Prt] tipo participante'
 }
