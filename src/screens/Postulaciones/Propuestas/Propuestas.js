@@ -43,8 +43,6 @@ export const Propuestas = () => {
         }
     }, [])
 
-    console.log(postulaciones)
-
     const columns = [
         {
             title: "Propuesta",
@@ -103,17 +101,17 @@ export const Propuestas = () => {
             dataIndex: "pais_residencia",
             key: "pais_residencia",
         },
-        {
-            title: "Consultar verficación",
-            width: 120,
-            key: "acciones",
-            fixed: "right",
-            render: (datos) => (
-                <>
-                    <Button className="botones-acciones" icon="search" onClick={() => showModal(datos)} />
-                </>
-            ),
-        },
+        // {
+        //     title: "Consultar verficación",
+        //     width: 120,
+        //     key: "acciones",
+        //     fixed: "right",
+        //     render: (datos) => (
+        //         <>
+        //             <Button className="botones-acciones" icon="search" onClick={() => showModal(datos)} />
+        //         </>
+        //     ),
+        // },
         {
             title: "Modificar verficación",
             width: 120,

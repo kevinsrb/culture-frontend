@@ -43,6 +43,8 @@ export const GestionarPostulaciones = () => {
         }
     }, [])
 
+    console.log(postulaciones)
+
     const columns = [
         {
             title: "Propuesta",
