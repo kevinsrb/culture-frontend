@@ -85,6 +85,7 @@ export default function Login() {
         contraseña,
       });
 
+      dispatch(user_token(''));
       dispatch(id_Participante(idusuario));
       dispatch(user_token(token.data));
 

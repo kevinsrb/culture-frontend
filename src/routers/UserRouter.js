@@ -45,34 +45,34 @@ export default function UserRouter() {
               </Grid.Column>
             </Grid.Row>
           </Grid>
-          <Route path="/Usuario/">
+          <Route exact path="/Usuario/">
             <BuscarConvocatoria />
           </Route>
-          <Route path="/Usuario/Inscripcion">
+          <Route exact path="/Usuario/Inscripcion">
             <Inscripcion />
           </Route>
-          <Route path="/Usuario/Agregararticipantes">
+          <Route exact path="/Usuario/Agregararticipantes">
             <AgregarPaticipante />
           </Route>
-          <Route path="/Usuario/Personanatural">
+          <Route exact path="/Usuario/Personanatural">
             <PersonaNatural />
           </Route>
-          <Route path="/Usuario/Personajuridica">
+          <Route exact path="/Usuario/Personajuridica">
             <PersonaJuridica />
           </Route>
-          <Route path="/Usuario/Grupoconformado">
+          <Route exact path="/Usuario/Grupoconformado">
             <GrupoConformado />
           </Route>
-          <Route path="/Usuario/Seleccionarrol">
+          <Route exact path="/Usuario/Seleccionarrol">
             <SeleccionarRoles />
           </Route>
-          <Route path="/Usuario/Cargardocumentos">
+          <Route exact path="/Usuario/Cargardocumentos">
             <CargarDocumentos />
           </Route>
-          <Route path="/Usuario/AgregarLinks">
+          <Route exact path="/Usuario/AgregarLinks">
             <AgregarLinks />
           </Route>
-          <Route path="/Usuario/Participantes">
+          <Route exact path="/Usuario/Participantes">
             <HomeParticipantes />
           </Route>
         </div>
