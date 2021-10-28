@@ -19,12 +19,12 @@ import {
     GridColumn,
 } from "semantic-ui-react";
 import ModalPostulacion from '../ModalPostualcion';
-import { FiltrosTabla } from './FiltrosTabla';
-import { useGestionarPostulaciones } from './Hooks/useGestionarPostulaciones';
+import { FiltrosTabla } from '../VerificacionPropuestas/FiltrosTabla';
+import { useGestionarPostulaciones } from '../GestionarPostulaciones/Hooks/useGestionarPostulaciones';
 
 
 
-export const GestionarPostulaciones = () => {
+export const Propuestas = () => {
 
     const {
         openFilter,
@@ -42,8 +42,6 @@ export const GestionarPostulaciones = () => {
             mounted = false;
         }
     }, [])
-
-    console.log(postulaciones)
 
     const columns = [
         {
@@ -103,17 +101,17 @@ export const GestionarPostulaciones = () => {
             dataIndex: "pais_residencia",
             key: "pais_residencia",
         },
-        {
-            title: "Consultar verficación",
-            width: 120,
-            key: "acciones",
-            fixed: "right",
-            render: (datos) => (
-                <>
-                    <Button className="botones-acciones" icon="search" onClick={() => showModal(datos)} />
-                </>
-            ),
-        },
+        // {
+        //     title: "Consultar verficación",
+        //     width: 120,
+        //     key: "acciones",
+        //     fixed: "right",
+        //     render: (datos) => (
+        //         <>
+        //             <Button className="botones-acciones" icon="search" onClick={() => showModal(datos)} />
+        //         </>
+        //     ),
+        // },
         {
             title: "Modificar verficación",
             width: 120,
@@ -146,7 +144,7 @@ export const GestionarPostulaciones = () => {
                     <Header
                         className="font-size-14px font-color-1B1C1D font-weight-600 font-family-Montserrat-SemiBold"
                     >
-                        Busqueda de propuestas
+                        Mis propuestas
                     </Header>
                 </Col>
                 <Col span={8}>

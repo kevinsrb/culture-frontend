@@ -27,6 +27,8 @@ import { DocumentacionConvocatoria } from "../screens/Convocatoria/Documentacion
 // POSTULACIONES
 import { GestionarPostulaciones } from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
 import GestionarDocumentosPostulacion from "../screens/Postulaciones/GestionarDocumentos/GestionarDocumentosPostulacion";
+import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas"; 
+
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
 import { VerificacionPropuestas } from "../screens/Postulaciones/VerificacionPropuestas/VerificacionPropuestas";

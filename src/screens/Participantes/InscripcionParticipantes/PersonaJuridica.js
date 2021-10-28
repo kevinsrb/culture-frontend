@@ -91,10 +91,8 @@ export const PersonaJuridica = () => {
   };
 
   const handleCrearPersonaJuridica = () => {
-
     let arrayErrores = stateErrores;
     let error = false;
-
 
     if (principalState.tipo_identificacion == 0) {
       arrayErrores = {
@@ -239,11 +237,11 @@ export const PersonaJuridica = () => {
       return setErrores(arrayErrores);
     } else {
       console.log({ principalState, empresa })
-
+       ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+      history.push("/agregarParticipantes");
     }
 
-    // ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-    // history.push("/agregarParticipantes");
+   
 
   };
   return (
@@ -433,7 +431,7 @@ export const PersonaJuridica = () => {
                   fluid
                   label={<label className="font-color-4B4B4B font-size-12px">Primer apellido</label>}
                   name="primer_apellido"
-                  error={errores.segundo_nombre}
+                  error={errores.primer_apellido}
                   onChange={handleInputChange}
                 />
 
@@ -526,7 +524,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono fijo</label>}
                   name="telefono_fijo"
                   onChange={handleInputChange}
-                  error={errores.fecha_nacimiento}
+                  error={errores.telefono_fijo}
                 />
 
                 <Form.Input
