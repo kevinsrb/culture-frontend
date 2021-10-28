@@ -27,6 +27,8 @@ import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks
 // POSTULACIONES
 import { GestionarPostulaciones } from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
 import GestionarDocumentosPostulacion from "../screens/Postulaciones/GestionarDocumentos/GestionarDocumentosPostulacion";
+import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas"; 
+
 // Menu de usuario
 import { Grid, Icon } from "semantic-ui-react";
 import { VerificacionPropuestas } from "../screens/Postulaciones/VerificacionPropuestas/VerificacionPropuestas";
@@ -124,6 +126,10 @@ export default function AdminRouter() {
           <Route path="/Administrador/AgregarLinks">
             <AgregarLinks />
           </Route>
+          <Route path="/Administrador/MisPropuestas">
+            <Propuestas />
+          </Route>
+          
         </div>
       </div>
     </React.Fragment>

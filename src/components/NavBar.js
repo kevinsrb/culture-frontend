@@ -69,7 +69,7 @@ export default function Navbar() {
           </Accordion>
 
           <Menu.Item as="a" key={2} className="sidebar_items font-family-Montserrat-Regular font-size-12px">
-            <Link>
+            <Link to="/Administrador/MisPropuestas">
               <span>Mis propuestas</span>
             </Link>
           </Menu.Item>
