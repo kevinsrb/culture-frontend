@@ -93,7 +93,7 @@ export default function Login() {
         return history.push('/Administrador');
       }
 
-      return history.push('/Administrador');
+      return history.push('/Usuario');
 
     } catch (error) {
       setIsLoginFailed(true);
