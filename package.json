@@ -13,6 +13,8 @@
     "@testing-library/user-event": "^12.1.10",
     "antd": "^4.16.13",
     "axios": "^0.21.4",
+    "formik": "^2.2.9",
+    "formik-semantic-ui-react": "^2.0.0",
     "js-file-download": "^0.4.12",
     "moment": "^2.29.1",
     "node-sass": "^4.14.1",
@@ -20,6 +22,7 @@
     "react-beautiful-dnd": "^13.1.0",
     "react-datepicker": "^4.2.1",
     "react-dom": "^17.0.2",
+    "react-hook-form": "^7.18.0",
     "react-icons": "^4.2.0",
     "react-imask": "^6.2.2",
     "react-pdf": "^5.4.0",
@@ -35,7 +38,8 @@
     "sweetalert2": "^11.1.6",
     "sweetalert2-react-content": "^4.1.1",
     "use-imask": "^2.0.0",
-    "web-vitals": "^1.0.1"
+    "web-vitals": "^1.0.1",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

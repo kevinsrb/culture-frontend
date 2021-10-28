@@ -12,6 +12,7 @@ import { useHistory } from "react-router";
 
 export const GrupoConformado = () => {
   const initialState = {
+    tipo_identificacion: "",
     nombre_grupo: "",
     correo_electronico_gc: "",
     documento: "",
@@ -33,13 +34,103 @@ export const GrupoConformado = () => {
     tipo_participante: 3,
   };
 
+  const stateErrores = {
+    tipo_identificacion: false,
+    numero_documento: false,
+    primer_nombre: false,
+    primer_apellido: false,
+    fecha_nacimiento: false,
+    sexo: false,
+    pais_residencia: false,
+    telefono_fijo: "",
+    telefono_celular: false,
+  };
+
+
   const [principalState, setPrincipalState] = useState(initialState);
   const [startDate, setStartDate] = useState(new Date());
+  const [errores, setErrores] = useState(stateErrores);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const handleCrearGrupoConformado = async () => {
+
+    let arrayErrores = stateErrores;
+    let error = false;
+
+    if(principalState.tipo_identificacion.length == 0){
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_identificacion: true,
+      }
+      error = true
+    }
+    if(principalState.numero_documento == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        numero_documento: true,
+      }
+      error = true
+    }
+    if(principalState.primer_nombre == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        primer_nombre: true,
+      }
+      error = true
+    }
+    if(principalState.primer_apellido == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        primer_apellido: true,
+      }
+      error = true
+    }
+    if(principalState.fecha_nacimiento == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        fecha_nacimiento: true,
+      }
+      error = true
+    }
+    if(principalState.sexo.length == 0){
+      arrayErrores = {
+        ...arrayErrores,
+        sexo: true,
+      }
+      error = true
+    }
+    if(principalState.pais_residencia == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        pais_residencia: true,
+      }
+      error = true
+    }
+    if(principalState.telefono_fijo == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_fijo: true,
+      }
+      error = true
+    }
+    if(principalState.telefono_celular == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_celular: true,
+      }
+      error = true
+    }
+
+    if(error){
+      return setErrores(arrayErrores);
+    } else {
+      console.log(principalState)
+      ObjNotificaciones.MSG_SUCCESS("success", "se ha creado correctamente el grupo conformado");
+      history.push("/Administrador/homeParticipantes");
+    }
+    
     // await axios
     // .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
     // .then((data) => {
@@ -51,13 +142,12 @@ export const GrupoConformado = () => {
     //   console.log(error)
     //   //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
     // });
-    ObjNotificaciones.MSG_SUCCESS("success", "se ha creado correctamente el grupo conformado");
-    history.push("/Administrador/homeParticipantes");
+    
   };
 
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
-    console.log(value, name);
+    // console.log(value, name);
     //setErrores({...errores, [name]: false});
     return setPrincipalState({ ...principalState, [name]: value });
   };
@@ -97,6 +187,7 @@ export const GrupoConformado = () => {
                   name="tipo_identificacion"
                   options={TipoDocumentosOptions}
                   onChange={handleInputChange}
+                  error={errores.tipo_identificacion}
                 />
 
                 <Form.Input
@@ -105,15 +196,16 @@ export const GrupoConformado = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Numero documento</label>}
                   name="numero_documento"
                   onChange={handleInputChange}
+                  error={errores.numero_documento}
                 />
 
-                <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Primer nombre</label>} name="primer_nombre" onChange={handleInputChange} />
+                <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Primer nombre</label>} name="primer_nombre" onChange={handleInputChange}  error={errores.primer_nombre} />
 
                 <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Segundo nombre</label>} name="segundo_nombre" onChange={handleInputChange} />
               </Form.Group>
 
               <Form.Group widths="equal">
-                <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Primer apellido</label>} name="primer_apellido" onChange={handleInputChange} />
+                <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Primer apellido</label>} name="primer_apellido" onChange={handleInputChange} error={errores.primer_apellido} />
 
                 <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Segundo apellido</label>} name="segundo_apellido" onChange={handleInputChange} />
 
@@ -122,16 +214,17 @@ export const GrupoConformado = () => {
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setPrincipalState({ ...principalState, fecha_nacimiento: date })}
+                    error={errores.fecha_nacimiento}
                   />
                 </Form.Field>
 
-                <Form.Select fluid label={<label className="font-color-4B4B4B font-size-12px">Sexo</label>} name="sexo" options={SexoOptions} onChange={handleInputChange} />
+                <Form.Select fluid label={<label className="font-color-4B4B4B font-size-12px">Sexo</label>} name="sexo" options={SexoOptions} onChange={handleInputChange}  error={errores.sexo}/>
               </Form.Group>
 
               <Form.Group widths="equal">
                 <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">País de nacimiento</label>} name="pais_nacimiento" onChange={handleInputChange} />
 
-                <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">País de residencia</label>} name="pais_residencia" onChange={handleInputChange} />
+                <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">País de residencia</label>} name="pais_residencia" onChange={handleInputChange} error={errores.pais_residencia} />
 
                 <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Departamento</label>} name="departamento" onChange={handleInputChange} />
 
@@ -160,6 +253,7 @@ export const GrupoConformado = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono fijo</label>}
                   name="telefono_fijo"
                   onChange={handleInputChange}
+                  error={errores.telefono_fijo}
                 />
 
                 <Form.Input
@@ -168,6 +262,7 @@ export const GrupoConformado = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono celular</label>}
                   name="telefono_celular"
                   onChange={handleInputChange}
+                  error={errores.telefono_celular}
                 />
 
                 <Form.Input fluid label={<label className="font-color-4B4B4B font-size-12px">Correo electrónico</label>} name="correo_electronico" onChange={handleInputChange} />

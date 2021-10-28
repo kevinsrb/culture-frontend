@@ -60,119 +60,200 @@ export const PersonaNatural = () => {
     cargarInformacionParticipante();
   }, [])
 
-  const handleCrearPersonaNatural = async() => {
+  const handleCrearPersonaNatural = async () => {
 
+    let arrayErrores = stateErrores;
+    let error = false;
 
-    if(idParticipante !== undefined){
-
-      const existeParticipante = await consularExisteParticipante();
-      if(!Array.isArray(existeParticipante)){
-
-        await axios
-        .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`, principalState)
-        .then(({data}) => {
-          ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
-        })
-        .catch(function (error) {
-          console.log(error)
-         // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-        });
-
-        const { primer_nombre: nombres, primer_apellido: apellidos, correo_electronico: email, telefono: telefono_celular, tipo_identificacion }  = principalState;
-        const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
-
-        await axios
-        .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
-        .then(({data}) => {
-          ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
-        })
-        .catch(function (error) {
-          console.log(error)
-         // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-        });
-
-      }else{
-
-        await axios
-        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
-        .then(({data}) => {
-          ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-          //history.push("/Administrador/agregarParticipantes"); 
-        })
-        .catch(function (error) {
-          console.log(error)
-        });
-
-        const { primer_nombre: nombres, primer_apellido: apellidos, correo_electronico: email, telefono: telefono_celular, tipo_identificacion }  = principalState;
-        const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
-
-        await axios
-        .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
-        .then(({data}) => {
-          ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
-        })
-        .catch(function (error) {
-          console.log(error)
-        });
+    if (principalState.tipo_identificacion == 0) {
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_identificacion: true,
       }
-
-      history.push('/Administrador/agregarParticipantes')
+      error = true
     }
+    if (principalState.numero_documento == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        numero_documento: true,
+      }
+      error = true
+    }
+    if (principalState.primer_nombre == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        primer_nombre: true,
+      }
+      error = true
+    }
+
+    if (principalState.primer_apellido == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        primer_apellido: true,
+      }
+      error = true
+    }
+
+    if (principalState.fecha_nacimiento == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        fecha_nacimiento: true,
+      }
+      error = true
+    }
+    if (principalState.sexo.length == 0) {
+      arrayErrores = {
+        ...arrayErrores,
+        sexo: true,
+      }
+      error = true
+    }
+
+    if (principalState.pais_residencia == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        pais_residencia: true,
+      }
+      error = true
+    }
+
+    if (principalState.telefono_fijo == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_fijo: true,
+      }
+      error = true
+    }
+    if (principalState.telefono_celular == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_celular: true,
+      }
+      error = true
+    }
+
+    if (error) {
+      return setErrores(arrayErrores);
+    } else {  
+      // debugger 
+      if (idParticipante !== undefined) {
+
+        const existeParticipante = await consularExisteParticipante();
+        if (!Array.isArray(existeParticipante)) {
+
+          await axios
+            .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`, principalState)
+            .then(({ data }) => {
+              ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
+            })
+            .catch(function (error) {
+              console.log(error)
+              // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+            });
+
+          const { primer_nombre: nombres, primer_apellido: apellidos, correo_electronico: email, telefono: telefono_celular, tipo_identificacion } = principalState;
+          const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
+
+          await axios
+            .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
+            .then(({ data }) => {
+              ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
+            })
+            .catch(function (error) {
+              console.log(error)
+              // ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+            });
+
+        } else {
+
+          await axios
+            .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
+            .then(({ data }) => {
+              ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+              //history.push("/Administrador/agregarParticipantes"); 
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+
+          const { primer_nombre: nombres, primer_apellido: apellidos, correo_electronico: email, telefono: telefono_celular, tipo_identificacion } = principalState;
+          const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
+
+          await axios
+            .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
+            .then(({ data }) => {
+              ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
+            })
+            .catch(function (error) {
+              console.log(error)
+            });
+        }
+
+        history.push('/Administrador/agregarParticipantes')
+      }
+    }
+
+
+
+
+
   }
 
-  const consularExisteParticipante = async() => {
+  const consularExisteParticipante = async () => {
     return await axios
       .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`)
       .then(({ data }) => {
         return data.data
       })
-      .catch(function (error) {});
+      .catch(function (error) { });
   };
 
-  const cargarInformacionParticipante = async() => {
+  const cargarInformacionParticipante = async () => {
 
-    if(idParticipante != undefined){
+    if (idParticipante != undefined) {
 
       const existeParticipante = await consularExisteParticipante();
       console.log(existeParticipante)
-      
-      if(!Array.isArray(existeParticipante)){
+
+      if (!Array.isArray(existeParticipante)) {
         return setPrincipalState(existeParticipante)
-      }else{
+      } else {
         await axios
-        .get(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`,)
-        .then(({data}) => {
+          .get(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`,)
+          .then(({ data }) => {
 
-          console.log(data.data)
-          const { nombres , apellidos, direccion, email, telefono, tipo_identificacion, idusuario } = data.data;
-      
-          const objUsuario = {
-            tipo_identificacion: tipo_identificacion,
-            numero_documento: idusuario,
-            primer_nombre: nombres,
-            primer_apellido: apellidos,
-            telefono_celular: telefono,
-            correo_electronico: email,
-            tipo_participante: 1,
-            usuario_id: idParticipante
-          }
+            console.log(data.data)
+            const { nombres, apellidos, direccion, email, telefono, tipo_identificacion, idusuario } = data.data;
 
-          console.log(objUsuario)
+            const objUsuario = {
+              tipo_identificacion: tipo_identificacion,
+              numero_documento: idusuario,
+              primer_nombre: nombres,
+              primer_apellido: apellidos,
+              telefono_celular: telefono,
+              correo_electronico: email,
+              tipo_participante: 1,
+              usuario_id: idParticipante
+            }
 
-          return setPrincipalState(objUsuario)
+            console.log(objUsuario)
 
-        })
-        .catch(function (error) {
-          console.log(error)
-          //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
-        });
-      } 
+            return setPrincipalState(objUsuario)
+
+          })
+          .catch(function (error) {
+            console.log(error)
+            //ObjNotificaciones.MSG_ERROR('error', 'Oops...' , error.data.mensaje)
+          });
+      }
     }
   }
- 
+
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
     return setPrincipalState({ ...principalState, [name]: value });
+
   };
 
   return (
@@ -307,6 +388,7 @@ export const PersonaNatural = () => {
                   name="departamento"
                   value={principalState.departamento}
                   onChange={handleInputChange}
+
                 />
 
                 <Form.Input
@@ -353,6 +435,7 @@ export const PersonaNatural = () => {
                   name="telefono_fijo"
                   value={principalState.telefono_fijo}
                   onChange={handleInputChange}
+                  error={errores.telefono_fijo}
                 />
 
                 <Form.Input

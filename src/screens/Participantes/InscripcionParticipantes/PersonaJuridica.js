@@ -47,29 +47,204 @@ export const PersonaJuridica = () => {
     tipo_participante: 2,
   };
 
+  const stateErrores = {
+    tipo_identificacion: false,
+    numero_documento: false,
+    primer_nombre: false,
+    primer_apellido: false,
+    fecha_nacimiento: false,
+    sexo: false,
+    pais_residencia: false,
+    telefono_fijo: "",
+    telefono_celular: false,
+    razon_social: false,
+    nit: false,
+    direccion_empresa: false,
+    telefono_fijo_empresa: false,
+    telefono_celular_empresa: false,
+    tipo_enfoque_empresa: false,
+    objeto_social_empresa: false,
+    fecha_constitucion_empresa: false,
+    correo_electronico_empresa: false,
+    municipio_residencia_empresa: false,
+  };
+
   const [empresa, setEmpresa] = useState(stateEmpresa);
   const [principalState, setPrincipalState] = useState(initialState);
   const [startDate, setStartDate] = useState(new Date());
+  const [errores, setErrores] = useState(stateErrores);
 
   const history = useHistory();
 
   const handleInputChangeEmpresa = (event, result) => {
     const { name, value } = result || event.target;
-    console.log(value, name);
+    // console.log(value, name);
     //setErrores({...errores, [name]: false});
     return setEmpresa({ ...empresa, [name]: value });
   };
 
   const handleInputChange = (event, result) => {
     const { name, value } = result || event.target;
-    console.log(value, name);
+    // console.log(value, name);
     //setErrores({...errores, [name]: false});
     return setPrincipalState({ ...principalState, [name]: value });
   };
 
   const handleCrearPersonaJuridica = () => {
-    ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
-    history.push("/agregarParticipantes");
+
+    let arrayErrores = stateErrores;
+    let error = false;
+
+
+    if (principalState.tipo_identificacion == 0) {
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_identificacion: true,
+      }
+      error = true
+    }
+    if (principalState.numero_documento == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        numero_documento: true,
+      }
+      error = true
+    }
+    if (principalState.primer_nombre == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        primer_nombre: true,
+      }
+      error = true
+    }
+
+    if (principalState.primer_apellido == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        primer_apellido: true,
+      }
+      error = true
+    }
+
+    if (principalState.fecha_nacimiento == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        fecha_nacimiento: true,
+      }
+      error = true
+    }
+    if (principalState.sexo.length == 0) {
+      arrayErrores = {
+        ...arrayErrores,
+        sexo: true,
+      }
+      error = true
+    }
+
+    if (principalState.pais_residencia == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        pais_residencia: true,
+      }
+      error = true
+    }
+
+    if (principalState.telefono_fijo == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_fijo: true,
+      }
+      error = true
+    }
+    if (principalState.telefono_celular == '') {
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_celular: true,
+      }
+      error = true
+    }
+
+    if(empresa.razon_social == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        razon_social: true,
+      }
+      error = true;
+    }
+    if(empresa.nit == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        nit: true,
+      }
+      error = true;
+    }
+    if(empresa.direccion_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        direccion_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.telefono_fijo_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_fijo_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.telefono_celular_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        telefono_celular_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.tipo_enfoque_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        tipo_enfoque_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.objeto_social_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        objeto_social_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.fecha_constitucion_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        fecha_constitucion_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.correo_electronico_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        correo_electronico_empresa: true,
+      }
+      error = true;
+    }
+    if(empresa.municipio_residencia_empresa == ''){
+      arrayErrores = {
+        ...arrayErrores,
+        municipio_residencia_empresa: true,
+      }
+      error = true;
+    }
+
+    if (error) {
+      return setErrores(arrayErrores);
+    } else {
+      console.log({ principalState, empresa })
+
+    }
+
+    // ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
+    // history.push("/agregarParticipantes");
+
   };
   return (
     <React.Fragment>
@@ -105,6 +280,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Razón social</label>}
                   name="razon_social"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.razon_social}
                 />
 
                 <Form.Input
@@ -112,6 +288,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">NIT</label>}
                   name="nit"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.nit}
                 />
 
                 <Form.Input
@@ -119,6 +296,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Dirección empresa</label>}
                   name="direccion_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.direccion_empresa}
                 />
 
                 <Form.Input
@@ -126,6 +304,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono fijo</label>}
                   name="telefono_fijo_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.telefono_fijo_empresa}
                 />
               </Form.Group>
 
@@ -135,6 +314,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono celular</label>}
                   name="telefono_celular_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.telefono_celular_empresa}
                 />
 
                 <Form.Input
@@ -142,6 +322,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Tipo de enfoque</label>}
                   name="tipo_enfoque_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.tipo_enfoque_empresa}
                 />
 
                 <Form.Input
@@ -149,6 +330,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Objeto social</label>}
                   name="objeto_social_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.objeto_social_empresa}
                 />
 
                 <Form.Input
@@ -156,6 +338,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Fecha de constitución</label>}
                   name="fecha_constitucion_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.fecha_constitucion_empresa}
                 />
               </Form.Group>
 
@@ -165,6 +348,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Correo electrónico</label>}
                   name="correo_electronico_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.correo_electronico_empresa}
                 />
 
                 <Form.Input
@@ -172,6 +356,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Municipio de residencia</label>}
                   name="municipio_residencia_empresa"
                   onChange={handleInputChangeEmpresa}
+                  error={errores.municipio_residencia_empresa}
                 />
 
                 <Form.Input
@@ -215,6 +400,7 @@ export const PersonaJuridica = () => {
                   name="tipo_identificacion"
                   options={TipoDocumentosOptions}
                   onChange={handleInputChange}
+                  error={errores.tipo_identificacion}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
@@ -223,6 +409,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Numero documento</label>}
                   name="numero_documento"
                   onChange={handleInputChange}
+                  error={errores.numero_documento}
                 />
 
                 <Form.Input
@@ -230,6 +417,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Primer nombre</label>}
                   name="primer_nombre"
                   onChange={handleInputChange}
+                  error={errores.primer_nombre}
                 />
 
                 <Form.Input
@@ -245,6 +433,7 @@ export const PersonaJuridica = () => {
                   fluid
                   label={<label className="font-color-4B4B4B font-size-12px">Primer apellido</label>}
                   name="primer_apellido"
+                  error={errores.segundo_nombre}
                   onChange={handleInputChange}
                 />
 
@@ -260,6 +449,7 @@ export const PersonaJuridica = () => {
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setPrincipalState({ ...principalState, fecha_nacimiento: date })}
+                    error={errores.fecha_nacimiento}
                   />
                 </Form.Field>
 
@@ -270,6 +460,7 @@ export const PersonaJuridica = () => {
                   options={SexoOptions}
                   onChange={handleInputChange}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                  error={errores.sexo}
                 />
               </Form.Group>
 
@@ -286,6 +477,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">País de residencia</label>}
                   name="pais_residencia"
                   onChange={handleInputChange}
+                  error={errores.pais_residencia}
                 />
 
                 <Form.Input
@@ -334,6 +526,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono fijo</label>}
                   name="telefono_fijo"
                   onChange={handleInputChange}
+                  error={errores.fecha_nacimiento}
                 />
 
                 <Form.Input
@@ -341,6 +534,7 @@ export const PersonaJuridica = () => {
                   label={<label className="font-color-4B4B4B font-size-12px">Teléfono celular</label>}
                   name="telefono_celular"
                   onChange={handleInputChange}
+                  error={errores.telefono_celular}
                 />
 
                 <Form.Input
