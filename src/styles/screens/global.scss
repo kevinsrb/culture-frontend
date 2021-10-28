@@ -292,6 +292,11 @@ input:checked ~ label:after {
   justify-content: flex-end !important;
 }
 
+.justify-content-center {
+  display: flex !important;
+  justify-content: center !important;
+}
+
 .display-flex {
   display: flex !important;
 }
@@ -327,4 +332,8 @@ input:checked ~ label:after {
 
 .border-left-1-gray-input {
   border-left: 1px solid rgba(34, 36, 38, 0.15) !important;
+}
+
+.sidebar-padding {
+  padding-left: 4%;
 }

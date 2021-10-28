@@ -21,7 +21,7 @@ export const VerConvocatoria = (props) => {
     dispatch(fechasParticipantes(fechas));
     dispatch(nombreConvocatoria(numero_convocatoria))
 
-    history.push("/Administrador/seleccionarRol");
+    history.push("/Usuario/Seleccionarrol");
   };
 
   return (

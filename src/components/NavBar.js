@@ -1,13 +1,13 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { SidebarData } from "../data/Sidedata";
+import { sidebardataAdmin, sidebardataUser } from "../data/Sidedata";
 import { participantesData } from "../data/participantesData";
 
 import "./Header.css";
 
-import { Sidebar, Menu, Accordion, Icon } from "semantic-ui-react";
-import escudoAlcaldia from "../assets/escudoAlcaldia.png";
+import { Sidebar, Menu, Accordion, Image, Grid } from "semantic-ui-react";
+import escudoAlcaldia from "../assets/medellin.png";
 
 export default function Navbar() {
   const sidebar = true;
@@ -18,75 +18,46 @@ export default function Navbar() {
     const newIndex = activeIndex === index ? -1 : index;
     setState({ activeIndex: newIndex });
   };
+  const { user } = useSelector((state) => state);
 
   return (
     <>
-      <div className="navbar navbar_edit">
-        <Sidebar as={Menu} animation="overlay" direction="left" vertical visible={sidebar} className="sidebar">
-          <div className="sidebar_container">
-            <div>
-              <figure>
-                <img src={escudoAlcaldia} className="sidebar_logo" />
-              </figure>
-            </div>
-            <span className="sidebar_sub_titulo font-family-Montserrat-Regular font-size-12px">Secretaria de cultura ciudadana</span>
-          </div>
-
-          <Menu.Item as="a" key={1}>
-            <Link to="/homeParticipantes">
-              <span className="sidebar_items_title">Fomento a la cultura</span>
-            </Link>
-          </Menu.Item>
-
-          {SidebarData.map((item, index) => {
-            return (
-              <Menu.Item as="a" key={index} className="sidebar_items font-family-Montserrat-Regular font-size-12px">
-                <Link to={item.path}>
-                  <span>{item.title}</span>
-                </Link>
-              </Menu.Item>
-            );
-          })}
-
-          <Accordion>
-            <Accordion.Title active={state.activeIndex === 0} index={0} onClick={handleClick}>
-              <Menu.Item as="a" key={1} className="sidebar_items font-family-Montserrat-Regular font-size-12px">
-                Participantes
-                <Icon name="dropdown" />
-              </Menu.Item>
-            </Accordion.Title>
-            <Accordion.Content active={state.activeIndex === 0}>
-              {participantesData.map((parti, index) => {
+      <Sidebar as={Menu} animation="overlay" direction="left" vertical visible={sidebar} className="sidebar">
+        <Grid className="no-margin background-color-6DA3FC">
+          <Grid.Row className="justify-content-center no-padding-bottom">
+            <Image src={escudoAlcaldia} style={{ width: "50%", height: "50%" }} fluid />
+          </Grid.Row>
+          <Grid.Row className="justify-content-center">
+            <span className="font-family-Montserrat-Regular font-size-12px font-color-FFFFFF">
+              Secretaria de cultura ciudadana
+            </span>
+          </Grid.Row>
+        </Grid>
+        <Grid className="no-margin" columns={1}>
+          <Grid.Row>
+            <span className="font-color-632264">Fomento a la cultura</span>
+          </Grid.Row>
+          {user.id_tipo === "ADMI"
+            ? sidebardataAdmin.map((item, index) => {
                 return (
-                  <Menu.Item as="a" key={index} className="sidebar_items">
-                    <Link to={parti.path}>
-                      <span>{parti.title}</span>
+                  <Grid.Row key={index} columns={1}>
+                    <Link to={item.path}>
+                      <span className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D sidebar-padding">{item.title}</span>
                     </Link>
-                  </Menu.Item>
+                  </Grid.Row>
+                );
+              })
+            : sidebardataUser.map((item, index) => {
+                return (
+                  <Grid.Row key={index} columns={1}>
+                    <Link to={item.path}>
+                      <span className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D">{item.title}</span>
+                    </Link>
+                  </Grid.Row>
                 );
               })}
-            </Accordion.Content>
-          </Accordion>
-
-          <Menu.Item as="a" key={2} className="sidebar_items font-family-Montserrat-Regular font-size-12px">
-            <Link>
-              <span>Mis propuestas</span>
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item as="a" key={3} className="sidebar_items font-family-Montserrat-Regular font-size-12px">
-            <Link>
-              <span>Juradoss</span>
-            </Link>
-          </Menu.Item>
-
-          <Menu.Item as="a" key={4} className="sidebar_items font-family-Montserrat-Regular font-size-12px">
-            <Link>
-              <span>Historico</span>
-            </Link>
-          </Menu.Item>
-        </Sidebar>
-      </div>
+        </Grid>
+      </Sidebar>
     </>
   );
 }

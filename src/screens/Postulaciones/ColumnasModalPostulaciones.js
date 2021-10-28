@@ -24,8 +24,8 @@ export const columnasDocumentaciontecnicaModal = [
         <Checkbox
           // className="font-color-4B4B4B"
           radio
-          label="Aceptado"
-          name="Aceptado"
+          label="Subsanar"
+          name="Subsanar"
         //   value={datos.publicosi}
         //   checked={datos.publicosi}
         //   onChange={(e, r) => handletoggleChange(datos, index, e, r)}
@@ -68,8 +68,8 @@ export const columnasDocumentacionadministrativaModal = [
           <Checkbox
             // className="font-color-4B4B4B"
             radio
-            label="Aceptado"
-            name="Aceptado"
+            label="Subsanar"
+            name="Subsanar"
           //   value={datos.publicosi}
           //   checked={datos.publicosi}
           //   onChange={(e, r) => handletoggleChange(datos, index, e, r)}

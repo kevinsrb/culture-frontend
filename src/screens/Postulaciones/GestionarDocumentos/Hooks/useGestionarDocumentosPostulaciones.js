@@ -143,9 +143,9 @@ export const useGestionarDocumentosPostulaciones = (initialState) => {
       setFormulario({ ...formulario, datosActuales: filtrado });
     }
   };
-  const mostrarModal = () => {
+  const mostrarModal = (datos) => {
     console.log("aca");
-    setFormulario({ ...formulario, openModal: !formulario.openModal });
+    setFormulario({ ...formulario, openModal: !formulario.openModal, documentocambiar: datos });
   };
   const mostrarmodalPostulacion = (datos) => {
     setFormulario({
@@ -154,9 +154,30 @@ export const useGestionarDocumentosPostulaciones = (initialState) => {
       informacionPostulacion: datos,
     });
   };
-  const handleChangeCheckbox = (e, r) => {
-
-  }
+  const changeStateDocument = async () => {
+    console.log(formulario.documentocambiar, "estos son los datos para enviar a cambiar el estado");
+    console.log("aca");
+    console.log("aca", formulario.documentocambiar);
+    let url = `${process.env.REACT_APP_SERVER_PART}participantes/actualizarEstadoSubsanacionDocumento/${formulario.documentocambiar.numero_documento}`;
+    let data = {
+      idDocumento: formulario.documentocambiar.id,
+      estado: false,
+    };
+    let response = await axios.put(url, data);
+    console.log(response);
+    setFormulario({ ...formulario, openModal: !formulario.openModal });
+  };
+  const savedocumentotoChange = async () => {
+    console.log("aca", formulario.documentocambiar);
+    let url = `${process.env.REACT_APP_SERVER_PART}participantes/actualizarEstadoSubsanacionDocumento/${formulario.documentocambiar.numero_documento}`;
+    let data = {
+      idDocumento: formulario.documentocambiar.id,
+      estado: false,
+    };
+    let response = await axios.put(url, data);
+    console.log(response);
+  };
+  const handleChangeCheckbox = (e, r) => {};
 
   return [
     formulario,
@@ -166,6 +187,8 @@ export const useGestionarDocumentosPostulaciones = (initialState) => {
     filtrarTablaMultiple,
     mostrarModal,
     mostrarmodalPostulacion,
-    handleChangeCheckbox
+    handleChangeCheckbox,
+    changeStateDocument,
+    savedocumentotoChange,
   ];
 };

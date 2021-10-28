@@ -103,7 +103,7 @@ export const AgregarLinks = () => {
           console.log(res)
         });   
         
-      // history.push('/Administrador/homeParticipantes')
+      history.push('/Administrador/Participantes')
     }    
 
     const consultarLinks = async () => {

@@ -13,16 +13,16 @@ import { DocumentacionTecnica } from "../screens/Convocatoria/Documentacion/docu
 import { DocumentacionConvocatoria } from "../screens/Convocatoria/Documentacion/documentacionGeneral";
 
 // PARTICIPANTES
-import { Inscripcion } from "../screens/Participantes/InscripcionParticipantes/Inscripcion";
-import { SeleccionarRoles } from "../screens/Participantes/SeleccionarRoles/SeleccionarRoles";
-import { AgregarPaticipante } from "../screens/Participantes/AgregarParticiantes/AgregarPaticipante";
-import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatoria";
-import { PersonaNatural } from "../screens/Participantes/InscripcionParticipantes/PersonaNatural";
-import { PersonaJuridica } from "../screens/Participantes/InscripcionParticipantes/PersonaJuridica";
-import { GrupoConformado } from "../screens/Participantes/InscripcionParticipantes/GrupoConformado";
-import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
-import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
-import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
+// import { Inscripcion } from "../screens/Participantes/InscripcionParticipantes/Inscripcion";
+// import { SeleccionarRoles } from "../screens/Participantes/SeleccionarRoles/SeleccionarRoles";
+// import { AgregarPaticipante } from "../screens/Participantes/AgregarParticiantes/AgregarPaticipante";
+// import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatoria";
+// import { PersonaNatural } from "../screens/Participantes/InscripcionParticipantes/PersonaNatural";
+// import { PersonaJuridica } from "../screens/Participantes/InscripcionParticipantes/PersonaJuridica";
+// import { GrupoConformado } from "../screens/Participantes/InscripcionParticipantes/GrupoConformado";
+// import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
+// import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
+// import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
 
 // POSTULACIONES
 import { GestionarPostulaciones } from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
@@ -82,30 +82,6 @@ export default function AdminRouter() {
           <Route exact path="/Administrador/documentacionConvocatoria">
             <DocumentacionConvocatoria />
           </Route>
-          <Route path="/Administrador/bucarConvocatoria">
-            <BuscarConvocatoria />
-          </Route>
-          <Route path="/Administrador/Inscripcion">
-            <Inscripcion />
-          </Route>
-          <Route path="/Administrador/agregarParticipantes">
-            <AgregarPaticipante />
-          </Route>
-          <Route path="/Administrador/personaNatural">
-            <PersonaNatural />
-          </Route>
-          <Route path="/Administrador/personaJuridica">
-            <PersonaJuridica />
-          </Route>
-          <Route path="/Administrador/grupoConformado">
-            <GrupoConformado />
-          </Route>
-          <Route path="/Administrador/seleccionarRol">
-            <SeleccionarRoles />
-          </Route>
-          <Route path="/Administrador/cargarDocumentos">
-            <CargarDocumentos />
-          </Route>
           <Route path="/Administrador/gestionarPostulaciones">
             <GestionarPostulaciones />
           </Route>
@@ -117,12 +93,6 @@ export default function AdminRouter() {
           </Route>
           <Route path="/Administrador/administrarJurados">
             <AdministrarJurados />
-          </Route>
-          <Route path="/Administrador/Homeparticipantes">
-            <HomeParticipantes />
-          </Route>
-          <Route path="/Administrador/AgregarLinks">
-            <AgregarLinks />
           </Route>
         </div>
       </div>

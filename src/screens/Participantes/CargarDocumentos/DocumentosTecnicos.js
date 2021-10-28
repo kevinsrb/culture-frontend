@@ -177,10 +177,13 @@ export const DocumentosTecnicos = React.memo(() => {
   };
 
   const asociarDocumenttosTecnicos = () => {
+    // for (var i in documentos) {
+    //   console.log(documentos[i]);
+    //   if (documentos[i].url_participante.trim() === ''){
 
-
-
-    history.push('/Administrador/AgregarLinks')
+    //   }
+    // }
+    history.push('/Usuario/AgregarLinks')
   }
 
   return (
@@ -224,7 +227,7 @@ export const DocumentosTecnicos = React.memo(() => {
                     </Grid>
                   </Card.Content>
                 </Card>
-                {datos.url_participante !== "" ? (
+                {datos.url_participante !== "" && datos.url_participante !== null ? (
                   <Card className="card_archivo_subido_tecnicos no-margin">
                     <Card.Content className="cards_content ">
                       <Card.Header className="font-family-Montserrat-Bold font-size-12px font-color-FFFFFF">
