@@ -15,6 +15,7 @@ import { GrupoConformado } from "../screens/Participantes/InscripcionParticipant
 import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
 import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
 import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
+import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas";
 
 export default function UserRouter() {
   return (
@@ -74,6 +75,9 @@ export default function UserRouter() {
           </Route>
           <Route exact path="/Usuario/Participantes">
             <HomeParticipantes />
+          </Route>
+          <Route exact path="/Usuario/misPropuestas">
+            <Propuestas />
           </Route>
         </div>
       </div>
