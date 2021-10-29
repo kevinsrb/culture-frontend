@@ -8,8 +8,9 @@ export const useGestionarPostulaciones = () => {
     const [postulaciones, setPostulaciones] = useState([]);
     const getPostulaciones = async() => {
         try {
-            const { participantes } = await PostulacionesApi.getPostulaciones();
-            setPostulaciones(participantes);
+            const { postulaciones } = await PostulacionesApi.getPostulaciones();
+            console.log(postulaciones)
+            setPostulaciones(postulaciones);
         } catch (error) {
             console.log(error);
         }

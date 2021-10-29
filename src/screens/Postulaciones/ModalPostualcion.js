@@ -7,6 +7,8 @@ import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaM
 
 export default function ModalPostulacion({ openModal, closeModal, actionButton, datos }) {
   React.useEffect(() => console.log(datos), [datos]);
+
+
   return (
     <Modal centered={false} open={openModal} onClose={closeModal}>
       <Grid className="no-margin">
@@ -19,14 +21,14 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
             >
               Propuesta&nbsp;-&nbsp;
               <span style={{ marginBottom: "0" }} className="font-size-10px font-family-Montserrat-SemiBold no-margin">
-                Código propuesta
+                {datos.id_postulacion}
               </span>
             </Header>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <label className="font-size-24px font-family-Montserrat-SemiBold">Nombre de propuesta</label>
+            <label className="font-size-24px font-family-Montserrat-SemiBold">{datos.nombre_propuesta}</label>
           </Grid.Column>
         </Grid.Row>
         <Divider clearing style={{ marginTop: "0", marginBottom: "1%" }} />
@@ -96,9 +98,7 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
                 style={{ marginBottom: "0" }}
                 className="font-size-12px font-family-Montserrat-SemiBold no-margin font-color-000000"
               >
-                {datos.tipo_participante
-                  ? TiposIdentificacion.filter((data) => data.value === datos.tipo_participante)[0].text
-                  : null}
+                {datos.tipo_participante == 1 ? 'Persona Natural' : datos.tipo_participante == 2 ? 'Persona Juriedica': datos.tipo_participante == 3 ? 'Grupo Conformado' : null}
               </span>
             </Header>
           </Grid.Column>
@@ -111,10 +111,12 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
             <Table
               columns={columnasDocumentaciontecnicaModal}
               dataSource={datos.documentosTecnicos}
+              dataSource={datos.participante.documentos?.filter( x => x.tipo_documento_id == 1)}
               scroll={{ x: 800, y: 300 }}
               size="large"
               rowClassName="sizeTable table-row"
               bordered={false}
+              size="middle"
             />
           </Grid.Column>
         </Grid.Row>
@@ -125,11 +127,12 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
             </label>
             <Table
               columns={columnasDocumentacionadministrativaModal}
-              dataSource={datos.documentosAdministrativos}
+              dataSource={datos.participante.documentos?.filter( x => x.tipo_documento_id == 0)}
               scroll={{ x: 800, y: 300 }}
               size="large"
               rowClassName="sizeTable table-row"
               bordered={false}
+              size="middle"
             />
           </Grid.Column>
         </Grid.Row>

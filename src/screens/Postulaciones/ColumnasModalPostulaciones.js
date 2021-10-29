@@ -5,8 +5,8 @@ export const columnasDocumentaciontecnicaModal = [
   {
     title: "Nombre documentos",
     width: 30,
-    dataIndex: "url_participante",
-    key: "url_participante",
+    dataIndex: "descripcion",
+    key: "descripcion",
   },
   {
     title: "Tipo de documento",
@@ -49,8 +49,8 @@ export const columnasDocumentacionadministrativaModal = [
     {
       title: "Nombre documentos",
       width: 30,
-      dataIndex: "url_participante",
-      key: "url_participante",
+      dataIndex: "descripcion",
+      key: "descripcion",
     },
     {
       title: "Tipo de documento",
