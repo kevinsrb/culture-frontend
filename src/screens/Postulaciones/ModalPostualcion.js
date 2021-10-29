@@ -195,9 +195,7 @@ export default function ModalPostulacion({
                 style={{ marginBottom: "0" }}
                 className="font-size-12px font-family-Montserrat-SemiBold no-margin font-color-000000"
               >
-                {datos.tipo_participante
-                  ? TiposIdentificacion.filter((data) => data.value === datos.tipo_participante)[0].text
-                  : null}
+                {datos.tipo_participante == 1 ? 'Persona Natural' : datos.tipo_participante == 2 ? 'Persona Juriedica': datos.tipo_participante == 3 ? 'Grupo Conformado' : null}
               </span>
             </Header>
           </Grid.Column>
@@ -209,11 +207,13 @@ export default function ModalPostulacion({
             </label>
             <Table
               columns={columnasDocumentaciontecnicaModal}
-              dataSource={datos.documentosTecnicos}
+              // dataSource={[]}
+              dataSource={datos.participante.documentos?.filter( x => x.tipo_documento_id == 1)}
               scroll={{ x: 800, y: 300 }}
               size="large"
               rowClassName="sizeTable table-row"
               bordered={false}
+              size="middle"
             />
           </Grid.Column>
         </Grid.Row>
@@ -224,11 +224,12 @@ export default function ModalPostulacion({
             </label>
             <Table
               columns={columnasDocumentacionadministrativaModal}
-              dataSource={datos.documentosAdministrativos}
+              dataSource={datos.participante.documentos?.filter( x => x.tipo_documento_id == 0)}
               scroll={{ x: 800, y: 300 }}
               size="large"
               rowClassName="sizeTable table-row"
               bordered={false}
+              size="middle"
             />
           </Grid.Column>
         </Grid.Row>
