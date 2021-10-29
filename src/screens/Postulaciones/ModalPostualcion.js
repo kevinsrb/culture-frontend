@@ -1,12 +1,111 @@
 import React from "react";
-import { Modal, Grid, Header, Divider } from "semantic-ui-react";
+import axios from "axios";
+import { Modal, Grid, Header, Divider, Button, Checkbox } from "semantic-ui-react";
 import ButtonPrimary from "../../components/Buttons/ButtonPrimary";
 import { TiposIdentificacion } from "../../data/selectOption.data";
 import { Table } from "antd";
-import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
+import fileDownload from "js-file-download";
+// import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
 
-export default function ModalPostulacion({ openModal, closeModal, actionButton, datos }) {
+export default function ModalPostulacion({
+  openModal,
+  closeModal,
+  actionButton,
+  actionCancelButton,
+  datos,
+  handlechangechecksustentable,
+  handlechangecheckaceptar,
+  handlechangecheckcancelar,
+}) {
   React.useEffect(() => console.log(datos), [datos]);
+  const handlecheckChange = (datos, index, e, r) => {
+    console.log(datos, index, e, r);
+  };
+  const columnasDocumentaciontecnicaModal = [
+    {
+      title: "Nombre documentos",
+      width: 30,
+      dataIndex: "url_participante",
+      key: "url_participante",
+    },
+    {
+      title: "Tipo de documento",
+      width: 30,
+      dataIndex: "descripcion",
+      key: "descripcion",
+    },
+    {
+      title: "Acciones",
+      width: 30,
+      render: (datos) => (
+        <>
+          <Button className="botones-acciones" icon="eye" onClick={() => descargarArchivos(datos)} />
+        </>
+      ),
+    },
+  ];
+  const descargarArchivos = async (datos) => {
+    console.log(datos);
+    if (datos.url_documento !== undefined) {
+      await axios
+        .get(`${process.env.REACT_APP_SERVER_CONV}documentos/consultarArchivos/${datos.url_documento}`, {
+          responseType: "blob",
+        })
+        .then((res) => {
+          fileDownload(res.data, datos.url_documento);
+        });
+    }
+  };
+  const columnasDocumentacionadministrativaModal = [
+    {
+      title: "Nombre documentos",
+      width: 30,
+      dataIndex: "url_participante",
+      key: "url_participante",
+    },
+    {
+      title: "Tipo de documento",
+      width: 30,
+      dataIndex: "descripcion",
+      key: "descripcion",
+    },
+    {
+      title: "Acciones",
+      width: 30,
+      render: (datos, record, index) => {
+        return (
+          <>
+            {datos.subsanable ? (
+              <Checkbox
+                label={<label className="font-color-4B4B4B font-size-10px">Subsanable</label>}
+                name="Subsanable"
+                value={datos.checksubsanable}
+                checked={datos.checksubsanable}
+                onChange={(e, r) => handlechangechecksustentable(datos, index)}
+              />
+            ) : null}
+            <Checkbox
+              className="font-color-4B4B4B"
+              label={<label className="font-color-4B4B4B font-size-10px">Aceptar</label>}
+              name="Aceptar"
+              value={datos.checkaceptar}
+              checked={datos.checkaceptar}
+              onChange={(e, r) => handlechangecheckaceptar(datos, index)}
+            />
+
+            <Checkbox
+              className="font-color-4B4B4B"
+              label={<label className="font-color-4B4B4B font-size-10px">Rechazar</label>}
+              name="Rechazado"
+              value={datos.checkcancelar}
+              checked={datos.checkcancelar}
+              onChange={(e, r) => handlechangecheckcancelar(datos, index)}
+            />
+          </>
+        );
+      },
+    },
+  ];
   return (
     <Modal centered={false} open={openModal} onClose={closeModal}>
       <Grid className="no-margin">
@@ -19,14 +118,14 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
             >
               Propuesta&nbsp;-&nbsp;
               <span style={{ marginBottom: "0" }} className="font-size-10px font-family-Montserrat-SemiBold no-margin">
-                Código propuesta
+                {datos.numero_documento}
               </span>
             </Header>
           </Grid.Column>
         </Grid.Row>
         <Grid.Row>
           <Grid.Column>
-            <label className="font-size-24px font-family-Montserrat-SemiBold">Nombre de propuesta</label>
+            <label className="font-size-24px font-family-Montserrat-SemiBold">{datos.nombre_propuesta}</label>
           </Grid.Column>
         </Grid.Row>
         <Divider clearing style={{ marginTop: "0", marginBottom: "1%" }} />
@@ -59,12 +158,12 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
                 style={{ marginBottom: "0" }}
                 className="font-size-12px font-family-Montserrat-SemiBold no-margin font-color-000000"
               >
-                {datos.categoria_linea_convocatoria
+                {/* {datos.categoria_linea_convocatoria.length > 0
                   ? datos.categoria_linea_convocatoria.map((data) => {
                       console.log(data);
                       return ` ${data.text} `;
                     })
-                  : null}
+                  : null} */}
               </span>
             </Header>
           </Grid.Column>
@@ -142,7 +241,8 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
         </Grid.Row>
       </Grid>
       <Modal.Actions>
-        <ButtonPrimary labelButton="Enviar" actionButton={actionButton} />
+        <ButtonPrimary labelButton="Cancelar" actionButton={actionCancelButton} />
+        <ButtonPrimary labelButton="Enviar" actionButton={() => actionButton(datos)} />
       </Modal.Actions>
     </Modal>
   );
