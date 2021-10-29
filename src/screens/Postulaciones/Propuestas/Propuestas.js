@@ -120,7 +120,7 @@ export const Propuestas = () => {
         //     ),
         // },
         {
-            title: "Modificar verficación",
+            title: "Revisar propuestas",
             width: 120,
             key: "acciones",
             fixed: "right",
