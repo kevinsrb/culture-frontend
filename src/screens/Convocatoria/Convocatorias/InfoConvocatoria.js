@@ -21,7 +21,7 @@ import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 
 export function InfoConvocatoria() {
   const objConvocatoria = {
-    numero_convocatoria: "",
+    nombre_convocatoria: "",
     linea_convocatoria: "",
     categoria_linea_convocatoria: [],
     entidad: "",
@@ -54,7 +54,7 @@ export function InfoConvocatoria() {
   };
 
   const stateErrores = {
-    numero_convocatoria: false,
+    nombre_convocatoria: false,
     linea_convocatoria: false,
     categoria_linea_convocatoria: false,
     entidad: false,
@@ -136,7 +136,7 @@ export function InfoConvocatoria() {
     console.log(tipocategoriasseleccionado);
     return setConvocatoria({
       ...convocatoria,
-      numero_convocatoria: response.data.data.numero_convocatoria,
+      nombre_convocatoria: response.data.data.nombre_convocatoria,
       linea_convocatoria: response.data.data.linea_convocatoria,
       categoria_linea_convocatoria: response.data.data.categoria_linea_convocatoria,
       entidad: response.data.data.entidad,
@@ -245,7 +245,7 @@ export function InfoConvocatoria() {
   const handleCreateConvocatoria = async (e) => {
     let arrayErrores = stateErrores;
     let error = false;
-    if (convocatoria.numero_convocatoria === "") {
+    if (convocatoria.nombre_convocatoria === "") {
       arrayErrores = {
         ...arrayErrores,
         numero_convocatoria: true,
@@ -545,8 +545,8 @@ export function InfoConvocatoria() {
                   label={<label className="font-color-4B4B4B">Nombre de la convocatoria</label>}
                   // placeholder="Seleccionar..."
                   // options={NumeroConvocatoiriaOptions}
-                  name="numero_convocatoria"
-                  value={convocatoria.numero_convocatoria.toString()}
+                  name="nombre_convocatoria"
+                  value={convocatoria.numero_convocatoria}
                   onChange={handleInputChange}
                   style={{ paddingRight: "2%" }}
                   // icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
