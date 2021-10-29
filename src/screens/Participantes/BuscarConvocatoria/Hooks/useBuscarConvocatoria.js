@@ -50,7 +50,9 @@ export const useBuscarConvocatoria = (initialState) => {
   const handleLineaConvocatoria = async (event, results) => {
     let { value } = results || event.target;
     try {
-      let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${value[0].value}`);
+      let response = await axios.get(
+        `${process.env.REACT_APP_SERVER_CONV}convocatorias/lineasConvocatorias/${value[0].value}`
+      );
       let categoriaslineasconvocatoriaMap;
       categoriaslineasconvocatoriaMap = response.data.data.map((ds) => {
         return {
@@ -85,6 +87,10 @@ export const useBuscarConvocatoria = (initialState) => {
       ...formulario.filtros,
       [e.name]: e.value,
     };
+    let copiaDatosActuales = [];
+    if (formulario.datosActuales.length > 0) {
+      copiaDatosActuales = formulario.datosActuales.map((data) => data);
+    }
     if (e.value.length !== 0) {
       let objetos = Object.keys(filtros);
       for (var i in formulario.datosActuales) {
@@ -101,22 +107,25 @@ export const useBuscarConvocatoria = (initialState) => {
                 if (datorepetido.length === 0) filtrado.push(formulario.datosActuales[i]);
               }
             } else {
-              // let datorepetido = filtrado.filter(data => data[objetos[x]] === filtros[objetos[x]])
-              let datorepetido = filtrado.filter(
-                (data) => data.idconvocatorias === formulario.datosActuales[i].idconvocatorias
-              );
-              if (datorepetido.length === 0) filtrado.push(formulario.datosActuales[i]);
-              // if (datorepetido.length === 0) {
-              //   if (formulario.datosActuales[i][objetos[x]] === filtros[objetos[x]])
-              //     filtrado.push(formulario.datosActuales[i]);
-              // }
+              let existe = formulario.datosActuales[i][objetos[x]] === filtros[objetos[x]];
+              if (existe) {
+                let datorepetido = filtrado.filter(
+                  (data) => data.idconvocatorias === formulario.datosActuales[i].idconvocatorias
+                );
+                if (datorepetido.length === 0) filtrado.push(formulario.datosActuales[i]);
+              }
             }
           }
         }
       }
-      return setFormulario({ ...formulario, datosActuales: filtrado, filtros });
+      return setFormulario({
+        ...formulario,
+        datosActuales: filtrado,
+        filtros,
+        datosfiltroanterior: copiaDatosActuales,
+      });
     }
-    return setFormulario({ ...formulario, filtros });
+    return setFormulario({ ...formulario, filtros, datosActuales: formulario.datosfiltroanterior });
   };
   return [
     formulario,

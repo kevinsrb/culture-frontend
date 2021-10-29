@@ -30,6 +30,8 @@ export default function GestionarDocumentosPostulacion() {
     filtrarTablaMultiple,
     mostrarModal,
     mostrarmodalPostulacion,
+    changeStateDocument,
+    savedocumentotoChange,
   ] = useGestionarDocumentosPostulaciones({
     filtro: false,
     datosActuales: [],
@@ -40,6 +42,7 @@ export default function GestionarDocumentosPostulacion() {
     informacionPostulacion: [],
     aceptado: true,
     rechazado: false,
+    documentocambiar: [],
   });
   React.useEffect(() => {
     getDataInitial();
@@ -109,7 +112,7 @@ export default function GestionarDocumentosPostulacion() {
       render: (datos) => (
         <>
           <ButtonIcon iconRender="eye" actionButton={() => mostrarmodalPostulacion(datos)} />
-          <ButtonIcon iconRender="mail outline" actionButton={mostrarModal} />
+          <ButtonIcon iconRender="mail outline" actionButton={() => mostrarModal(datos)} />
         </>
       ),
     },
@@ -225,7 +228,7 @@ export default function GestionarDocumentosPostulacion() {
           </Grid>
         </Segment>
       </Grid>
-      <ModalNotificacion openModal={formulario.openModal} actionButton={mostrarModal} />
+      <ModalNotificacion openModal={formulario.openModal} actionButton={savedocumentotoChange} />
       <ModalPostulacion
         openModal={formulario.openModalPostulacion}
         actionButton={mostrarmodalPostulacion}

@@ -67,18 +67,9 @@ export const BuscarConvocatoria = () => {
     filtros: [],
   });
 
-  // const [datosActuales, setDatosActuales] = useState([]);
   const [filtros, setfiltros] = useState(initialState);
-  // const [principalState, setPrincipalState] = useState(initialStateFiltros);
   const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] = useState([]);
-  // const [tipoparticipanteseleccionado, setTipoparticipanteseleccionado] = useState([]);
   const [tipocategoriasseleccionado, setTipocategoriasseleccionado] = useState([]);
-  // const [lineaConvocatoriaOptions, setlineaConvocatoriaOptions] = useState();
-  // const [areaSeleccionada, setAreaSeleccionada] = useState([]);
-
-  // const [cantidadPáginas, setCantidadPáginas] = React.useState(10);
-  // const [paginacionTotal, setPaginacionTotal] = React.useState(0);
-  // const [paginacionActual, setPaginacionActual] = React.useState(1);
 
   useEffect(() => {
     primeroDatostabla();
@@ -89,9 +80,6 @@ export const BuscarConvocatoria = () => {
   //   return setfiltros({ ...filtros, [name]: value });
   // };
 
-  const abrirModal = (e, datos) => {
-    console.log(datos);
-  };
 
   return (
     <React.Fragment>

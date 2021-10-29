@@ -170,7 +170,7 @@ export const AgregarPaticipante = () => {
     //   }
 
     await ObjNotificaciones.MSG_SUCCESS("success", "Se guardaron correctamente todos los participantes");
-    history.push("/Administrador/cargarDocumentos");
+    history.push("/Usuario/Cargardocumentos");
     // }else{
     //   await ObjNotificaciones.MSG_SUCCESS("success", "Se guardaron correctamente los cambios");
     //   //return history.push("/publicarConvocatoria");

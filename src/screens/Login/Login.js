@@ -84,17 +84,16 @@ export default function Login() {
         idusuario,
         contraseña,
       });
-      console.log(token)
 
-      dispatch(id_Participante(idusuario))
+      dispatch(user_token(''));
+      dispatch(id_Participante(idusuario));
       dispatch(user_token(token.data));
 
-      if (user.id_tipo === 'ADMI') {
-        return history.push('/Administrador');
+      if (token.data.id_tipo === "ADMI") {
+        return history.push("/Administrador");
       }
 
-      return history.push('/Administrador');
-
+      return history.push("/Usuario");
     } catch (error) {
       setIsLoginFailed(true);
       console.error(error);
@@ -173,11 +172,11 @@ export default function Login() {
                 />
               </Form.Field>
 
-              {isLoginFailed &&
+              {isLoginFailed && (
                 <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
                   Identificación o contraseña incorrectos
                 </Header>
-              }
+              )}
 
               <Form.Field className="container-space-between" style={{ paddingTop: "10%", paddingBottom: "10%" }}>
                 <Button

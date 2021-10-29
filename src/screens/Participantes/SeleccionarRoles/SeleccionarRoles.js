@@ -18,15 +18,15 @@ export const SeleccionarRoles = () => {
   const dispatch = useDispatch();
 
   const asociarRoles = () => {
-    if(principalState == 1){
-      history.push('/Administrador/personaNatural')
-    }else if(principalState == 2){
-      history.push('/Administrador/personaJuridica')
-    }else{
-      history.push('/Administrador/grupoConformado')
+    if (principalState === 1) {
+      history.push("/Usuario/Personanatural");
+    } else if (principalState === 2) {
+      history.push("/Usuario/Personajuridica");
+    } else {
+      history.push("/Usuario/Grupoconformado");
     }
-    console.log(principalState)
-    dispatch(tipoParticipante(principalState))
+    console.log(principalState);
+    dispatch(tipoParticipante(principalState));
   };
 
   return (
@@ -70,7 +70,11 @@ export const SeleccionarRoles = () => {
             <div className="check_roles">
               <Radio
                 className="radio-buttons-seleccionarroles"
-                label={<label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Persona natural</label>}
+                label={
+                  <label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">
+                    Persona natural
+                  </label>
+                }
                 name="rol"
                 value={principalState}
                 checked={principalState === 1}
@@ -81,7 +85,11 @@ export const SeleccionarRoles = () => {
 
               <Radio
                 className="radio-buttons-seleccionarroles"
-                label={<label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Perona jurídica</label>}
+                label={
+                  <label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">
+                    Perona jurídica
+                  </label>
+                }
                 name="rol"
                 value={principalState}
                 checked={principalState === 2}
@@ -92,7 +100,11 @@ export const SeleccionarRoles = () => {
 
               <Radio
                 className="radio-buttons-seleccionarroles"
-                label={<label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Grupo conformado</label>}
+                label={
+                  <label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">
+                    Grupo conformado
+                  </label>
+                }
                 name="rol"
                 value={principalState}
                 checked={principalState === 3}
@@ -104,7 +116,7 @@ export const SeleccionarRoles = () => {
 
             <Divider clearing />
 
-            <Container textAlign="right" style={{ paddingRight: '2%' }}>
+            <Container textAlign="right" style={{ paddingRight: "2%" }}>
               <Button className="btn btn-primary" content="Continuar" onClick={asociarRoles}></Button>
             </Container>
           </Segment>

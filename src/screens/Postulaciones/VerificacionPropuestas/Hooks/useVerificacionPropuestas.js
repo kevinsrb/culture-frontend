@@ -65,7 +65,7 @@ export const useVerificacionPropuestas = () => {
             key: "pais_residencia",
         },
         {
-            title: "Verificar propuesta",
+            title: "Aceptar propuesta",
             width: 120,
             key: "acciones",
             fixed: "right",
@@ -76,18 +76,7 @@ export const useVerificacionPropuestas = () => {
             ),
         },
         {
-            title: "Modificar propuesta",
-            width: 120,
-            key: "acciones",
-            fixed: "right",
-            render: (datos) => (
-                <>
-                    <Button className="botones-acciones" icon="pencil" />
-                </>
-            ),
-        },
-        {
-            title: "Anular propuesta",
+            title: "Rechazar propuesta",
             width: 120,
             key: "acciones",
             fixed: "right",

@@ -6,6 +6,7 @@ import { ObjConstanst } from "../../../config/utils/constanst";
 import { Container, Card, Header, Button, Grid, GridColumn } from "semantic-ui-react";
 import { documentosCargados } from "../../../store/actions/participantesAction";
 import styled from "@emotion/styled";
+import { useHistory } from "react-router";
 
 const ContainerFragment = styled.div`
   padding: 1%;
@@ -25,6 +26,7 @@ export const DocumentosAdministrativos = () => {
 
   const fileInputRef = useRef();
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const { documentos_convocatoria, idParticipante, documentos_cargados } = useSelector((state) => state.participantes);
 
@@ -104,6 +106,7 @@ export const DocumentosAdministrativos = () => {
 
       let todosJSON1 = JSON.parse(JSON.stringify(documentos));
       todosJSON1[index].url_participante = name;
+      if (todosJSON1[index].subsanable) todosJSON1[index].estado_subsanable = true;
       todosJSON1[index].tipo_documento_id = 0;
 
       // await axios
@@ -131,6 +134,7 @@ export const DocumentosAdministrativos = () => {
       console.log(index, "documento a adjuntar");
       let todosJSON = JSON.parse(JSON.stringify(documentos));
       todosJSON[index].url_participante = name;
+      if (todosJSON[index].subsanable) todosJSON[index].estado_subsanable = true
       todosJSON[index].tipo_documento_id = 0;
       dispatch(documentosCargados(todosJSON));
       return setDocumentos(todosJSON);
@@ -168,6 +172,10 @@ export const DocumentosAdministrativos = () => {
         console.log(error);
       });
   };
+
+  const SaveandContinue = () => {
+    history.push('/Usuario/AgregarLinks')
+  }
 
   return (
     <React.Fragment>
@@ -210,7 +218,7 @@ export const DocumentosAdministrativos = () => {
                     </Grid>
                   </Card.Content>
                 </Card>
-                {datos.url_participante !== "" ? (
+                {datos.url_participante !== "" && datos.url_participante !== null ? (
                   <Card className="card_archivo_subido_admin no-margin">
                     <Card.Content className="cards_content ">
                       <Card.Header className="font-family-Montserrat-Bold font-size-12px font-color-FFFFFF">
@@ -245,6 +253,7 @@ export const DocumentosAdministrativos = () => {
           <Button
             content="Guardar y continuar"
             className="btn btn-primary-outline"
+            onClick={SaveandContinue}
             // onClick={() => fileInputRef.current.click()}
           />
         </Container>

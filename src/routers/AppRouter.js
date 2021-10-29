@@ -3,6 +3,7 @@ import OlvidoContraseña from "../screens/Login/OlvidoContraseña";
 import CrearUsuario from "../screens/Login/CrearUsuario";
 import Login from "../screens/Login/Login";
 import AdminRouter from "./AdminRouter";
+import UserRouter from "./UserRouter";
 
 export const AppRouter = () => {
   return (
@@ -16,6 +17,9 @@ export const AppRouter = () => {
         </Route>
         <Route path="/Administrador">
           <AdminRouter />
+        </Route>
+        <Route path="/Usuario">
+          <UserRouter />
         </Route>
         <Route path="/">
           <Login />
