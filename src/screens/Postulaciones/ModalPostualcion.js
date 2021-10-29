@@ -110,7 +110,7 @@ export default function ModalPostulacion({ openModal, closeModal, actionButton, 
             </label>
             <Table
               columns={columnasDocumentaciontecnicaModal}
-              dataSource={datos.documentosTecnicos}
+              // dataSource={[]}
               dataSource={datos.participante.documentos?.filter( x => x.tipo_documento_id == 1)}
               scroll={{ x: 800, y: 300 }}
               size="large"

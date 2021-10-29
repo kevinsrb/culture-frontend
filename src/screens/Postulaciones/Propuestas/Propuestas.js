@@ -135,7 +135,7 @@ export const Propuestas = () => {
     const [datos, setDatos] = useState({})
     const [openModal, setOpenModal] = useState(false);
     const showModal = (datos) => {
-        debugger
+        // debugger
         setDatos(datos)
         setOpenModal(true);
     }
