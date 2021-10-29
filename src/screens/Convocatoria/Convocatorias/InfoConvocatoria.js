@@ -539,17 +539,17 @@ export function InfoConvocatoria() {
               </Header>
               <Divider clearing style={{ marginTop: "0", marginBottom: "3%" }} />
               <Form.Group widths="equal">
-                <Form.Select
+                <Form.Input
                   error={errores.numero_convocatoria}
                   className="font-color-4B4B4B"
-                  label={<label className="font-color-4B4B4B">Número de la convocatoria</label>}
-                  placeholder="Seleccionar..."
-                  options={NumeroConvocatoiriaOptions}
+                  label={<label className="font-color-4B4B4B">Nombre de la convocatoria</label>}
+                  // placeholder="Seleccionar..."
+                  // options={NumeroConvocatoiriaOptions}
                   name="numero_convocatoria"
                   value={convocatoria.numero_convocatoria.toString()}
                   onChange={handleInputChange}
                   style={{ paddingRight: "2%" }}
-                  icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                  // icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Select
