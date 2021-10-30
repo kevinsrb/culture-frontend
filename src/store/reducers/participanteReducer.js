@@ -12,10 +12,15 @@ export const participantesReducer = (state = {}, action) => {
                 ...state,
                 documentos_convocatoria: action.payload.documentos_convocatoria
             };
-        case types.documentos_cargados:
+        case types.documentos_administrativos_cargados:
             return {
                 ...state,
-                documentos_cargados: action.payload.documentos_cargados
+                documentos_administrativos_cargados: action.payload.documentos_administrativos_cargados
+            };
+        case types.documentos_tecnico_cargados:
+            return {
+                ...state,
+                documentos_tecnico_cargados: action.payload.documentos_tecnico_cargados
             };
         case types.fechas_participantes:
             return {
@@ -41,6 +46,11 @@ export const participantesReducer = (state = {}, action) => {
             return {
                 ...state,
                 tipo_participante: action.payload.tipo_participante
+            };
+        case types.id_postulacion:
+            return {
+                ...state,
+                id_postulacion: action.payload.id_postulacion
             };
         default:
             return state

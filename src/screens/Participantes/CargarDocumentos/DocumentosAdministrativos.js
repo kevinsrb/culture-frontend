@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import fileDownload from "js-file-download";
 import { ObjConstanst } from "../../../config/utils/constanst";
 import { Container, Card, Header, Button, Grid, GridColumn } from "semantic-ui-react";
-import { documentosCargados } from "../../../store/actions/participantesAction";
+import { documentosAdministrativosCargados } from "../../../store/actions/participantesAction";
 import styled from "@emotion/styled";
 import { useHistory } from "react-router";
 
@@ -28,7 +28,7 @@ export const DocumentosAdministrativos = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { documentos_convocatoria, idParticipante, documentos_cargados } = useSelector((state) => state.participantes);
+  const { id_postulacion, documentos_convocatoria, idParticipante, documentos_administrativos_cargados, documentos_tecnico_cargados } = useSelector((state) => state.participantes);
 
   const documentosAdministrativos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 0);
   const [documentos, setDocumentos] = useState(documentosAdministrativos);
@@ -41,39 +41,8 @@ export const DocumentosAdministrativos = () => {
   }, []);
 
   const consultarDocumentosCargados = () => {
-    // console.log(copy, 'esta es la copia con la url de los participantes');
-    console.log(documentos_cargados, " documentos cargados");
-    let copy = documentos.map((data) => {
-      let url_participante = "";
-      if (data.url_participante) url_participante = data.url_participante;
-      return {
-        descripcion: data.descripcion,
-        documentoActualizado: data.documentoActualizado,
-        fecha_creacion: data.fecha_creacion,
-        id: data.id,
-        idconvocatoria: data.idconvocatoria,
-        obligatorio: data.obligatorio,
-        subsanable: data.subsanable,
-        tipo_documento: data.tipo_documento,
-        tipo_documento_id: data.tipo_documento_id,
-        tipo_persona: data.tipo_persona,
-        url_documento: data.url_documento,
-        url_participante,
-      };
-    });
-    let todosJSON = JSON.parse(JSON.stringify(copy));
-    if (documentos_cargados !== null && documentos_cargados !== undefined) {
-      const documentosAdministrativosCargados = documentos_cargados.filter((doct) => doct.tipo_documento_id === 0);
-      if (documentosAdministrativosCargados.length > 0) {
-        for (var i in documentosAdministrativosCargados) {
-          let doc = documentosAdministrativosCargados[i];
-          for (var x in todosJSON) {
-            if (todosJSON[x].id === doc.id) todosJSON[x].url_participante = doc.url_participante;
-          }
-        }
-      }
-      console.log(documentosAdministrativosCargados, "documentos cargados");
-      setDocumentos(todosJSON);
+    if (documentos_administrativos_cargados !== null && documentos_administrativos_cargados !== undefined && documentos_administrativos_cargados.length > 0 ) {
+      return setDocumentos(documentos_administrativos_cargados);
     }
   };
 
@@ -109,16 +78,7 @@ export const DocumentosAdministrativos = () => {
       if (todosJSON1[index].subsanable) todosJSON1[index].estado_subsanable = true;
       todosJSON1[index].tipo_documento_id = 0;
 
-      // await axios
-      //   .post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, guardarDocumento)
-      //   .then((data) => {
-      //     console.log(data);
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
-
-      await guardarDocumentosParticipante(todosJSON1);
+      await guardarUrlDocumentosPostulacion(id_postulacion,todosJSON1[index].id, name  );
 
       let file = e.target.files[0];
       const formData = new FormData();
@@ -131,46 +91,42 @@ export const DocumentosAdministrativos = () => {
         .catch(function (error) {
           console.log(error);
         });
+        
       console.log(index, "documento a adjuntar");
       let todosJSON = JSON.parse(JSON.stringify(documentos));
       todosJSON[index].url_participante = name;
       if (todosJSON[index].subsanable) todosJSON[index].estado_subsanable = true
       todosJSON[index].tipo_documento_id = 0;
-      dispatch(documentosCargados(todosJSON));
+      dispatch(documentosAdministrativosCargados(todosJSON));
       return setDocumentos(todosJSON);
     }
   };
 
+  const guardarUrlDocumentosPostulacion = async (id_postulacion, id_documento, filename) => {
+    const actualizarDocumento = {
+      id_postulacion,
+      id_documento,
+      filename
+    }
+    await axios
+    .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/guardarUrlDocumentosPostulacion`, actualizarDocumento)
+    .then(({ data }) => {
+      console.log(data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   const eliminarArchivo = async (e, index) => {
     console.log(index, "este es el index a eliminar");
     let todosJSON = JSON.parse(JSON.stringify(documentos));
-
-    await axios
-      .delete(`${ObjConstanst.IP_PARTICIPANTES}participantes/eliminarArchivo/${todosJSON[index].url_participante}`)
-      .then((data) => {
-        console.log(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-
     todosJSON[index].url_participante = "";
-    todosJSON[index].tipo_documento_id = 0;
-    dispatch(documentosCargados(todosJSON));
-    guardarDocumentosParticipante(todosJSON);
-
+    todosJSON[index].tipo_documento_id = 1;
+    console.log(todosJSON[index]);
+    dispatch(documentosAdministrativosCargados(todosJSON));
+    guardarUrlDocumentosPostulacion(id_postulacion, todosJSON[index].id, "")
     return setDocumentos(todosJSON);
-  };
-
-  const guardarDocumentosParticipante = async (documentos) => {
-    await axios
-      .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/documentos/${idParticipante}`, documentos)
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
 
   const SaveandContinue = () => {

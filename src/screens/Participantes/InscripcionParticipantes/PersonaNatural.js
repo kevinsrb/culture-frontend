@@ -42,7 +42,7 @@ export const PersonaNatural = () => {
     fecha_nacimiento: false,
     sexo: false,
     pais_residencia: false,
-    telefono_fijo: "",
+    telefono_fijo: false,
     telefono_celular: false,
   };
 
@@ -190,13 +190,9 @@ export const PersonaNatural = () => {
             });
         }
 
-        history.push('/Administrador/agregarParticipantes')
+        history.push('agregarParticipantes')
       }
     }
-
-
-
-
 
   }
 
