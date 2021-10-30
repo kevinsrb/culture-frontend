@@ -43,12 +43,14 @@ export const Propuestas = () => {
         }
     }, [])
 
+    console.log(postulaciones)
+
     const columns = [
         {
             title: "Propuesta",
             width: 120,
-            dataIndex: "id_participante",
-            key: "id_participante",
+            dataIndex: "nombre_propuesta",
+            key: "nombre_propuesta",
             fixed: "left",
         },
         {
@@ -56,50 +58,55 @@ export const Propuestas = () => {
             width: 120,
             fixed: "left",
             render: (datos, index) => {
-                return `${datos.primer_nombre} ${datos.segundo_nombre} ${datos.primer_apellido} ${datos.segundo_apellido};`
+                return `${datos.participante.primer_nombre} ${datos.participante.segundo_nombre} ${datos.participante.primer_apellido} ${datos.participante.segundo_apellido};`
             },
         },
         {
             title: "Identificación participante",
             width: 200,
-            dataIndex: "numero_documento",
-            key: "numero_documento",
+            dataIndex: "numero_documento_participante",
+            key: "numero_documento_participante",
         },
         {
             title: "Estado",
             width: 130,
-            dataIndex: "estado",
-            key: "estado",
+            dataIndex: "estado_jurado",
+            key: "estado_jurado",
         },
         {
             title: "Barrio",
             width: 150,
-            dataIndex: "barrio",
-            key: "barrio",
+            render: (datos, index) => {
+                return `${datos.participante.barrio}`
+            },
         },
         {
             title: "Comuna",
             width: 140,
-            dataIndex: "comuna",
-            key: "comuna",
+            render: (datos, index) => {
+                return `${datos.participante.comuna}`
+            },
         },
         {
             title: "Teléfono Fijo",
             width: 150,
-            dataIndex: "telefono_fijo",
-            key: "telefono_fijo",
+            render: (datos, index) => {
+                return `${datos.participante.telefono_fijo}`
+            },
         },
         {
             title: "Teléfono Celular",
             width: 169,
-            dataIndex: "telefono_celular",
-            key: "telefono_celular",
+            render: (datos, index) => {
+                return `${datos.participante.telefono_celular}`
+            },
         },
         {
             title: "Pais residencia",
             width: 169,
-            dataIndex: "pais_residencia",
-            key: "pais_residencia",
+            render: (datos, index) => {
+                return `${datos.participante.pais_residencia}`
+            },
         },
         // {
         //     title: "Consultar verficación",
@@ -113,13 +120,13 @@ export const Propuestas = () => {
         //     ),
         // },
         {
-            title: "Modificar verficación",
+            title: "Revisar propuestas",
             width: 120,
             key: "acciones",
             fixed: "right",
             render: (datos) => (
                 <>
-                    <Button className="botones-acciones" icon="pencil" />
+                    <Button className="botones-acciones" icon="pencil" onClick={() => showModal(datos)} />
                 </>
             ),
         },
@@ -128,6 +135,7 @@ export const Propuestas = () => {
     const [datos, setDatos] = useState({})
     const [openModal, setOpenModal] = useState(false);
     const showModal = (datos) => {
+        // debugger
         setDatos(datos)
         setOpenModal(true);
     }

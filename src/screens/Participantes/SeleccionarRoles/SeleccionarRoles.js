@@ -2,22 +2,24 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
-import { Header, Divider, Segment, Container, Button, Radio, Grid, Breadcrumb, Icon } from "semantic-ui-react";
+import { Header, Divider, Segment, Container, Button, Radio, Grid, Breadcrumb, Icon, Checkbox } from "semantic-ui-react";
 import { tipoParticipante } from "../../../store/actions/participantesAction";
 import { useDispatch, useSelector } from "react-redux";
 import { ObjConstanst } from "../../../config/utils/constanst";
 
 export const SeleccionarRoles = () => {
-  const [principalState, setPrincipalState] = useState("persona_natural");
-
-  const {  id_postulacion } = useSelector((state) => state.participantes);
+  const initialState = {
+    top: "-59%",
+    checkgestor: false,
+    checkcreador: false,
+  };
+  const [principalState, setPrincipalState] = useState(1);
+  const [state, setState] = useState(initialState);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
   const asociarRoles = async() => {
-
-    
 
     await axios
       .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/cambiarTipoParticipantePostulacion`, {
@@ -75,7 +77,7 @@ export const SeleccionarRoles = () => {
       </Grid>
       <Grid className="no-margin">
         <Grid.Column>
-          <Segment className="segment-shadow contenerdor_roles">
+          <Segment className="segment-shadow contenerdor_roles" style={{ top: state.top }}>
             <Header className="font-family-Montserrat-Regular font-size-14px" floated="left">
               Dirigido a
             </Header>
@@ -94,6 +96,7 @@ export const SeleccionarRoles = () => {
                 value={principalState}
                 checked={principalState === 1}
                 onClick={() => {
+                  setState({ ...state, top: "-45%" });
                   setPrincipalState(1);
                 }}
               />
@@ -102,13 +105,14 @@ export const SeleccionarRoles = () => {
                 className="radio-buttons-seleccionarroles"
                 label={
                   <label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">
-                    Perona jurídica
+                    Persona jurídica
                   </label>
                 }
                 name="rol"
                 value={principalState}
                 checked={principalState === 2}
                 onClick={() => {
+                  setState({ ...state, top: "-59%" });
                   setPrincipalState(2);
                 }}
               />
@@ -124,10 +128,40 @@ export const SeleccionarRoles = () => {
                 value={principalState}
                 checked={principalState === 3}
                 onClick={() => {
+                  setState({ ...state, top: "-59%" });
                   setPrincipalState(3);
                 }}
               />
             </div>
+            {principalState === 1 ? (
+              <div className="check_roles">
+                <Checkbox
+                  className="radio-buttons-seleccionarroles"
+                  label={
+                    <label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Gestor</label>
+                  }
+                  name="tiponatural"
+                  value={state.checkgestor}
+                  checked={state.checkgestor}
+                  onClick={() => {
+                    setState({...state, checkgestor: !state.checkgestor});
+                  }}
+                />
+
+                <Checkbox
+                  className="radio-buttons-seleccionarroles"
+                  label={
+                    <label className="font-color-000000CC font-size-14px font-family-Montserrat-Regular">Creador</label>
+                  }
+                  name="tiponatural"
+                  value={state.checkcreador}
+                  checked={state.checkcreador}
+                  onClick={() => {
+                    setState({ ...state, checkcreador: !state.checkcreador })
+                  }}
+                />
+              </div>
+            ) : null}
 
             <Divider clearing />
 
