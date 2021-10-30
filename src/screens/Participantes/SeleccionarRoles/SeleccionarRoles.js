@@ -13,8 +13,11 @@ export const SeleccionarRoles = () => {
     checkgestor: false,
     checkcreador: false,
   };
+  
   const [principalState, setPrincipalState] = useState(1);
   const [state, setState] = useState(initialState);
+
+  const { id_postulacion  } = useSelector((state) => state.participantes);
 
   const history = useHistory();
   const dispatch = useDispatch();
