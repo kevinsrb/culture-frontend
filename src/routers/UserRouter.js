@@ -16,6 +16,7 @@ import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/Ho
 import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
 import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
 import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas";
+import BuscarConvocatorias from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatorias2";
 
 export default function UserRouter() {
   return (
@@ -48,6 +49,9 @@ export default function UserRouter() {
           </Grid>
           <Route exact path="/Usuario/">
             <BuscarConvocatoria />
+          </Route>
+          <Route exact path="/Usuario/2">
+            <BuscarConvocatorias />
           </Route>
           <Route exact path="/Usuario/Inscripcion">
             <Inscripcion />

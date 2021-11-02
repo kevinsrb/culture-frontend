@@ -72,7 +72,7 @@ export const AdminConvocatorias = () => {
     {
       title: "Nombre",
       width: 200,
-      dataIndex: "numero_convocatoria",
+      dataIndex: "nombre_convocatoria",
       key: "name",
       fixed: "left",
     },
@@ -210,10 +210,10 @@ export const AdminConvocatorias = () => {
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
       let fechaactual = moment().format("YYYY-MM-DD");
       for (var i in response.data.convocatorias) {
-        let nomconvo = response.data.convocatorias[i].numero_convocatoria;
-        let nombreconvocatoria = copynombres.filter((data) => data.idlineaconvocatoria === nomconvo);
-        response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
-        response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
+        // let nomconvo = response.data.convocatorias[i].numero_convocatoria;
+        // let nombreconvocatoria = copynombres.filter((data) => data.idlineaconvocatoria === nomconvo);
+        // response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
+        // response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
         for (var y in response.data.convocatorias[i].fechas) {
           if (
             response.data.convocatorias[i].fechas[y].clave === "Apertura" &&

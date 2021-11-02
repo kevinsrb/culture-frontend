@@ -7,16 +7,7 @@ import { Table } from "antd";
 import fileDownload from "js-file-download";
 // import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
 
-export default function ModalPostulacion({
-  openModal,
-  closeModal,
-  actionButton,
-  actionCancelButton,
-  datos,
-  handlechangechecksustentable,
-  handlechangecheckaceptar,
-  handlechangecheckcancelar,
-}) {
+export default function ModalAceptarPropuesta({ openModal, closeModal, actionButton, actionCancelButton, datos }) {
   React.useEffect(() => console.log(datos), [datos]);
   const columnasDocumentaciontecnicaModal = [
     {
@@ -65,42 +56,6 @@ export default function ModalPostulacion({
       width: 30,
       dataIndex: "descripcion",
       key: "descripcion",
-    },
-    {
-      title: "Acciones",
-      width: 30,
-      render: (datos, record, index) => {
-        return (
-          <>
-            {datos.subsanable ? (
-              <Checkbox
-                label={<label className="font-color-4B4B4B font-size-10px">Subsanable</label>}
-                name="Subsanable"
-                value={datos.checksubsanable}
-                checked={datos.checksubsanable}
-                onChange={(e, r) => handlechangechecksustentable(datos, index)}
-              />
-            ) : null}
-            <Checkbox
-              className="font-color-4B4B4B"
-              label={<label className="font-color-4B4B4B font-size-10px">Aceptar</label>}
-              name="Aceptar"
-              value={datos.checkaceptar}
-              checked={datos.checkaceptar}
-              onChange={(e, r) => handlechangecheckaceptar(datos, index)}
-            />
-
-            <Checkbox
-              className="font-color-4B4B4B"
-              label={<label className="font-color-4B4B4B font-size-10px">Rechazar</label>}
-              name="Rechazado"
-              value={datos.checkcancelar}
-              checked={datos.checkcancelar}
-              onChange={(e, r) => handlechangecheckcancelar(datos, index)}
-            />
-          </>
-        );
-      },
     },
   ];
   return (
@@ -192,7 +147,13 @@ export default function ModalPostulacion({
                 style={{ marginBottom: "0" }}
                 className="font-size-12px font-family-Montserrat-SemiBold no-margin font-color-000000"
               >
-                {datos.tipo_participante == 1 ? 'Persona Natural' : datos.tipo_participante == 2 ? 'Persona Juriedica': datos.tipo_participante == 3 ? 'Grupo Conformado' : null}
+                {datos.tipo_participante == 1
+                  ? "Persona Natural"
+                  : datos.tipo_participante == 2
+                  ? "Persona Juriedica"
+                  : datos.tipo_participante == 3
+                  ? "Grupo Conformado"
+                  : null}
               </span>
             </Header>
           </Grid.Column>
@@ -240,7 +201,7 @@ export default function ModalPostulacion({
       </Grid>
       <Modal.Actions>
         <ButtonPrimary labelButton="Cancelar" actionButton={actionCancelButton} />
-        <ButtonPrimary labelButton="Enviar" actionButton={() => actionButton(datos)} />
+        <ButtonPrimary labelButton="Aceptar propuesta" actionButton={() => actionButton(datos)} />
       </Modal.Actions>
     </Modal>
   );

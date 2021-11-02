@@ -16,6 +16,7 @@ import { EntidadOptions, Years, cantidadRegistros } from "../../../data/selectOp
 import { useGestionarDocumentosPostulaciones } from "./Hooks/useGestionarDocumentosPostulaciones";
 import SelectMultiple from "../../../components/SelectMultiple";
 import ModalNotificacion from "./ModalNotificacion";
+import ModalAceptarPropuesta from "../ModalAceptar";
 import ModalPostulacion from "../ModalPostualcion";
 import ButtonIcon from "../../../components/Buttons/ButtonIcons";
 
@@ -28,10 +29,13 @@ export default function GestionarDocumentosPostulacion() {
     getDataInitial,
     mostrarConvocatorias,
     filtrarTablaMultiple,
-    mostrarModal,
     mostrarmodalPostulacion,
-    changeStateDocument,
-    savedocumentotoChange,
+    handlechangechecksustentable,
+    handlechangecheckaceptar,
+    handlechangecheckcancelar,
+    modificarDocumentos,
+    salirModal,
+    mostrarModalAceptarPropuesta,
   ] = useGestionarDocumentosPostulaciones({
     filtro: false,
     datosActuales: [],
@@ -39,6 +43,7 @@ export default function GestionarDocumentosPostulacion() {
     datossinfiltro: [],
     openModal: false,
     openModalPostulacion: false,
+    openModalAceptarPropuesta: false,
     informacionPostulacion: [],
     aceptado: true,
     rechazado: false,
@@ -49,24 +54,24 @@ export default function GestionarDocumentosPostulacion() {
   }, []);
   const columns = [
     {
-      title: "Propuesta",
-      width: 80,
-      dataIndex: "id_participante",
-      key: "id_participante",
+      title: "Codigo propuesta",
+      width: 100,
+      dataIndex: "numero_documento",
+      key: "numero_documento",
       fixed: "left",
     },
     {
       title: "Participante",
-      width: 150,
+      width: 200,
       fixed: "left",
       dataIndex: "nombre_particpante",
       key: "nombre_particpante",
     },
     {
-      title: "Identificación participante",
-      width: 100,
-      dataIndex: "numero_documento",
-      key: "numero_documento",
+      title: "Identificación",
+      width: 120,
+      dataIndex: "id_participante",
+      key: "id_participante",
     },
     {
       title: "Estado",
@@ -105,14 +110,23 @@ export default function GestionarDocumentosPostulacion() {
       key: "pais_residencia",
     },
     {
-      title: "Acciones",
-      width: 80,
-      key: "acciones",
+      title: "Ver propuesta",
+      width: 90,
       fixed: "right",
       render: (datos) => (
         <>
           <ButtonIcon iconRender="eye" actionButton={() => mostrarmodalPostulacion(datos)} />
-          <ButtonIcon iconRender="mail outline" actionButton={() => mostrarModal(datos)} />
+          {/* <ButtonIcon iconRender="mail outline" actionButton={() => mostrarModal(datos)} /> */}
+        </>
+      ),
+    },
+    {
+      title: "Aceptar propuesta",
+      width: 90,
+      fixed: "right",
+      render: (datos) => (
+        <>
+          <ButtonIcon iconRender="checkmark" actionButton={() => mostrarModalAceptarPropuesta(datos)} />
         </>
       ),
     },
@@ -129,7 +143,7 @@ export default function GestionarDocumentosPostulacion() {
                   className="font-size-14px font-color-1B1C1D font-weight-600 font-family-Montserrat-SemiBold"
                   style={{ paddingLeft: "2%" }}
                 >
-                  Subsanar propuestas
+                  Gestionar propuestas
                 </Header>
               </Grid.Column>
             </Grid.Row>
@@ -178,8 +192,8 @@ export default function GestionarDocumentosPostulacion() {
                         <SelectMultiple
                           options={EntidadOptions}
                           functiondata={filtrarTablaMultiple}
-                          labelName="Entidad"
-                          selectName="entidad"
+                          labelName="Estado"
+                          selectName="Estado"
                         />
                       </Form.Field>
                       <Form.Field>
@@ -194,17 +208,21 @@ export default function GestionarDocumentosPostulacion() {
                         <SelectMultiple
                           options={EntidadOptions}
                           functiondata={filtrarTablaMultiple}
-                          labelName="Categorias"
-                          selectName="categoria"
+                          labelName="Linea convocatoria"
+                          selectName="linea_convocatoria"
                         />
                       </Form.Field>
                       <Form.Field>
                         <SelectMultiple
                           options={EntidadOptions}
                           functiondata={filtrarTablaMultiple}
-                          labelName="Convocatoria"
-                          selectName="convocatoria"
+                          labelName="Categorias"
+                          selectName="categoria"
                         />
+                      </Form.Field>
+                      <Form.Field>
+                        <label className="font-color-4B4B4B font-size-12px">Código</label>
+                        <Input placeholder="Digite la categoria" />
                       </Form.Field>
                     </Form.Group>
                   </Form>
@@ -228,10 +246,19 @@ export default function GestionarDocumentosPostulacion() {
           </Grid>
         </Segment>
       </Grid>
-      <ModalNotificacion openModal={formulario.openModal} actionButton={savedocumentotoChange} />
       <ModalPostulacion
         openModal={formulario.openModalPostulacion}
-        actionButton={mostrarmodalPostulacion}
+        actionButton={modificarDocumentos}
+        actionCancelButton={salirModal}
+        datos={formulario.informacionPostulacion}
+        handlechangechecksustentable={handlechangechecksustentable}
+        handlechangecheckaceptar={handlechangecheckaceptar}
+        handlechangecheckcancelar={handlechangecheckcancelar}
+      />
+      <ModalAceptarPropuesta
+        openModal={formulario.openModalAceptarPropuesta}
+        actionButton={mostrarModalAceptarPropuesta}
+        actionCancelButton={mostrarModalAceptarPropuesta}
         datos={formulario.informacionPostulacion}
       />
     </div>

@@ -42,19 +42,33 @@ export default function Navbar() {
                 return (
                   <Grid.Row key={index} columns={1}>
                     <Link to={item.path}>
-                      <span className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D sidebar-padding">{item.title}</span>
+                      <span className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D sidebar-padding">
+                        {item.title}
+                      </span>
                     </Link>
                   </Grid.Row>
                 );
               })
             : sidebardataUser.map((item, index) => {
-                return (
-                  <Grid.Row key={index} columns={1}>
-                    <Link to={item.path}>
-                      <span className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D">{item.title}</span>
-                    </Link>
-                  </Grid.Row>
-                );
+                if (item.href) {
+                  return (
+                    <Grid.Row key={index} columns={1}>
+                      <a style={{ marginLeft:'5%' }} href={item.href} className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D">
+                        {item.title}
+                      </a>
+                    </Grid.Row>
+                  );
+                } else {
+                  return (
+                    <Grid.Row key={index} columns={1}>
+                      <Link to={item.path}>
+                        <span className="font-family-Montserrat-Regular font-size-12px font-color-1B1C1D">
+                          {item.title}
+                        </span>
+                      </Link>
+                    </Grid.Row>
+                  );
+                }
               })}
         </Grid>
       </Sidebar>

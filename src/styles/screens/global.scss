@@ -270,6 +270,10 @@ input:checked ~ label:after {
   font-weight: normal !important;
 }
 
+.letter-spacing-1px {
+  letter-spacing: 1px !important;
+}
+
 .border-right-left-none {
   border-right: none !important;
   border-left: none !important;
@@ -340,4 +344,21 @@ input:checked ~ label:after {
 
 .sidebar-padding {
   padding-left: 4%;
+}
+
+.breadcrumb-participantes {
+  font-family: "Montserrat-Regular";
+  font-size: 10px;
+  color: #739BBC !important;
+}
+
+.breadcrumb-participantes-activo {
+  font-family: "Montserrat-SemiBold";
+  font-size: 10px;
+  color: #004884 !important;
+}
+
+.ant-breadcrumb > span,
+.ant-breadcrumb-link {
+  margin-left: 0 !important;
 }

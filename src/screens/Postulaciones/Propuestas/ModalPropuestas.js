@@ -1,22 +1,13 @@
 import React from "react";
 import axios from "axios";
 import { Modal, Grid, Header, Divider, Button, Checkbox } from "semantic-ui-react";
-import ButtonPrimary from "../../components/Buttons/ButtonPrimary";
-import { TiposIdentificacion } from "../../data/selectOption.data";
+import ButtonPrimary from "../../../components/Buttons/ButtonPrimary";
+import { TiposIdentificacion } from "../../../data/selectOption.data";
 import { Table } from "antd";
 import fileDownload from "js-file-download";
 // import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
 
-export default function ModalPostulacion({
-  openModal,
-  closeModal,
-  actionButton,
-  actionCancelButton,
-  datos,
-  handlechangechecksustentable,
-  handlechangecheckaceptar,
-  handlechangecheckcancelar,
-}) {
+export default function ModalRevisarPropuesta({ openModal, closeModal, actionButton, uploadFile, datos }) {
   React.useEffect(() => console.log(datos), [datos]);
   const columnasDocumentaciontecnicaModal = [
     {
@@ -67,42 +58,48 @@ export default function ModalPostulacion({
       key: "descripcion",
     },
     {
-      title: "Acciones",
+      title: "Tipo de documento",
       width: 30,
       render: (datos, record, index) => {
-        return (
-          <>
-            {datos.subsanable ? (
-              <Checkbox
-                label={<label className="font-color-4B4B4B font-size-10px">Subsanable</label>}
-                name="Subsanable"
-                value={datos.checksubsanable}
-                checked={datos.checksubsanable}
-                onChange={(e, r) => handlechangechecksustentable(datos, index)}
+        console.log(datos);
+        if (datos.checkaceptar) return <label>Documento aceptado</label>;
+        if (datos.checksubsanable)
+          return (
+            <>
+              <Button
+                size="mini"
+                content="Seleccionar archivo"
+                className="btn button_archivo"
+                onClick={() => {
+                  var inputs = document.getElementsByClassName("inputs-ref");
+                  inputs[index].click();
+                }}
               />
-            ) : null}
-            <Checkbox
-              className="font-color-4B4B4B"
-              label={<label className="font-color-4B4B4B font-size-10px">Aceptar</label>}
-              name="Aceptar"
-              value={datos.checkaceptar}
-              checked={datos.checkaceptar}
-              onChange={(e, r) => handlechangecheckaceptar(datos, index)}
-            />
-
-            <Checkbox
-              className="font-color-4B4B4B"
-              label={<label className="font-color-4B4B4B font-size-10px">Rechazar</label>}
-              name="Rechazado"
-              value={datos.checkcancelar}
-              checked={datos.checkcancelar}
-              onChange={(e, r) => handlechangecheckcancelar(datos, index)}
-            />
-          </>
-        );
+              <input className="inputs-ref" type="file" hidden onChange={(e) => saveFile(e, datos, index)} />
+            </>
+          );
+        if (datos.checkcancelar) return <label>Documento rechazado</label>;
       },
     },
   ];
+  const saveFile = async (e, datos ,index) => {
+    uploadFile(e.target.files[0].name, index, datos);
+    // if (e.target.files.length > 0) {
+    //   let file = e.target.files[0];
+    //   const formData = new FormData();
+    //   formData.append("archivo", file);
+    //   await axios
+    //     .post(`${process.env.REACT_APP_SERVER_CONV}documentos/guardarArchivo`, formData, {
+    //       headers: { "content-type": "multipart/form-data" },
+    //     })
+    //     .then((data) => {
+    //       uploadFile(e.target.files[0].name, datos, index);
+    //     })
+    //     .catch(function (error) {
+    //       return console.error(error);
+    //     });
+    // }
+  };
   return (
     <Modal centered={false} open={openModal} onClose={closeModal}>
       <Grid className="no-margin">
@@ -192,7 +189,13 @@ export default function ModalPostulacion({
                 style={{ marginBottom: "0" }}
                 className="font-size-12px font-family-Montserrat-SemiBold no-margin font-color-000000"
               >
-                {datos.tipo_participante == 1 ? 'Persona Natural' : datos.tipo_participante == 2 ? 'Persona Juriedica': datos.tipo_participante == 3 ? 'Grupo Conformado' : null}
+                {datos.tipo_participante == 1
+                  ? "Persona Natural"
+                  : datos.tipo_participante == 2
+                  ? "Persona Juriedica"
+                  : datos.tipo_participante == 3
+                  ? "Grupo Conformado"
+                  : null}
               </span>
             </Header>
           </Grid.Column>
@@ -239,8 +242,7 @@ export default function ModalPostulacion({
         </Grid.Row>
       </Grid>
       <Modal.Actions>
-        <ButtonPrimary labelButton="Cancelar" actionButton={actionCancelButton} />
-        <ButtonPrimary labelButton="Enviar" actionButton={() => actionButton(datos)} />
+        <ButtonPrimary labelButton="Cerrar" actionButton={actionButton} />
       </Modal.Actions>
     </Modal>
   );

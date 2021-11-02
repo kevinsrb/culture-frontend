@@ -96,6 +96,8 @@ export default function Login() {
       dispatch(id_Participante(idusuario));
       dispatch(user_token(token.data));
 
+      console.log(token.data.id_tipo);
+
       if (token.data.id_tipo === "ADMI") {
         return history.push("/Administrador");
       }

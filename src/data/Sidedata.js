@@ -9,6 +9,11 @@ export const sidebardataAdmin = [
     path: "/Administrador/",
     cName: "navbar-text",
   },
+  {
+    title: "Postulaciones",
+    path: "/Administrador/gestionarPostulacionesdocumentos",
+    cName: "navbar-text",
+  },
 ];
 
 export const sidebardataUser = [
@@ -19,12 +24,13 @@ export const sidebardataUser = [
   },
   {
     title: "Mis propuestas",
-    path: "/Usuario/",
+    path: "/Usuario/misPropuestas",
     cName: "navbar-text",
   },
   {
     title: "Jurados",
     path: "/Usuario/",
+    href: 'http://segurapay.itinformatix.org/jurados',
     cName: "navbar-text",
   },
 ];

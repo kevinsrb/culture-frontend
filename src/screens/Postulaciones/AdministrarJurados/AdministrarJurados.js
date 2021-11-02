@@ -12,17 +12,23 @@ export const AdministrarJurados = () => {
 
   const columns = [
     {
-      title: "Nombre propuesta",
-      dataIndex: "nombrepropuesta",
-      key: "nombrepropuesta",
-      width: 300,
-      fixed: "left",
+      title: "#",
+      dataIndex: "id",
+      width: 40,
+      key: "id",
     },
     {
       title: "Codigo propuesta",
       dataIndex: "codigpropuesta",
       key: "codigpropuesta",
       width: 200,
+    },
+    {
+      title: "Nombre propuesta",
+      dataIndex: "nombrepropuesta",
+      key: "nombrepropuesta",
+      width: 300,
+      fixed: "left",
     },
     {
       title: "Nombre participante",
@@ -43,10 +49,16 @@ export const AdministrarJurados = () => {
       key: "categorias",
     },
     {
+      title: "Jurados",
+      dataIndex: "jurados",
+      width: 200,
+      key: "jurados",
+    },
+    {
       title: "Seleccionar",
       dataIndex: "id",
       key: "id",
-      width: 100,
+      width: 110,
       fixed: "right",
       render: (datos) => (
         <>
@@ -92,9 +104,11 @@ export const AdministrarJurados = () => {
   return (
     <Row gutter={[12, 12]} className="container-postulaciones" style={{ marginRight: "15px", marginLeft: "15px" }}>
       <Col span={24}>
-        <Title level={4}>Adminstrar Jurados</Title>
+        <Title style={{ marginBottom: "0" }} level={4}>
+          Adminstrar Jurados
+        </Title>
       </Col>
-      <Divider />
+      <Divider style={{ marginTop: "1%", marginBottom: "1%" }} />
       <Col span={8}>
         <Input icon={<Icon name="search" />} fluid placeholder="Buscar" />
       </Col>
@@ -110,7 +124,9 @@ export const AdministrarJurados = () => {
         <Table dataSource={data} columns={columns} />
       </Col>
       <Col span={24} className="justify-content-flex-end">
-        <Button className="botones-redondos" color="blue" onClick={showModal}>Asignar Jurado</Button>
+        <Button className="botones-redondos" color="blue" onClick={showModal}>
+          Asignar Jurado
+        </Button>
       </Col>
 
       <ModalJurados openModal={openModal} setOpenModal={setOpenModal} />

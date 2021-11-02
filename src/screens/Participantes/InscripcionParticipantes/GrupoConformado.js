@@ -185,7 +185,7 @@ export const GrupoConformado = () => {
             });
         }
 
-        history.push('/Administrador/agregarParticipantes')
+        history.push('/Usuario/participantes')
       }
     }
     
