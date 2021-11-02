@@ -80,7 +80,6 @@ export const BuscarConvocatoria = () => {
   //   return setfiltros({ ...filtros, [name]: value });
   // };
 
-
   return (
     <React.Fragment>
       <Grid className="no-margin">
@@ -136,11 +135,10 @@ export const BuscarConvocatoria = () => {
                   selection
                   fluid
                   onChange={(e, r) => {
-                    r.value = formulario.lineasconvocatorias.filter(data => data.value === r.value)
-                    filtrarTablaMultiple({ e, value: r.value[0].text, name: "numero_convocatoria" })
+                    r.value = formulario.lineasconvocatorias.filter((data) => data.value === r.value);
+                    filtrarTablaMultiple({ e, value: r.value[0].text, name: "numero_convocatoria" });
                     // handleLineaConvocatoria(e, r);
-                  }
-                  }
+                  }}
                   options={formulario.lineasconvocatorias}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
@@ -302,7 +300,7 @@ export const BuscarConvocatoria = () => {
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.numero_convocatoria}
+                                {datos.nombre_convocatoria}
                               </Table.Cell>
                               {/* <Table.Cell width={2}>{datos.fechas[0]}</Table.Cell> */}
 
@@ -321,14 +319,14 @@ export const BuscarConvocatoria = () => {
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.fechas[0].valormin}
+                                {datos.fechas !== null ? datos.fechas[0].valormin : null}
                               </Table.Cell>
                               <Table.Cell
                                 style={{ width: "10%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.fechas[1].valormin}
+                                {datos.fechas !== null ? datos.fechas[1].valormin : null}
                               </Table.Cell>
 
                               <Table.Cell
