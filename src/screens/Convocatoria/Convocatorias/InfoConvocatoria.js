@@ -546,7 +546,7 @@ export function InfoConvocatoria() {
                   // placeholder="Seleccionar..."
                   // options={NumeroConvocatoiriaOptions}
                   name="nombre_convocatoria"
-                  value={convocatoria.numero_convocatoria}
+                  value={convocatoria.nombre_convocatoria}
                   onChange={handleInputChange}
                   style={{ paddingRight: "2%" }}
                   // icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}

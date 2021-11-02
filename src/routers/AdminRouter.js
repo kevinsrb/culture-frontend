@@ -12,18 +12,6 @@ import { Documentos } from "../screens/Convocatoria/Documentos/Documentos";
 import { DocumentacionTecnica } from "../screens/Convocatoria/Documentacion/documentacionTecnica";
 import { DocumentacionConvocatoria } from "../screens/Convocatoria/Documentacion/documentacionGeneral";
 
-// PARTICIPANTES
-// import { Inscripcion } from "../screens/Participantes/InscripcionParticipantes/Inscripcion";
-// import { SeleccionarRoles } from "../screens/Participantes/SeleccionarRoles/SeleccionarRoles";
-// import { AgregarPaticipante } from "../screens/Participantes/AgregarParticiantes/AgregarPaticipante";
-// import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatoria";
-// import { PersonaNatural } from "../screens/Participantes/InscripcionParticipantes/PersonaNatural";
-// import { PersonaJuridica } from "../screens/Participantes/InscripcionParticipantes/PersonaJuridica";
-// import { GrupoConformado } from "../screens/Participantes/InscripcionParticipantes/GrupoConformado";
-// import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/HomeParticipantes";
-// import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
-// import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
-
 // POSTULACIONES
 import { GestionarPostulaciones } from "../screens/Postulaciones/GestionarPostulaciones/GestionarPostulaciones";
 import GestionarDocumentosPostulacion from "../screens/Postulaciones/GestionarDocumentos/GestionarDocumentosPostulacion";

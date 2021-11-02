@@ -9,7 +9,7 @@ export default function BreadcrumbComponent({Ruta}) {
         <Breadcrumb style={{ paddingLeft: "4%" }}>
           {Ruta.length > 0 ? (
             Ruta.map((data, index) => {
-              console.log(data);
+              // console.log(data);
               return (
                 <React.Fragment>
                   <Breadcrumb.Section>

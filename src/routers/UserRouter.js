@@ -16,38 +16,18 @@ import { HomeParticipantes } from "../screens/Participantes/HomeParticipantes/Ho
 import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/CargarDocumentos";
 import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
 import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas";
+import BuscarConvocatorias from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatorias2";
 
 export default function UserRouter() {
   return (
     <React.Fragment>
       <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#F7FBFF" }}>
-        <div style={{ width: "18.75%" }}>
-          <Navbar />
-        </div>
-        <div style={{ width: "81.25%" }}>
-          <Grid className="menu-usuario-principal no-margin">
-            <Grid.Row>
-              <Grid.Column style={{ display: "flex", justifyContent: "flex-end" }}>
-                <span className="font-family-Montserrat-Regular font-size-10px">Hola,</span>
-                <span
-                  className="font-family-Montserrat-Bold font-size-10px"
-                  style={{ marginLeft: "0.2%", marginRight: "1%" }}
-                >
-                  Luisa María Sanchez Cadavid
-                </span>
-                <Icon name="bell" className="font-color-FF8900" />
-                <span
-                  className="font-family-Montserrat-SemiBold font-size-10px font-color-FF8900"
-                  style={{ marginLeft: "0", marginRight: "1.5%" }}
-                >
-                  99+
-                </span>
-                <Icon name="bars" className="font-color-1FAEEF" size="large" />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+        <div style={{ width: "100%" }}>
           <Route exact path="/Usuario/">
             <BuscarConvocatoria />
+          </Route>
+          <Route exact path="/Usuario/2">
+            <BuscarConvocatorias />
           </Route>
           <Route exact path="/Usuario/Inscripcion">
             <Inscripcion />

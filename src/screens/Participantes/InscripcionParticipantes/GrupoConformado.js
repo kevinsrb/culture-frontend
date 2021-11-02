@@ -128,7 +128,7 @@ export const GrupoConformado = () => {
     } else {
       console.log(principalState)
       ObjNotificaciones.MSG_SUCCESS("success", "se ha creado correctamente el grupo conformado");
-      history.push("/Administrador/homeParticipantes");
+      history.push("/Usuario/participantes");
     }
     
     // await axios
