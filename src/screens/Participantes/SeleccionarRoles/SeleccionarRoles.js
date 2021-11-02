@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { useHistory } from "react-router";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { Header, Divider, Segment, Container, Button, Radio, Grid, Breadcrumb, Icon, Checkbox } from "semantic-ui-react";
 import { tipoParticipante } from "../../../store/actions/participantesAction";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ObjConstanst } from "../../../config/utils/constanst";
 
 export const SeleccionarRoles = () => {
   const initialState = {
@@ -11,13 +13,26 @@ export const SeleccionarRoles = () => {
     checkgestor: false,
     checkcreador: false,
   };
+  
   const [principalState, setPrincipalState] = useState(1);
   const [state, setState] = useState(initialState);
+
+  const { id_postulacion  } = useSelector((state) => state.participantes);
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const asociarRoles = () => {
+  const asociarRoles = async() => {
+
+    await axios
+      .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/cambiarTipoParticipantePostulacion`, {
+        id_postulacion: id_postulacion,
+        tipo_participante: principalState
+      })
+      .then((res) => {
+        dispatch(tipoParticipante(principalState));
+      });
+
     if (principalState === 1) {
       history.push("/Usuario/Personanatural");
     } else if (principalState === 2) {
@@ -25,8 +40,13 @@ export const SeleccionarRoles = () => {
     } else {
       history.push("/Usuario/Grupoconformado");
     }
-    console.log(principalState);
-    dispatch(tipoParticipante(principalState));
+
+  };
+
+  const handletoggleChange = (event, result) => {
+    const { name, checked } = result || event.target;
+    console.log(name, checked);
+    setPrincipalState({ [name]: checked });
   };
 
   return (

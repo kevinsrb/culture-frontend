@@ -32,7 +32,7 @@ export default function UserRouter() {
           <Route exact path="/Usuario/Inscripcion">
             <Inscripcion />
           </Route>
-          <Route exact path="/Usuario/Agregararticipantes">
+          <Route exact path="/Usuario/agregarParticipantes">
             <AgregarPaticipante />
           </Route>
           <Route exact path="/Usuario/Personanatural">

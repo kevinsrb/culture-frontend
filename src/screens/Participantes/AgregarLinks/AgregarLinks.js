@@ -56,11 +56,9 @@ export const AgregarLinks = () => {
 
   const history = useHistory();
 
-  const { idParticipante, nombre_convocatoria, categoria_linea_convocatoria, fechas_participantes, tipo_participante } =
-    useSelector((state) => state.participantes);
-  const { idConvocatoria } = useSelector((state) => state.convocatoria);
+  const { idParticipante, id_postulacion  } = useSelector((state) => state.participantes);
   const [principalState, setPrincipalState] = useState(initialState);
-  const [nombrePropuesta, setnombrePropuesta] = useState("Prueba");
+  const [nombrePropuesta, setnombrePropuesta] = useState();
 
   const agregarLink = async () => {
     console.log(principalState.linksAgregado);
@@ -82,51 +80,27 @@ export const AgregarLinks = () => {
   };
 
   const guardarLinks = async () => {
-    // await axios
-    //   .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarLinksParticipantes/${idParticipante}`, arrLinks)
-    //   .then((res) => {
-    //     console.log(res)
-    //   });
+    await axios
+    .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/guardarLinksPostulacion/${id_postulacion}`, principalState.linksAgregado )
+    .then((res) => {
+      console.log(res)
+    })
 
-    const fechaApertura = fechas_participantes.filter((fec) => fec.clave == "Apertura");
+    await axios
+    .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/actualizarNombrePropuesta`, {id_postulacion, nombrePropuesta})
+    .then((res) => {
+      console.log(res)
+    })
 
-    //  const postulaciones = [{
-    //   idConvocatoria,
+    await axios
+    .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/cambiarEstadoPostulacion/`, {id_postulacion, estado: 'Completado'})
+    .then((res) => {
+      console.log(res)
+    })
+  
+    history.push('/Usuario')
+  }
 
-    //   tipo_participante,
-    //   'postulacion': true
-    //  }]
-
-    // await axios
-    //   .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarPostulacionParticipantes/${idParticipante}`, postulaciones)
-    //   .then((res) => {
-    //     console.log(res)
-    //   });
-
-    let arrLinks = principalState.linksAgregado;
-    console.log(fechaApertura[0].valormin);
-
-    const postulante = {
-      convocatoria_id: idConvocatoria,
-      numero_documento_participante: idParticipante,
-      nombre_propuesta: nombrePropuesta,
-      tipo_participante,
-      links: arrLinks,
-      nombre_convocatoria,
-      categoria_linea_convocatoria,
-      fecha_apertura: fechaApertura[0].valormin,
-    };
-
-    console.log(postulante);
-
-    await axios.post(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/`, postulante).then((res) => {
-      console.log(res);
-    });
-
-    history.push("/Usuario/");
-  };
-
-  console.log(principalState.linksAgregado);
 
   const consultarLinks = async () => {
     try {

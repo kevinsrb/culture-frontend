@@ -8,10 +8,17 @@ export const id_Participante = (idParticipante) => ({
 })
 
 
-export const documentosCargados = (documentos_cargados) => ({
-    type: types.documentos_cargados,
+export const documentosTecnicosCargados = (documentos_tecnico_cargados) => ({
+    type: types.documentos_tecnico_cargados,
     payload:  {
-        documentos_cargados,
+        documentos_tecnico_cargados,
+    }
+})
+
+export const documentosAdministrativosCargados = (documentos_administrativos_cargados) => ({
+    type: types.documentos_administrativos_cargados,
+    payload:  {
+        documentos_administrativos_cargados,
     }
 })
 
@@ -52,4 +59,15 @@ export const tipoParticipante = (tipo_participante) => ({
     }
   
 })
+
+export const idPostulacion = (id_postulacion) => ({
+    type: types.id_postulacion,
+    payload:  {
+        id_postulacion,
+    }
+  
+})
+
+
+
 
