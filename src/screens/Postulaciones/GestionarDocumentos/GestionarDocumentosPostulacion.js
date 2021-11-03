@@ -11,7 +11,7 @@ import {
   Button,
   Dropdown as DropdownSemantic,
 } from "semantic-ui-react";
-import { Table, Dropdown as DropdownAnt, Menu } from "antd";
+import { Table, Dropdown as DropdownAnt, Menu, Empty } from "antd";
 import { EntidadOptions, Years, cantidadRegistros } from "../../../data/selectOption.data";
 import { useGestionarDocumentosPostulaciones } from "./Hooks/useGestionarDocumentosPostulaciones";
 import SelectMultiple from "../../../components/SelectMultiple";
@@ -235,6 +235,7 @@ export default function GestionarDocumentosPostulacion() {
               <Grid.Column>
                 <Table
                   columns={columns}
+                  locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
                   dataSource={formulario.datosActuales}
                   scroll={{ x: 1500, y: 300 }}
                   size="large"

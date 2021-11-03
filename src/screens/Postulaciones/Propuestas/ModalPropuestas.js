@@ -3,7 +3,7 @@ import axios from "axios";
 import { Modal, Grid, Header, Divider, Button, Checkbox } from "semantic-ui-react";
 import ButtonPrimary from "../../../components/Buttons/ButtonPrimary";
 import { TiposIdentificacion } from "../../../data/selectOption.data";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import fileDownload from "js-file-download";
 // import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
 
@@ -207,6 +207,7 @@ export default function ModalRevisarPropuesta({ openModal, closeModal, actionBut
             </label>
             <Table
               columns={columnasDocumentaciontecnicaModal}
+              locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
               // dataSource={[]}
               dataSource={datos.documentosTecnicos}
               scroll={{ x: 800, y: 300 }}
@@ -225,6 +226,7 @@ export default function ModalRevisarPropuesta({ openModal, closeModal, actionBut
             <Table
               columns={columnasDocumentacionadministrativaModal}
               dataSource={datos.documentosAdministrativos}
+              locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
               scroll={{ x: 800, y: 300 }}
               size="large"
               rowClassName="sizeTable table-row"

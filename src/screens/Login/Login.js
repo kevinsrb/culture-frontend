@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { user_token } from "../../store/actions/userAction";
@@ -29,18 +29,25 @@ export default function Login() {
 
   const initialBorderState = {
     idusuario: "border-color-707070",
-    contraseña: "border-color-707070",
+    contraseña: "border-color-707070 sin_borde-right",
   };
 
   const [principalState, setPrincipalState] = React.useState(initialState);
   const [errorState, setErrorState] = React.useState(initialerrorState);
   const [borderState, setBoderState] = React.useState(initialBorderState);
   const [isLoginFailed, setIsLoginFailed] = useState(false);
+  const [disabled, setDisabled] = useState(true);
 
   const onChangeInput = (e) => {
+
     setBoderState({ ...borderState, [e.target.name]: "border-color-707070" });
     setErrorState({ ...errorState, [e.target.name]: false });
-    return setPrincipalState({ ...principalState, [e.target.name]: e.target.value });
+    setPrincipalState({ ...principalState, [e.target.name]: e.target.value });
+    if (principalState.idusuario !== '' && principalState.contraseña !== '') {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
   };
 
   const ingresarUsuario = async () => {
@@ -114,6 +121,20 @@ export default function Login() {
 
     return setPrincipalState({ ...principalState, tipopassword: "input", buttonVER: "button-contraseña-login-show" });
   }
+
+  useEffect(() => {
+    let mounted = true;
+    if (mounted) {
+      if (principalState.idusuario !== '' && principalState.contraseña !== '') {
+        setDisabled(false);
+      } else {
+        setDisabled(true);
+      }
+    }
+    return () => {
+      mounted = false
+    }
+  }, [principalState])
   return (
     <div>
       <Grid columns={2} style={{ height: "100vh" }} className="no-margin">
@@ -122,7 +143,7 @@ export default function Login() {
             <Image className="image-container-login" src={loginimage} />
           </Grid.Column>
           <Grid.Column className="no-padding-right no-padding-left container-form-creacion-cuentas">
-            <Form className="container-form-login">
+            <Form className="container-form-login"  autoComplete="off">
               <Form.Field className="container-center">
                 <Image className="image-logo-container-login" src={logo} />
               </Form.Field>
@@ -141,9 +162,11 @@ export default function Login() {
                 <label className="font-color-4B4B4B font-size-12px">Numero de identificación</label>
                 <Input
                   name="idusuario"
+
                   onChange={onChangeInput}
                   value={principalState.idusuario}
                   className={borderState.idusuario}
+                  
                 />
                 {errorState.idusuario ? (
                   <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
@@ -182,17 +205,17 @@ export default function Login() {
 
               <Form.Field className="container-space-between" style={{ paddingTop: "10%", paddingBottom: "10%" }}>
                 <Button
-                  basic
-                  color="blue"
-                  className="boton-ingresar-login"
+                  // basic
+                  // color="blue"
+                  className="btn btn-primary-outline"
                   onClick={() => history.push("/CrearUsuario")}
                 >
                   Registrarse
                 </Button>
                 <Button
-                  disabled={principalState.disbledIngresar}
-                  color="blue"
-                  className="boton-ingresar-login"
+                  // disabled={principalState.disbledIngresar}
+                  // color="blue"
+                  className={`${disabled ? 'btn btn-disable' : 'btn btn-primary'}`}
                   onClick={ingresarUsuario}
                 >
                   Ingresar

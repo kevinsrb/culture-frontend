@@ -1,4 +1,4 @@
-import { Col, Row, Table } from 'antd'
+import { Col, Empty, Row, Table } from 'antd'
 import React from 'react'
 import { FiltrosTabla } from './FiltrosTabla'
 import {
@@ -145,6 +145,7 @@ export const VerificacionPropuestas = () => {
                         columns={columns}
                         scroll={{ x: 1500, y: 300 }}
                         size="large"
+                        locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
                         rowClassName="sizeTable table-row"
                     />
                 </Col>

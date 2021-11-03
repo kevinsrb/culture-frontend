@@ -118,6 +118,11 @@
   color: #1faeef !important;
 }
 
+.button-filtro-adminconvocatorias:hover {
+  background-color: transparent !important;
+  color: $naranja !important;
+}
+
 .divider-admin-convocatorias {
   border-top: 1px solid #e2e2e3 !important;
   margin-bottom: 0% !important;
@@ -253,4 +258,16 @@ tr:nth-child(2n) {
   font-family: "Montserrat-Bold";
   font-size: 12px;
   color: #ffffff;
+}
+
+.ui.input>input {
+  border: 1px solid #C4C4C4 !important;
+}
+
+.ui.selection.dropdown {
+  border: 1px solid #C4C4C4 !important;
+}
+
+.float-icon {
+  float: right !important;
 }

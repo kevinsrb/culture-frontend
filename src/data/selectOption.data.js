@@ -48,6 +48,10 @@ export const EntidadOptions = [
   { key: 'scc', value: 'SCC',  text: 'SCC' }
 ]
 
+export const EntidadSelected = [
+  'SCC'
+]
+
 
 export const AreaOptions = [
   { key: 'adquisicionEquipos', value: 'Adquisición de equipos',  text: 'Adquisición de equipos' },
