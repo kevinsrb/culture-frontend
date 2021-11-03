@@ -1,4 +1,4 @@
-import { Col, Divider, Row, Typography, Table } from "antd";
+import { Col, Divider, Row, Typography, Table, Empty } from "antd";
 import { Input, Icon, Button, Checkbox, Grid } from "semantic-ui-react";
 import React, { useState } from "react";
 import { useAdministrarJurados } from "./Hooks/useAdministrarJurados";
@@ -121,7 +121,7 @@ export const AdministrarJurados = () => {
         </Col>
       )}
       <Col span={24}>
-        <Table dataSource={data} columns={columns} />
+        <Table dataSource={data} columns={columns}  locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }}  />
       </Col>
       <Col span={24} className="justify-content-flex-end">
         <Button className="botones-redondos" color="blue" onClick={showModal}>

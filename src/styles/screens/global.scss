@@ -395,3 +395,8 @@ i.icon{
   // padding-right:   !important;
   // padding-left:   !important;
 }
+
+.ui.fluid.dropdown {
+  display: flex;
+  justify-content: space-between;
+}

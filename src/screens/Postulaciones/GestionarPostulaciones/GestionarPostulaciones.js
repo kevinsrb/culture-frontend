@@ -1,4 +1,4 @@
-import { Col, Row, Divider as DividerAntd, Table } from "antd";
+import { Col, Row, Divider as DividerAntd, Table, Empty } from "antd";
 import { FormProvider } from "rc-field-form";
 import React, { useEffect, useState } from "react";
 import {
@@ -146,6 +146,7 @@ export const GestionarPostulaciones = () => {
             dataSource={postulaciones}
             columns={columns}
             scroll={{ x: 1500, y: 300 }}
+            locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
             size="large"
             rowClassName="sizeTable table-row"
             bordered={false}

@@ -3,7 +3,7 @@ import axios from "axios";
 import { Modal, Grid, Header, Divider, Button, Checkbox } from "semantic-ui-react";
 import ButtonPrimary from "../../components/Buttons/ButtonPrimary";
 import { TiposIdentificacion } from "../../data/selectOption.data";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import fileDownload from "js-file-download";
 // import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
 
@@ -166,6 +166,7 @@ export default function ModalAceptarPropuesta({ openModal, closeModal, actionBut
             <Table
               columns={columnasDocumentaciontecnicaModal}
               // dataSource={[]}
+              locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
               dataSource={datos.documentosTecnicos}
               scroll={{ x: 800, y: 300 }}
               size="large"

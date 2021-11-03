@@ -20,7 +20,7 @@ import {
   Dropdown as DropdownSemantic,
   Breadcrumb,
 } from "semantic-ui-react";
-import { Table, Dropdown as DropdownAnt, Menu } from "antd";
+import { Table, Dropdown as DropdownAnt, Menu, Empty } from "antd";
 
 import { AreaOptions, EntidadOptions, LineaEstrategicaOptions } from "../../../data/selectOption.data";
 
@@ -347,7 +347,7 @@ export const AdminConvocatorias = () => {
         dispatch(edicionConvocatoria(undefined));
         history.push("/Administrador/infoconvocatorias");
       })
-      .catch(function (error) {});
+      .catch(function (error) { });
   };
 
   const filtrarTablaMultiple = (data) => {
@@ -450,7 +450,7 @@ export const AdminConvocatorias = () => {
                   className="select-registros-adminconvocatoria no-margin"
                   defaultValue={cantidadPáginas}
                   options={cantidadRegistros}
-                  icon={<Icon className="font-color-1FAEEF" name="angle down" />}
+                  icon={<Icon className="font-color-1FAEEF iconos-dropdown-global" name="angle down" />}
                   onChange={(e, { value }) => mostrarConvocatorias(e, value)}
                 />
               </Grid.Column>
@@ -517,6 +517,7 @@ export const AdminConvocatorias = () => {
             <Grid.Row>
               <Grid.Column>
                 <Table
+                  locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
                   columns={columns}
                   dataSource={datosActuales}
                   scroll={{ x: 1500, y: 300 }}

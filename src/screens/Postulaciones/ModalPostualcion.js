@@ -3,7 +3,7 @@ import axios from "axios";
 import { Modal, Grid, Header, Divider, Button, Checkbox } from "semantic-ui-react";
 import ButtonPrimary from "../../components/Buttons/ButtonPrimary";
 import { TiposIdentificacion } from "../../data/selectOption.data";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import fileDownload from "js-file-download";
 // import { columnasDocumentaciontecnicaModal, columnasDocumentacionadministrativaModal } from "./ColumnasModalPostulaciones";
 
@@ -211,6 +211,7 @@ export default function ModalPostulacion({
               rowClassName="sizeTable table-row"
               bordered={false}
               size="middle"
+              locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
             />
           </Grid.Column>
         </Grid.Row>
@@ -227,6 +228,7 @@ export default function ModalPostulacion({
               rowClassName="sizeTable table-row"
               bordered={false}
               size="middle"
+              locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} 
             />
           </Grid.Column>
         </Grid.Row>

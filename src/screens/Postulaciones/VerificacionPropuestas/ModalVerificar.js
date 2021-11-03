@@ -1,4 +1,4 @@
-import { Col, Row, Typography, Table } from 'antd';
+import { Col, Row, Typography, Table, Empty } from 'antd';
 import React from 'react';
 
 import {
@@ -94,10 +94,10 @@ export const ModalVerificar = ({ openModal, setOpenModal, datos }) => {
                     <p>45-343</p>
                 </Col>
                 <Col>
-                    <Table columns={columns1} />
+                    <Table columns={columns1}   locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }} />
                 </Col>
                 <Col>
-                    <Table columns={columns2} />
+                    <Table columns={columns2}  locale={{ emptyText: <Empty description="No hay datos" style={{ padding: '50px'}} /> }}  />
                 </Col>
             </Row>
             <Row justify="end" style={{padding: '20px'}}>

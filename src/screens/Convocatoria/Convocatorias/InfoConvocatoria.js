@@ -14,6 +14,7 @@ import {
   TipoEstimuloOptions,
   NumeroConvocatoiriaOptions,
   QuienParticipaOptions,
+  EntidadSelected,
 } from "../../../data/selectOption.data";
 
 //Alertas y notificaciones
@@ -24,7 +25,7 @@ export function InfoConvocatoria() {
     nombre_convocatoria: "",
     linea_convocatoria: "",
     categoria_linea_convocatoria: [],
-    entidad: "",
+    entidad: "scc",
     pseudonimossi: true,
     pseudonimosno: false,
     pseudonimo: true,
@@ -83,6 +84,7 @@ export function InfoConvocatoria() {
   const [areaSeleccionada, setAreaSeleccionada] = useState([]);
   const [tipocategoriasseleccionado, setTipocategoriasseleccionado] = useState([]);
   const [errores, setErrores] = useState(stateErrores);
+  const [disabled, setDisabled] = useState(true);
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -336,6 +338,7 @@ export function InfoConvocatoria() {
     console.log(user, "user");
 
     if (editarConvocatoria === undefined) {
+      setDisabled(false);
       e.preventDefault();
       console.log(convocatoria);
       return await axios
@@ -371,7 +374,7 @@ export function InfoConvocatoria() {
       event.target.value = event.target.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       return setConvocatoria({ ...convocatoria, [name]: event.target.value });
     }
-    return setConvocatoria({ ...convocatoria, [name]: value });
+    setConvocatoria({ ...convocatoria, [name]: value });
   };
   const conteoCaracteres = (event) => {
     if (
@@ -592,6 +595,7 @@ export function InfoConvocatoria() {
                   onChange={handleInputChange}
                   style={{ paddingRight: "2%" }}
                   icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                  defaultValue={'SCC'}
                 />
               </Form.Group>
 
@@ -749,7 +753,7 @@ export function InfoConvocatoria() {
                     </Grid>
                   </Grid.Column>
                   <Grid.Column style={{ marginLeft: '100px' }}>
-                    <label>¿Mayor de edad?</label>
+                    <label>¿Participa menores de edad?&nbsp;-&nbsp; <span className="font-size-10px no-margin">opcional</span></label>
                     <Grid columns={1} >
                       <Grid.Row style={{ marginLeft: '15px' }}>
                         <Form.Group>
@@ -872,7 +876,7 @@ export function InfoConvocatoria() {
                       className="no-margin"
                       label={
                         <label className="font-color-4B4B4B">
-                          Descripción corta&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                          Descripción corta
                         </label>
                       }
                       name="descripcion_corta"
@@ -896,8 +900,7 @@ export function InfoConvocatoria() {
                       className="no-margin"
                       label={
                         <label className="font-color-4B4B4B">
-                          ¿Quién no puede participar?&nbsp;-&nbsp;
-                          <span className="font-size-10px no-margin font-color-4B4B4B">opcional</span>
+                          ¿Quién no puede participar?
                         </label>
                       }
                       name="noparticipa"
@@ -916,7 +919,7 @@ export function InfoConvocatoria() {
                       className="no-margin"
                       label={
                         <label className="font-color-4B4B4B">
-                          Perfil de participante&nbsp;-&nbsp;<span className="font-size-10px no-margin">opcional</span>
+                          Perfil de participante
                         </label>
                       }
                       name="perfil_participante"
@@ -936,7 +939,7 @@ export function InfoConvocatoria() {
                 <Grid.Row>
                   <Grid.Column>
                     <p align="right">
-                      <Button className="border-radius-16 font-color-B0B0B0" type="submit">
+                      <Button className="btn btn-primary"    type="submit">
                         Guardar y continuar
                       </Button>
                     </p>
