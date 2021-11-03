@@ -549,7 +549,7 @@ export function InfoConvocatoria() {
                   value={convocatoria.nombre_convocatoria}
                   onChange={handleInputChange}
                   style={{ paddingRight: "2%" }}
-                  // icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                // icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
                 />
 
                 <Form.Select
@@ -611,7 +611,7 @@ export function InfoConvocatoria() {
                       options={QuienParticipaOptions}
                       onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "tipo_participante")}
                       style={{ paddingRight: "2%" }}
-                      icon={<Icon style={{ float: "right" }} color="blue" name="angle down" />}
+                      icon={<Icon style={{ float: "right" }} color="blue" name="angle down" className="iconos-dropdown-global" />}
                     />
                   </Grid.Column>
                   <Grid.Column>
@@ -748,7 +748,7 @@ export function InfoConvocatoria() {
                       </Grid.Row>
                     </Grid>
                   </Grid.Column>
-                  <Grid.Column style={{marginLeft: '100px'}}>
+                  <Grid.Column style={{ marginLeft: '100px' }}>
                     <label>¿Mayor de edad?</label>
                     <Grid columns={1} >
                       <Grid.Row style={{ marginLeft: '15px' }}>
@@ -864,7 +864,7 @@ export function InfoConvocatoria() {
 
               <Divider clearing />
 
-              <Grid columns={2}>
+              <Grid columns={1}>
                 <Grid.Row>
                   <Grid.Column>
                     <Form.TextArea
@@ -885,6 +885,11 @@ export function InfoConvocatoria() {
                       {convocatoria.conteodescripcion_corta}
                     </label>
                   </Grid.Column>
+                </Grid.Row>
+              </Grid>
+
+              <Grid columns={2}>
+                <Grid.Row>
                   <Grid.Column>
                     <Form.TextArea
                       required
@@ -905,11 +910,6 @@ export function InfoConvocatoria() {
                       {convocatoria.conteonoparticipa}
                     </label>
                   </Grid.Column>
-                </Grid.Row>
-              </Grid>
-
-              <Grid columns={2}>
-                <Grid.Row>
                   <Grid.Column>
                     <Form.TextArea
                       required

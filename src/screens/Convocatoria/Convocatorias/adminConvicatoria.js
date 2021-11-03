@@ -428,7 +428,7 @@ export const AdminConvocatorias = () => {
                 <Input
                   icon="search"
                   placeholder="Buscar Nombre/Código"
-                  className="font-family-Work-Sans font-size-14px"
+                  className="font-family-Work-Sans font-size-14px border-color-707070"
                   fluid
                   onChange={filtradodeinformacion}
                 />
@@ -442,7 +442,7 @@ export const AdminConvocatorias = () => {
               </Grid.Column>
               <Grid.Column></Grid.Column>
               <Grid.Column className="registos-adminconvocatoria">
-                <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E" style={{ flex: 0.5 }}>
+                <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E" style={{ flex: 0.4 }}>
                   Registros por página
                 </label>
                 <DropdownSemantic
@@ -467,7 +467,7 @@ export const AdminConvocatorias = () => {
                         <Select
                           multiple
                           className="font-family-Work-Sans"
-                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF" name="angle down" />}
+                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF iconos-select-global" name="angle down" />}
                           placeholder="Seleccionar..."
                           options={tiposidentificacion}
                           onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "tipo_participante" })}
@@ -478,7 +478,7 @@ export const AdminConvocatorias = () => {
                         <Select
                           className="font-family-Work-Sans"
                           multiple
-                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF" name="angle down" />}
+                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF iconos-select-global" name="angle down" />}
                           placeholder="Seleccionar..."
                           options={EntidadOptions}
                           onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "entidad" })}
@@ -489,7 +489,7 @@ export const AdminConvocatorias = () => {
                         <Select
                           className="font-family-Work-Sans"
                           multiple
-                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF" name="angle down" />}
+                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF iconos-select-global" name="angle down" />}
                           placeholder="Seleccionar..."
                           options={LineaEstrategicaOptions}
                           onChange={(e, { value }) => filtrarTablaMultiple({ e, value, input: "linea_estrategica" })}
@@ -500,7 +500,7 @@ export const AdminConvocatorias = () => {
                         <Select
                           className="font-family-Work-Sans"
                           multiple
-                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF" name="angle down" />}
+                          icon={<Icon style={{ float: "right" }} className="font-color-1FAEEF iconos-select-global" name="angle down" />}
                           placeholder="Seleccionar..."
                           options={AreaOptions}
                           label={<label className="font-color-4B4B4B">Área</label>}

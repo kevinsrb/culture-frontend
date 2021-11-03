@@ -254,3 +254,15 @@ tr:nth-child(2n) {
   font-size: 12px;
   color: #ffffff;
 }
+
+.ui.input>input {
+  border: 1px solid #C4C4C4 !important;
+}
+
+.ui.selection.dropdown {
+  border: 1px solid #C4C4C4 !important;
+}
+
+.float-icon {
+  float: right !important;
+}
