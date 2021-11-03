@@ -144,7 +144,7 @@
 }
 
 .font-color-6A6A6A {
-  color: #6A6A6A !important;
+  color: #6a6a6a !important;
 }
 
 .font-size-24px {
@@ -347,13 +347,14 @@ input:checked ~ label:after {
 }
 
 .breadcrumb-participantes {
-  font-family: "Montserrat-Regular";
+  font-family: "Montserrat-SemiBold";
   font-size: 10px;
-  color: #739BBC !important;
+  color: #739bbc !important;
+  font-weight: normal !important;
 }
 
 .breadcrumb-participantes-activo {
-  font-family: "Montserrat-SemiBold";
+  font-family: "Montserrat-Bold";
   font-size: 10px;
   color: #004884 !important;
 }
@@ -361,6 +362,68 @@ input:checked ~ label:after {
 .ant-breadcrumb > span,
 .ant-breadcrumb-link {
   margin-left: 0 !important;
+}
+
+.ant-select-selector {
+  border-radius: 6px !important;
+}
+
+.ant-select-arrow {
+  color: #1faeef;
+  font-size: 14px;
+}
+
+.ant-input-lg {
+  border-radius: 6 px;
+}
+
+.ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+  display: none;
+}
+
+.ant-form-item-required {
+  color: #535353 !important;
+  font-family: "Montserrat-Bold";
+  letter-spacing: -1px;
+}
+
+.ant-form-vertical .ant-form-item-label {
+  padding: 0 !important;
+}
+
+.button-azul-radius {
+  background-color: #1faeef;
+  color: #fff;
+  border-radius: 16px;
+}
+
+.button-blanco-radius {
+  background-color: #fff;
+  color: #1faeef;
+  border: 1px solid #1faeef;
+  border-radius: 16px;
+}
+
+.button-gray-ghost {
+  background: transparent;
+  color: #707070;
+  border: none;
+}
+
+.button-gray-ghost:hover {
+  color: #ff8900;
+}
+
+.button-azul-radius:hover,
+.button-blanco-radius:hover {
+  background-color: #ff8900;
+  color: #fff;
+}
+
+.ant-modal-footer.ant-btn .ant-btn-primary {
+  background-color: #1faeef !important;
+  color: #fff;
+  border-radius: 16px !important;
 }
 
 .ui.multiple.dropdown {
