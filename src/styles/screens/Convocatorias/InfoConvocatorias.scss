@@ -115,3 +115,20 @@ tr:nth-child(2n) {
   padding: 50px;
   margin: 15px;
 }
+
+
+.contenedor__titulos__convocatoria {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.titulo__span__convocatoria {
+  font-size: 12px;
+  margin: 0px;
+}
+
+.ant-select-item-option-content {
+  white-space: break-spaces;
+  word-break: break-word;
+}
