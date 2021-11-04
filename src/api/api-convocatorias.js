@@ -2,12 +2,22 @@ import { BaseConvocatoriaService } from "./baseApiConvocatorias";
 
 export class ConvocatoriasService extends BaseConvocatoriaService {
 
+
     async postConvocatoria ( values ) {
         try {
             const { data } = await this.axiosClient.post(`${process.env.REACT_APP_SERVER_CONV}convocatorias`, values);
             return data;
         } catch (error) {
             throw new Error(`An unhandled exception in postConvocatoria with stack: ${error}`);
+        }
+    }
+
+    async getConvocatoriaById( idConvocatoria ) {
+        try {
+            const { data } = await this.axiosClient.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
+            return data;
+        } catch (error) {
+            throw new Error(`An unhandled exception in getConvocatoriaById with stack: ${error}`);
         }
     }
 
