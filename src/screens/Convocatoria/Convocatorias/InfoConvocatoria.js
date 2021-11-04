@@ -147,7 +147,7 @@ export const InfoConvocatoria = () => {
         </Col>
         <Divider style={{ marginTop: '0px' }} />
         <Col span={24}>
-          <Form layout="vertical" onFinish={handleConvocatoriaSubmit}
+          <Form layout="vertical" size="large" onFinish={handleConvocatoriaSubmit}
             initialValues={{
               entidad: 'SCC',
               valor_total_entg: 0,
