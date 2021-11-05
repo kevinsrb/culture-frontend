@@ -24,14 +24,12 @@ import { Row, Col, Typography, Divider, Form, Input, Select, Radio, Button, Inpu
 import { useFormConvocatoria } from "./Hooks/useFormConvocatoria";
 import { useOptionsSelect } from "./Hooks/useOptionsSelect";
 
-
 // Ant Controllers
 const { Title, Paragraph, Text } = Typography;
 const { TextArea } = Input;
 const { Option } = Select;
 
 export const InfoConvocatoria = () => {
-
   const {
     getLineaConvocatorias,
     lineaConvocatorias,
@@ -45,7 +43,8 @@ export const InfoConvocatoria = () => {
     handleConvocatoriaSubmit,
     getConvocatoria,
     convocatoria,
-    handleInputChange
+    handleInputChange,
+    setConvocatoria,
   } = useFormConvocatoria();
 
   const {
@@ -56,11 +55,8 @@ export const InfoConvocatoria = () => {
     areas,
     coberturas,
     modalidadesEstimulo,
-    tipoModalidades
+    tipoModalidades,
   } = useOptionsSelect();
-
-
-
 
   const history = useHistory();
   const dispatch = useDispatch();
@@ -78,153 +74,186 @@ export const InfoConvocatoria = () => {
     }
     return () => {
       mounted = false;
-    }
+    };
   }, [dispatch]);
 
+  const fields = [
+    { name: "nombre_convocatoria", value: convocatoria.nombre_convocatoria },
+    { name: "linea_convocatoria", value: convocatoria.linea_convocatoria },
+    { name: "categoria_linea_convocatoria", value: convocatoria.categoria_linea_convocatoria },
+    { name: "entidad", value: convocatoria.entidad },
+    { name: "tipo_participante", value: convocatoria.tipo_participante },
+    { name: "ciclo", value: convocatoria.ciclo },
+    { name: "linea_estrategica", value: convocatoria.linea_estrategica },
+    { name: "area", value: convocatoria.area },
+    { name: "cobertura", value: convocatoria.cobertura },
+    { name: "modalidad", value: convocatoria.modalidad },
+    { name: "tipo_estimulo", value: convocatoria.tipo_estimulo },
+    { name: "valor_total_entg", value: convocatoria.valor_total_entg },
+    { name: "num_estimulos", value: convocatoria.num_estimulos },
+    { name: "descripcion_corta", value: convocatoria.descripcion_corta },
+    { name: "noparticipa", value: convocatoria.noparticipa },
+    { name: "perfil_participante", value: convocatoria.perfil_participante },
+  ];
 
   return (
     <React.Fragment>
       <Row className="card-shadow">
         <Col className="contenedor__titulos__convocatoria" span={24}>
-          <Title level={5}>Información General - <Text type="danger" className="titulo__span__convocatoria">Todos los campos son obligatorios</Text></Title>
+          <Title level={5}>
+            Información General -{" "}
+            <Text type="danger" className="titulo__span__convocatoria">
+              Todos los campos son obligatorios
+            </Text>
+          </Title>
           <Text type="secondary">Código convocatoria {idConvocatoria}</Text>
         </Col>
-        <Divider style={{ marginTop: '0px' }} />
+        <Divider style={{ marginTop: "0px" }} />
         <Col span={24}>
           <Form
             layout="vertical"
             size="large"
             onFinish={handleConvocatoriaSubmit}
-            initialValues={{
-              nombre_convocatoria: `${convocatoria.nombre_convocatoria}`,
-              seudonimos: true
+            fields={fields}
+            onFieldsChange={(_, fields) => {
+              let infoupdate = { ...convocatoria };
+              for (var i in fields) {
+                infoupdate[fields[i].name] = fields[i].value;
+              }
+              setConvocatoria(infoupdate);
             }}
           >
             <Row gutter={[16, 16]}>
               <Col span={6}>
-                <Form.Item label="Nombre convocatoria" name="nombre_convocatoria" rules={[{ required: true, message: '' }]} >
-                  <Input  />
+                <Form.Item
+                  label="Nombre convocatoria"
+                  name="nombre_convocatoria"
+                  rules={[{ required: true, message: "" }]}
+                >
+                  <Input />
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Línea convocatoria" rules={[{ required: true, message: '' }]}>
+                <Form.Item
+                  label="Línea convocatoria"
+                  name="linea_convocatoria"
+                  rules={[{ required: true, message: "" }]}
+                >
                   <Select
                     placeholder="Seleccionar..."
-                    value={convocatoria.linea_convocatoria}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'linea_convocatoria')}
+                    // value={convocatoria.linea_convocatoria}
+                    // onChange={(value) => handleLineaConvocatoriaChange(value, "linea_convocatoria")}
                     dropdownClassName="testWrap"
                   >
-                    {lineaConvocatorias.map(({ id, name }) =>
-                      <Option key={id} value={id}>{name}</Option>
-                    )}
+                    {lineaConvocatorias.map(({ id, name }) => (
+                      <Option key={id} value={id}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={7}>
-                <Form.Item label="Categorias Línea convocatoria" rules={[{ required: true, message: '' }]}>
+                <Form.Item
+                  label="Categorias Línea convocatoria"
+                  name="categoria_linea_convocatoria"
+                  rules={[{ required: true, message: "" }]}
+                >
                   <Select
                     mode="multiple"
                     placeholder="Seleccionar..."
                     disabled={editarConvocatoria ? false : isDisabledCategorias}
                     dropdownClassName="testWrap"
-                    value={convocatoria.categoria_linea_convocatoria}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'categoria_linea_convocatoria')}
                   >
-                    {categoriasLC.map(({ id, name }) =>
-                      <Option key={id} value={id}>{name}</Option>
-                    )}
+                    {categoriasLC.map(({ id, name }) => (
+                      <Option key={id} value={id}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={5}>
-                <Form.Item label="Entidad" rules={[{ required: true, message: '' }]}>
-                  <Select
-                    value={convocatoria.entidad}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'entidad')}
-                  >
-                    {entidades.map(({ id, name }) =>
-                      <Option key={id} value={name}>{name}</Option>
-                    )}
+                <Form.Item label="Entidad" name="entidad" rules={[{ required: true, message: "" }]}>
+                  <Select>
+                    {entidades.map(({ id, name }) => (
+                      <Option key={id} value={name}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="¿Quién puede participar?" rules={[{ required: true, message: '' }]}>
-                  <Select
-                    placeholder="Seleccionar..."
-                    mode="multiple"
-                    value={convocatoria.tipo_participante}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'tipo_participante')}
-                  >
-                    {participaciones.map(({ id, name }) =>
-                      <Option key={id} value={id}>{name}</Option>
-                    )}
+                <Form.Item
+                  label="¿Quién puede participar?"
+                  name="tipo_participante"
+                  rules={[{ required: true, message: "" }]}
+                >
+                  <Select placeholder="Seleccionar..." mode="multiple">
+                    {participaciones.map(({ id, name }) => (
+                      <Option key={id} value={id}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="¿Seudónimos? - opcional" rules={[{ required: true, message: '' }]}>
+                <Form.Item label="¿Seudónimos? - opcional" rules={[{ required: true, message: "" }]}>
                   <Radio.Group name="pseudonimo" value={convocatoria.pseudonimo} onChange={handleInputChange}>
                     <Radio value={true}>Sí</Radio>
                     <Radio value={false}>No</Radio>
                   </Radio.Group>
                 </Form.Item>
               </Col>
-              <Divider style={{ marginTop: '0px' }} />
+              <Divider style={{ marginTop: "0px" }} />
               <Col span={6}>
-                <Form.Item label="Ciclo" rules={[{ required: true, message: '' }]}>
-                  <Select
-                    placeholder="Seleccionar..."
-                    value={convocatoria.ciclo}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'ciclo')}
-                  >
-                    {ciclo.map(({ id, name }) =>
-                      <Option key={id} value={name}>{name}</Option>
-                    )}
+                <Form.Item label="Ciclo" name="ciclo" rules={[{ required: true, message: "" }]}>
+                  <Select placeholder="Seleccionar...">
+                    {ciclo.map(({ id, name }) => (
+                      <Option key={id} value={name}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="Línea estratégica" rules={[{ required: true, message: '' }]}>
-                  <Select
-                    value={convocatoria.linea_estrategica}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'linea_estrategica')}
-                    placeholder="Seleccionar..."
-                  >
-                    {lineasEstrategicas.map(({ id, name }) =>
-                      <Option key={id} value={name}>{name}</Option>
-                    )}
+                <Form.Item label="Línea estratégica" name="linea_estrategica" rules={[{ required: true, message: "" }]}>
+                  <Select placeholder="Seleccionar...">
+                    {lineasEstrategicas.map(({ id, name }) => (
+                      <Option key={id} value={name}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={7}>
-                <Form.Item label="Área" rules={[{ required: true, message: '' }]}>
-                  <Select
-                    placeholder="Seleccionar..."
-                    mode="multiple"
-                    value={convocatoria.area}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'area')}
-                  >
-                    {areas.map(({ id, name }) =>
-                      <Option key={id} value={name}>{name}</Option>
-                    )}
+                <Form.Item label="Área" name="area" rules={[{ required: true, message: "" }]}>
+                  <Select placeholder="Seleccionar..." mode="multiple">
+                    {areas.map(({ id, name }) => (
+                      <Option key={id} value={name}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={5}>
-                <Form.Item label="Cobertura - opcional" rules={[{ required: true, message: '' }]}>
-                  <Select placeholder="Seleccionar..."
-                    value={convocatoria.cobertura}
-                    onChange={(value) => handleLineaConvocatoriaChange(value, 'cobertura')}
-                  >
-                    {coberturas.map(({ id, name }) =>
-                      <Option key={id} value={name}>{name}</Option>
-                    )}
+                <Form.Item label="Cobertura" name="cobertura" rules={[{ required: true, message: "" }]}>
+                  <Select placeholder="Seleccionar...">
+                    {coberturas.map(({ id, name }) => (
+                      <Option key={id} value={name}>
+                        {name}
+                      </Option>
+                    ))}
                   </Select>
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="¿En convenio? - opcional" rules={[{ required: true, message: '' }]}>
+                <Form.Item label="¿En convenio? - opcional" rules={[{ required: true, message: "" }]}>
                   <Radio.Group name="esconvenio" value={convocatoria.esconvenio} onChange={handleInputChange}>
                     <Radio value={true}>Sí</Radio>
                     <Radio value={false}>No</Radio>
@@ -239,21 +268,18 @@ export const InfoConvocatoria = () => {
                   </Radio.Group>
                 </Form.Item>
               </Col>
-              <Divider style={{ marginTop: '0px' }} />
+              <Divider style={{ marginTop: "0px" }} />
 
               <Col span="24">
                 <Row>
-                  <Col span={24} style={{ maxWidth: '24%' }}>
-                    <Form.Item label="Modalidad de estímulo - opcional"
-
-                    >
-                      <Select placeholder="Seleccionar..."
-                        value={convocatoria.modalidad}
-                        onChange={(value) => handleLineaConvocatoriaChange(value, 'modalidad')}
-                      >
-                        {modalidadesEstimulo.map(({ id, name }) =>
-                          <Option key={id} value={name}>{name}</Option>
-                        )}
+                  <Col span={24} style={{ maxWidth: "24%" }}>
+                    <Form.Item label="Modalidad de estímulo - opcional" name="modalidad">
+                      <Select placeholder="Seleccionar...">
+                        {modalidadesEstimulo.map(({ id, name }) => (
+                          <Option key={id} value={name}>
+                            {name}
+                          </Option>
+                        ))}
                       </Select>
                     </Form.Item>
                   </Col>
@@ -261,96 +287,96 @@ export const InfoConvocatoria = () => {
               </Col>
               <Col span="24">
                 <Row gutter={[16, 16]}>
-                  <Col span={`${isEconomico ? 8 : 24}`} style={{ maxWidth: isEconomico ? '25%' : '24%' }}>
-                    <Form.Item label="Tipo de estímulo" rules={[{ required: true, message: '' }]}>
-                      <Select placeholder="Seleccionar..."
-                        onChange={(value) => handleTipoEstimuloChange(value, 'tipo_estimulo')}
-                        value={convocatoria.tipo_estimulo}
-                      // onChange={(value) => handleLineaConvocatoriaChange(value, 'cobertura')}
+                  <Col span={`${isEconomico ? 8 : 24}`} style={{ maxWidth: isEconomico ? "25%" : "24%" }}>
+                    <Form.Item label="Tipo de estímulo" name="tipo_estimulo" rules={[{ required: true, message: "" }]}>
+                      <Select
+                        placeholder="Seleccionar..."
+                        onChange={(value) => handleTipoEstimuloChange(value, "tipo_estimulo")}
                       >
-                        {tipoModalidades.map(({ id, name }) =>
-                          <Option key={id} value={name}>{name}</Option>
-                        )}
+                        {tipoModalidades.map(({ id, name }) => (
+                          <Option key={id} value={name}>
+                            {name}
+                          </Option>
+                        ))}
                       </Select>
                     </Form.Item>
                   </Col>
-                  {isEconomico &&
+                  {isEconomico && (
                     <>
-                      <Col span={6} >
-                        <Form.Item label="Valor total de recursos" rules={[{ required: true, message: '' }]}>
+                      <Col span={6}>
+                        <Form.Item
+                          label="Valor total de recursos"
+                          name="valor_total_entg"
+                          rules={[{ required: true, message: "" }]}
+                        >
                           <InputNumber
                             controls={false}
-                            formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            parser={value => value.replace(/\$\s?|(,*)/g, '')}
-                            style={{ width: '55%' }}
+                            formatter={(value) => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                            parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
+                            style={{ width: "55%" }}
                             min={0}
-                            value={convocatoria.valor_total_entg}
-                            onChange={(value) => handleLineaConvocatoriaChange(value, 'valor_total_entg')}
+                            // value={convocatoria.valor_total_entg}
+                            // onChange={(value) => handleLineaConvocatoriaChange(value, "valor_total_entg")}
                           />
                         </Form.Item>
                       </Col>
                       <Col span={6}>
                         <Form.Item label="Bolsa Concursable">
-                          <Switch checked={ convocatoria.bolsa_concursable } onChange={(value) => handleBolsaConcursableChange(value, 'bolsa_concursable')} />
+                          <Switch
+                            checked={convocatoria.bolsa_concursable}
+                            onChange={(value) => handleBolsaConcursableChange(value, "bolsa_concursable")}
+                          />
                         </Form.Item>
                       </Col>
-                      {isBolsaConcursable &&
+                      {isBolsaConcursable && (
                         <Col span={6}>
-                          <Form.Item label="Número de estímulos" rules={[{ required: true, message: '' }]}>
-                            <InputNumber min={0}
-                              value={convocatoria.num_estimulos}
-                              onChange={(value) => handleLineaConvocatoriaChange(value, 'num_estimulos')}
+                          <Form.Item
+                            label="Número de estímulos"
+                            name="num_estimulos"
+                            rules={[{ required: true, message: "" }]}
+                          >
+                            <InputNumber
+                              min={0}
+                              // value={convocatoria.num_estimulos}
+                              // onChange={(value) => handleLineaConvocatoriaChange(value, "num_estimulos")}
                             />
                           </Form.Item>
                         </Col>
-                      }
+                      )}
                     </>
-                  }
+                  )}
                 </Row>
               </Col>
-              <Divider style={{ marginTop: '0px' }} />
+              <Divider style={{ marginTop: "0px" }} />
               <Col span={24}>
-                <Form.Item label="Descripción corta">
-                  <TextArea
-                    rows={4}
-                    rows={4}
-                    showCount
-                    maxLength={250}
-                    name="descripcion_corta"
-                    onChange={handleInputChange}
-                    value={convocatoria.descripcion_corta}
-                  />
+                <Form.Item label="Descripción corta" name="descripcion_corta" rules={[{ required: true, message: "" }]}>
+                  <TextArea rows={4} showCount maxLength={250} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="¿Quién no puede participar?">
-                  <TextArea
-                    rows={4}
-                    rows={4}
-                    showCount
-                    maxLength={250}
-                    name="noparticipa"
-                    onChange={handleInputChange}
-                    value={convocatoria.noparticipa}
-                  />
+                <Form.Item
+                  label="¿Quién no puede participar?"
+                  name="noparticipa"
+                  rules={[{ required: true, message: "" }]}
+                >
+                  <TextArea rows={4} showCount maxLength={250} />
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Perfíl participante">
-                  <TextArea
-                    rows={4}
-                    showCount
-                    maxLength={250}
-                    name="perfil_participante"
-                    onChange={handleInputChange}
-                    value={convocatoria.perfil_participante}
-                  />
+                <Form.Item
+                  label="Perfíl participante"
+                  name="perfil_participante"
+                  rules={[{ required: true, message: "" }]}
+                >
+                  <TextArea rows={4} showCount maxLength={250} />
                 </Form.Item>
               </Col>
               <Col span={24}>
                 <Row justify="end">
                   <Col>
-                    <Button type="default" htmlType="submit">Guardar y continuar</Button>
+                    <Button type="default" htmlType="submit">
+                      Guardar y continuar
+                    </Button>
                   </Col>
                 </Row>
               </Col>
@@ -360,4 +386,4 @@ export const InfoConvocatoria = () => {
       </Row>
     </React.Fragment>
   );
-}
+};
