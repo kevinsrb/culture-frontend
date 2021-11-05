@@ -38,10 +38,10 @@ export const useFormConvocatoria = () => {
   const [categoriasLC, setcategoriasLC] = useState([]);
   const [isDisabledCategorias, setIsDisabledCategorias] = useState(true);
   const handleLineaConvocatoriaChange = async (value, name) => {
-    setConvocatoria({
-      ...convocatoria,
-      [name]: value,
-    });
+    // setConvocatoria({
+    //   ...convocatoria,
+    //   [name]: value,
+    // });
 
     if (name == "bolsa_concursable") {
       setIsBolsaConcursable(true);
@@ -178,9 +178,10 @@ export const useFormConvocatoria = () => {
     convocatoria.area = areas;
     convocatoria.tipo_participante = tipoParticipante;
     try {
+      debugger
       // console.log(convocatoria)
       if (editarConvocatoria !== undefined) {
-        const data = apiConvocatorias.editConvocatoria(idConvocatoria, convocatoria);
+        const data = await  apiConvocatorias.editConvocatoria(idConvocatoria, convocatoria);
         ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
         return history.push("/Administrador/cronogramaActividades");
       }

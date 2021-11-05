@@ -142,7 +142,7 @@ export const InfoConvocatoria = () => {
                   <Select
                     placeholder="Seleccionar..."
                     // value={convocatoria.linea_convocatoria}
-                    // onChange={(value) => handleLineaConvocatoriaChange(value, "linea_convocatoria")}
+                    onChange={(value) => handleLineaConvocatoriaChange(value, "linea_convocatoria")}
                     dropdownClassName="testWrap"
                   >
                     {lineaConvocatorias.map(({ id, name }) => (
