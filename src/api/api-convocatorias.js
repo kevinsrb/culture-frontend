@@ -39,6 +39,15 @@ export class ConvocatoriasService extends BaseConvocatoriaService {
             throw new Error(`An unhandled exception in getCategoriasLineaConvocatoria with stack: ${error}`);
         }
     }
+
+    async editConvocatoria ( idConvocatoria, value ) {
+        try {
+            const { data } = await this.axiosClient.post(`${this.baseAPI}convocatorias/${idConvocatoria}`, value);
+            return data;
+        } catch (error) {
+            throw new Error(`An unhandled exception in postConvocatoria with stack: ${error}`);
+        }
+    }
 }
 
 export default new ConvocatoriasService();
