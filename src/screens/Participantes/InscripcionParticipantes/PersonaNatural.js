@@ -190,7 +190,7 @@ export const PersonaNatural = () => {
             });
         }
 
-        history.push('/Usuario/Agregararticipantes')
+        history.push('/Usuario/Cargardocumentos')
       }
     }
 
