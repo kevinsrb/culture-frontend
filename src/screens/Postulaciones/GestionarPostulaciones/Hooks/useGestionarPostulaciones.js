@@ -16,6 +16,20 @@ export const useGestionarPostulaciones = () => {
           categoria_linea_convocatoria: [],
           fechaApertura: [{ valormin: "" }],
         };
+        if (postulacion.participante === null)
+          postulacion.participante = {
+            barrio: "",
+            comuna: "",
+            telefono_fijo: "",
+            telefono_celular: "",
+            pais_residencia: "",
+            primer_nombre: "",
+            segundo_nombre: "",
+            primer_apellido: "",
+            segundo_apellido: "",
+            documentos: null,
+          };
+          if (postulacion.documentos === null) postulacion.documentos = [];  
         if (postulacion.participante.documentos === null) postulacion.participante.documentos = [];
         return {
           id_postulacion: postulacion.id_postulacion,
@@ -35,8 +49,8 @@ export const useGestionarPostulaciones = () => {
           categoria_linea_convocatoria: postulaciones.categoria_linea_convocatoria,
           fechainicio: postulacion.fecha_apertura,
           tipo_participante: parseInt(postulacion.tipo_participante),
-          documentosTecnicos: postulacion.participante.documentos.filter((data) => data.tipo_documento_id === 1),
-          documentosAdministrativos: postulacion.participante.documentos.filter((data) => data.tipo_documento_id === 0),
+          documentosTecnicos: postulacion.documentos.filter((data) => data.tipo_documento_id === 1),
+          documentosAdministrativos: postulacion.documentos.filter((data) => data.tipo_documento_id === 0),
         };
       });
       return setPostulaciones(copy1);
