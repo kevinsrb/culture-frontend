@@ -16,13 +16,13 @@ export const useBuscarConvocatoria = (initialState) => {
       // console.log(LineaConvocatoriaOptionsMap, 'linea de convocatorias');
       let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/`);
       console.log(response);
-      let copynombres = response.data.lineasconvocatorias.map((data) => data);
-      for (var i in response.data.convocatorias) {
-        let idlinea_data = response.data.convocatorias[i].numero_convocatoria;
-        let nombreconvocatoria = copynombres.filter((data) => data.idlineaconvocatoria === idlinea_data);
-        response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
-        response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
-      }
+      // let copynombres = response.data.lineasconvocatorias.map((data) => data);
+      // for (var i in response.data.convocatorias) {
+      //   let idlinea_data = response.data.convocatorias[i].numero_convocatoria;
+      //   let nombreconvocatoria = copynombres.filter((data) => data.idlineaconvocatoria === idlinea_data);
+      //   response.data.convocatorias[i].numero_convocatoria = nombreconvocatoria[0].nombre;
+      //   response.data.convocatorias[i].idnumero_convocatoria = nombreconvocatoria[0].idlineaconvocatoria;
+      // }
       if (response.data.convocatorias.length > 0) {
         // setFormulario({
         //   ...formulario,
