@@ -30,7 +30,7 @@ export const sidebardataUser = [
   {
     title: "Jurados",
     path: "/Usuario/",
-    href: 'http://segurapay.itinformatix.org/jurados',
+    href: "/Usuario/Jurados",
     cName: "navbar-text",
   },
 ];

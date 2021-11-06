@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { ObjConstanst } from "../../../config/utils/constanst";
+// import axios from "axios";
+// import { ObjConstanst } from "../../../config/utils/constanst";
 import {
   AreaOptions,
   QuienParticipaOptions,
@@ -25,13 +25,26 @@ import { VerConvocatoria } from "../../../components/Participantes/VerConvocator
 import { useBuscarConvocatoria } from "./Hooks/useBuscarConvocatoria";
 
 const cantidadRegistros = [
-  { key: 1, value: 10, text: "10" },
-  { key: 2, value: 20, text: "20" },
-  { key: 3, value: 50, text: "50" },
-  { key: 4, value: 100, text: "100" },
+  {
+    key: 0,
+    value: null,
+    text: "",
+  },
+  {
+    key: 1,
+    value: 10,
+    text: "Adquisición de equipos y herramientas tecnológicas",
+  },
+  {
+    key: 2,
+    value: 20,
+    text: "Apoyo para la participación en ferias y eventos del sector",
+  },
+  { key: 3, value: 50, text: "Áreas integradas" },
+  { key: 4, value: 100, text: "Arte" },
 ];
 
-export const BuscarConvocatoria = () => {
+export const Jurados = () => {
   const initialState = {
     area: [],
     linea_convocatoria: [],
@@ -86,6 +99,9 @@ export const BuscarConvocatoria = () => {
   //   return setfiltros({ ...filtros, [name]: value });
   // };
 
+  const abrirModal = () => {
+    console.log("helloo");
+  };
   return (
     <React.Fragment>
       <Grid className="no-margin">
@@ -98,9 +114,72 @@ export const BuscarConvocatoria = () => {
               /
             </Breadcrumb.Divider>
             <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
-              Crear convocatoria
+              Jurados
+            </Breadcrumb.Section>
+            <Breadcrumb.Divider className="font-color-FFFFFF font-size-8px">
+              /
+            </Breadcrumb.Divider>
+            <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
+              Postulaciones de jurados
             </Breadcrumb.Section>
           </Breadcrumb>
+        </Grid.Column>
+      </Grid>
+      <Grid
+        style={{
+          marginBottom: "0%",
+          marginLeft: "0",
+          marginTop: "0",
+          marginRight: "0",
+        }}
+      >
+        <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
+          <Segment className="segment-shadow">
+            <Grid.Column width={1}>
+              <Grid className="justify-content-space-between">
+                <Grid.Row>
+                  <Grid.Column width={4} className="justify-content-flex-end">
+                    <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
+                      Filtrar por area
+                    </label>
+                  </Grid.Column>
+                  <Grid.Column width={5}>
+                    <Dropdown
+                      fluid
+                      className="select-registros-adminconvocatoria no-margin"
+                      defaultValue={formulario.cantidadPáginas}
+                      options={cantidadRegistros}
+                      icon={
+                        <Icon className="font-color-1FAEEF" name="angle down" />
+                      }
+                      onChange={(e, { value }) => showConvocatorias(e, value)}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Grid.Column>
+            <Grid.Column width={3} className="no-padding-left">
+              <Grid>
+                <Grid.Column width={4} className="justify-content-flex-end">
+                  <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
+                    Filtrar por palabra clave o código de jurado
+                  </label>
+                </Grid.Column>
+                <Grid.Column width={5}>
+                  <Dropdown
+                    fluid
+                    className="select-registros-adminconvocatoria no-margin"
+                    defaultValue={formulario.cantidadPáginas}
+                    options={cantidadRegistros}
+                    icon={
+                      <Icon className="font-color-1FAEEF" name="angle down" />
+                    }
+                    onChange={(e, { value }) => showConvocatorias(e, value)}
+                  />
+                </Grid.Column>
+              </Grid>
+            </Grid.Column>
+          </Segment>
         </Grid.Column>
       </Grid>
       <Grid
@@ -114,133 +193,6 @@ export const BuscarConvocatoria = () => {
         <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
           <Form size="large">
             <Segment className="segment-shadow">
-              <Header
-                as="h4"
-                floated="left"
-                className="font-size-14px font-family-Montserrat-SemiBold"
-              >
-                Buscar Convocatorias
-              </Header>
-
-              <Divider
-                clearing
-                style={{ marginTop: "0", marginBottom: "2%" }}
-              />
-
-              <Form.Group widths="equal">
-                <Form.Dropdown
-                  multiple
-                  label={
-                    <label className="font-color-4B4B4B font-size-12px">
-                      Perfil
-                    </label>
-                  }
-                  fluid
-                  search
-                  selection
-                  className="font-family-Work-Sans"
-                  icon={
-                    <Icon
-                      style={{ float: "right", paddingTop: "4%" }}
-                      color="blue"
-                      name="angle down"
-                    />
-                  }
-                  placeholder="Seleccionar..."
-                  options={QuienParticipaOptions}
-                  onChange={(e, { value }) =>
-                    filtrarTablaMultiple({
-                      e,
-                      value,
-                      name: "tipo_participante",
-                    })
-                  }
-                />
-                <Form.Field>
-                  <label className="font-color-4B4B4B font-size-12px">
-                    Área
-                  </label>
-                  <Select
-                    multiple
-                    search
-                    icon={
-                      <Icon
-                        style={{ float: "right", paddingTop: "4%" }}
-                        color="blue"
-                        name="angle down"
-                      />
-                    }
-                    placeholder="Seleccionar..."
-                    options={AreaOptions}
-                    onChange={(e, { value }) =>
-                      filtrarTablaMultiple({ e, value, name: "area" })
-                    }
-                  />
-                </Form.Field>
-                <Form.Dropdown
-                  label={
-                    <label className="font-color-4B4B4B font-size-12px">
-                      Línea convocatoria
-                    </label>
-                  }
-                  placeholder="Seleccionar"
-                  selection
-                  fluid
-                  onChange={(e, r) => {
-                    r.value = formulario.lineasconvocatorias.filter(
-                      (data) => data.value === r.value
-                    );
-                    filtrarTablaMultiple({
-                      e,
-                      value: r.value[0].text,
-                      name: "numero_convocatoria",
-                    });
-                    // handleLineaConvocatoria(e, r);
-                  }}
-                  options={formulario.lineasconvocatorias}
-                  icon={
-                    <Icon
-                      style={{ float: "right" }}
-                      color="blue"
-                      name="angle down"
-                    />
-                  }
-                />
-                <Form.Dropdown
-                  label={
-                    <label className="font-color-4B4B4B font-size-12px">
-                      Categorías convocatoria
-                    </label>
-                  }
-                  value={tipocategoriasseleccionado}
-                  placeholder="Seleccionar"
-                  fluid
-                  multiple
-                  selection
-                  options={formulario.categoriaslineasconvocatorias}
-                  icon={
-                    <Icon
-                      style={{ float: "right", paddingTop: "4%" }}
-                      color="blue"
-                      name="angle down"
-                    />
-                  }
-                  // onChange={(event, result) => capturarValoresOptionsMultiple(event, result, "categoria")}
-                />
-              </Form.Group>
-
-              <Divider clearing />
-
-              <Container textAlign="right">
-                <Button
-                  content="Buscar convocatoria"
-                  className="btn btn-primary background-color-1FAEEF"
-                  // onClick={filtrarConvocatorias}
-                />
-              </Container>
-            </Segment>
-
-            <Segment className="segment-shadow">
               <Grid>
                 <Grid.Row columns={3}>
                   <Grid.Column width={8}>
@@ -249,7 +201,7 @@ export const BuscarConvocatoria = () => {
                       floated="left"
                       className="font-size-14px font-family-Montserrat-Regular"
                     >
-                      Resultados de busqueda
+                      Resultados de jurados postulados
                     </Header>
                   </Grid.Column>
                   <Grid.Column
@@ -260,7 +212,7 @@ export const BuscarConvocatoria = () => {
                       className="font-color-1B1C1D font-family-Montserrat-Regular font-size-12px"
                       style={{ width: "45%" }}
                     >
-                      Total de resultados:
+                      Total:
                       <span
                         className="font-color-F28C02 font-family-Montserrat-Regular font-size-12px"
                         style={{ marginLeft: "1%" }}
@@ -323,42 +275,28 @@ export const BuscarConvocatoria = () => {
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
-                            Linea convocatoria
+                            Nombres y apellidos
                           </Table.HeaderCell>
                           <Table.HeaderCell
                             style={{ width: "15%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
-                            Perfil
+                            No. Documento
                           </Table.HeaderCell>
                           <Table.HeaderCell
                             style={{ width: "10%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
-                            Fecha inicio
+                            Código
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "10%" }}
+                            style={{ width: "40%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
-                            Fecha cierre
-                          </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "15%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Area
-                          </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "15%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Entidad
+                            Categorías específicas
                           </Table.HeaderCell>
                           <Table.HeaderCell
                             style={{ width: "15%" }}
@@ -457,7 +395,11 @@ export const BuscarConvocatoria = () => {
                                 style={{ width: "15%" }}
                                 className="font-size-12px font-family-Work-Sans"
                               >
-                                {/* <Button className="botones-acciones" icon="eye "onClick={(e) => abrirModal(e, datos)} /> */}
+                                <Button
+                                  className="botones-acciones"
+                                  icon="eye "
+                                  onClick={(e) => abrirModal(e, datos)}
+                                />
                                 <VerConvocatoria datos={datos} />
                               </Table.Cell>
                             </Table.Row>

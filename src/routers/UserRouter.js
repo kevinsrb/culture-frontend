@@ -17,19 +17,30 @@ import { CargarDocumentos } from "../screens/Participantes/CargarDocumentos/Carg
 import { AgregarLinks } from "../screens/Participantes/AgregarLinks/AgregarLinks";
 import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas";
 import BuscarConvocatorias from "../screens/Participantes/BuscarConvocatoria/BuscarConvocatorias2";
+import { Jurados } from "../screens/Participantes/Jurados/Jurados";
 
 export default function UserRouter() {
   return (
     <React.Fragment>
-      <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#F7FBFF" }}>
+      <div
+        style={{
+          display: "flex",
+          minHeight: "100vh",
+          backgroundColor: "#F7FBFF",
+        }}
+      >
         <div style={{ width: "18.75%" }}>
           <Navbar />
         </div>
         <div style={{ width: "81.25%" }}>
           <Grid className="menu-usuario-principal no-margin">
             <Grid.Row>
-              <Grid.Column style={{ display: "flex", justifyContent: "flex-end" }}>
-                <span className="font-family-Montserrat-Regular font-size-10px">Hola,</span>
+              <Grid.Column
+                style={{ display: "flex", justifyContent: "flex-end" }}
+              >
+                <span className="font-family-Montserrat-Regular font-size-10px">
+                  Hola,
+                </span>
                 <span
                   className="font-family-Montserrat-Bold font-size-10px"
                   style={{ marginLeft: "0.2%", marginRight: "1%" }}
@@ -82,6 +93,9 @@ export default function UserRouter() {
           </Route>
           <Route exact path="/Usuario/misPropuestas">
             <Propuestas />
+          </Route>
+          <Route exact path="/Usuario/Jurados">
+            <Jurados />
           </Route>
         </div>
       </div>
