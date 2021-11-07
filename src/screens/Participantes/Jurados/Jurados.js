@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import { ObjConstanst } from "../../../config/utils/constanst";
-import {
-  AreaOptions,
-  QuienParticipaOptions,
-} from "../../../data/selectOption.data";
+// import {
+//   AreaOptions,
+//   QuienParticipaOptions,
+// } from "../../../data/selectOption.data";
 import {
   Button,
-  Container,
+  // Container,
   Form,
   Segment,
   Header,
-  Divider,
+  // Divider,
   Grid,
   Table,
-  Select,
+  // Select,
   Breadcrumb,
   Icon,
   Dropdown,
@@ -24,24 +24,52 @@ import { useHistory } from "react-router";
 import { VerConvocatoria } from "../../../components/Participantes/VerConvocatoria";
 import { useBuscarConvocatoria } from "./Hooks/useBuscarConvocatoria";
 
-const cantidadRegistros = [
+const filtrarPorArea = [
   {
-    key: 0,
-    value: null,
-    text: "",
+    key: 1,
+    value: 1,
+    text: [],
   },
+  {
+    key: 2,
+    value: 2,
+    text: "Adquisición de equipos y herramientas tecnológicas",
+  },
+  {
+    key: 3,
+    value: 3,
+    text: "Apoyo para la participación en ferias y eventos del sector",
+  },
+  { key: 4, value: 4, text: "Áreas integradas" },
+  { key: 5, value: 5, text: "Arte" },
+];
+const filtrarPalabraClaveCodigoJurado = [
+  {
+    key: 2,
+    value: 2,
+    text: "Adquisición de equipos y herramientas tecnológicas",
+  },
+  {
+    key: 3,
+    value: 3,
+    text: "Apoyo para la participación en ferias y eventos del sector",
+  },
+  { key: 3, value: 3, text: "Áreas integradas" },
+  { key: 4, value: 4, text: "Arte" },
+];
+const cantidadRegistros = [
   {
     key: 1,
     value: 10,
-    text: "Adquisición de equipos y herramientas tecnológicas",
+    text: "10",
   },
   {
     key: 2,
     value: 20,
-    text: "Apoyo para la participación en ferias y eventos del sector",
+    text: "20",
   },
-  { key: 3, value: 50, text: "Áreas integradas" },
-  { key: 4, value: 100, text: "Arte" },
+  { key: 3, value: 50, text: "50" },
+  { key: 4, value: 100, text: "100" },
 ];
 
 export const Jurados = () => {
@@ -135,53 +163,58 @@ export const Jurados = () => {
       >
         <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
           <Segment className="segment-shadow">
-            <Grid.Column width={1}>
-              <Grid className="justify-content-space-between">
-                <Grid.Row>
-                  <Grid.Column width={4} className="justify-content-flex-end">
-                    <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
+            <Grid>
+              <Grid.Row>
+                <Grid.Column
+                  width={8}
+                  className="justify-content-flex-start"
+                  style={{ maxWidth: "50%" }}
+                >
+                  <Grid.Row>
+                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
                       Filtrar por area
                     </label>
-                  </Grid.Column>
-                  <Grid.Column width={5}>
                     <Dropdown
                       fluid
-                      className="select-registros-adminconvocatoria no-margin"
+                      className="select-registros-filtrar-por-area no-margin"
+                      placeholder="Seleccionar..."
                       defaultValue={formulario.cantidadPáginas}
-                      options={cantidadRegistros}
+                      options={filtrarPorArea}
                       icon={
                         <Icon className="font-color-1FAEEF" name="angle down" />
                       }
                       onChange={(e, { value }) => showConvocatorias(e, value)}
                     />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Grid.Column>
-            <Grid.Column width={3} className="no-padding-left">
-              <Grid>
-                <Grid.Column width={4} className="justify-content-flex-end">
-                  <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
-                    Filtrar por palabra clave o código de jurado
-                  </label>
+                  </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={5}>
-                  <Dropdown
-                    fluid
-                    className="select-registros-adminconvocatoria no-margin"
-                    defaultValue={formulario.cantidadPáginas}
-                    options={cantidadRegistros}
-                    icon={
-                      <Icon className="font-color-1FAEEF" name="angle down" />
-                    }
-                    onChange={(e, { value }) => showConvocatorias(e, value)}
-                  />
+                <Grid.Column
+                  width={8}
+                  className="justify-content-flex-start"
+                  style={{ maxWidth: "50%" }}
+                >
+                  <Grid.Row>
+                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                      Filtrar por palabra clave o código de jurado
+                    </label>
+                    <Dropdown
+                      fluid
+                      className="select-registros-adminconvocatoria no-margin"
+                      defaultValue={formulario.cantidadPáginas}
+                      placeholder="Seleccionar..."
+                      options={filtrarPalabraClaveCodigoJurado}
+                      icon={
+                        <Icon className="font-color-1FAEEF" name="angle down" />
+                      }
+                      onChange={(e, { value }) => showConvocatorias(e, value)}
+                    />
+                  </Grid.Row>
                 </Grid.Column>
-              </Grid>
-            </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Segment>
         </Grid.Column>
       </Grid>
+
       <Grid
         style={{
           marginBottom: "8%",

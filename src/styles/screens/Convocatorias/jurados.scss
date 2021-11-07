@@ -4,16 +4,17 @@
   justify-content: end;
 }
 
-.select-registros-adminconvocatoria {
+.select-registros-filtrar-por-area {
   border: 1px solid rgba(34, 36, 38, 0.15);
-  text-align: center;
   border-radius: 4px;
-  flex: 0.2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   padding-left: 2% !important;
   padding-right: 2% !important;
-  height: 25px !important;
+  height: 38px !important;
   justify-content: center;
   align-items: center;
 }
