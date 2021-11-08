@@ -1,28 +1,28 @@
 import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import { ObjConstanst } from "../../../config/utils/constanst";
-import {
-  AreaOptions,
-  QuienParticipaOptions,
-} from "../../../data/selectOption.data";
+// import {
+//   AreaOptions,
+//   QuienParticipaOptions,
+// } from "../../../data/selectOption.data";
 import {
   Button,
-  Container,
+  // Container,
   Form,
   Segment,
   Header,
-  Divider,
+  // Divider,
   Grid,
   Table,
-  Select,
+  // Select,
   Breadcrumb,
   Icon,
   Dropdown,
   Pagination,
 } from "semantic-ui-react";
 import { useHistory } from "react-router";
-import { VerConvocatoria } from "../../../components/Participantes/VerConvocatoria";
 import { useBuscarConvocatoria } from "./Hooks/useBuscarConvocatoria";
+import { VerPostulaciones } from "../../../components/Jurados/VerPostulaciones";
 
 const cantidadRegistros = [
   {
@@ -400,7 +400,7 @@ export const Jurados = () => {
                                   icon="eye "
                                   onClick={(e) => abrirModal(e, datos)}
                                 />
-                                <VerConvocatoria datos={datos} />
+                                <VerPostulaciones datos={datos} />
                               </Table.Cell>
                             </Table.Row>
                           ))
