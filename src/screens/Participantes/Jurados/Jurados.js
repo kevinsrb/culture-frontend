@@ -11,6 +11,7 @@ import {
   Dropdown,
   Pagination,
   Search,
+  Divider,
 } from "semantic-ui-react";
 import { useHistory } from "react-router";
 import { VerConvocatoria } from "../../../components/Participantes/VerConvocatoria";
@@ -51,7 +52,60 @@ const cantidadRegistros = [
 ];
 const JuradosLista = [
   {
-    nro: "1",
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
@@ -202,9 +256,9 @@ export const Jurados = () => {
                       Total:
                       <span
                         className="font-color-F28C02 font-family-Montserrat-Regular font-size-12px"
-                        style={{ marginLeft: "1%" }}
+                        style={{ marginLeft: "4%" }}
                       >
-                        "1"
+                        "{JuradosLista.length}"
                       </span>
                     </span>
                   </Grid.Column>
@@ -258,7 +312,7 @@ export const Jurados = () => {
                             No.
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "15%" }}
+                            style={{ width: "21%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
@@ -272,7 +326,7 @@ export const Jurados = () => {
                             No. Documento
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "10%" }}
+                            style={{ width: "9%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
@@ -318,29 +372,42 @@ export const Jurados = () => {
                                 {index + 1}
                               </Table.Cell>
                               <Table.Cell
-                                style={{ width: "15%" }}
+                                style={{ width: "20%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.nro}
+                                {datos.nombreCompleto}
                               </Table.Cell>
                               <Table.Cell
-                                style={{ width: "15%" }}
+                                style={{ width: "14%" }}
+                                className="font-size-12px font-family-Work-Sans"
+                                width={1}
+                              >
+                                {datos.nroDocumento}
+                              </Table.Cell>
+                              <Table.Cell
+                                style={{ width: "9%" }}
+                                className="font-size-12px font-family-Work-Sans"
+                                width={1}
+                              >
+                                {datos.codigo}
+                              </Table.Cell>
+                              <Table.Cell
+                                style={{ width: "38%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
                                 {datos.categoriasEspecificas}
-                              </Table.Cell>
+                              </Table.Cell>{" "}
                               <Table.Cell
-                                style={{ width: "15%" }}
+                                style={{ width: "10%" }}
                                 className="font-size-12px font-family-Work-Sans"
+                                width={1}
                               >
-                                <Button
-                                  className="botones-acciones"
-                                  icon="eye "
+                                <VerConvocatoria
+                                  datos={datos}
                                   onClick={(e) => abrirModal(e, datos)}
                                 />
-                                <VerConvocatoria datos={datos} />
                               </Table.Cell>
                             </Table.Row>
                           ))
