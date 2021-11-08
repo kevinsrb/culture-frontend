@@ -184,7 +184,7 @@ export const VerJurados = () => {
     return (
       <>
         <Table
-          columns={8}
+          columns={5}
           className="border-right-left-none border-bottom-none"
         >
           <Table.Header>
@@ -197,7 +197,7 @@ export const VerJurados = () => {
                 No.
               </Table.HeaderCell>
               <Table.HeaderCell
-                style={{ width: "26%" }}
+                style={{ width: "27%" }}
                 rowSpan="2"
                 className="background-color-FFFFFF font-size-12px"
               >
@@ -226,49 +226,50 @@ export const VerJurados = () => {
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
+          {JuradosLista.map((datos, index) => (
+            <Table.Row className="display-flex table-cell-modal">
+              <Table.Cell
+                style={{
+                  width: "4%",
+                  textAlign: "center",
+                  padding: "10px",
+                }}
+                className="font-size-12px font-family-Work-Sans "
+                width={5}
+              >
+                {index + 1}
+              </Table.Cell>
+              <Table.Cell
+                style={{ width: "28%", paddingLeft: "10px", padding: "10px" }}
+                className="font-size-12px font-family-Work-Sans table-cell"
+                width={1}
+              >
+                {datos.titulo}
+              </Table.Cell>
+              <Table.Cell
+                style={{ width: "28%", padding: "10px" }}
+                className="font-size-12px font-family-Work-Sans"
+                width={1}
+              >
+                {datos.nivelEducacion}
+              </Table.Cell>
+              <Table.Cell
+                style={{ width: "29%", padding: "10px" }}
+                className="font-size-12px font-family-Work-Sans"
+                width={1}
+              >
+                {datos.institucionEducativa}
+              </Table.Cell>
+              <Table.Cell
+                style={{ width: "10%", padding: "10px" }}
+                className="font-size-12px font-family-Work-Sans"
+                width={1}
+              >
+                Ver anexo
+              </Table.Cell>
+            </Table.Row>
+          ))}
         </Table>
-        {JuradosLista.map((datos, index) => (
-          <Table.Row className="display-flex">
-            <Table.Cell
-              style={{
-                width: "4%",
-                textAlign: "center",
-              }}
-              className="font-size-12px font-family-Work-Sans "
-              width={5}
-            >
-              {index + 1}
-            </Table.Cell>
-            <Table.Cell
-              style={{ width: "28%", paddingLeft: "10px" }}
-              className="font-size-12px font-family-Work-Sans"
-              width={1}
-            >
-              {datos.titulo}
-            </Table.Cell>
-            <Table.Cell
-              style={{ width: "28%" }}
-              className="font-size-12px font-family-Work-Sans"
-              width={1}
-            >
-              {datos.nivelEducacion}
-            </Table.Cell>
-            <Table.Cell
-              style={{ width: "29%" }}
-              className="font-size-12px font-family-Work-Sans"
-              width={1}
-            >
-              {datos.institucionEducativa}
-            </Table.Cell>
-            <Table.Cell
-              style={{ width: "10%" }}
-              className="font-size-12px font-family-Work-Sans"
-              width={1}
-            >
-              Ver anexo
-            </Table.Cell>
-          </Table.Row>
-        ))}
       </>
     );
   };
@@ -293,7 +294,10 @@ export const VerJurados = () => {
     {
       menuItem: "Experiencia",
       render: () => (
-        <Tab.Pane attached={false} style={{ border: "none", height: "100%" }}>
+        <Tab.Pane
+          attached={false}
+          style={{ border: "none", height: "100%", boxShadow: "none" }}
+        >
           {" "}
           <TabTwo />
         </Tab.Pane>
@@ -302,7 +306,10 @@ export const VerJurados = () => {
     {
       menuItem: "Reconocimiento y publicaciones",
       render: () => (
-        <Tab.Pane attached={false} style={{ border: "none", height: "100%" }}>
+        <Tab.Pane
+          attached={false}
+          style={{ border: "none", height: "100%", boxShadow: "none" }}
+        >
           {" "}
           <TabTwo />
         </Tab.Pane>
@@ -311,7 +318,7 @@ export const VerJurados = () => {
     // { menuItem: "", pane: "TabThree" },
     // { menuItem: "", pane: "TabFour" },
   ];
-  const Tabs = () => <Tab panes={panes} />;
+  const Tabs = () => <Tab panes={panes} style={{ boxShadow: "none" }} />;
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -340,13 +347,14 @@ export const VerJurados = () => {
         Postulación a jurado <span className="soft-text">Código 23401</span>
       </Modal.Header>
       <Modal.Content style={{ display: "flex" }}>
-        <Modal.Description style={{ width: "5%" }}>
+        <Modal.Description style={{ width: "5%" }} className="card-jurado">
           <Card className="card-jurado-main">
             <CardContent className="card-jurado-content">
               <Icon
                 name="user circle"
-                className="icon-jurado-modal"
-                textAlign="center"
+                size="massive"
+                style={{ margin: "1rem" }}
+                color="grey"
               />
               <CardHeader>Juan Esteban Ramírez Gonzales</CardHeader>
               <CardDescription>
@@ -370,11 +378,20 @@ export const VerJurados = () => {
             </CardContent>
           </Card>{" "}
         </Modal.Description>
-        <Modal.Description style={{ width: "58%", height: "100%" }}>
+        <Modal.Description
+          style={{ width: "58%", height: "100%", boxShadow: "none" }}
+        >
           <Tabs />
         </Modal.Description>
       </Modal.Content>
-      <Modal.Actions style={{ position: "absolute", bottom: 0, width: "100%" }}>
+      <Modal.Actions
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          boxShadow: "none",
+        }}
+      >
         <Button
           color="black"
           onClick={() => setOpen(false)}
