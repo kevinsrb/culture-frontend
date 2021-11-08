@@ -1,47 +1,116 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
-// import { ObjConstanst } from "../../../config/utils/constanst";
-import {
-  AreaOptions,
-  QuienParticipaOptions,
-} from "../../../data/selectOption.data";
 import {
   Button,
-  Container,
   Form,
   Segment,
   Header,
-  Divider,
   Grid,
   Table,
-  Select,
   Breadcrumb,
   Icon,
   Dropdown,
   Pagination,
+  Search,
+  Divider,
 } from "semantic-ui-react";
 import { useHistory } from "react-router";
 import { VerConvocatoria } from "../../../components/Participantes/VerConvocatoria";
 import { useBuscarConvocatoria } from "./Hooks/useBuscarConvocatoria";
 
-const cantidadRegistros = [
+const filtrarPorArea = [
   {
-    key: 0,
-    value: null,
-    text: "",
+    key: 1,
+    value: 1,
+    text: [],
   },
+  {
+    key: 2,
+    value: 2,
+    text: "Adquisición de equipos y herramientas tecnológicas",
+  },
+  {
+    key: 3,
+    value: 3,
+    text: "Apoyo para la participación en ferias y eventos del sector",
+  },
+  { key: 4, value: 4, text: "Áreas integradas" },
+  { key: 5, value: 5, text: "Arte" },
+];
+const cantidadRegistros = [
   {
     key: 1,
     value: 10,
-    text: "Adquisición de equipos y herramientas tecnológicas",
+    text: "10",
   },
   {
     key: 2,
     value: 20,
-    text: "Apoyo para la participación en ferias y eventos del sector",
+    text: "20",
   },
-  { key: 3, value: 50, text: "Áreas integradas" },
-  { key: 4, value: 100, text: "Arte" },
+  { key: 3, value: 50, text: "50" },
+  { key: 4, value: 100, text: "100" },
+];
+const JuradosLista = [
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
+  {
+    nombreCompleto: "Andres Julián Toro Gonzales",
+    nroDocumento: "1017196606",
+    codigo: "23401",
+    categoriasEspecificas: "Música popular, Formación en artes...",
+  },
 ];
 
 export const Jurados = () => {
@@ -63,36 +132,9 @@ export const Jurados = () => {
 
   const history = useHistory();
 
-  const [
-    formulario,
-    handleLineaConvocatoria,
-    primeroDatostabla,
-    changePagination,
-    showConvocatorias,
-    filtrarTablaMultiple,
-  ] = useBuscarConvocatoria({
-    categoriaslineasconvocatorias: [],
-    lineasconvocatorias: [],
-    datosActuales: [],
-    paginacionTotal: 0,
-    paginacionActual: 1,
-    datossinfiltro: [],
-    datosfiltroanterior: [],
-    numeroregistros: 0,
-    cantidadPáginas: 10,
-    filtros: [],
-  });
-
-  const [filtros, setfiltros] = useState(initialState);
-  const [categoriasLineaconvocatoria, setCategoriasLineaconvocatoria] =
-    useState([]);
-  const [tipocategoriasseleccionado, setTipocategoriasseleccionado] = useState(
-    []
-  );
-
-  useEffect(() => {
-    primeroDatostabla();
-  }, []);
+  // useEffect(() => {
+  //   primeroDatostabla();
+  // }, []);
 
   // const handleInputChange = (event, result) => {
   //   const { name, value } = result || event.target;
@@ -135,53 +177,52 @@ export const Jurados = () => {
       >
         <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
           <Segment className="segment-shadow">
-            <Grid.Column width={1}>
-              <Grid className="justify-content-space-between">
-                <Grid.Row>
-                  <Grid.Column width={4} className="justify-content-flex-end">
-                    <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={8} className="justify-content-flex-start">
+                  <Grid.Row>
+                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
                       Filtrar por area
                     </label>
-                  </Grid.Column>
-                  <Grid.Column width={5}>
                     <Dropdown
                       fluid
-                      className="select-registros-adminconvocatoria no-margin"
-                      defaultValue={formulario.cantidadPáginas}
-                      options={cantidadRegistros}
+                      className="select-registros-filtrar-por-area no-margin"
+                      placeholder="Seleccionar..."
+                      defaultValue={filtrarPorArea}
+                      options={filtrarPorArea}
                       icon={
                         <Icon className="font-color-1FAEEF" name="angle down" />
                       }
-                      onChange={(e, { value }) => showConvocatorias(e, value)}
                     />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Grid.Column>
-            <Grid.Column width={3} className="no-padding-left">
-              <Grid>
-                <Grid.Column width={4} className="justify-content-flex-end">
-                  <label className="font-family-Montserrat-Regular font-size-9px font-color-7E7E7E">
-                    Filtrar por palabra clave o código de jurado
-                  </label>
+                  </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={5}>
-                  <Dropdown
-                    fluid
-                    className="select-registros-adminconvocatoria no-margin"
-                    defaultValue={formulario.cantidadPáginas}
-                    options={cantidadRegistros}
-                    icon={
-                      <Icon className="font-color-1FAEEF" name="angle down" />
-                    }
-                    onChange={(e, { value }) => showConvocatorias(e, value)}
-                  />
+                <Grid.Column width={8} className="justify-content-flex-start">
+                  <Grid.Row>
+                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                      Filtrar por palabra clave o código de jurado
+                    </label>
+                    <Search
+                      placeholder="Buscar por palabra clave..."
+                      className="formulario-palabra-clave"
+                      // loading={loading}
+                      // onResultSelect={(e, data) =>
+                      //   dispatch({
+                      //     type: "UPDATE_SELECTION",
+                      //     selection: data.result.title,
+                      //   })
+                      // }
+                      // onSearchChange={handleSearchChange}
+                      // results={results}
+                      // value={value}
+                    />
+                  </Grid.Row>
                 </Grid.Column>
-              </Grid>
-            </Grid.Column>
+              </Grid.Row>
+            </Grid>
           </Segment>
         </Grid.Column>
       </Grid>
+
       <Grid
         style={{
           marginBottom: "8%",
@@ -215,9 +256,9 @@ export const Jurados = () => {
                       Total:
                       <span
                         className="font-color-F28C02 font-family-Montserrat-Regular font-size-12px"
-                        style={{ marginLeft: "1%" }}
+                        style={{ marginLeft: "4%" }}
                       >
-                        {formulario.numeroregistros}
+                        "{JuradosLista.length}"
                       </span>
                     </span>
                   </Grid.Column>
@@ -236,7 +277,7 @@ export const Jurados = () => {
                           <Dropdown
                             fluid
                             className="select-registros-adminconvocatoria no-margin"
-                            defaultValue={formulario.cantidadPáginas}
+                            defaultValue={cantidadRegistros}
                             options={cantidadRegistros}
                             icon={
                               <Icon
@@ -244,9 +285,9 @@ export const Jurados = () => {
                                 name="angle down"
                               />
                             }
-                            onChange={(e, { value }) =>
-                              showConvocatorias(e, value)
-                            }
+                            // onChange={(e, { value }) =>
+                            //   showConvocatorias(e, value)
+                            // }
                           />
                         </Grid.Column>
                       </Grid.Row>
@@ -271,7 +312,7 @@ export const Jurados = () => {
                             No.
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "15%" }}
+                            style={{ width: "21%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
@@ -285,7 +326,7 @@ export const Jurados = () => {
                             No. Documento
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "10%" }}
+                            style={{ width: "9%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
@@ -320,8 +361,8 @@ export const Jurados = () => {
                       className="border-right-left-none border-top-none"
                     >
                       <Table.Body>
-                        {formulario.datosActuales.length > 0 ? (
-                          formulario.datosActuales.map((datos, index) => (
+                        {JuradosLista.length > 0 ? (
+                          JuradosLista.map((datos, index) => (
                             <Table.Row className="display-flex">
                               <Table.Cell
                                 style={{ width: "5%" }}
@@ -331,76 +372,42 @@ export const Jurados = () => {
                                 {index + 1}
                               </Table.Cell>
                               <Table.Cell
-                                style={{ width: "15%" }}
+                                style={{ width: "20%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.nombre_convocatoria}
+                                {datos.nombreCompleto}
                               </Table.Cell>
-                              {/* <Table.Cell width={2}>{datos.fechas[0]}</Table.Cell> */}
-
                               <Table.Cell
-                                style={{ width: "15%" }}
+                                style={{ width: "14%" }}
                                 className="font-size-12px font-family-Work-Sans"
-                                width={2}
+                                width={1}
                               >
-                                {datos.tipo_participante.map((parti, index) => (
-                                  <p className="font-size-12px font-family-Work-Sans">
-                                    {" "}
-                                    {parti.text}
-                                  </p>
-                                ))}
+                                {datos.nroDocumento}
                               </Table.Cell>
-
+                              <Table.Cell
+                                style={{ width: "9%" }}
+                                className="font-size-12px font-family-Work-Sans"
+                                width={1}
+                              >
+                                {datos.codigo}
+                              </Table.Cell>
+                              <Table.Cell
+                                style={{ width: "38%" }}
+                                className="font-size-12px font-family-Work-Sans"
+                                width={1}
+                              >
+                                {datos.categoriasEspecificas}
+                              </Table.Cell>{" "}
                               <Table.Cell
                                 style={{ width: "10%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.fechas !== null
-                                  ? datos.fechas[0].valormin
-                                  : null}
-                              </Table.Cell>
-                              <Table.Cell
-                                style={{ width: "10%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {datos.fechas !== null
-                                  ? datos.fechas[1].valormin
-                                  : null}
-                              </Table.Cell>
-
-                              <Table.Cell
-                                style={{ width: "15%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={2}
-                              >
-                                {datos.area.map((area, index) => (
-                                  <p className="font-size-12px font-family-Work-Sans">
-                                    {" "}
-                                    {area.text}
-                                  </p>
-                                ))}
-                              </Table.Cell>
-
-                              <Table.Cell
-                                style={{ width: "15%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {datos.entidad}
-                              </Table.Cell>
-                              <Table.Cell
-                                style={{ width: "15%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                              >
-                                <Button
-                                  className="botones-acciones"
-                                  icon="eye "
+                                <VerConvocatoria
+                                  datos={datos}
                                   onClick={(e) => abrirModal(e, datos)}
                                 />
-                                <VerConvocatoria datos={datos} />
                               </Table.Cell>
                             </Table.Row>
                           ))
@@ -418,9 +425,9 @@ export const Jurados = () => {
                 <Grid.Row>
                   <Grid.Column className="container-pagination-adminconvocatorias">
                     <Pagination
-                      totalPages={formulario.paginacionTotal}
-                      activePage={formulario.paginacionActual}
-                      onPageChange={changePagination}
+                      totalPages="10"
+                      activePage="1"
+                      // onPageChange={changePagination}
                     />
                   </Grid.Column>
                 </Grid.Row>
