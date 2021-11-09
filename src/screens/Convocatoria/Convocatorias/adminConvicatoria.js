@@ -207,6 +207,7 @@ export const AdminConvocatorias = () => {
   const primeroDatostabla = async () => {
     try {
       let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/`);
+      console.log(response)
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
       let fechaactual = moment().format("YYYY-MM-DD");
       for (var i in response.data.convocatorias) {
@@ -250,16 +251,19 @@ export const AdminConvocatorias = () => {
         }
       }
       if (response.data.convocatorias.length > 0) {
+        // debugger
         setPrincipalState({ datossinfiltro: response.data.convocatorias });
         let copy = response.data.convocatorias.map((data) => data);
         let datos = copy.slice(0, cantidadPáginas);
-        setDatosActuales(datos);
+        console.log(datos)
+        setDatosActuales(copy);
         let x = response.data.convocatorias.length / cantidadPáginas;
         x = Math.ceil(x);
         return setPaginacionTotal(x);
       }
 
       let datos = [];
+      // console.log(datos)
       setDatosActuales(datos);
       setPrincipalState({ datossinfiltro: datos });
       let x = 1;
@@ -384,6 +388,8 @@ export const AdminConvocatorias = () => {
     z = Math.ceil(z);
     return setPaginacionTotal(z);
   };
+
+  console.log(datosActuales)
 
   return (
     <div>

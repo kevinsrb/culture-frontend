@@ -57,6 +57,24 @@ export class ConvocatoriasService extends BaseConvocatoriaService {
             throw new Error(`An unhandled exception in getActividades with stack: ${error}`);
         }
     }
+
+    async postActividades (idConvocatoria, actividades) {
+        try {
+            const { data } = await this.axiosClient.post(`${this.baseAPI}convocatorias/actividades/${idConvocatoria}`, actividades);
+            return data
+        } catch (error) {
+            throw new Error(`An unhandled exception in postActividades with stack: ${error}`);
+        }
+    }
+
+    async getActividadesByConvocatoria (idnumero_convocatoria) {
+        try {
+            const { data } = await this.axiosClient.get(`${this.baseAPI}convocatorias/lineasConvocatorias/${idnumero_convocatoria}`);
+            return data
+        } catch (error) {
+            throw new Error(`An unhandled exception in getActividadesByConvocatoria with stack: ${error}`);
+        }
+    }
 }
 
 export default new ConvocatoriasService();
