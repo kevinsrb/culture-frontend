@@ -207,7 +207,7 @@ export const useFormConvocatoria = () => {
       return;
     }
 
-    if (name == 'ciclo' || name == 'linea_estrategica' || name == 'cobertura' || name == 'modalidad' || name == 'tipo_estimulo') {
+    if (name == 'ciclo' || name == 'linea_estrategica' || name == 'cobertura' || name == 'tipo_estimulo') {
       // debugger
       if (name == 'tipo_estimulo') {
         if (value == 'Económico') {
