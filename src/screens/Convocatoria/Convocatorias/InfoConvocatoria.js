@@ -240,7 +240,7 @@ export const InfoConvocatoria = () => {
                 </Form.Item>
               </Col>
               <Col span={6}>
-                <Form.Item label="¿En convenio?">
+                <Form.Item label="¿En convenio? - opcional">
                   <Radio.Group name="esconvenio" value={convocatoria.esconvenio} onChange={handleInputChange}>
                     <Radio value={true}>Sí</Radio>
                     <Radio value={false}>No</Radio>
@@ -248,7 +248,7 @@ export const InfoConvocatoria = () => {
                 </Form.Item>
               </Col>
               <Col span={7}>
-                <Form.Item label="¿Participa menor de edad?">
+                <Form.Item label="¿Participa menor de edad? - opcional">
                   <Radio.Group name="menor_edad" onChange={handleInputChange} value={convocatoria.menor_edad}>
                     <Radio value={true}>Sí</Radio>
                     <Radio value={false}>No</Radio>
@@ -335,13 +335,13 @@ export const InfoConvocatoria = () => {
               </Col>
               <Divider style={{ marginTop: "0px" }} />
               <Col span={24}>
-                <Form.Item label="Descripción corta"  /* rules={[{ required: true, message: "" }]} */>
+                <Form.Item label="Descripción corta - opcional"  /* rules={[{ required: true, message: "" }]} */>
                   <TextArea value={convocatoria.descripcion_corta} name="descripcion_corta" onChange={handleInputChange} className={convocatoria.error.descripcion_corta_style} rows={4} showCount maxLength={250} />
                 </Form.Item>
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="¿Quién no puede participar?"
+                  label="¿Quién no puede participar? - opcional"
                   
                 // rules={[{ required: true, message: "" }]}
                 >
@@ -350,7 +350,7 @@ export const InfoConvocatoria = () => {
               </Col>
               <Col span={12}>
                 <Form.Item
-                  label="Perfíl participante"
+                  label="Perfíl participante - opcional"
                   
                 // rules={[{ required: true, message: "" }]}
                 >
