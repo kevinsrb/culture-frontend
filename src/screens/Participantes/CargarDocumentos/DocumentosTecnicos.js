@@ -173,7 +173,7 @@ export const DocumentosTecnicos = React.memo(() => {
                       <Grid.Column className="justify-content-flex-end no-padding-top no-padding-bottom no-padding-right">
                         <Button
                           content="Cargar documento"
-                          className="font-size-12px button-back font-family-Montserrat-SemiBold"
+                          className="font-size-12px button-back font-family--MontserratSemiBold"
                           onClick={() => {
                             var inputs = document.getElementsByClassName("inputs-ref");
                             inputs[index].click();
