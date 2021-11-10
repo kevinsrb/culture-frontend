@@ -21,6 +21,7 @@ import {
 } from "semantic-ui-react";
 import { useDispatch, useSelector } from "react-redux";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
+import { ModalConvocatoria } from "./ModalConvocatoria";
 
 export const DocumentacionConvocatoria = () => {
   // STATE PRINCIPAL
@@ -127,15 +128,19 @@ export const DocumentacionConvocatoria = () => {
     return setPrincipalState({ ...principalState, [name]: value });
   };
   const agregarFila = () => {
+
+    if(openModal){
+      setOpenModal(!openModal)
+    }
     let arrayErrores = stateErrores;
     let error = false;
-    if (principalState.nombre.trim() === "") {
-      error = true;
-      arrayErrores = {
-        ...arrayErrores,
-        nombre: true,
-      };
-    }
+    // if (principalState.nombre.trim() === "") {
+    //   error = true;
+    //   arrayErrores = {
+    //     ...arrayErrores,
+    //     nombre: true,
+    //   };
+    // }
 
     if (principalState.tipo_documento.trim() === "") {
       error = true;
@@ -184,6 +189,8 @@ export const DocumentacionConvocatoria = () => {
     }
 
     let todoJSON = JSON.parse(JSON.stringify(principalState.documentacion));
+    debugger
+    console.log(todoJSON)
     todoJSON[principalState.index].nombre = principalState.nombre;
     todoJSON[principalState.index].tipo_documento = principalState.tipo_documento;
     todoJSON[principalState.index].descripcion = principalState.descripcion;
@@ -208,7 +215,10 @@ export const DocumentacionConvocatoria = () => {
     return setPrincipalState({ ...principalState, documentacion: array });
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
   const Editardocumentacion = (data) => {
+    setOpenModal(true);
     console.log(data);
     return setPrincipalState({
       ...principalState,
@@ -636,6 +646,19 @@ export const DocumentacionConvocatoria = () => {
           ) : null}
         </Modal.Content>
       </Modal>
+
+      <ModalConvocatoria 
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        principalState={principalState}
+        setPrincipalState={setPrincipalState}
+        fileInputRef={fileInputRef}
+        saveFile={saveFile}
+        agregarFila={agregarFila}
+        cambiarValor={CambiarValor}
+      />
     </div>
+
+    
   );
 };

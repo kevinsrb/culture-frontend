@@ -21,6 +21,7 @@ import { ObjConstanst } from "../../../config/utils/constanst";
 import { useHistory } from "react-router";
 import { ObjNotificaciones } from "../../../config/utils/notificaciones.utils";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
+import { ModalTecnica } from "./ModalTecnica";
 
 export const DocumentacionTecnica = () => {
   // STATE PRINCIPAL
@@ -70,7 +71,7 @@ export const DocumentacionTecnica = () => {
           array.push(response.data.data.documentos[i]);
         }
       }
-      console.log(array);
+      console.log(array, 'este es');
       return setPrincipalState({ ...principalState, documentacion: array });
     }
   };
@@ -82,6 +83,13 @@ export const DocumentacionTecnica = () => {
   };
 
   const agregarFila = () => {
+
+    debugger
+
+    if(openModal){
+      setOpenModal(!openModal)
+    }
+
     let arrayErrores = StateErrores;
     let error = false;
 
@@ -152,7 +160,10 @@ export const DocumentacionTecnica = () => {
     return setPrincipalState({ ...principalState, documentacion: array });
   };
 
+  const [openModal, setOpenModal] = useState(false);
+
   const Editardocumentacion = (data) => {
+    setOpenModal(true);
     console.log(data);
     return setPrincipalState({
       ...principalState,
@@ -165,7 +176,8 @@ export const DocumentacionTecnica = () => {
     });
   };
 
-  const Eliminardocumentacion = async ({ data }) => {
+  const Eliminardocumentacion = async (data) => {
+    console.log(data)
     // const { id_documentos_tecnico, index } = data;
     // console.log(id_documentos_tecnico, index);
 
@@ -181,6 +193,7 @@ export const DocumentacionTecnica = () => {
     let copy = principalState.documentacion.map((data) => data);
     console.log(copy);
     array = copy.filter((doc) => doc.index !== data.index);
+    console.log(array)
     return setPrincipalState({ ...principalState, documentacion: array });
   };
 
@@ -199,7 +212,10 @@ export const DocumentacionTecnica = () => {
 
   let conteoDocumentosTecnicos = 0;
   const handelAsociarDocumentosTecnicos = async () => {
+    // console.log(principalState.documentacion)
+    // debugger
     let idconvocatoria = idConvocatoria;
+    console.log(idConvocatoria)
     if (principalState.documentacion.length === 0) {
       return console.error("NO HAY NINGUN DOCUMENTO ASOCIADO");
     }
@@ -207,6 +223,7 @@ export const DocumentacionTecnica = () => {
       try {
         let tipo_documento_id = 1;
         if (editarConvocatoria !== undefined) {
+          
           await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos/editar`, {
             idconvocatoria,
             descripcion: principalState.documentacion[conteoDocumentosTecnicos].descripcion,
@@ -215,15 +232,10 @@ export const DocumentacionTecnica = () => {
             tipo_documento: principalState.documentacion[conteoDocumentosTecnicos].tipo_documento,
             tipo_documento_id,
           });
+          console.log(conteoDocumentosTecnicos)
         } else {
-          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, {
-            idconvocatoria,
-            descripcion: principalState.documentacion[conteoDocumentosTecnicos].descripcion,
-            url_documento: principalState.documentacion[conteoDocumentosTecnicos].url_documento,
-            activo: principalState.documentacion[conteoDocumentosTecnicos].activo,
-            tipo_documento: principalState.documentacion[conteoDocumentosTecnicos].tipo_documento,
-            tipo_documento_id,
-          });
+          
+          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, principalState.documentacion);
         }
         conteoDocumentosTecnicos++;
         return handelAsociarDocumentosTecnicos();
@@ -236,6 +248,7 @@ export const DocumentacionTecnica = () => {
   };
 
   const saveFile = async (e) => {
+    debugger
     console.log(e.target.files.length);
     if (e.target.files.length > 0) {
       let file = e.target.files[0];
@@ -625,6 +638,17 @@ export const DocumentacionTecnica = () => {
           ) : null}
         </Modal.Content>
       </Modal>
+
+      <ModalTecnica 
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        principalState={principalState}
+        setPrincipalState={setPrincipalState}
+        fileInputRef={fileInputRef}
+        saveFile={saveFile}
+        agregarFila={agregarFila}
+        cambiarValor={CambiarValor}
+      />
     </div>
   );
 };

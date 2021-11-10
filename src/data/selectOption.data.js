@@ -94,9 +94,9 @@ export const QuienParticipaOptions = [
 
 export const RequisitosOptions = [
   { key: 1, value: "Anexo", text: "Anexo" },
-  { key: 2, value: "Hoja de vida", text: "Hoja de vida" },
-  { key: 3, value: "Propuesta", text: "Propuesta" },
-  { key: 4, value: "Presupuesto", text: "Presupuesto" },
+  { key: 2, value: "Formato", text: "Formato" },
+  { key: 3, value: "Resolución", text: "Resolución" },
+  // { key: 4, value: "Presupuesto", text: "Presupuesto" },
 ];
 
 
