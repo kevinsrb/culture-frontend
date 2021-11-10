@@ -167,8 +167,10 @@ export const Cronograma = () => {
     hora_cierreno: true,
     verFechas: false,
     verHoras: false,
-    hora: "23",
-    minuto: "59",
+    hora: "12",
+    minuto: "00",
+    formato_pm: true,
+    formato_am: false
   };
   const stateErrores = {
     actividad: false,
@@ -382,6 +384,7 @@ export const Cronograma = () => {
   };
 
   const handletoggleChange = (event, result) => {
+    // debugger
     const { name, checked } = result || event.target;
     console.log(name, checked);
     if (name === "rango_fechassi") {
@@ -395,6 +398,12 @@ export const Cronograma = () => {
     }
     if (name === "hora_cierreno") {
       return setPrincipalState({ ...principalState, [name]: true, hora_cierresi: false, verHoras: false });
+    }
+    if (name === "formato_am") {
+      return setPrincipalState({ ...principalState, [name]: true, formato_pm: false });
+    }
+    if (name === "formato_pm") {
+      return setPrincipalState({ ...principalState, [name]: true, formato_am: false });
     }
   };
 
@@ -719,8 +728,8 @@ export const Cronograma = () => {
                     </Grid.Row>
                   </Grid>
                   <Grid>
-                    <Grid.Row columns={3} style={{ paddingTop: "0%" }}>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
+                    <Grid.Row columns={4} style={{ paddingTop: "0%" }}>
+                      <Grid.Column width={4} className="column-without-padding-rigth">
                         <Input
                           placeholder="HH"
                           onChange={(e) => setPrincipalState({ ...principalState, hora: e.target.value })}
@@ -729,13 +738,35 @@ export const Cronograma = () => {
                           value={principalState.hora}
                         />
                       </Grid.Column>
-                      <Grid.Column width={5} className="column-without-padding-rigth">
+                      <Grid.Column width={4} className="column-without-padding-rigth">
                         <Input
                           placeholder="mm"
                           onChange={(e) => setPrincipalState({ ...principalState, minuto: e.target.value })}
                           maxLength="2"
                           fluid
                           value={principalState.minuto}
+                        />
+                      </Grid.Column>
+                      <Grid.Column /* style={{ width: "40%" }} */>
+                        <Form.Checkbox
+                          className="font-color-4B4B4B"
+                          radio
+                          label="AM"
+                          name="formato_am"
+                          value={principalState.formato_am}
+                          checked={principalState.formato_am}
+                          onChange={handletoggleChange}
+                        />
+                      </Grid.Column>
+                      <Grid.Column /* style={{ paddingLeft: "2%" }} */>
+                        <Form.Checkbox
+                          className="font-color-4B4B4B"
+                          radio
+                          label="PM"
+                          name="formato_pm"
+                          value={principalState.formato_pm}
+                          checked={principalState.formato_pm}
+                          onChange={handletoggleChange}
                         />
                       </Grid.Column>
                     </Grid.Row>

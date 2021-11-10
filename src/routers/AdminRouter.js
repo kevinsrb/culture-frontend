@@ -6,7 +6,7 @@ import Navbar from "../components/NavBar";
 // CONVOCATORIAS
 import { AdminConvocatorias } from "../screens/Convocatoria/Convocatorias/adminConvicatoria";
 import { InfoConvocatoria } from "../screens/Convocatoria/Convocatorias/InfoConvocatoria";
-// import { CronogramaActividades } from "../screens/Convocatoria/Actividades/CronogramaActividades";
+import { CronogramaActividades } from "../screens/Convocatoria/Actividades/CronogramaActividades";
 import { Cronograma } from "../screens/Convocatoria/Cronograma/Cronograma";
 import { Documentos } from "../screens/Convocatoria/Documentos/Documentos";
 import { DocumentacionTecnica } from "../screens/Convocatoria/Documentacion/documentacionTecnica";
@@ -21,7 +21,7 @@ import { Propuestas } from "../screens/Postulaciones/Propuestas/Propuestas";
 import { Grid, Icon } from "semantic-ui-react";
 import { VerificacionPropuestas } from "../screens/Postulaciones/VerificacionPropuestas/VerificacionPropuestas";
 import { AdministrarJurados } from "../screens/Postulaciones/AdministrarJurados/AdministrarJurados";
-import { CronogramaActividades } from "../screens/Convocatoria/Actividades/NewCronogramaActividades";
+// import { CronogramaActividades } from "../screens/Convocatoria/Actividades/NewCronogramaActividades";
 
 export default function AdminRouter() {
   return (

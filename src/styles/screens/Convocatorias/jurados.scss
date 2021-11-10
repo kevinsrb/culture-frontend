@@ -4,24 +4,69 @@
   justify-content: end;
 }
 
-.select-registros-adminconvocatoria {
+.select-registros-filtrar-por-area {
   border: 1px solid rgba(34, 36, 38, 0.15);
-  text-align: center;
   border-radius: 4px;
-  flex: 0.2;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
   padding-left: 2% !important;
   padding-right: 2% !important;
-  height: 25px !important;
+  height: 38px !important;
   justify-content: center;
   align-items: center;
 }
-
+.formulario-palabra-clave input {
+  width: 468px !important;
+  height: 38px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 4px !important;
+  color: #1b1c1d;
+}
 .celda-estatica-adminconvocatoria {
   position: absolute;
 }
-
+// Modal
+.modal-jurado {
+  border-radius: 1rem !important;
+  box-shadow: none !important;
+}
+.ui.tabular.menu .active.item {
+  border-color: none;
+}
+.table-cell tr {
+  height: 1rem;
+  padding: 1px;
+}
+.table-cell-modal tr {
+  height: 1rem;
+  padding: 10px;
+}
+.soft-text li span {
+  font-weight: normal;
+}
+.card-jurado {
+  margin: 0 -20px;
+}
+.card-jurado div {
+  box-shadow: none !important;
+  width: 85%;
+  padding: 3px;
+}
+.card-jurado-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+.icon-jurado-modal {
+  width: 100px;
+}
 .no-padding-left {
   padding-left: 0px !important;
 }
@@ -97,10 +142,10 @@
 //   overflow-x: scroll;
 // }
 
-// .container-pagination-adminconvocatorias {
-//   display: flex !important;
-//   justify-content: flex-end !important;
-// }
+.container-pagination-jurados {
+  display: flex !important;
+  justify-content: flex-end !important;
+}
 
 .ant-table-thead tr {
   background-color: #ffffff !important;

@@ -1,4 +1,4 @@
-import { useState } from "react";
+  import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import apiConvocatorias from "../../../../api/api-convocatorias";
@@ -6,9 +6,12 @@ import { ObjNotificaciones } from "../../../../config/utils/notificaciones.utils
 
 export const useFormConvocatoria = () => {
   const [convocatoria, setConvocatoria] = useState(initialValues);
+  const [errores_style, setErrores_style] = useState(initialStateErrores);
+  const [isDisabledForm, setIsDisabledForm] = useState(true);
 
   const { editarConvocatoria } = useSelector((state) => state.edicion);
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
+  // useState
 
   const participantes = [
     { id: 1, name: "Persona natural" },
@@ -37,64 +40,9 @@ export const useFormConvocatoria = () => {
 
   const [categoriasLC, setcategoriasLC] = useState([]);
   const [isDisabledCategorias, setIsDisabledCategorias] = useState(true);
-  const handleLineaConvocatoriaChange = async (value, name) => {
-    // setConvocatoria({
-    //   ...convocatoria,
-    //   [name]: value,
-    // });
-
-    if (name == "bolsa_concursable") {
-      setIsBolsaConcursable(true);
-    }
-
-    if (name == "linea_convocatoria") {
-      try {
-        const { data } = await apiConvocatorias.getCategoriasLineaConvocatoria(value);
-        const optionCategorias = data.map((clc) => {
-          return {
-            id: clc.idcategorialineaconvocatoria,
-            name: clc.nombre,
-          };
-        });
-        setcategoriasLC(optionCategorias);
-      } catch (error) {
-        console.log(error);
-      }
-      setIsDisabledCategorias(false);
-    }
-  };
-
   const [isEconomico, setIsEconomico] = useState(false);
-  const handleTipoEstimuloChange = (value, name) => {
-    setConvocatoria({
-      ...convocatoria,
-      [name]: value,
-    });
-
-    if (value == "Económico") {
-      setIsEconomico(true);
-    } else {
-      setIsEconomico(false);
-    }
-  };
-
   const [isBolsaConcursable, setIsBolsaConcursable] = useState(false);
-  const handleBolsaConcursableChange = (value, name) => {
-    // console.log(value)
-    setConvocatoria({
-      ...convocatoria,
-      [name]: value,
-    });
-    // setConvocatoria
-    // console.log(value, name)
-    // debugger
-    // console.log({value, name})
-    // setConvocatoria({
-    //     ...convocatoria,
-    //     [name]: value
-    // })
-    setIsBolsaConcursable(value);
-  };
+
 
   const getConvocatoria = async (idConvocatoria, user, editarConvocatoria) => {
     // debugger;
@@ -135,7 +83,27 @@ export const useFormConvocatoria = () => {
         // console.log(data)
         // debugger
         setcategoriasLC(optionCategorias);
-        setConvocatoria(data);
+        setConvocatoria({
+          ...data,
+          error: {
+            descripcion_corta_style: "",
+            noparticipa_style: "",
+            perfil_participante_style: "",
+          },
+          alterno: {
+            nombre_convocatoria: true,
+            linea_convocatoria: true,
+            categoria_linea_convocatoria: true,
+            tipo_participante: true,
+            ciclo: true,
+            linea_estrategica: true,
+            area: true,
+            cobertura: true,
+            modalidad: true,
+            tipo_estimulo: true,
+          }
+        });
+        setIsDisabledForm(false);
       } else {
         setConvocatoria(initialValues);
       }
@@ -146,14 +114,351 @@ export const useFormConvocatoria = () => {
 
   const handleInputChange = ({ target }) => {
     const { name, value } = target;
+
+    if (name === 'nombre_convocatoria') {
+      setConvocatoria({
+        ...convocatoria,
+        [name]: value,
+        alterno: {
+          ...convocatoria.alterno,
+          [name]: value == '' ? false : true
+        }
+      });
+
+      convocatoria.alterno[name] = value == '' ? false : true
+
+      let array = Object.values(convocatoria.alterno);
+      if (array.filter(data => data === false).length === 0) {
+        setIsDisabledForm(false);
+        let error = {
+          ...convocatoria.error,
+          errorstate: false,
+        }
+        if (convocatoria.descripcion_corta == '') {
+          error.descripcion_corta_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.noparticipa == '') {
+          error.noparticipa_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.perfil_participante == '') {
+          error.perfil_participante_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.modalidad == '') {
+          error.modalidad_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (error.errorstate) {
+          setConvocatoria({ ...convocatoria, error })
+        }
+      }
+
+      return;
+    }
+
     setConvocatoria({
       ...convocatoria,
       [name]: value,
     });
+
+    convocatoria.alterno[name] = value;
+
+    let array = Object.values(convocatoria.alterno);
+    if (array.filter(data => data === false).length === 0) {
+      setIsDisabledForm(false);
+      let error = {
+        ...convocatoria.error,
+        errorstate: false,
+      }
+      if (convocatoria.descripcion_corta == '') {
+        error.descripcion_corta_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+      }
+      if (convocatoria.noparticipa == '') {
+        error.noparticipa_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+      }
+      if (convocatoria.perfil_participante == '') {
+        error.perfil_participante_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+      }
+      if (convocatoria.modalidad == '') {
+        error.modalidad_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+      }
+      if (error.errorstate) {
+        setConvocatoria({ ...convocatoria, error })
+      }
+    } else {
+      setIsDisabledForm(true);
+    }
+
   };
+
+  const handleSelectChange = async (value, name) => {
+    if (name == 'linea_convocatoria') {
+      try {
+        const { data } = await apiConvocatorias.getCategoriasLineaConvocatoria(value);
+        const optionCategorias = data.map((clc) => {
+          return {
+            id: clc.idcategorialineaconvocatoria,
+            name: clc.nombre,
+          };
+        });
+        setcategoriasLC(optionCategorias);
+      } catch (error) {
+        console.log(error);
+      }
+      setIsDisabledCategorias(false);
+      setConvocatoria({
+        ...convocatoria,
+        [name]: value,
+        alterno: {
+          ...convocatoria.alterno,
+          [name]: true
+        }
+      })
+
+      convocatoria.alterno[name] = value;
+      let array = Object.values(convocatoria.alterno);
+      if (array.filter(data => data === false).length === 0) {
+        setIsDisabledForm(false);
+        let error = {
+          ...convocatoria.error,
+          errorstate: false,
+        }
+        if (convocatoria.descripcion_corta == '') {
+          error.descripcion_corta_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.noparticipa == '') {
+          error.noparticipa_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.perfil_participante == '') {
+          error.perfil_participante_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.modalidad == '') {
+          error.modalidad_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (error.errorstate) {
+          setConvocatoria({ ...convocatoria, error })
+        }
+      } else {
+        setIsDisabledForm(true);
+      }
+
+      return;
+    }
+
+    if (name == 'tipo_participante' || name == 'categoria_linea_convocatoria' || name == 'area') {
+      setConvocatoria({
+        ...convocatoria,
+        [name]: value,
+        alterno: {
+          ...convocatoria.alterno,
+          [name]: value.length == 0 ? false : true
+        }
+      })
+
+      convocatoria.alterno[name] = value.length == 0 ? false : true;
+      let array = Object.values(convocatoria.alterno);
+      if (array.filter(data => data === false).length === 0) {
+        setIsDisabledForm(false);
+        let error = {
+          ...convocatoria.error,
+          errorstate: false,
+        }
+        if (convocatoria.descripcion_corta == '') {
+          error.descripcion_corta_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.noparticipa == '') {
+          error.noparticipa_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.perfil_participante == '') {
+          error.perfil_participante_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.modalidad == '') {
+          error.modalidad_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (error.errorstate) {
+          setConvocatoria({ ...convocatoria, error })
+        }
+      } else {
+        setIsDisabledForm(true);
+      }
+
+      return;
+    }
+
+    if (name == 'ciclo' || name == 'linea_estrategica' || name == 'cobertura' || name == 'tipo_estimulo') {
+      // debugger
+      if (name == 'tipo_estimulo') {
+        if (value == 'Económico') {
+          setIsEconomico(true);
+        } else {
+          setIsEconomico(false);
+        }
+      }
+
+      setConvocatoria({
+        ...convocatoria,
+        [name]: value,
+        alterno: {
+          ...convocatoria.alterno,
+          [name]: value == '' ? false : true
+        }
+      })
+
+      convocatoria.alterno[name] = value == '' ? false : true
+      let array = Object.values(convocatoria.alterno);
+      if (array.filter(data => data === false).length === 0) {
+        setIsDisabledForm(false);
+        let error = {
+          ...convocatoria.error,
+          errorstate: false,
+        }
+        if (convocatoria.descripcion_corta == '') {
+          error.descripcion_corta_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.noparticipa == '') {
+          error.noparticipa_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.perfil_participante == '') {
+          error.perfil_participante_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (convocatoria.modalidad == '') {
+          error.modalidad_style = "ant-form-item-has-error"
+          error.errorstate = true
+          // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+        }
+        if (error.errorstate) {
+          setConvocatoria({ ...convocatoria, error })
+        }
+      } else {
+        setIsDisabledForm(true);
+      }
+
+      return;
+    }
+
+    if (name == 'bolsa_concursable') {
+      if(value){
+        setIsBolsaConcursable(true)
+      } else {
+        setIsBolsaConcursable(false)
+
+      }
+    }
+
+    if (name == 'tipo_estimulo') {
+      if (value == 'Económico') {
+        setIsEconomico(true);
+      } else {
+        setIsEconomico(false);
+      }
+    }
+
+    setConvocatoria({
+      ...convocatoria,
+      [name]: value,
+    })
+
+    convocatoria.alterno[name] = value;
+    let array = Object.values(convocatoria.alterno);
+    if (array.filter(data => data === false).length === 0) {
+      setIsDisabledForm(false);
+      let error = {
+        ...convocatoria.error,
+        errorstate: false,
+      }
+      if (convocatoria.descripcion_corta == '') {
+        error.descripcion_corta_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+      }
+      if (convocatoria.noparticipa == '') {
+        error.noparticipa_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+      }
+      if (convocatoria.perfil_participante == '') {
+        error.perfil_participante_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+      }
+      if (convocatoria.modalidad == '') {
+        error.modalidad_style = "ant-form-item-has-error"
+        error.errorstate = true
+        // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+      }
+      if (error.errorstate) {
+        setConvocatoria({ ...convocatoria, error })
+      }
+    } else {
+      setIsDisabledForm(true);
+    }
+  }
 
   // ENVIO FORMULARIO
   const handleConvocatoriaSubmit = async () => {
+    // let error = {
+    //   ...convocatoria.error,
+    //   errorstate: false,
+    // }
+    // if (convocatoria.descripcion_corta == '') {
+    //   error.descripcion_corta_style = "ant-form-item-has-error"
+    //   error.errorstate = true
+    //   // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, descripcion_corta_style: "ant-form-item-has-error" } })
+    // }
+    // if (convocatoria.noparticipa == '') {
+    //   error.noparticipa_style = "ant-form-item-has-error"
+    //   error.errorstate = true
+    //   // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, noparticipa_style: "ant-form-item-has-error" } })
+    // }
+    // if (convocatoria.perfil_participante == '') {
+    //   error.perfil_participante_style = "ant-form-item-has-error"
+    //   error.errorstate = true
+    //   // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+    // }
+    // if (convocatoria.modalidad == '') {
+    //   error.modalidad_style = "ant-form-item-has-error"
+    //   error.errorstate = true
+    //   // setConvocatoria({ ...convocatoria, error: { ...convocatoria.error, perfil_participante_style: "ant-form-item-has-error" } })
+    // }
+    // if (error.errorstate) {
+    //   setConvocatoria({ ...convocatoria, error })
+    // }
     let categoriasConvocatoria = convocatoria.categoria_linea_convocatoria.map((x) => {
       let filtrado = categoriasLC.filter((data) => data.id === x);
       return {
@@ -178,16 +483,16 @@ export const useFormConvocatoria = () => {
     convocatoria.area = areas;
     convocatoria.tipo_participante = tipoParticipante;
     try {
-      debugger
-      // console.log(convocatoria)
       if (editarConvocatoria !== undefined) {
-        const data = await  apiConvocatorias.editConvocatoria(idConvocatoria, convocatoria);
+        const data = await apiConvocatorias.editConvocatoria(idConvocatoria, convocatoria);
         ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
         return history.push("/Administrador/cronogramaActividades");
       }
+
       const data = await apiConvocatorias.postConvocatoria(convocatoria);
       ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
       history.push("/Administrador/cronogramaActividades");
+      // console.log(convocatoria)
     } catch (error) {
       console.log(error);
     }
@@ -198,16 +503,17 @@ export const useFormConvocatoria = () => {
     getLineaConvocatorias,
     categoriasLC,
     isDisabledCategorias,
-    handleLineaConvocatoriaChange,
-    handleTipoEstimuloChange,
     isEconomico,
-    handleBolsaConcursableChange,
     isBolsaConcursable,
     handleConvocatoriaSubmit,
     getConvocatoria,
     convocatoria,
     handleInputChange,
     setConvocatoria,
+    errores_style,
+    isDisabledForm,
+    setIsDisabledForm,
+    handleSelectChange
   };
 };
 
@@ -223,7 +529,7 @@ const initialValues = {
   area: [],
   cobertura: null,
   esconvenio: false,
-  menoredad: false,
+  menor_edad: false,
   modalidad: null,
   tipo_estimulo: null,
   descripcion_corta: "",
@@ -232,4 +538,27 @@ const initialValues = {
   valor_total_entg: 0,
   bolsa_concursable: false,
   num_estimulos: 0,
+  error: {
+    descripcion_corta_style: "",
+    noparticipa_style: "",
+    perfil_participante_style: "",
+    modalidad_style: "",
+  },
+  alterno: {
+    nombre_convocatoria: false,
+    linea_convocatoria: false,
+    categoria_linea_convocatoria: false,
+    tipo_participante: false,
+    ciclo: false,
+    linea_estrategica: false,
+    area: false,
+    cobertura: false,
+    tipo_estimulo: false,
+  }
 };
+
+const initialStateErrores = {
+  descripcion_corta_style: "",
+  noparticipa_style: "",
+  perfil_participante_style: "",
+}

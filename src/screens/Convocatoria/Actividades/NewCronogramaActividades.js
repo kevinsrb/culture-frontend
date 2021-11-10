@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Breadcrumb, Col, Divider, Dropdown, Row, Menu, Typography, Input, Checkbox, Button } from 'antd';
 import { DownOutlined, HomeFilled, SearchOutlined } from '@ant-design/icons';
 import { useActividades } from './Hooks/useActividades';
+import apiConvocatorias from '../../../api/api-convocatorias';
 
 // Ant Controllers
 const { Title, Paragraph, Text } = Typography;
@@ -14,51 +15,23 @@ export const CronogramaActividades = () => {
     const {
         actividades,
         getActividades,
-        actividadesGet
+        indeterminate,
+        onCheckAllChange,
+        checkAll,
+        checkedList,
+        onChange,
+        handleSubmit,
+        getActividadesConvocatoria
     } = useActividades();
 
-    const defaultCheckedList = ['Apertura', 'Resolución de otorgamiento', 'Cierre'];
+    
 
-    const [checkedList, setCheckedList] = useState(defaultCheckedList);
-    const [indeterminate, setIndeterminate] = useState(true);
-    const [checkAll, setCheckAll] = useState(false);
-    const onChange = list => {
-        setCheckedList(list);
-        setIndeterminate(!!list.length && list.length < actividades.length);
-        setCheckAll(list.length === actividades.length);
-    };
-
-    const onCheckAllChange = e => {
-        setCheckedList(e.target.checked ? actividades : []);
-        setIndeterminate(false);
-        setCheckAll(e.target.checked);
-    };
-
-    const handleSubmit = () => {
-        let array = defaultCheckedList.map(data => {
-            let filter = checkedList.filter(check => check === data);
-            if (checkedList.filter(check => check === data).length === 0) {
-                return true
-            }
-            return false;
-        })
-
-        if (array.includes(true) > 0) {
-            return console.log('No te envies')
-        }
-
-        console.log('Enviate')
-        // if(checkedList.includes('Apertura') && checkedList.includes('Resolución de otorgamiento') && checkedList.includes('Cierre') ) {
-        //     console.log('Lo puedo enviar')
-        // } else {
-        //     console.log('Error')
-        // }
-    }
-
+    
     useEffect(() => {
         let mounted = true;
         if (mounted) {
             getActividades();
+            getActividadesConvocatoria();
         }
         return () => {
             mounted = false;

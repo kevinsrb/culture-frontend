@@ -141,6 +141,8 @@ export const CronogramaActividades = () => {
       actividades: actividadesSeleccionadas,
     };
 
+    // console.log(objActividades)
+
     return await axios
       .post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/actividades/${idConvocatoria}`, objActividades)
       .then(({ data }) => {
