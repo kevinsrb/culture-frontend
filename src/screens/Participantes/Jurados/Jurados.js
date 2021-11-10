@@ -14,8 +14,10 @@ import {
   Divider,
 } from "semantic-ui-react";
 import { useHistory } from "react-router";
-import { VerConvocatoria } from "../../../components/Participantes/VerConvocatoria";
-import { useBuscarConvocatoria } from "./Hooks/useBuscarConvocatoria";
+import {
+  VerJurados,
+  VerPostulaciones,
+} from "../../../components/Jurados/VerJurados";
 
 const filtrarPorArea = [
   {
@@ -56,60 +58,70 @@ const JuradosLista = [
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "Postulado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No cumple",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
   {
     nombreCompleto: "Andres Julián Toro Gonzales",
     nroDocumento: "1017196606",
     codigo: "23401",
     categoriasEspecificas: "Música popular, Formación en artes...",
+    estado: "No verificado",
   },
 ];
 
@@ -305,42 +317,49 @@ export const Jurados = () => {
                       <Table.Header>
                         <Table.Row className="display-flex">
                           <Table.HeaderCell
-                            style={{ width: "5%" }}
+                            style={{ width: "4%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
                             No.
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "21%" }}
+                            style={{ width: "19%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
                             Nombres y apellidos
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "15%" }}
+                            style={{ width: "14%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
                             No. Documento
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "9%" }}
+                            style={{ width: "7%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
                             Código
                           </Table.HeaderCell>
                           <Table.HeaderCell
-                            style={{ width: "40%" }}
+                            style={{ width: "30%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
-                            Categorías específicas
+                            Areas
                           </Table.HeaderCell>
                           <Table.HeaderCell
                             style={{ width: "15%" }}
+                            rowSpan="2"
+                            className="background-color-FFFFFF font-size-12px"
+                          >
+                            Estado
+                          </Table.HeaderCell>
+                          <Table.HeaderCell
+                            style={{ width: "10%" }}
                             rowSpan="2"
                             className="background-color-FFFFFF font-size-12px"
                           >
@@ -363,16 +382,16 @@ export const Jurados = () => {
                       <Table.Body>
                         {JuradosLista.length > 0 ? (
                           JuradosLista.map((datos, index) => (
-                            <Table.Row className="display-flex">
+                            <Table.Row className="display-flextable-cell">
                               <Table.Cell
-                                style={{ width: "5%" }}
+                                style={{ width: "4%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
                                 {index + 1}
                               </Table.Cell>
                               <Table.Cell
-                                style={{ width: "20%" }}
+                                style={{ width: "19%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
@@ -386,28 +405,32 @@ export const Jurados = () => {
                                 {datos.nroDocumento}
                               </Table.Cell>
                               <Table.Cell
-                                style={{ width: "9%" }}
+                                style={{ width: "6%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
                                 {datos.codigo}
                               </Table.Cell>
                               <Table.Cell
-                                style={{ width: "38%" }}
+                                style={{ width: "30%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
                                 {datos.categoriasEspecificas}
                               </Table.Cell>{" "}
                               <Table.Cell
+                                style={{ width: "15%" }}
+                                className="font-size-12px font-family-Work-Sans"
+                                width={1}
+                              >
+                                {datos.estado}
+                              </Table.Cell>{" "}
+                              <Table.Cell
                                 style={{ width: "10%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                <VerConvocatoria
-                                  datos={datos}
-                                  onClick={(e) => abrirModal(e, datos)}
-                                />
+                                <VerJurados datos={datos} />
                               </Table.Cell>
                             </Table.Row>
                           ))
@@ -423,7 +446,7 @@ export const Jurados = () => {
                   </Grid.Column>
                 </Grid.Row>
                 <Grid.Row>
-                  <Grid.Column className="container-pagination-adminconvocatorias">
+                  <Grid.Column className="container-pagination-jurados">
                     <Pagination
                       totalPages="10"
                       activePage="1"
