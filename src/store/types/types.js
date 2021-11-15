@@ -12,7 +12,9 @@ export const types = {
 
     idParticipante: '[Prt] id participante',
     id_convocatoria_seleccionada: '[Prt] id convocatoria seleccionada',
-    documentos_convocatoria: '[Prt] documentos convocatoria',
+    documentos_generales: '[Prt] documentos generales convocatoria',
+    documentos_tecnicos: '[Prt] documentos tecnicos convocatoria',
+    documentos_administrativos: '[Prt] documentos administrativos convocatoria',
     documentos_tecnico_cargados: '[Prt] documentos tecnicos cargados',
     documentos_administrativos_cargados: '[Prt] documentos admistrativos cargados',
     categoria_linea_convocatoria: '[Prt] categorias participante',

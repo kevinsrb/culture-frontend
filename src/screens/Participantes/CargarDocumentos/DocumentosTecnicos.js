@@ -22,17 +22,18 @@ export const DocumentosTecnicos = React.memo(() => {
     descripcion: "",
     url_participante: "",
     tipo_documento_file: "",
+
   };
 
   const fileInputRef = useRef();
   const dispatch = useDispatch();
   const history = useHistory()
 
-  const { id_postulacion, documentos_convocatoria, idParticipante, documentos_tecnico_cargados } = useSelector((state) => state.participantes);
-  const documentosTecnicos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 1);
-  const documentosAdministrativos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 0);
+  const { id_postulacion, documentos_tecnicos, idParticipante, documentos_tecnico_cargados } = useSelector((state) => state.participantes);
+
  
-  const [documentos, setDocumentos] = useState(documentosTecnicos);
+  const [documentos, setDocumentos] = useState(documentos_tecnicos);
+ console.log(documentos)
   const [documentosCargadosState, setDocumentosCargadosState] = useState(State);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export const DocumentosTecnicos = React.memo(() => {
 
     if (url_documento !== undefined) {
       await axios
-        .get(`${ObjConstanst.IP_CULTURE}documentos/consultarArchivos/${url_documento}`, {
+        .get(`${process.env.REACT_APP_SERVER_PARTI}documentos/consultarArchivos/${url_documento}`, {
           responseType: "blob",
         })
         .then((res) => {
@@ -76,14 +77,14 @@ export const DocumentosTecnicos = React.memo(() => {
       let todosJSON1 = JSON.parse(JSON.stringify(documentos));
       todosJSON1[index].url_participante = name;
 
-      console.log(todosJSON1, "aca");
-      await guardarUrlDocumentosPostulacion(id_postulacion,todosJSON1[index].id, name  );
+      console.log(index)
+      await guardarUrlDocumentosPostulacion(id_postulacion, index, name  );
 
       let file = e.target.files[0];
       const formData = new FormData();
       formData.append("archivo", file);
       await axios
-        .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/guardarArchivo`, formData, {
+        .post(`${process.env.REACT_APP_SERVER_PARTI}participantes/guardarArchivo`, formData, {
           headers: { "content-type": "multipart/form-data" },
         })
         .then((data) => {})
@@ -100,14 +101,16 @@ export const DocumentosTecnicos = React.memo(() => {
     }
   };
 
-  const guardarUrlDocumentosPostulacion = async (id_postulacion, id_documento, filename) => {
+  const guardarUrlDocumentosPostulacion = async (id_postulacion, index, filename) => {
     const actualizarDocumento = {
       id_postulacion,
-      id_documento,
+      index,
       filename
     }
+
+
     await axios
-    .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/guardarUrlDocumentosPostulacion`, actualizarDocumento)
+    .put(`${process.env.REACT_APP_SERVER_PARTI}postulaciones/guardarUrlDocumentosTecnicosPostulacion`, actualizarDocumento)
     .then(({ data }) => {
       console.log(data);
     })
@@ -129,9 +132,9 @@ export const DocumentosTecnicos = React.memo(() => {
 
   const guardarDocumentosPostulacion = async () => {
   
-    const documentos = documentosTecnicos.concat(documentosAdministrativos);
+    
     await axios
-      .post(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/documentos/${id_postulacion}`, documentos)
+      .post(`${process.env.REACT_APP_SERVER_PARTI}postulaciones/documentos_tecnicos/${id_postulacion}`, documentos)
       .then(({ data }) => {
         console.log(data);
       })
@@ -148,7 +151,7 @@ export const DocumentosTecnicos = React.memo(() => {
     <React.Fragment>
       <Grid className="no-margin" style={{ paddingTop: "1%" }}>
         <Card.Group style={{ width: "100%", display: "inline-flex" }}>
-          {documentos.length > 0 ? (
+          {documentos != undefined && documentos.length > 0 ? (
             documentos.map((datos, index) => (
               <ContainerFragment>
                 <Card className="cards_container no-margin box-card-participantes">

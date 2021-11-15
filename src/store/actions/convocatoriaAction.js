@@ -7,13 +7,6 @@ export const idConvocatorias = (idConvocatoria) => ({
     }
 })
 
-export const documentosConvocatoria = (documentos_convocatoria) => ({
-    type: types.documentos_convocatoria,
-    payload:  {
-        documentos_convocatoria,
-    }
-})
-
 export const edicionConvocatoria = (editarConvocatoria) => ({
     type: types.edicion,
     payload:  {

@@ -28,10 +28,10 @@ export const DocumentosAdministrativos = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { id_postulacion, documentos_convocatoria, idParticipante, documentos_administrativos_cargados, documentos_tecnico_cargados } = useSelector((state) => state.participantes);
+  const { id_postulacion, documentos_administrativos, idParticipante, documentos_administrativos_cargados, documentos_tecnico_cargados } = useSelector((state) => state.participantes);
 
-  const documentosAdministrativos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 0);
-  const [documentos, setDocumentos] = useState(documentosAdministrativos);
+  // const documentosAdministrativos = documentos_convocatoria.filter((doct) => doct.tipo_documento_id === 0);
+  const [documentos, setDocumentos] = useState(documentos_administrativos);
 
   const [principalState, setPrincipalState] = useState(State);
   console.log(documentos, "estos son los documentos");
@@ -51,7 +51,7 @@ export const DocumentosAdministrativos = () => {
 
     if (url_documento !== undefined) {
       await axios
-        .get(`${ObjConstanst.IP_CULTURE}documentos/consultarArchivos/${url_documento}`, {
+        .get(`${process.env.REACT_APP_SERVER_PARTI}documentos/consultarArchivos/${url_documento}`, {
           responseType: "blob",
         })
         .then((res) => {
@@ -109,7 +109,7 @@ export const DocumentosAdministrativos = () => {
       filename
     }
     await axios
-    .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/guardarUrlDocumentosPostulacion`, actualizarDocumento)
+    .put(`${process.env.REACT_APP_SERVER_PARTI}postulaciones/guardarUrlDocumentosPostulacion`, actualizarDocumento)
     .then(({ data }) => {
       console.log(data);
     })

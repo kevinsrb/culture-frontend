@@ -7,7 +7,7 @@ import { ObjConstanst } from "../../config/utils/constanst";
 import { Modal, Button } from "semantic-ui-react";
 
 import { documentosConvocatoria, idConvocatorias } from "../../store/actions/convocatoriaAction";
-import { categoriasLineasConvocatoria, documentosAdministrativosCargados, documentosTecnicosCargados, fechasParticipantes, idConvocatoriaSelecionada, idPostulacion, nombreConvocatoria } from "../../store/actions/participantesAction";
+import { categoriasLineasConvocatoria, documentosAdministrativosCargados, documentosAdministrativosConvocatoria, documentosGeneralesConvocatoria, documentosTecnicosCargados, documentosTecnicosConvocatoria, fechasParticipantes, idConvocatoriaSelecionada, idPostulacion, nombreConvocatoria } from "../../store/actions/participantesAction";
 
 export const VerConvocatoria = (props) => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ export const VerConvocatoria = (props) => {
 
 
   const [open, setOpen] = useState(false);
-  const { idconvocatorias, numero_convocatoria, descripcion_corta, documentos, categoria_linea_convocatoria, fechas } = props.datos;
+  const { idconvocatorias, numero_convocatoria, descripcion_corta, documentos_generales, documentos_tecnicos, documentos_administrativos, categoria_linea_convocatoria, fechas } = props.datos;
   const {  idParticipante } = useSelector((state) => state.participantes);
 
   const crearPostulacion = async () => {
@@ -33,8 +33,9 @@ export const VerConvocatoria = (props) => {
     console.log(postulante)
 
     await axios
-      .post(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/`, postulante)
+      .post(`${process.env.REACT_APP_SERVER_PARTI}postulaciones/`, postulante)
       .then(({data}) => {
+        console.log(data)
         dispatch(idPostulacion(data.data.id_postulacion))
       });   
 
@@ -42,7 +43,9 @@ export const VerConvocatoria = (props) => {
 
   const continuar = () => {
     dispatch(idConvocatorias(idconvocatorias))
-    dispatch(documentosConvocatoria(documentos));
+    dispatch(documentosGeneralesConvocatoria(documentos_generales));
+    dispatch(documentosTecnicosConvocatoria(documentos_tecnicos));
+    dispatch(documentosAdministrativosConvocatoria(documentos_administrativos));
     dispatch(categoriasLineasConvocatoria(categoria_linea_convocatoria));
     dispatch(fechasParticipantes(fechas));
     dispatch(nombreConvocatoria(numero_convocatoria))

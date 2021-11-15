@@ -24,8 +24,10 @@ export const SeleccionarRoles = () => {
 
   const asociarRoles = async() => {
 
+    console.log(id_postulacion)
+
     await axios
-      .put(`${ObjConstanst.IP_PARTICIPANTES}postulaciones/cambiarTipoParticipantePostulacion`, {
+      .put(`${process.env.REACT_APP_SERVER_PARTI}postulaciones/cambiarTipoParticipantePostulacion`, {
         id_postulacion: id_postulacion,
         tipo_participante: principalState
       })

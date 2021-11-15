@@ -143,7 +143,7 @@ export const PersonaNatural = () => {
         if (!Array.isArray(existeParticipante)) {
 
           await axios
-            .put(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`, principalState)
+            .put(`${process.env.REACT_APP_SERVER_PARTI}participantes/${idParticipante}`, principalState)
             .then(({ data }) => {
               ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
             })
@@ -156,7 +156,7 @@ export const PersonaNatural = () => {
           const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
 
           await axios
-            .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
+            .put(`${process.env.REACT_APP_SERVER_USER}usuarios/${idParticipante}`, stateUsuario)
             .then(({ data }) => {
               ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
             })
@@ -168,7 +168,7 @@ export const PersonaNatural = () => {
         } else {
 
           await axios
-            .post(`${ObjConstanst.IP_PARTICIPANTES}participantes/`, principalState)
+            .post(`${process.env.REACT_APP_SERVER_PARTI}participantes/`, principalState)
             .then(({ data }) => {
               ObjNotificaciones.MSG_SUCCESS("success", "El participante se creo correctamente");
               //history.push("/Administrador/agregarParticipantes"); 
@@ -181,7 +181,7 @@ export const PersonaNatural = () => {
           const stateUsuario = { nombres, apellidos, telefono_celular, tipo_identificacion, idusuario: idParticipante }
 
           await axios
-            .put(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`, stateUsuario)
+            .put(`${process.env.REACT_APP_SERVER_USER}usuarios/${idParticipante}`, stateUsuario)
             .then(({ data }) => {
               ObjNotificaciones.MSG_SUCCESS("success", data.mensaje);
             })
@@ -198,7 +198,7 @@ export const PersonaNatural = () => {
 
   const consularExisteParticipante = async () => {
     return await axios
-      .get(`${ObjConstanst.IP_PARTICIPANTES}participantes/${idParticipante}`)
+      .get(`${process.env.REACT_APP_SERVER_PARTI}participantes/${idParticipante}`)
       .then(({ data }) => {
         return data.data
       })
@@ -216,7 +216,7 @@ export const PersonaNatural = () => {
         return setPrincipalState(existeParticipante)
       } else {
         await axios
-          .get(`${ObjConstanst.IP_USUARIOS}usuarios/${idParticipante}`,)
+          .get(`${process.env.REACT_APP_SERVER_USER}usuarios/${idParticipante}`,)
           .then(({ data }) => {
 
             console.log(data.data)

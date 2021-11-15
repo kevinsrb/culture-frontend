@@ -1,10 +1,9 @@
-import axios from "axios";
 import { useState } from "react";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
-import documentosTecnicosServices from "../../../../services/convocatorias/documentosTecnicosServices";
 import { ObjNotificaciones } from "../../../../config/utils/notificaciones.utils";
 import { edicionConvocatoria, idConvocatorias } from "../../../../store/actions/convocatoriaAction";
+import documentosTecnicosServices from "../../../../services/convocatorias/documentosTecnicosServices";
 
 export const useFormDocumentacionTecnica = () => {
   const [principalState, setPrincipalState] = useState(initialValues);
@@ -15,20 +14,11 @@ export const useFormDocumentacionTecnica = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   
-
-   const cargarDocumentosTecnicos = async () => {
-    let array = [];
+  const cargarDocumentosTecnicos = async () => {
     if (editarConvocatoria !== undefined) {
-      const { data } = await documentosTecnicosServices.getDocumentosTecnicos(idConvocatoria);
-      if (data.documentos === null) return;
-      for (var i in data.documentos) {
-        if (data.documentos[i].tipo_documento_id === 1) {
-          data.documentos[i].index = i;
-          array.push(data.documentos[i]);
-        }
-      }
-      console.log(array, 'aqui');
-      return setPrincipalState({ ...principalState, documentacion: array });
+      const  { documentos_tecnicos }  = await documentosTecnicosServices.getDocumentosTecnicos(idConvocatoria);
+      if (documentos_tecnicos === null) return;
+      return setPrincipalState({ ...principalState, documentacion: documentos_tecnicos });
     }
   };
 
@@ -57,8 +47,6 @@ export const useFormDocumentacionTecnica = () => {
         editar: false,
       });
     }
-
-
 
     let documentacionJSON = JSON.parse(JSON.stringify(principalState.documentacion));
     console.log(principalState.index)
@@ -94,12 +82,8 @@ export const useFormDocumentacionTecnica = () => {
 
   const verDocumentacion = async (documento) => {
 
-    
-
     const {data}  = await documentosTecnicosServices.getArchivo(documento.url_documento);
-    console.log(data)
-
-    
+     
     if(data){
         let mimetype;
         let tipo = documento.url_documento.split(".");
@@ -188,42 +172,14 @@ export const useFormDocumentacionTecnica = () => {
     return history.push("/Administrador/documentos");
   };
 
-  let conteoDocumentosTecnicos = 0;
+
   const handelAsociarDocumentosTecnicos = async () => {
-    let idconvocatoria = idConvocatoria;
     if (principalState.documentacion.length === 0) {
       return console.error("NO HAY NINGUN DOCUMENTO ASOCIADO");
     }
-    if (principalState.documentacion[conteoDocumentosTecnicos]) {
-      console.log(principalState.documentacion)
-      try {
-        let tipo_documento_id = 1;
-        if (editarConvocatoria !== undefined) {
-          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos/editar`, {
-            idconvocatoria,
-            descripcion: principalState.documentacion[conteoDocumentosTecnicos].descripcion,
-            url_documento: principalState.documentacion[conteoDocumentosTecnicos].url_documento,
-            activo: principalState.documentacion[conteoDocumentosTecnicos].activo,
-            tipo_documento: principalState.documentacion[conteoDocumentosTecnicos].tipo_documento,
-            tipo_documento_id,
-          });
-        } else {
-          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosTecnicos`, {
-            idconvocatoria,
-            descripcion: principalState.documentacion[conteoDocumentosTecnicos].descripcion,
-            url_documento: principalState.documentacion[conteoDocumentosTecnicos].url_documento,
-            activo: principalState.documentacion[conteoDocumentosTecnicos].activo,
-            tipo_documento: principalState.documentacion[conteoDocumentosTecnicos].tipo_documento,
-            tipo_documento_id,
-          });
-        }
-        conteoDocumentosTecnicos++;
-        console.log(conteoDocumentosTecnicos)
-        return handelAsociarDocumentosTecnicos();
-      } catch (error) {
-        return console.error(error);
-      }
-    }
+
+    await documentosTecnicosServices.postDocumentosTecnicos(idConvocatoria, principalState.documentacion);
+
     await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
     history.push("/Administrador/documentacionConvocatoria");
   };

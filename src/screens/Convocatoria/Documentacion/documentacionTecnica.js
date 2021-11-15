@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { RequisitosOptions } from "../../../data/selectOption.data";
 
 import { Divider, Row, Col, Typography, Form, Select, Input, Table, Button, Empty, Modal, Radio} from 'antd';
@@ -33,7 +33,7 @@ export const DocumentacionTecnica = () => {
   
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   
-  const { Title, Paragraph, Text } = Typography;
+  const { Title, Text } = Typography;
   const { TextArea } = Input;
   const { Option } = Select;
 
