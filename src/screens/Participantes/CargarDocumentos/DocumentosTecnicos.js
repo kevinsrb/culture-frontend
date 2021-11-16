@@ -107,8 +107,6 @@ export const DocumentosTecnicos = React.memo(() => {
       index,
       filename
     }
-
-
     await axios
     .put(`${process.env.REACT_APP_SERVER_PARTI}postulaciones/guardarUrlDocumentosTecnicosPostulacion`, actualizarDocumento)
     .then(({ data }) => {

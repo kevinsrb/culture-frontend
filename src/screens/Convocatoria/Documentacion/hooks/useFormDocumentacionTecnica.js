@@ -184,9 +184,6 @@ export const useFormDocumentacionTecnica = () => {
     history.push("/Administrador/documentacionConvocatoria");
   };
 
-
-
-  
   return {
     cargarDocumentosTecnicos,
     agregarFila,
@@ -199,8 +196,6 @@ export const useFormDocumentacionTecnica = () => {
     principalState,
     setPrincipalState
   }
-
-
 };
 
 const initialValues = {

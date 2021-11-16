@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 // import SubirArchivo from "../../components/Archivos/SubirArchivos";
@@ -22,6 +22,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/convocatoriaAction";
 import { ModalConvocatoria } from "./ModalConvocatoria";
+import documentosTecnicosServices from "../../../services/convocatorias/documentosTecnicosServices";
 
 export const DocumentacionConvocatoria = () => {
   // STATE PRINCIPAL
@@ -62,23 +63,21 @@ export const DocumentacionConvocatoria = () => {
   const history = useHistory();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     cargarDocumentosGenerales();
   }, []);
 
   const cargarDocumentosGenerales = async () => {
-    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
-    if (response.data.data.documentos === null) return;
-    console.log(response.data.data);
-    let array = [];
-    if (editarConvocatoria !== undefined) {
-      for (var i in response.data.data.documentos) {
-        if (response.data.data.documentos[i].tipo_documento_id === 2) {
-          array.push(response.data.data.documentos[i]);
-        }
-      }
-      return setPrincipalState({ ...principalState, documentacion: array });
-    }
+   
+    axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/consultarDocumentosGenerales/${idConvocatoria}`)
+    .then(({data}) => {
+      console.log(data)
+      return setPrincipalState({ ...principalState, documentacion: data.documentos_generales });
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+    
   };
 
   const fileInputRef = React.useRef();
@@ -127,8 +126,9 @@ export const DocumentacionConvocatoria = () => {
     setPrincipalErrores({ ...principalErrores, [name]: false });
     return setPrincipalState({ ...principalState, [name]: value });
   };
-  const agregarFila = () => {
 
+
+  const agregarFila = () => {
     if(openModal){
       setOpenModal(!openModal)
     }
@@ -163,7 +163,7 @@ export const DocumentacionConvocatoria = () => {
     }
 
     let array = [];
-    console.log(principalState.editar);
+    console.log(principalState.documentacion);
     if (!principalState.editar) {
       array = [
         ...principalState.documentacion,
@@ -189,8 +189,9 @@ export const DocumentacionConvocatoria = () => {
     }
 
     let todoJSON = JSON.parse(JSON.stringify(principalState.documentacion));
-    debugger
+    
     console.log(todoJSON)
+    console.log(principalState.index)
     todoJSON[principalState.index].nombre = principalState.nombre;
     todoJSON[principalState.index].tipo_documento = principalState.tipo_documento;
     todoJSON[principalState.index].descripcion = principalState.descripcion;
@@ -209,6 +210,7 @@ export const DocumentacionConvocatoria = () => {
       editar: false,
     });
   };
+
   const cambiaChecktabla = (data) => {
     let array = JSON.parse(JSON.stringify(principalState.documentacion));
     array[data.index].activo = !array[data.index].activo;
@@ -218,114 +220,103 @@ export const DocumentacionConvocatoria = () => {
   const [openModal, setOpenModal] = useState(false);
 
   const Editardocumentacion = (data) => {
+    console.log(data)
     setOpenModal(true);
-    console.log(data);
     return setPrincipalState({
       ...principalState,
+      index: data.index,
       nombre: data.data.nombre,
-      tipo_documento: data.data.tipo_documento,
       descripcion: data.data.descripcion,
+      tipo_documento: data.data.tipo_documento,
       url_documento: data.data.url_documento,
       filename: data.data.url_documento,
-      index: data.data.index,
       editar: true,
     });
   };
 
-  const Eliminardocumentacion = async ({ data }) => {
-    const { id_documentos_tecnico, index } = data;
-    console.log(id_documentos_tecnico, index);
-
-    const existeDocumento = await verificarExisteDocumento(id_documentos_tecnico, index + 1);
-    console.log(existeDocumento);
-    if (existeDocumento !== undefined && existeDocumento.length) {
-      await axios.delete(
-        `${process.env.REACT_APP_SERVER_CONV}documentosConvocatoria/delete/${existeDocumento[0].id_documentos_tecnico}`
-      );
-    }
-
+  const Eliminardocumentacion = async (data) => { 
     let array = [];
     let copy = principalState.documentacion.map((data) => data);
-    console.log(copy);
     array = copy.filter((doc) => doc.index !== data.index);
     return setPrincipalState({ ...principalState, documentacion: array });
   };
 
-  const verificarExisteDocumento = async (id_documento_tecnico, index) => {
-    const id_consultar = id_documento_tecnico != undefined ? id_documento_tecnico : index;
-    if (id_consultar) {
-      try {
-        let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}documentosConvocatoria/${id_consultar}`);
-        return response.data.data;
-      } catch (error) {
-        console.error(error);
-        return false;
-      }
-    }
-  };
-
-  let conteoDocumentosGeneral = 0;
   const handelAsociarDocumentosGenerales = async () => {
-    if (principalState.documentacion.length === 0) {
-      return console.error("NO PUEDO GUARDAR");
-    }
-    if (principalState.documentacion[conteoDocumentosGeneral]) {
-      try {
-        let tipo_documento_id = 2;
-        if (editarConvocatoria !== undefined) {
-          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosConvocatorias/editar`, {
-            nombre: principalState.documentacion[conteoDocumentosGeneral].nombre,
-            activo: principalState.documentacion[conteoDocumentosGeneral].activo,
-            descripcion: principalState.documentacion[conteoDocumentosGeneral].descripcion,
-            tipo_documento: principalState.documentacion[conteoDocumentosGeneral].tipo_documento,
-            tipo_documento_id,
-            url_documento: principalState.documentacion[conteoDocumentosGeneral].url_documento,
-            idconvocatoria: idConvocatoria,
-          });
-        } else {
-          await axios.post(`${process.env.REACT_APP_SERVER_CONV}documentos/documentosConvocatorias`, {
-            nombre: principalState.documentacion[conteoDocumentosGeneral].nombre,
-            activo: principalState.documentacion[conteoDocumentosGeneral].activo,
-            descripcion: principalState.documentacion[conteoDocumentosGeneral].descripcion,
-            tipo_documento: principalState.documentacion[conteoDocumentosGeneral].tipo_documento,
-            tipo_documento_id,
-            url_documento: principalState.documentacion[conteoDocumentosGeneral].url_documento,
-            idconvocatoria: idConvocatoria,
-          });
-        }
-        conteoDocumentosGeneral++;
-        return handelAsociarDocumentosGenerales();
-      } catch (error) {
-        return console.error(error);
+      if (principalState.documentacion.length === 0) {
+        return console.error("NO HAY NINGUN DOCUMENTO ASOCIADO");
       }
-    }
 
-    await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
-    return history.push("/Administrador/");
-  };
-
-  const Verdocumentacion = async (data) => {
-    console.log(data);
-    await axios
-      .get(`${process.env.REACT_APP_SERVER_CONV}documentos/consultarArchivos/${data.url_documento}`, {
-        responseType: "blob",
+      await axios.post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/documentos_generales/${idConvocatoria}`, principalState.documentacion)
+      .then(({data}) => {
+        console.log(data)
       })
-      .then((response) => {
-        var file = new Blob([response.data], {
-          type: "application/pdf",
-        });
-        const fileURL = URL.createObjectURL(file);
-        return setPrincipalState({
-          ...principalState,
-          pdf: fileURL,
-          namepdf: data.url_documento,
-          openModalViewer: !principalState.openModalViewer,
-        });
-      })
-      .catch((error) => {
+      .catch(function (error) {
         console.log(error);
       });
+  
+      await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
+      history.push("/Administrador/documentacionConvocatoria");
+    
   };
+
+
+    const Verdocumentacion = async (documento) => {
+      console.log(documento)
+      const data  = await documentosTecnicosServices.getArchivo(documento.url_documento);
+      console.log(data)
+      if(data){
+          let mimetype;
+          let tipo = documento.url_documento.split(".");
+          var file, fileURL;
+          switch (tipo[1]) {
+            case "pdf":
+              mimetype = "application/pdf";
+              file = new Blob([data], {
+                type: mimetype,
+              });
+              fileURL = URL.createObjectURL(file);
+              break;
+            case "docx":
+              mimetype = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+              file = new Blob([data], {
+                type: mimetype,
+              });
+              fileURL = URL.createObjectURL(file);
+              break;
+            case "xlsx":
+              mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+              file = new Blob([data], {
+                type: mimetype,
+              });
+              fileURL = URL.createObjectURL(file);
+              break;
+            case "ppt":
+              mimetype = "application/vnd.ms-powerpoint";
+              file = new Blob([data], {
+                type: mimetype,
+              });
+              fileURL = URL.createObjectURL(file);
+              break;
+            default:
+              mimetype = "application/pdf";
+              file = new Blob([data], {
+                type: mimetype,
+              });
+              fileURL = URL.createObjectURL(file);
+              break;
+          }
+  
+          console.log(principalState.openModalViewer, 'cvxdc')
+  
+          return setPrincipalState({
+            ...principalState,
+            pdf: fileURL,
+            namepdf: data.url_documento,
+            openModalViewer: !principalState.openModalViewer,
+          });
+      }
+      
+    };
 
   const conteoCaracteres = (event) => {
     if (event.target.name === "descripcion") {
@@ -376,6 +367,7 @@ export const DocumentacionConvocatoria = () => {
     dispatch(idConvocatorias(idConvocatoria));
     return history.push("/Administrador/documentacionTecnica");
   };
+
 
   return (
     <div>
@@ -487,7 +479,7 @@ export const DocumentacionConvocatoria = () => {
                     <Form.Field style={{ height: "74%" }}>
                       <label className="font-color-4B4B4B">Adjuntar archivo</label>
                       <div className="constiner_documentacion_general">
-                        {principalState.filename.trim() === "" && (
+                        {principalState.filename === "" && (
                           <Button
                             content="Seleccionar archivo"
                             className="btn button_archivo"
@@ -573,7 +565,7 @@ export const DocumentacionConvocatoria = () => {
                         {principalState.documentacion.length > 0 ? (
                           principalState.documentacion.map((data, index) => (
                             <Table.Row key={index}>
-                              <Table.Cell width={1}>{index + 1}</Table.Cell>
+                              <Table.Cell width={1}>{data.index}</Table.Cell>
                               <Table.Cell width={2}>{data.nombre}</Table.Cell>
                               <Table.Cell width={2}>{data.tipo_documento}</Table.Cell>
                               <Table.Cell width={5}>{data.descripcion}</Table.Cell>
