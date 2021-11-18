@@ -1,28 +1,23 @@
 .constiner_documentacion_general {
-  background-color: #f6f6f6 !important;
-  border: 1px solid #b0b0b0 !important;
-  color: #1faeef !important;
-  width: 100%;
-  height: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    background-color: #F6F6F6 !important;
+    border: 1px solid #B0B0B0 !important;
+    color: #1faeef !important;
+    width: 100%;
+    height: 78%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.button_archivo {
-  background-color: transparent !important;
-  color: $azulClarito !important;
-  border: none !important;
-}
+  .button_archivo {
+    background-color: transparent !important;
+    color: $azulClarito !important;
+    
+  }
 
-.button_archivo:hover {
-  background-color: $naranja !important;
-  color: white !important;
-}
-
-.nombreArchivo {
-  width: 260px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
+  .button_archivo:hover {
+    background-color: $naranja !important;
+    color: white !important;
+  }
+ 
+ 

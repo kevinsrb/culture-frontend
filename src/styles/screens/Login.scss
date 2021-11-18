@@ -11,7 +11,7 @@
 }
 
 .container-form-login {
-  width: 44%;
+  width: 60%;
   align-items: center;
 }
 
@@ -63,9 +63,7 @@
 }
 
 .boton-ingresar-login {
-  // imp
-  border: 1px solid #1FAEEF !important;
-  border-radius: 100px solid #1FAEEF !important;
+    border-radius: 2rem !important;
 }
 
 // CON GRID
@@ -126,4 +124,20 @@
   border-top: 0.5px solid #D1D0D0 !important;
   border-bottom: 0.4px solid #D1D0D0 !important;
   border-right: 0.4px solid #D1D0D0 !important;
+}
+
+
+@media (max-width:991px) {
+  .container-form-login {
+      width: 100%;
+      padding: 29px 2rem;
+  }
+}
+
+@media (max-width:767px) {
+  .container-form-login {
+      width: 100%;
+      padding: 29px 2rem;
+  }
+  .login--forgo-txt{font-size: 13px !important;}
 }

@@ -1,8 +1,8 @@
 import { createStore, combineReducers, applyMiddleware, compose  } from 'redux'
 import thunk from 'redux-thunk';
 import { userReducer } from './reducers/userReducer'
+import {masterReducer}  from './reducers/masterReducer'
 import { convocatoriasReducer, edicionReducer } from './reducers/convocatoriasReducer'
-import { participantesReducer } from './reducers/participanteReducer';
 //import { notesReducer } from '../reducers/notesReducer';
 //import { uiReducer } from '../reducers/uiReducers';
 
@@ -12,7 +12,7 @@ const reducer = combineReducers({
     user: userReducer,
     convocatoria: convocatoriasReducer,
     edicion: edicionReducer,
-    participantes: participantesReducer,
+    masterReducer:masterReducer
 })
 
 export const store = createStore(

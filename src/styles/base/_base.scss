@@ -20,27 +20,9 @@ label{
     font-size: .92857143em;
     font-weight: 700;
     text-transform: none;
-    height: 40px;
 }
 
-.label_container{
-    display: inline-block;
-    flex-grow: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-align: right;
-    vertical-align: middle;
-}
 
-.label_container span{
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    max-width: 100%;
-    height: 32px;
-    color: rgba(0, 0, 0, 0.85);
-    font-size: 14px;
-}
 
 
 

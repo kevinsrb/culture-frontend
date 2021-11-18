@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
 import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { ObjConstanst } from '../../../config/utils/constanst'
 
 import {
   Segment,
@@ -13,12 +15,10 @@ import {
   Form,
   Select,
   Input,
+  Checkbox,
   Icon,
   Divider,
   Container,
-  Label,
-  Breadcrumb,
-  Dropdown,
 } from "semantic-ui-react";
 import es from "date-fns/locale/es";
 import styled from "@emotion/styled";
@@ -37,6 +37,14 @@ import { edicionConvocatoria, idConvocatorias } from "../../../store/actions/con
 registerLocale("es", es);
 
 var conteoFechas = 0;
+
+const options = [
+  { key: 1, value: 1, text: "Observaciones a los lineamientos" },
+  { key: 2, value: 2, text: "Observaciones al informe final de verificación de documentos" },
+  { key: 3, value: 3, text: "Informe evaluación" },
+  { key: 4, value: 4, text: "Cierre" },
+  { key: 5, value: 5, text: "Observaciones al informe de evaluación" },
+];
 
 export const StyleWrapper = styled.div`
   .fc-button.fc-button-primary {
@@ -66,7 +74,7 @@ export const StyleWrapper = styled.div`
     padding-right: 18%;
   }
   .fc-toolbar-title {
-    font-family: "Montserrat-Regular";
+    font-family: ""
     text-transform: capitalize;
     font-weight: normal;
     font-size: 22px;
@@ -80,7 +88,7 @@ export const StyleWrapper = styled.div`
   .fc-col-header-cell.fc-day.fc-day-fri,
   .fc-col-header-cell.fc-day.fc-day-sat {
     background: #632264;
-    border: 1px solid #632264;
+    border-right: 1px solid #632264;
   }
   .fc-col-header-cell-cushion {
     color: white;
@@ -110,33 +118,18 @@ export const StyleWrapper = styled.div`
   }
   .fc-today-button {
     border-radius: 19px;
-    padding-left: 17% !important;
-    padding-right: 17% !important;
-  }
-  .fc-toolbar-chunk:nth-child(2) {
-    width: 50%;
-    display: flex;
-    justify-content: flex-end;
-  }
-  .fc-daygrid-day-frame {
-    background-color: #FFFFFF;
+    padding-left: 7% !important;
+    padding-right: 7% !important;
   }
 `;
 
 export const Cronograma = () => {
-  const stateError = {
-    apertura: false,
-    cierre: false,
-    otorgamiento: false,
-  };
-
   const CalendarRef = React.useRef();
   const history = useHistory();
   const dispatch = useDispatch();
   const { idConvocatoria } = useSelector((state) => state.convocatoria);
   const { editarConvocatoria } = useSelector((state) => state.edicion);
 
-  const [principalError, setPrincipalError] = useState(stateError);
   const [actividad, setActividad] = React.useState({ text: "" });
   const [open, setOpen] = React.useState(false);
   const [openDatepicker1, setOpenDatepicker1] = React.useState(false);
@@ -167,10 +160,8 @@ export const Cronograma = () => {
     hora_cierreno: true,
     verFechas: false,
     verHoras: false,
-    hora: "12",
-    minuto: "00",
-    formato_pm: true,
-    formato_am: false
+    hora: "23",
+    minuto: "59",
   };
   const stateErrores = {
     actividad: false,
@@ -190,7 +181,7 @@ export const Cronograma = () => {
   async function primerasFechas() {
     if (editarConvocatoria === undefined) return;
 
-    let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/${idConvocatoria}`);
+    let response = await axios.get(`${ObjConstanst.IP_CULTURE}convocatorias/${idConvocatoria}`);
     if (response.data.data.length === 0) return;
 
     var events = [];
@@ -254,15 +245,6 @@ export const Cronograma = () => {
     if (actividad.text.trim() === "") {
       return setErrorState({ actividad: true });
     }
-    if (actividad.text.trim() === "Apertura") {
-      setPrincipalError({ ...principalError, apertura: false });
-    }
-    if (actividad.text.trim() === "Cierre") {
-      setPrincipalError({ ...principalError, cierre: false });
-    }
-    if (actividad.text.trim() === "Resolución de otorgamiento") {
-      setPrincipalError({ ...principalError, otorgamiento: false });
-    }
     calendarApi.unselect();
     setOpen(false);
     let events = [
@@ -286,42 +268,9 @@ export const Cronograma = () => {
     // });
   }
   async function grabarActividades() {
-    conteoFechas = 0;
-    let calendaroptions = CalendarRef.current.getApi();
-    let events = calendaroptions.getEvents();
-    console.log(events);
-    let apertura = events.filter((data) => data.title === "Apertura");
-    let cierre = events.filter((data) => data.title === "Cierre");
-    let otorgamiento = events.filter((data) => data.title === "Resolución de otorgamiento");
-    let arrayErrores = stateError;
-    let error = false;
-    console.log(apertura.length, cierre.length, otorgamiento.length);
-    if (apertura.length === 0) {
-      error = true;
-      arrayErrores = {
-        ...arrayErrores,
-        apertura: true,
-      };
-    }
-    if (cierre.length === 0) {
-      error = true;
-      arrayErrores = {
-        ...arrayErrores,
-        cierre: true,
-      };
-    }
-    if (otorgamiento.length === 0) {
-      error = true;
-      arrayErrores = {
-        ...arrayErrores,
-        otorgamiento: true,
-      };
-    }
-    if (error) {
-      return setPrincipalError(arrayErrores);
-    }
+    console.log("grabó");
     if (editarConvocatoria !== undefined)
-      await axios.post(`${process.env.REACT_APP_SERVER_CONV}convocatorias/fechas/${idConvocatoria}`);
+      await axios.post(`${ObjConstanst.IP_CULTURE}convocatorias/fechas/${idConvocatoria}`);
     grabandoActividades();
   }
 
@@ -331,11 +280,10 @@ export const Cronograma = () => {
     let events = calendaroptions.getEvents();
     if (events.length === 0) return;
     console.log(events, eventosCalendario, "estos son los eventos");
-    console.log(conteoFechas, "conteo de fechas", events[conteoFechas]);
     if (events[conteoFechas]) {
       try {
         console.log("grabe", events[conteoFechas]);
-        await axios.post(`${process.env.REACT_APP_SERVER_CONV}fechas`, {
+        await axios.post(`${ObjConstanst.IP_CULTURE}fechas`, {
           id_convocatoria,
           clave: events[conteoFechas].title,
           valormin: events[conteoFechas].start,
@@ -348,12 +296,12 @@ export const Cronograma = () => {
       }
     }
     await ObjNotificaciones.MSG_SUCCESS("success", "Se han asociado las actividades al cronograma");
-    return history.push("/Administrador/documentos");
+    return history.push("/documentos");
   };
 
   const handelCargarActividadesSeleccionadas = async () => {
     return await axios
-      .get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/actividades/${idConvocatoria}`)
+      .get(`${ObjConstanst.IP_CULTURE}convocatorias/actividades/${idConvocatoria}`)
       .then(({ data }) => {
         actividadesSeleccionadasMap = data.data.map((ds) => {
           return {
@@ -384,7 +332,6 @@ export const Cronograma = () => {
   };
 
   const handletoggleChange = (event, result) => {
-    // debugger
     const { name, checked } = result || event.target;
     console.log(name, checked);
     if (name === "rango_fechassi") {
@@ -399,132 +346,76 @@ export const Cronograma = () => {
     if (name === "hora_cierreno") {
       return setPrincipalState({ ...principalState, [name]: true, hora_cierresi: false, verHoras: false });
     }
-    if (name === "formato_am") {
-      return setPrincipalState({ ...principalState, [name]: true, formato_pm: false });
-    }
-    if (name === "formato_pm") {
-      return setPrincipalState({ ...principalState, [name]: true, formato_am: false });
-    }
   };
 
   const backComponente = () => {
     dispatch(edicionConvocatoria(true));
     console.log(idConvocatoria);
     dispatch(idConvocatorias(idConvocatoria));
-    return history.push("/Administrador/infoconvocatorias");
+    return history.push("/infoconvocatorias");
   };
 
   return (
-    <div>
-      <Grid className="no-margin">
-        <Grid.Column className="background-color-6DA3FC no-margin no-padding-top no-padding-bottom">
-          <Breadcrumb style={{ paddingLeft: "4%" }}>
-            <Breadcrumb.Section>
-              <Icon name="home" className="font-color-FFFFFF" size="small" />
-            </Breadcrumb.Section>
-            <Breadcrumb.Divider className="font-color-FFFFFF font-size-8px">/</Breadcrumb.Divider>
-            <Breadcrumb.Section className="font-family-Montserrat-Regular font-color-FFFFFF font-size-8px">
-              Crear convocatoria
-            </Breadcrumb.Section>
-          </Breadcrumb>
-        </Grid.Column>
-      </Grid>
-      <Grid className="no-margin">
-        <Grid.Column
-          className="background-color-6DA3FC-opacity-025 no-margin"
-          style={{ display: "flex", justifyContent: "flex-end", paddingTop: "2% !important" }}
-        >
-          <span className="font-color-1B1C1D font-size-14px">Crear convocatoria :</span>
-          <Dropdown
-            text={<span className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</span>}
-            icon={
-              <Icon style={{ float: "right", paddingLeft: "5%" }} className="font-color-1FAEEF" name="angle down" />
-            }
-          >
-            <Dropdown.Menu>
-              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
-                Información General
-              </Dropdown.Item>
-              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Cronograma</Dropdown.Item>
-              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">
-                Doc. Administrativos
-              </Dropdown.Item>
-              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. Técnicos</Dropdown.Item>
-              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Doc. General</Dropdown.Item>
-              <Dropdown.Item className="font-color-1B1C1D font-family-Montserrat-Regular">Públicación</Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Grid.Column>
-      </Grid>
-      <Grid className="no-margin">
-        <Grid.Column style={{ padding: "2%", marginBottom: '8%' }}>
-          <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }} className="segment-shadow">
-            <Header
-              as="h4"
-              className="font-size-14px font-color-1B1C1D font-family-Montserrat-SemiBold"
-              style={{ marginBottom: "0.5%" }}
-              floated="left"
-            >
-              Cronograma
-            </Header>
-            <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
-              <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
-                Codigo de convocatoria {idConvocatoria}
-              </span>
-            </Header>
+    <div style={{ padding: "2%" }}>
+      <Segment style={{ paddingLeft: "3%", paddingRight: "3%" }} className="segment-shadow">
+        <Header
+          as="h4"
+          className="font-size-14px font-color-1B1C1D font-family-Montserrat-SemiBold"
+          style={{ marginBottom: "0.5%" }}
+          floated="left">
+          Cronograma
+        </Header>
+        <Header as="h4" floated="right" style={{ marginBottom: "0.5%" }}>
+          <span className="font-color-B0B0B0 font-family-Montserrat-Thin font-size-12px">
+            Codigo de convocatoria {idConvocatoria}
+          </span>
+        </Header>
 
-            <Divider clearing style={{ marginTop: "0", marginBottom: "0%" }} />
+        <Divider clearing style={{ marginTop: "0", marginBottom: "0%" }} />
 
-            <StyleWrapper style={{ padding: "1%" }}>
-              <FullCalendar
-                plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
-                weekends={true}
-                droppable={true}
-                locale="es"
-                height={895}
-                headerToolbar={{
-                  start: "timeGridDay,timeGridWeek,dayGridMonth",
-                  center: "title",
-                  end: "prev,next today",
-                }}
-                buttonText={{
-                  today: "Hoy",
-                  month: "Mes",
-                  week: "Semana",
-                  day: "Día",
-                }}
-                dateClick={(info) => {
-                  setFechainicioaño(moment(info.date).format("YYYY"));
-                  setFechainiciomes(moment(info.date).format("MM"));
-                  setFechainiciodia(moment(info.date).format("DD"));
-                  return setOpen(true);
-                }}
-                events={eventosCalendario}
-                eventColor="#1FAEEF"
-                ref={CalendarRef}
-              />
-            </StyleWrapper>
-            <Container textAlign="right">
-              {principalError.apertura ? <Label color="red">Falta asignar la Apertura</Label> : null}
-              {principalError.cierre ? <Label color="red">Falta asignar el Cierre</Label> : null}
-              {principalError.otorgamiento ? (
-                <Label color="red">Falta asignar la Resolución de otorgamiento</Label>
-              ) : null}
-              {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
+        <StyleWrapper style={{ padding: "1%" }}>
+          <FullCalendar
+            plugins={[timeGridPlugin, dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            weekends={true}
+            droppable={true}
+            locale="es"
+            height={450}
+            headerToolbar={{
+              start: "timeGridDay,timeGridWeek,dayGridMonth",
+              center: "title",
+              end: "prev,next today",
+            }}
+            buttonText={{
+              today: "Hoy",
+              month: "Mes",
+              week: "Semana",
+              day: "Día",
+            }}
+            dateClick={(info) => {
+              setFechainicioaño(moment(info.date).format("YYYY"));
+              setFechainiciomes(moment(info.date).format("MM"));
+              setFechainiciodia(moment(info.date).format("DD"));
+              return setOpen(true);
+            }}
+            events={eventosCalendario}
+            eventColor="#1FAEEF"
+            ref={CalendarRef}
+          />
+        </StyleWrapper>
+        <Container textAlign="right">
+          {/* <Button basic className="botones-redondos" color="blue" onClick={() => console.log("atras")}>
             Atras
           </Button> */}
-              <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
-                Guardar y continuar
-              </Button>
-            </Container>
-          </Segment>
-        </Grid.Column>
-      </Grid>
+          <Button className="botones-redondos" color="blue" onClick={grabarActividades}>
+            Guardar y continuar
+          </Button>
+        </Container>
+      </Segment>
       <Grid columns={1} className="container-absolute">
         <Grid.Row>
           <Button basic color="blue" className="font-size-12px button-back" onClick={backComponente}>
-            Atrás
+            Atras
           </Button>
         </Grid.Row>
       </Grid>
@@ -728,8 +619,8 @@ export const Cronograma = () => {
                     </Grid.Row>
                   </Grid>
                   <Grid>
-                    <Grid.Row columns={4} style={{ paddingTop: "0%" }}>
-                      <Grid.Column width={4} className="column-without-padding-rigth">
+                    <Grid.Row columns={3} style={{ paddingTop: "0%" }}>
+                      <Grid.Column width={5} className="column-without-padding-rigth">
                         <Input
                           placeholder="HH"
                           onChange={(e) => setPrincipalState({ ...principalState, hora: e.target.value })}
@@ -738,35 +629,13 @@ export const Cronograma = () => {
                           value={principalState.hora}
                         />
                       </Grid.Column>
-                      <Grid.Column width={4} className="column-without-padding-rigth">
+                      <Grid.Column width={5} className="column-without-padding-rigth">
                         <Input
                           placeholder="mm"
                           onChange={(e) => setPrincipalState({ ...principalState, minuto: e.target.value })}
                           maxLength="2"
                           fluid
                           value={principalState.minuto}
-                        />
-                      </Grid.Column>
-                      <Grid.Column /* style={{ width: "40%" }} */>
-                        <Form.Checkbox
-                          className="font-color-4B4B4B"
-                          radio
-                          label="AM"
-                          name="formato_am"
-                          value={principalState.formato_am}
-                          checked={principalState.formato_am}
-                          onChange={handletoggleChange}
-                        />
-                      </Grid.Column>
-                      <Grid.Column /* style={{ paddingLeft: "2%" }} */>
-                        <Form.Checkbox
-                          className="font-color-4B4B4B"
-                          radio
-                          label="PM"
-                          name="formato_pm"
-                          value={principalState.formato_pm}
-                          checked={principalState.formato_pm}
-                          onChange={handletoggleChange}
                         />
                       </Grid.Column>
                     </Grid.Row>

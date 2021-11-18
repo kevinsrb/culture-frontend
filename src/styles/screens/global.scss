@@ -71,14 +71,6 @@
   src: url("../../assets/Fonts/WorkSans-Regular.ttf");
 }
 
-.font-weight-600 {
-  font-weight: 600 !important;
-}
-
-.font-color-FFFFFF {
-  color: #ffffff !important;
-}
-
 .font-color-632264 {
   color: #632264 !important;
 }
@@ -91,10 +83,6 @@
   color: #db2828 !important;
 }
 
-.font-color-9F0505 {
-  color: #9f0505 !important;
-}
-
 .font-color-4B4B4B {
   color: #4b4b4b !important;
 }
@@ -104,11 +92,11 @@
 }
 
 .font-color-B0B0B0 {
-  color: #b0b0b0 !important;
+  color: #B0B0B0 !important;
 }
 
 .font-color-1B1C1D {
-  color: #1b1c1d !important;
+  color: #1B1C1D !important;
 }
 
 .font-color-454545 {
@@ -117,42 +105,6 @@
 
 .font-color-707070 {
   color: #707070 !important;
-}
-
-.font-color-1FAEEF {
-  color: #1faeef !important;
-}
-
-.font-color-FF8900 {
-  color: #ff8900 !important;
-}
-
-.font-color-7E7E7E {
-  color: #7e7e7e !important;
-}
-
-.font-color-8796A5 {
-  color: #8796a5 !important;
-}
-
-.font-color-000000CC {
-  color: #000000cc !important;
-}
-
-.font-color-000000 {
-  color: #000000 !important;
-}
-
-.font-color-6A6A6A {
-  color: #6a6a6a !important;
-}
-
-.font-size-24px {
-  font-size: 24px !important;
-}
-
-.font-size-18px {
-  font-size: 18px !important;
 }
 
 .font-size-14px {
@@ -173,10 +125,6 @@
 
 .font-size-9px {
   font-size: 9px !important;
-}
-
-.font-size-8px {
-  font-size: 8px !important;
 }
 
 .font-family-Montserrat-Thin {
@@ -208,12 +156,8 @@
 }
 
 .border-color-707070 {
-  border: 0px solid #707070 !important;
+  border: 1px solid #707070 !important;
   border-radius: 6px;
-}
-
-.sin_borde-right:focus {
-  border-right: 0px !important;
 }
 
 .border-color-AD0808 {
@@ -223,273 +167,4 @@
 
 * {
   font-family: "Montserrat-SemiBold";
-}
-
-.background-color-6DA3FC {
-  background-color: #6da3fc !important;
-}
-
-.background-color-E0E1E2 {
-  background-color: #e0e1e2 !important;
-}
-
-.background-color-FFFFFF {
-  background-color: #ffffff !important;
-}
-
-.background-color-1FAEEF {
-  background-color: #1faeef !important;
-}
-
-.background-color-6DA3FC-opacity-025 {
-  background-color: rgba(109, 163, 252, 0.25) !important;
-}
-
-.background-color-EAEBEC {
-  background-color: #eaebec !important;
-}
-
-.background-color-F5FAFC {
-  background-color: #f5fafc !important;
-}
-
-.border-radius-16 {
-  border-radius: 16px !important;
-}
-
-.border-radius19 {
-  border-radius: 19px !important;
-}
-
-input:checked ~ label:after {
-  color: #1faeef !important;
-  // background-color: #1FAEEF !important;
-}
-
-.font-weight-normal {
-  font-weight: normal !important;
-}
-
-.letter-spacing-1px {
-  letter-spacing: 1px !important;
-}
-
-.border-right-left-none {
-  border-right: none !important;
-  border-left: none !important;
-}
-
-.border-bottom-none {
-  border-bottom: none !important;
-}
-
-.border-top-none {
-  border-top: none !important;
-}
-
-.line-height-0 {
-  line-height: 0px !important;
-}
-
-.border-bottom-none {
-  border-bottom: none !important;
-}
-
-.justify-content-flex-end {
-  display: flex !important;
-  justify-content: flex-end !important;
-}
-
-.justify-content-center {
-  display: flex !important;
-  justify-content: center !important;
-}
-
-.display-flex {
-  display: flex !important;
-}
-
-.ui.secondary.pointing.menu {
-  // border: none !important;
-  border-bottom: 1px solid #aaaaaa;
-  background-color: #ffffff;
-}
-
-.ui.secondary.pointing.menu .active.item {
-  font-family: "Montserrat-Bold" !important;
-  color: #000000 !important;
-  padding-left: 1%;
-  padding-right: 1%;
-  margin-left: 2.4%;
-  border-bottom: 3px solid #1faeef;
-}
-
-.ui.secondary.pointing.menu .item {
-  font-family: "Montserrat-Regular";
-  color: #abafb3 !important;
-  font-size: 13px;
-}
-
-.ui.secondary.pointing.menu .active.item:hover {
-  border-color: #1faeef;
-}
-
-.ant-btn:empty {
-  display: none !important;
-}
-
-.border-left-1-gray-input {
-  border-left: 1px solid rgba(34, 36, 38, 0.15) !important;
-}
-
-.sidebar-padding {
-  padding-left: 4%;
-}
-
-.breadcrumb-participantes {
-  font-family: "Montserrat-SemiBold";
-  font-size: 10px;
-  color: #739bbc !important;
-  font-weight: normal !important;
-}
-
-.breadcrumb-participantes-activo {
-  font-family: "Montserrat-Bold";
-  font-size: 10px;
-  color: #004884 !important;
-}
-
-.ant-breadcrumb > span,
-.ant-breadcrumb-link {
-  margin-left: 0 !important;
-}
-
-.ant-select-selector {
-  border-radius: 6px !important;
-}
-
-.ant-select-arrow {
-  color: #1faeef;
-  font-size: 14px;
-}
-
-.ant-input-lg {
-  border-radius: 6 px;
-}
-
-.ant-form-item-label > label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
-  display: none;
-}
-
-.ant-form-item-required {
-  color: #535353 !important;
-  font-family: "Montserrat-Bold";
-  letter-spacing: -1px;
-}
-
-.ant-form-vertical .ant-form-item-label {
-  padding: 0 !important;
-}
-
-.button-azul-radius {
-  background-color: #1faeef;
-  color: #fff;
-  border-radius: 16px;
-}
-
-.button-blanco-radius {
-  background-color: #fff;
-  color: #1faeef;
-  border: 1px solid #1faeef;
-  border-radius: 16px;
-}
-
-.button-gray-ghost {
-  background: transparent;
-  color: #707070;
-  border: none;
-}
-
-.button-yellow-ghost {
-  background: transparent;
-  color: #ff8900;
-  border: none;
-}
-
-.button-gray-ghost:hover {
-  background: transparent !important;
-  color: #ff8900;
-}
-
-.button-azul-radius:hover,
-.button-blanco-radius:hover {
-  background: transparent !important;
-  background-color: #ff8900;
-  color: #fff;
-}
-
-.ant-modal-footer.ant-btn .ant-btn-primary {
-  background-color: #1faeef !important;
-  color: #fff;
-  border-radius: 16px !important;
-}
-
-.ui.multiple.dropdown {
-  padding: 0.22619048em 0.5em 0.22619048em 0.35714286em;
-}
-
-i.icon {
-  display: inline-flex !important;
-}
-
-.iconos-select-global {
-  width: 50%;
-  margin-top: 4% !important;
-  justify-content: end;
-  align-items: center;
-}
-.iconos-dropdown-global {
-  width: 50%;
-  margin-top: 1% !important;
-  justify-content: end;
-  align-items: center;
-}
-
-@media (min-width: 1441px) {
-  .iconos-select-global {
-    margin-top: 2% !important;
-  }
-}
-
-.container-menu {
-  padding: 10px 51px !important;
-  // padding-right:   !important;
-  // padding-left:   !important;
-}
-
-.ui.fluid.dropdown {
-  display: flex;
-  justify-content: space-between;
-}
-
-.background-color-verde-opacity {
-  background-color: rgba(0, 144, 76, 0.8);
-}
-
-.card-shadow {
-  padding: 30px;
-  margin: 20px;
-  box-shadow: 0px 3px 10px #00000029 !important;
-  border-radius: 10px !important;
-  max-width: 100%;
-
-}
-.segment{
-  background: #fff;
-  box-shadow: 0px 3px 10px #00000029;
-  margin: 1rem 1rem;
-  padding: 1rem 1rem;
-  border-radius: 0.28571429rem;
-  border: 1px solid rgba(34,36,38,.15);
-  width: 100%;
 }

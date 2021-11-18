@@ -1,37 +1,30 @@
+
 //Bases
-@import "./base/settings";
-@import "./base/base";
-@import "./base/button";
+@import './base/settings';
+@import './base/base';
+@import './base/button';
 
 // Components
-@import "./components/Task.scss";
-@import "./components/sidebar.scss";
-@import "./components/verConvocatoria.scss";
+@import './components/Task.scss';
+
 
 // Screen
-//Convocatorias
-@import "./screens/Convocatorias/InfoConvocatorias.scss";
-@import "./screens/Convocatorias/CrearActividades.scss";
-@import "./screens/Convocatorias/Cronograma.scss";
-@import "./screens/Convocatorias/Documentos.scss";
-@import "./screens/Convocatorias/CronogramaActividades.scss";
-@import "./screens/Convocatorias/CarcgarArchivos.scss";
-@import "./screens/Convocatorias/documentacionGeneral.scss";
-@import "./screens/Convocatorias/adminConvocatoria.scss";
-@import "./screens/Convocatorias/publicarConvocatoria.scss";
-@import "./screens/Convocatorias/jurados.scss";
+    //Convocatorias
+    @import './screens/Convocatorias/InfoConvocatorias.scss';
+    @import './screens/Convocatorias/CrearActividades.scss';
+    @import './screens/Convocatorias/Cronograma.scss';
+    @import './screens/Convocatorias/Documentos.scss';
+    @import './screens/Convocatorias/CronogramaActividades.scss';
+    @import './screens/Convocatorias/CarcgarArchivos.scss';
+    @import './screens/Convocatorias/documentacionGeneral.scss';
+    @import './screens/Convocatorias/adminConvocatoria.scss';
+    @import './screens/Convocatorias/publicarConvocatoria.scss';
 
-//participantes
-@import "./screens/Participantes/SeleccionarRoles.scss";
-@import "./screens/Participantes/AgregarPaticipante.scss";
-@import "./screens/Participantes/BuscarConvocatoria.scss";
-@import "./screens/Participantes/DocumentosTecnicos.scss";
+    //participantes
+    @import './screens/Participantes/SeleccionarRoles.scss';
 
-//Global
-@import "./screens/global.scss";
+
+
 
 //Login
-@import "./screens/Login.scss";
-
-// GLOBAL
-@import "./screens/global.scss";
+@import './screens/Login.scss';

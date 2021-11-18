@@ -2,21 +2,9 @@
     border-radius: 20px !important;
 }
 
-
 .btn-primary {
     background-color: $azulClarito !important;
     color: white !important;
-}
-
-.btn-primary-outline {
-    background-color: white !important;
-    color: $azulClarito !important;
-    border: 1px solid $azulClarito !important;
-}
-
-.btn-primary-outline:hover{
-    color: white !important;
-    background-color: $naranja !important;
 }
 
 .btn-primary:hover{
@@ -25,8 +13,4 @@
 
 .btn-disable{
     background-color: #E0E1E2 !important;
-}
-
-.btn-secondary{
-    background-color:$naranja  !important;
 }

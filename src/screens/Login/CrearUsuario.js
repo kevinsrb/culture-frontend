@@ -18,6 +18,8 @@ export default function CrearUsuario() {
   const [tipo_identificacion, setTipo_identificacion] = React.useState("");
   //   const [fecha_creacion, setFecha_creacion] = React.useState("");
   const [email, setEmail] = React.useState("");
+
+  const [path, setPath] = React.useState("http://127.0.0.1:4002/");
   // TIPO DE IDENTIFICACIONES
   const tiposidentificacion = [
     { key: 'CC', value: 'CC', text: 'CEDULA DE CIUDADANIA' },
@@ -32,8 +34,11 @@ export default function CrearUsuario() {
   ]
 
   async function registrarUsuario() {
+
+    
     let fecha_creacion = moment().format("YYYY-MM-DD");
     let fecha_actualizacion = moment().format("YYYY-MM-DD");
+    
     axios
       .post(`${process.env.REACT_APP_PAGE_HOST}api/usuarios`, {
         id_tipo,
