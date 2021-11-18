@@ -141,7 +141,12 @@
 //   width: 200px;
 //   overflow-x: scroll;
 // }
-
+.texto-reprobado {
+  color: #db2828;
+}
+.texto-aprobado {
+  color: green;
+}
 .container-pagination-jurados {
   display: flex !important;
   justify-content: flex-end !important;

@@ -33,19 +33,19 @@ import {
 //   nombreConvocatoria,
 // } from "../../store/actions/participantesAction";
 
-export const VerJurados = () => {
+export const VerJurados = ({ datos }) => {
   const dispatch = useDispatch();
   const history = useHistory();
 
   const [open, setOpen] = useState(false);
-  // const {
-  //   idconvocatorias,
-  //   numero_convocatoria,
-  //   descripcion_corta,
-  //   documentos,
-  //   categoria_linea_convocatoria,
-  //   fechas,
-  // } = props.datos;
+  const {
+    idconvocatorias,
+    numero_convocatoria,
+    descripcion_corta,
+    documentos,
+    categoria_linea_convocatoria,
+    fechas,
+  } = datos;
   // const { idParticipante } = useSelector((state) => state.participantes);
 
   const JuradosLista = [
@@ -148,35 +148,30 @@ export const VerJurados = () => {
         <Header size="small" as="h2">
           Descripción del jurado
         </Header>
+        <p>{datos.description}</p>
         <Divider />
-        <Header size="small" as="h2">
-          Ha sido jurado en
-        </Header>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas
-          nulla libero, viverra non tellus nec, dictum dapibus arcu. Donec eu
-          eros egestas, ullamcorper neque non, tempus tellus. In tincidunt
-          convallis tellus, sed pulvinar lacus aliquam in. Vestibulum velit
-          nunc, varius vitae augue lacinia, placerat elementum nisl. Etiam ante
-          nulla, efficitur nec commodo ac, tincidunt sed nisl. Duis arcu dui,
-          iaculis nec enim vitae, maximus lobortis mi. Pellentesque vulputate
-          congue nisl, eget venenatis neque convallis nec.
-        </p>
-        <Divider />
-        <List bulleted as="ul">
-          <List.Item as="li">Altavoz</List.Item>
-          <List.Item as="li">Danza</List.Item>
-          <List.Item as="li">Tango</List.Item>
-        </List>
+        {datos.jury.length > 0 && (
+          <>
+            <Header size="small" as="h2">
+              Ha sido jurado en
+            </Header>
+            <Divider />
+            <List bulleted as="ul">
+              <List.Item as="li">{datos.jury}</List.Item>
+            </List>
+          </>
+        )}
         <Header size="small" as="h2">
           Categorías específicas
         </Header>
         <Divider />
-        <List bulleted as="ul">
-          <List.Item as="li">Música popular</List.Item>
-          <List.Item as="li">Formación en artes</List.Item>
-          <List.Item as="li">Diseño visual</List.Item>
-        </List>
+        {datos.categories != null && datos.categories.length > 0 ? (
+          <List bulleted as="ul">
+            <List.Item as="li">{datos.categories}</List.Item>
+          </List>
+        ) : (
+          <p>No hay</p>
+        )}
       </>
     );
   };
@@ -356,24 +351,29 @@ export const VerJurados = () => {
                 style={{ margin: "1rem" }}
                 color="grey"
               />
-              <CardHeader>Juan Esteban Ramírez Gonzales</CardHeader>
+              <CardHeader>
+                {datos.first_name}
+                {datos.middle_name}
+                {datos.first_surname}
+                {datos.second_surname}
+              </CardHeader>
               <CardDescription>
-                C.C. <span>1017196606</span>
+                C.C. <span>{datos.identification_cc}</span>
               </CardDescription>
               <CardDescription>
-                País: <span>Colombia</span>
+                País: <span>{datos.country}</span>
               </CardDescription>
               <CardDescription>
-                Municipio: <span>Medellín</span>
+                Municipio: <span>{datos.city}</span>
               </CardDescription>
               <CardDescription>
-                Tel: <span>3473320</span>
+                Tel: <span>{datos.landline_phone}</span>
               </CardDescription>
               <CardDescription>
-                Cel: <span>3006183669</span>
+                Cel: <span>{datos.mobile}</span>
               </CardDescription>
               <CardDescription>
-                <span>Engraficos@gmail.com</span>
+                <span>{datos.email}</span>
               </CardDescription>
             </CardContent>
           </Card>{" "}

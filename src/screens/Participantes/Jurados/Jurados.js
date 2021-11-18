@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import {
-  Button,
   Form,
   Segment,
   Header,
@@ -11,13 +10,11 @@ import {
   Dropdown,
   Pagination,
   Search,
-  Divider,
 } from "semantic-ui-react";
+import { Checkbox } from "antd";
+
 import { useHistory } from "react-router";
-import {
-  VerJurados,
-  VerPostulaciones,
-} from "../../../components/Jurados/VerJurados";
+import { VerJurados } from "../../../components/Jurados/VerJurados";
 
 const filtrarPorArea = [
   {
@@ -126,12 +123,23 @@ const JuradosLista = [
 ];
 
 export const Jurados = () => {
-  const initialState = {
-    area: [],
-    linea_convocatoria: [],
-    tipo_participante: [],
-    categoria_linea_convocatoria: [],
+  const [userPermissions, setUserPermissions] = useState(true);
+  const [jurados, setJurados] = useState([]);
+  const url = "http://localhost:3333/api/juries";
+  const obtenerJurados = async (url) => {
+    const response = await fetch(url);
+    const respJSON = await response.json();
+    setJurados(respJSON.juries);
   };
+  useEffect(() => {
+    obtenerJurados(url);
+  }, []);
+  // const initialState = {
+  //   area: [],
+  //   linea_convocatoria: [],
+  //   tipo_participante: [],
+  //   categoria_linea_convocatoria: [],
+  // };
 
   const initialStateFiltros = {
     datossinfiltro: [],
@@ -153,9 +161,6 @@ export const Jurados = () => {
   //   return setfiltros({ ...filtros, [name]: value });
   // };
 
-  const abrirModal = () => {
-    console.log("helloo");
-  };
   return (
     <React.Fragment>
       <Grid className="no-margin">
@@ -188,6 +193,9 @@ export const Jurados = () => {
         }}
       >
         <Grid.Column style={{ maxWidth: "100%", padding: "2%" }}>
+          <Checkbox onChange={() => setUserPermissions(!userPermissions)}>
+            {userPermissions ? <h1>Administrador</h1> : <h1>Evaluador</h1>}
+          </Checkbox>
           <Segment className="segment-shadow">
             <Grid>
               <Grid.Row>
@@ -270,7 +278,7 @@ export const Jurados = () => {
                         className="font-color-F28C02 font-family-Montserrat-Regular font-size-12px"
                         style={{ marginLeft: "4%" }}
                       >
-                        "{JuradosLista.length}"
+                        "{jurados.length}"
                       </span>
                     </span>
                   </Grid.Column>
@@ -330,13 +338,15 @@ export const Jurados = () => {
                           >
                             Nombres y apellidos
                           </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "14%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            No. Documento
-                          </Table.HeaderCell>
+                          {userPermissions && (
+                            <Table.HeaderCell
+                              style={{ width: "14%" }}
+                              rowSpan="2"
+                              className="background-color-FFFFFF font-size-12px"
+                            >
+                              No. Documento
+                            </Table.HeaderCell>
+                          )}
                           <Table.HeaderCell
                             style={{ width: "7%" }}
                             rowSpan="2"
@@ -380,8 +390,8 @@ export const Jurados = () => {
                       className="border-right-left-none border-top-none"
                     >
                       <Table.Body>
-                        {JuradosLista.length > 0 ? (
-                          JuradosLista.map((datos, index) => (
+                        {jurados.length ? (
+                          jurados.map((datos, index) => (
                             <Table.Row className="display-flextable-cell">
                               <Table.Cell
                                 style={{ width: "4%" }}
@@ -395,35 +405,44 @@ export const Jurados = () => {
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.nombreCompleto}
+                                {datos.first_name}
+                                {datos.middle_name}
+                                {datos.first_surname}
+                                {datos.second_surname}
                               </Table.Cell>
-                              <Table.Cell
-                                style={{ width: "14%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {datos.nroDocumento}
-                              </Table.Cell>
+                              {userPermissions && (
+                                <Table.Cell
+                                  style={{ width: "14%" }}
+                                  className="font-size-12px font-family-Work-Sans"
+                                  width={1}
+                                >
+                                  {datos.document_number}
+                                </Table.Cell>
+                              )}
                               <Table.Cell
                                 style={{ width: "6%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.codigo}
+                                {datos.identification_no}
                               </Table.Cell>
                               <Table.Cell
                                 style={{ width: "30%" }}
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.categoriasEspecificas}
+                                {datos.categories[0]}
                               </Table.Cell>{" "}
                               <Table.Cell
                                 style={{ width: "15%" }}
-                                className="font-size-12px font-family-Work-Sans"
+                                className={
+                                  datos.estado == "Postulado"
+                                    ? "texto-aprobado"
+                                    : "texto-reprobado"
+                                }
                                 width={1}
                               >
-                                {datos.estado}
+                                Reprobado
                               </Table.Cell>{" "}
                               <Table.Cell
                                 style={{ width: "10%" }}
