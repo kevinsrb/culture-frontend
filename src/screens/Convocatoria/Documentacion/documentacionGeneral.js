@@ -255,7 +255,7 @@ export const DocumentacionConvocatoria = () => {
       });
   
       await ObjNotificaciones.MSG_SUCCESS("success", "Se Han asociado los documentos correctamente");
-      history.push("/Administrador/documentacionConvocatoria");
+      history.push("/Administrador/publicarConvocatoria");
     
   };
 
