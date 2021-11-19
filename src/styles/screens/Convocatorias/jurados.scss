@@ -18,12 +18,15 @@
   justify-content: center;
   align-items: center;
 }
+.formulario-palabra-clave .ui.input {
+  width: 100%;
+}
 .formulario-palabra-clave input {
-  width: 468px !important;
+  width: 100% !important;
   height: 38px !important;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: stretch;
   border: 1px solid rgba(34, 36, 38, 0.15);
   border-radius: 4px !important;
   color: #1b1c1d;
@@ -141,6 +144,13 @@
 //   width: 200px;
 //   overflow-x: scroll;
 // }
+.descripcion-del-jurado {
+  border: 1px solid #e2e2e3;
+  border-radius: 5px;
+  height: 134px;
+  width: 100%;
+  padding: 8px;
+}
 .texto-reprobado {
   color: #db2828;
 }

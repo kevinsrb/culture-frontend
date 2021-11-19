@@ -148,16 +148,23 @@ export const VerJurados = ({ datos }) => {
         <Header size="small" as="h2">
           Descripción del jurado
         </Header>
-        <p>{datos.description}</p>
+        <p className="font-size-12px font-family-Work-Sans">
+          {datos.description}
+        </p>
+        <Divider />
+        <Header size="small" as="h2">
+          Ha sido jurado en
+        </Header>
         <Divider />
         {datos.jury.length > 0 && (
           <>
-            <Header size="small" as="h2">
-              Ha sido jurado en
-            </Header>
-            <Divider />
             <List bulleted as="ul">
-              <List.Item as="li">{datos.jury}</List.Item>
+              <List.Item
+                as="li"
+                className="font-size-12px font-family-Work-Sans"
+              >
+                {datos.jury}
+              </List.Item>
             </List>
           </>
         )}
@@ -165,12 +172,22 @@ export const VerJurados = ({ datos }) => {
           Categorías específicas
         </Header>
         <Divider />
-        {datos.categories != null && datos.categories.length > 0 ? (
+        {datos !== undefined && Object.keys(datos.categories).length !== 0 && (
           <List bulleted as="ul">
-            <List.Item as="li">{datos.categories}</List.Item>
+            {datos.categories.map((category, index) => {
+              return (
+                category !== null && (
+                  <List.Item
+                    key={index}
+                    as="li"
+                    className="font-size-12px font-family-Work-Sans"
+                  >
+                    {category}
+                  </List.Item>
+                )
+              );
+            })}
           </List>
-        ) : (
-          <p>No hay</p>
         )}
       </>
     );
@@ -268,6 +285,29 @@ export const VerJurados = ({ datos }) => {
       </>
     );
   };
+  const TabFive = () => {
+    return (
+      <>
+        <Header size="small" as="h2">
+          Comentarios evaluador de jurados
+        </Header>
+        <div className="descripcion-del-jurado">
+          <p className="font-size-12px font-family-Work-Sans ">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+            finibus suscipit quam, at faucibus felis lacinia in. Vestibulum quis
+            consectetur odio, cursus imperdiet massa. Nulla sodales vulputate
+            tortor, eu lacinia justo volutpat vel. Vivamus vel nisi suscipit,
+            consequat tellus a, iaculis dui. Aliquam vulputate eros ut accumsan
+            commodo. Nullam vel ipsum ac velit posuere condimentum a sit amet
+            odio. Duis leo enim, rhoncus a posuere eget, posuere eget orci.
+            Quisque eleifend faucibus purus, at aliquet orci mollis a. Etiam
+            cursus nunc at magna hendrerit, ut fringilla nunc vehicula. Mauris
+            interdum ultricies gravida.
+          </p>
+        </div>
+      </>
+    );
+  };
   const panes = [
     {
       menuItem: "Perfil de jurado",
@@ -287,26 +327,14 @@ export const VerJurados = ({ datos }) => {
       ),
     },
     {
-      menuItem: "Experiencia",
+      menuItem: "Observaciones  del evaluador",
       render: () => (
         <Tab.Pane
           attached={false}
           style={{ border: "none", height: "100%", boxShadow: "none" }}
         >
           {" "}
-          <TabTwo />
-        </Tab.Pane>
-      ),
-    },
-    {
-      menuItem: "Reconocimiento y publicaciones",
-      render: () => (
-        <Tab.Pane
-          attached={false}
-          style={{ border: "none", height: "100%", boxShadow: "none" }}
-        >
-          {" "}
-          <TabTwo />
+          <TabFive />
         </Tab.Pane>
       ),
     },
@@ -338,8 +366,11 @@ export const VerJurados = ({ datos }) => {
       className="modal-jurado"
       trigger={<span className="ver_convocatoria no-margin">Ver más</span>}
     >
-      <Modal.Header>
-        Postulación a jurado <span className="soft-text">Código 23401</span>
+      <Modal.Header className="font-size-12px font-family-Work-Sans">
+        Postulación a jurado{" "}
+        <span className="font-size-14px font-family-Work-Sans">
+          Código {datos.identification_no}
+        </span>
       </Modal.Header>
       <Modal.Content style={{ display: "flex" }}>
         <Modal.Description style={{ width: "5%" }} className="card-jurado">

@@ -196,10 +196,38 @@ export const Jurados = () => {
           <Checkbox onChange={() => setUserPermissions(!userPermissions)}>
             {userPermissions ? <h1>Administrador</h1> : <h1>Evaluador</h1>}
           </Checkbox>
+          <h1>Gestionar postulación de jurados</h1>
           <Segment className="segment-shadow">
             <Grid>
               <Grid.Row>
-                <Grid.Column width={8} className="justify-content-flex-start">
+                <Grid.Column
+                  width={userPermissions ? 8 : 4}
+                  className="justify-content-flex-start"
+                >
+                  <Grid.Row>
+                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                      Filtrar por palabra clave o código
+                    </label>
+                    <Search
+                      placeholder="Buscar por palabra clave..."
+                      className="formulario-palabra-clave no-margin"
+                      // loading={loading}
+                      // onResultSelect={(e, data) =>
+                      //   dispatch({
+                      //     type: "UPDATE_SELECTION",
+                      //     selection: data.result.title,
+                      //   })
+                      // }
+                      // onSearchChange={handleSearchChange}
+                      // results={results}
+                      // value={value}
+                    />
+                  </Grid.Row>
+                </Grid.Column>
+                <Grid.Column
+                  width={userPermissions ? 8 : 4}
+                  className="justify-content-flex-start"
+                >
                   <Grid.Row>
                     <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
                       Filtrar por area
@@ -216,27 +244,51 @@ export const Jurados = () => {
                     />
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column width={8} className="justify-content-flex-start">
-                  <Grid.Row>
-                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
-                      Filtrar por palabra clave o código de jurado
-                    </label>
-                    <Search
-                      placeholder="Buscar por palabra clave..."
-                      className="formulario-palabra-clave"
-                      // loading={loading}
-                      // onResultSelect={(e, data) =>
-                      //   dispatch({
-                      //     type: "UPDATE_SELECTION",
-                      //     selection: data.result.title,
-                      //   })
-                      // }
-                      // onSearchChange={handleSearchChange}
-                      // results={results}
-                      // value={value}
-                    />
-                  </Grid.Row>
-                </Grid.Column>
+
+                {!userPermissions && (
+                  <Grid.Column width={4} className="justify-content-flex-start">
+                    <Grid.Row>
+                      <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                        Filtrar por Cateogría
+                      </label>
+                      <Dropdown
+                        fluid
+                        className="select-registros-filtrar-por-area no-margin"
+                        placeholder="Seleccionar..."
+                        defaultValue={filtrarPorArea}
+                        options={filtrarPorArea}
+                        icon={
+                          <Icon
+                            className="font-color-1FAEEF"
+                            name="angle down"
+                          />
+                        }
+                      />
+                    </Grid.Row>
+                  </Grid.Column>
+                )}
+                {!userPermissions && (
+                  <Grid.Column width={4} className="justify-content-flex-start">
+                    <Grid.Row>
+                      <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                        Filtrar por Estado
+                      </label>
+                      <Dropdown
+                        fluid
+                        className="select-registros-filtrar-por-area no-margin"
+                        placeholder="Seleccionar..."
+                        defaultValue={filtrarPorArea}
+                        options={filtrarPorArea}
+                        icon={
+                          <Icon
+                            className="font-color-1FAEEF"
+                            name="angle down"
+                          />
+                        }
+                      />
+                    </Grid.Row>
+                  </Grid.Column>
+                )}
               </Grid.Row>
             </Grid>
           </Segment>
@@ -431,7 +483,18 @@ export const Jurados = () => {
                                 className="font-size-12px font-family-Work-Sans"
                                 width={1}
                               >
-                                {datos.categories[0]}
+                                {datos.categories.map((category, index) => {
+                                  return (
+                                    category !== null && (
+                                      <span
+                                        key={index}
+                                        className="font-size-12px font-family-Work-Sans"
+                                      >
+                                        -{category + " "}
+                                      </span>
+                                    )
+                                  );
+                                })}
                               </Table.Cell>{" "}
                               <Table.Cell
                                 style={{ width: "15%" }}
