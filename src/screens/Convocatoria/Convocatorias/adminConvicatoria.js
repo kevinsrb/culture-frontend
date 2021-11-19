@@ -206,7 +206,7 @@ export const AdminConvocatorias = () => {
 
   const primeroDatostabla = async () => {
     try {
-      let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/`);
+      let response = await axios.get(`${process.env.REACT_APP_SERVER_CONV}convocatorias/consultarConvocatoriasActivas`);
       console.log(response)
       let copynombres = response.data.lineasconvocatorias.map((data) => data);
       let fechaactual = moment().format("YYYY-MM-DD");
@@ -325,7 +325,9 @@ export const AdminConvocatorias = () => {
 
   async function borrarConvocatoria() {
     try {
-      await axios.delete(`${process.env.REACT_APP_SERVER_CONV}api/convocatorias/delete/${idBorrar}`);
+      // await axios.delete(`${process.env.REACT_APP_SERVER_CONV}api/convocatorias/delete/${idBorrar}`);
+      await axios.put(`${process.env.REACT_APP_SERVER_CONV}convocatorias/cambiarEstadoConvocatoria/${idBorrar}`, {activo: false});
+
       let copy = datosActuales.map((data) => data);
       let eliminar = copy.filter((data) => data.idconvocatorias !== idBorrar);
       setDatosActuales(eliminar);

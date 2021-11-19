@@ -16,7 +16,7 @@ export const VerConvocatoria = (props) => {
 
 
   const [open, setOpen] = useState(false);
-  const { idconvocatorias, numero_convocatoria, descripcion_corta, documentos_generales, documentos_tecnicos, documentos_administrativos, categoria_linea_convocatoria, fechas } = props.datos;
+  const { idconvocatorias, nombre_convocatoria, numero_convocatoria, descripcion_corta, documentos_generales, documentos_tecnicos, documentos_administrativos, categoria_linea_convocatoria, fechas } = props.datos;
   const {  idParticipante } = useSelector((state) => state.participantes);
 
   const crearPostulacion = async () => {
