@@ -8,6 +8,7 @@ import {
   Modal,
   Card,
   Button,
+  Icon,
   Table,
   Tab,
   Header,
@@ -16,9 +17,12 @@ import {
   CardContent,
   CardHeader,
   CardDescription,
-  Icon,
+  Form,
+  Radio,
 } from "semantic-ui-react";
-import { Radio } from "antd";
+import { Collapse, Checkbox } from "antd";
+
+const { Panel } = Collapse;
 
 // import {
 //   documentosConvocatoria,
@@ -38,83 +42,54 @@ export const VerJurados = ({ datos, userState }) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [cumpleRequisitos, setCumpleRequisitos] = useState(false);
-  const onChange = (e) => {
-    e.preventDefault();
-    setCumpleRequisitos(e.target.value);
-  };
   const [open, setOpen] = useState(false);
-  const {
-    idconvocatorias,
-    numero_convocatoria,
-    descripcion_corta,
-    documentos,
-    categoria_linea_convocatoria,
-    fechas,
-  } = datos;
-  // const { idParticipante } = useSelector((state) => state.participantes);
+  const [stepOne, setStepOne] = useState(false);
+  const handleChange = (event, { value }) => setCumpleRequisitos({ value });
 
-  const JuradosLista = [
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad Pontificia Bolivar",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad de Bellas Artes",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad Cooperativa de...",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad de Medellín",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad de Antioquia",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad de Palermo",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Universidad Sergio Arboleda",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Persona Jurídica",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Grupo Conformado",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
-    {
-      titulo: "Nombre título adquirido",
-      nivelEducacion: "Nivel de educación",
-      institucionEducativa: "Persona Natural",
-      categoriasEspecificas: "Música popular, Formación en artes...",
-    },
+  // Acordeon
+  const plainOptions = [
+    "Chirimías y/o papayeras",
+    "Músicos populares  ",
+    "Música del mundo, alternativa y tradicionales  ",
+    "Arte por la vida  ",
+    "Disc Jockey (DJ)  ",
+    "Video Jockey (VJ)",
+    "Danza",
+    "Trovadores",
+    "Cuenteros y/o narradores orales",
+    "Cartas de amor",
+    "Titiriteros y/o cajas mágicas",
+    "Artes plásticas",
+    "Performance",
+    "Teatro",
+    "Estatuas Humanas",
+    "Películas Itinerantes",
+    "Magia",
+    "Pantomima",
+    "Circo",
+    "Comparsas",
   ];
+  const defaultCheckedList = [];
+
+  const [indeterminate, setIndeterminate] = useState(true);
+  const [checkedList, setCheckedList] = useState(defaultCheckedList);
+  const [checkAll, setCheckAll] = useState(false);
+
+  const onChangeCheck = (list) => {
+    setCheckedList(list);
+    setIndeterminate(!!list.length && list.length < plainOptions.length);
+    setCheckAll(list.length === plainOptions.length);
+  };
+  const onCheckAllChange = (e) => {
+    setCheckedList(e.target.checked ? plainOptions : []);
+    setIndeterminate(false);
+    setCheckAll(e.target.checked);
+  };
+  // const { idParticipante } = useSelector((state) => state.participantes);
+  const primerModalSubmitButton = (e) => {
+    setStepOne(true);
+    setOpen(false);
+  };
 
   // const crearPostulacion = async () => {
   //   const fechaApertura = fechas.filter((fec) => fec.clave == "Apertura");
@@ -201,91 +176,107 @@ export const VerJurados = ({ datos, userState }) => {
     return (
       <>
         <Table
-          columns={5}
+          columns={7}
+          compact
+          unstackable
+          striped
+          size="small"
           className="border-right-left-none border-bottom-none"
         >
-          <Table.Header>
-            <Table.Row className="display-flex">
+          <Table.Header fullWidth>
+            <Table.Row>
               <Table.HeaderCell
-                style={{ width: "5%" }}
-                rowSpan="2"
                 className="background-color-FFFFFF font-size-12px"
+                width={1}
               >
                 No.
               </Table.HeaderCell>
               <Table.HeaderCell
-                style={{ width: "27%" }}
-                rowSpan="2"
                 className="background-color-FFFFFF font-size-12px"
+                width={3}
               >
-                Títulos
+                Título
               </Table.HeaderCell>
               <Table.HeaderCell
-                style={{ width: "28%" }}
-                rowSpan="2"
                 className="background-color-FFFFFF font-size-12px"
+                width={2}
               >
                 Nivel de educación
               </Table.HeaderCell>
               <Table.HeaderCell
-                style={{ width: "29%" }}
-                rowSpan="2"
                 className="background-color-FFFFFF font-size-12px"
+                width={1}
               >
                 Institución educativa
               </Table.HeaderCell>
               <Table.HeaderCell
-                style={{ width: "9%" }}
-                rowSpan="2"
                 className="background-color-FFFFFF font-size-12px"
+                width={1}
+              >
+                Ciudad
+              </Table.HeaderCell>
+              <Table.HeaderCell
+                className="background-color-FFFFFF font-size-12px"
+                width={1}
+              >
+                Graduado
+              </Table.HeaderCell>
+
+              <Table.HeaderCell
+                className="background-color-FFFFFF font-size-12px"
+                width={1}
               >
                 Acciones
               </Table.HeaderCell>
             </Table.Row>
           </Table.Header>
-          {JuradosLista.map((datos, index) => (
-            <Table.Row className="display-flex table-cell-modal">
+          <Table.Body style={{ height: "100%" }}>
+            <Table.Row>
               <Table.Cell
-                style={{
-                  width: "4%",
-                  textAlign: "center",
-                  padding: "10px",
-                }}
-                className="font-size-12px font-family-Work-Sans "
-                width={5}
-              >
-                {index + 1}
-              </Table.Cell>
-              <Table.Cell
-                style={{ width: "28%", paddingLeft: "10px", padding: "10px" }}
-                className="font-size-12px font-family-Work-Sans table-cell"
-                width={1}
-              >
-                {datos.titulo}
-              </Table.Cell>
-              <Table.Cell
-                style={{ width: "28%", padding: "10px" }}
                 className="font-size-12px font-family-Work-Sans"
                 width={1}
               >
-                {datos.nivelEducacion}
+                {datos.resume_id}
               </Table.Cell>
               <Table.Cell
-                style={{ width: "29%", padding: "10px" }}
+                className="font-size-12px font-family-Work-Sans"
+                width={3}
+              >
+                Título
+              </Table.Cell>
+              <Table.Cell
+                className="font-size-12px font-family-Work-Sans"
+                width={2}
+              >
+                Nivel de educación{" "}
+              </Table.Cell>
+              <Table.Cell
                 className="font-size-12px font-family-Work-Sans"
                 width={1}
               >
-                {datos.institucionEducativa}
+                Universidad de blablabla{" "}
+              </Table.Cell>
+
+              <Table.Cell
+                width={1}
+                className="font-size-12px font-family-Work-Sans"
+              >
+                Sin verificar
               </Table.Cell>
               <Table.Cell
-                style={{ width: "10%", padding: "10px" }}
-                className="font-size-12px font-family-Work-Sans"
                 width={1}
+                className="font-size-12px font-family-Work-Sans"
               >
-                Ver anexo
+                Sin verificar
+              </Table.Cell>
+              <Table.Cell
+                width={1}
+                className="font-size-12px font-family-Work-Sans"
+              >
+                Sin verificar
               </Table.Cell>
             </Table.Row>
-          ))}
+          </Table.Body>
         </Table>
       </>
     );
@@ -296,7 +287,8 @@ export const VerJurados = ({ datos, userState }) => {
         {userState ? (
           <>
             <Header size="small" as="h2">
-              Comentarios evaluador de jurados
+              Comentarios evaluador de jurados {datos.first_name}{" "}
+              {datos.middle_name} {datos.first_surname} {datos.second_surname}
             </Header>
             <div className="descripcion-del-jurado">
               <p className="font-size-12px font-family-Work-Sans ">
@@ -316,19 +308,31 @@ export const VerJurados = ({ datos, userState }) => {
           </>
         ) : (
           <>
-            <Header size="small" as="h2">
-              ¿Cumple con los requisitos para ser jurado?
-            </Header>
-            <div>
-              <Radio.Group
-                onChange={onChange}
-                value={cumpleRequisitos}
-                defaultValue={[]}
-              >
-                <Radio value={true}>Si</Radio>
-                <Radio value={false}>No</Radio>
-              </Radio.Group>
-            </div>
+            <Form>
+              <Form.Field>
+                ¿Cumple con los requisitos para ser jurado?
+              </Form.Field>
+              <div style={{ display: "flex" }}>
+                <Form.Field>
+                  <Radio
+                    label="Si"
+                    name="radioGroup"
+                    value={true}
+                    checked={cumpleRequisitos == true}
+                    onChange={handleChange}
+                  />
+                </Form.Field>
+                <Form.Field>
+                  <Radio
+                    label="No"
+                    name="radioGroup"
+                    value={false}
+                    checked={cumpleRequisitos == false}
+                    onChange={handleChange}
+                  />
+                </Form.Field>
+              </div>
+            </Form>{" "}
           </>
         )}
       </>
@@ -353,6 +357,30 @@ export const VerJurados = ({ datos, userState }) => {
       ),
     },
     {
+      menuItem: "Experiencia",
+      render: () => (
+        <Tab.Pane
+          attached={false}
+          style={{ border: "none", height: "100%", boxShadow: "none" }}
+        >
+          {" "}
+          <TabFive />
+        </Tab.Pane>
+      ),
+    },
+    {
+      menuItem: "Reconocimientos y publicaciones",
+      render: () => (
+        <Tab.Pane
+          attached={false}
+          style={{ border: "none", height: "100%", boxShadow: "none" }}
+        >
+          {" "}
+          <TabFive />
+        </Tab.Pane>
+      ),
+    },
+    {
       menuItem: "Observaciones  del evaluador",
       render: () => (
         <Tab.Pane
@@ -367,103 +395,190 @@ export const VerJurados = ({ datos, userState }) => {
     // { menuItem: "", pane: "TabThree" },
     // { menuItem: "", pane: "TabFour" },
   ];
-  const Tabs = () => <Tab panes={panes} style={{ boxShadow: "none" }} />;
-  return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
-      closeIcon={
-        <Icon
-          name="x"
-          style={{
-            color: "#9F0505",
-            position: "absolute",
-            right: 20,
-            top: 25,
-            cursor: "pointer",
-          }}
-        />
-      }
-      style={{
-        width: "80vw",
-        height: "90vh",
-      }}
-      className="modal-jurado"
-      trigger={<span className="ver_convocatoria no-margin">Ver más</span>}
-    >
-      <Modal.Header className="font-size-12px font-family-Work-Sans">
-        Postulación a jurado{" "}
-        <span className="font-size-14px font-family-Work-Sans">
-          Código {datos.identification_no}
-        </span>
-      </Modal.Header>
-      <Modal.Content style={{ display: "flex" }}>
-        <Modal.Description style={{ width: "5%" }} className="card-jurado">
-          <Card className="card-jurado-main">
-            <CardContent className="card-jurado-content">
-              <Icon
-                name="user circle"
-                size="massive"
-                style={{ margin: "1rem" }}
-                color="grey"
+  const Tabs = () => (
+    <Tab
+      panes={panes}
+      menu={{ secondary: true, pointing: true }}
+      className="tabs-jurados"
+      renderActiveOnly={true}
+    />
+  );
+  const Accordion = () => {
+    return (
+      <>
+        <Collapse defaultActiveKey={["1"]} accordion>
+          <Panel
+            header="Estímulos a la creatividad en el espacio público"
+            key="1"
+            extra={
+              <Checkbox
+                indeterminate={indeterminate}
+                onChange={onCheckAllChange}
+                checked={checkAll}
               />
-              <CardHeader>
-                {datos.first_name}
-                {datos.middle_name}
-                {datos.first_surname}
-                {datos.second_surname}
-              </CardHeader>
-              {userState && (
-                <>
-                  <CardDescription>
-                    C.C. <span>{datos.identification_cc}</span>
-                  </CardDescription>
-                  <CardDescription>
-                    País: <span>{datos.country}</span>
-                  </CardDescription>
-                  <CardDescription>
-                    Municipio: <span>{datos.city}</span>
-                  </CardDescription>
-                  <CardDescription>
-                    Tel: <span>{datos.landline_phone}</span>
-                  </CardDescription>
-                  <CardDescription>
-                    Cel: <span>{datos.mobile}</span>
-                  </CardDescription>
-                  <CardDescription>
-                    <span>{datos.email}</span>
-                  </CardDescription>
-                </>
-              )}
-            </CardContent>
-          </Card>{" "}
-        </Modal.Description>
-        <Modal.Description
-          style={{ width: "58%", height: "100%", boxShadow: "none" }}
-        >
-          <Tabs />
-        </Modal.Description>
-      </Modal.Content>
-      <Modal.Actions
-        style={{
-          position: "absolute",
-          bottom: 0,
-          width: "100%",
-          boxShadow: "none",
-        }}
+            }
+          >
+            <Checkbox.Group
+              options={plainOptions}
+              value={checkedList}
+              onChange={onChangeCheck}
+            />
+          </Panel>
+          <Panel header="Medellín vive las artes" key="2">
+            a
+          </Panel>
+          <Panel
+            header="Estímulo a la apropiación creativa de nuestro patrimonio vivo"
+            key="3"
+          >
+            <p>a</p>
+          </Panel>
+          <Panel header="Festival de Tango" key="4">
+            <p>a</p>
+          </Panel>
+          <Panel header="Festival Altavoz" key="5">
+            <p>a</p>
+          </Panel>
+          <Panel
+            header="Estímulos para la promoción y distribución de largometrajes y cortometrajes"
+            key="6"
+          >
+            <p>a</p>
+          </Panel>
+        </Collapse>
+      </>
+    );
+  };
+  return (
+    <>
+      <Modal
+        size="fullscreen"
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        centered={false}
+        closeIcon={
+          <Icon
+            name="x"
+            style={{
+              color: "#9F0505",
+              position: "absolute",
+              right: 20,
+              top: 25,
+              cursor: "pointer",
+            }}
+          />
+        }
+        className="modal-jurado"
+        trigger={<span className="ver_convocatoria no-margin">Ver más</span>}
       >
-        <Button
-          color="black"
-          onClick={() => setOpen(false)}
-          className="btn btn-secondary"
+        <Modal.Header className="font-size-12px font-family-Work-Sans">
+          Postulación a jurado{" "}
+          <span className="font-size-14px font-family-Work-Sans">
+            Código {datos.identification_no}
+          </span>
+        </Modal.Header>
+        <Modal.Content style={{ display: "flex" }}>
+          <Modal.Description style={{ width: "5%" }} className="card-jurado">
+            <Card className="card-jurado-main">
+              <CardContent className="card-jurado-content">
+                <Icon
+                  name="user circle"
+                  size="massive"
+                  style={{ margin: "1rem" }}
+                  color="grey"
+                />
+                <CardHeader>
+                  {datos.first_name}
+                  {datos.middle_name}
+                  {datos.first_surname}
+                  {datos.second_surname}
+                </CardHeader>
+                {userState && (
+                  <>
+                    <CardDescription>
+                      C.C. <span>{datos.identification_cc}</span>
+                    </CardDescription>
+                    <CardDescription>
+                      País: <span>{datos.country}</span>
+                    </CardDescription>
+                    <CardDescription>
+                      Municipio: <span>{datos.city}</span>
+                    </CardDescription>
+                    <CardDescription>
+                      Tel: <span>{datos.landline_phone}</span>
+                    </CardDescription>
+                    <CardDescription>
+                      Cel: <span>{datos.mobile}</span>
+                    </CardDescription>
+                    <CardDescription>
+                      <span>{datos.email}</span>
+                    </CardDescription>
+                  </>
+                )}
+              </CardContent>
+            </Card>{" "}
+          </Modal.Description>
+          <Modal.Description
+            style={{ width: "58%", height: "100%", boxShadow: "none" }}
+            wrapped
+          >
+            <Tabs />
+          </Modal.Description>
+        </Modal.Content>
+        <Modal.Actions
+          style={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            boxShadow: "none",
+          }}
         >
-          Cancelar
-        </Button>
-        <Button onClick={() => setOpen(false)} className="btn btn-primary">
-          Postular jurado
-        </Button>
-      </Modal.Actions>
-    </Modal>
+          <Button
+            color="black"
+            onClick={() => setOpen(false)}
+            className="btn btn-secondary"
+          >
+            Cancelar
+          </Button>
+          <Button onClick={primerModalSubmitButton} className="btn btn-primary">
+            Postular jurado
+          </Button>
+        </Modal.Actions>
+      </Modal>
+      <Modal
+        size="fullscreen"
+        className="modal-jurado"
+        onClose={() => setStepOne(false)}
+        open={stepOne}
+      >
+        <Modal.Header>
+          Selecciona las lineas y categorías para el jurado
+        </Modal.Header>
+        <Modal.Content scrolling>
+          <Accordion />
+        </Modal.Content>
+        <Modal.Actions
+          style={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+            boxShadow: "none",
+          }}
+        >
+          <Button
+            content="cancelar"
+            className="btn"
+            onClick={() => setStepOne(false)}
+          />
+          <Button
+            content="Finalizar postulación de jurado"
+            className="btn"
+            onClick={() => setStepOne(false)}
+            primary
+          />
+        </Modal.Actions>
+      </Modal>
+    </>
   );
 };

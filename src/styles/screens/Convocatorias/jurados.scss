@@ -39,9 +39,15 @@
   position: absolute;
 }
 // Modal
+
 .modal-jurado {
   border-radius: 1rem !important;
   box-shadow: none !important;
+  height: 85% !important;
+  max-height: 85% !important;
+}
+.ui.fullscreen.modal {
+  left: auto !important;
 }
 .ui.tabular.menu .active.item {
   border-color: none;
@@ -165,7 +171,9 @@
   display: flex !important;
   justify-content: flex-end !important;
 }
-
+.ui.segment {
+  box-shadow: none;
+}
 .ant-table-thead tr {
   background-color: #ffffff !important;
   border-bottom: none !important;

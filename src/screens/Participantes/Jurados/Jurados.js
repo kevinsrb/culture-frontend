@@ -18,7 +18,6 @@ import { Checkbox } from "antd";
 
 import { useHistory } from "react-router";
 import { VerJurados } from "../../../components/Jurados/VerJurados";
-import Footer from "rc-table/lib/Footer";
 
 const filtrarPorArea = [
   {
@@ -157,10 +156,7 @@ export const Jurados = () => {
                     />
                   </Grid.Row>
                 </Grid.Column>
-                <Grid.Column
-                  width={userPermissions ? 8 : 4}
-                  className="justify-content-flex-start"
-                >
+                <Grid.Column width={4} className="justify-content-flex-start">
                   <Grid.Row>
                     <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
                       Filtrar por area
@@ -178,28 +174,24 @@ export const Jurados = () => {
                   </Grid.Row>
                 </Grid.Column>
 
-                {!userPermissions && (
-                  <Grid.Column width={4} className="justify-content-flex-start">
-                    <Grid.Row>
-                      <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
-                        Filtrar por Cateogría
-                      </label>
-                      <Dropdown
-                        fluid
-                        className="select-registros-filtrar-por-area no-margin"
-                        placeholder="Seleccionar..."
-                        defaultValue={filtrarPorArea}
-                        options={filtrarPorArea}
-                        icon={
-                          <Icon
-                            className="font-color-1FAEEF"
-                            name="angle down"
-                          />
-                        }
-                      />
-                    </Grid.Row>
-                  </Grid.Column>
-                )}
+                <Grid.Column width={4} className="justify-content-flex-start">
+                  <Grid.Row>
+                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                      Filtrar por Categoría
+                    </label>
+                    <Dropdown
+                      fluid
+                      className="select-registros-filtrar-por-area no-margin"
+                      placeholder="Seleccionar..."
+                      defaultValue={filtrarPorArea}
+                      options={filtrarPorArea}
+                      icon={
+                        <Icon className="font-color-1FAEEF" name="angle down" />
+                      }
+                    />
+                  </Grid.Row>
+                </Grid.Column>
+
                 {!userPermissions && (
                   <Grid.Column width={4} className="justify-content-flex-start">
                     <Grid.Row>
@@ -408,7 +400,12 @@ export const Jurados = () => {
                           {datos.identification_no}
                         </Table.Cell>
                         {!userPermissions && (
-                          <Table.Cell width={1}>Reprobado</Table.Cell>
+                          <Table.Cell
+                            width={2}
+                            className="font-size-12px font-family-Work-Sans"
+                          >
+                            Sin verificar
+                          </Table.Cell>
                         )}
                         {!userPermissions && (
                           <Table.Cell
@@ -423,7 +420,7 @@ export const Jurados = () => {
                             </span>
                           </Table.Cell>
                         )}
-                        <Table.Cell width={6}>
+                        <Table.Cell width={5}>
                           {datos.categories.map((category, index) => {
                             return (
                               category !== null && (
@@ -438,11 +435,16 @@ export const Jurados = () => {
                           })}
                         </Table.Cell>{" "}
                         {userPermissions && (
-                          <Table.Cell width={1}>Reprobado</Table.Cell>
+                          <Table.Cell
+                            width={2}
+                            className="font-size-12px font-family-Work-Sans"
+                          >
+                            Sin verificar
+                          </Table.Cell>
                         )}
                         <Table.Cell
                           className="font-size-12px font-family-Work-Sans"
-                          style={{ width: "10%" }}
+                          width={1}
                         >
                           <VerJurados
                             datos={datos}
