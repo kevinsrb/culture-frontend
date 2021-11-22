@@ -8,13 +8,17 @@ import {
   Breadcrumb,
   Icon,
   Dropdown,
-  Pagination,
+  Menu,
   Search,
 } from "semantic-ui-react";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+
 import { Checkbox } from "antd";
 
 import { useHistory } from "react-router";
 import { VerJurados } from "../../../components/Jurados/VerJurados";
+import Footer from "rc-table/lib/Footer";
 
 const filtrarPorArea = [
   {
@@ -48,78 +52,6 @@ const cantidadRegistros = [
   },
   { key: 3, value: 50, text: "50" },
   { key: 4, value: 100, text: "100" },
-];
-const JuradosLista = [
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "Postulado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No cumple",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
-  {
-    nombreCompleto: "Andres Julián Toro Gonzales",
-    nroDocumento: "1017196606",
-    codigo: "23401",
-    categoriasEspecificas: "Música popular, Formación en artes...",
-    estado: "No verificado",
-  },
 ];
 
 export const Jurados = () => {
@@ -160,6 +92,7 @@ export const Jurados = () => {
   //   const { name, value } = result || event.target;
   //   return setfiltros({ ...filtros, [name]: value });
   // };
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   return (
     <React.Fragment>
@@ -367,176 +300,195 @@ export const Jurados = () => {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
-              <Grid className="no-margin" style={{ paddingTop: "1%" }}>
-                <Grid.Row className="no-padding-top no-padding-left no-padding-bottom">
-                  <Grid.Column className="no-padding-left no-padding-right no-padding-bottom">
-                    <Table
-                      columns={8}
-                      className="border-right-left-none border-bottom-none"
+              <Table
+                columns={7}
+                compact
+                unstackable
+                striped
+                size="small"
+                className="border-right-left-none border-bottom-none"
+              >
+                <Table.Header fullWidth>
+                  <Table.Row>
+                    <Table.HeaderCell
+                      className="background-color-FFFFFF font-size-12px"
+                      width={1}
                     >
-                      <Table.Header>
-                        <Table.Row className="display-flex">
-                          <Table.HeaderCell
-                            style={{ width: "4%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            No.
-                          </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "19%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Nombres y apellidos
-                          </Table.HeaderCell>
-                          {userPermissions && (
-                            <Table.HeaderCell
-                              style={{ width: "14%" }}
-                              rowSpan="2"
-                              className="background-color-FFFFFF font-size-12px"
-                            >
-                              No. Documento
-                            </Table.HeaderCell>
-                          )}
-                          <Table.HeaderCell
-                            style={{ width: "7%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Código
-                          </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "30%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Areas
-                          </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "15%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Estado
-                          </Table.HeaderCell>
-                          <Table.HeaderCell
-                            style={{ width: "10%" }}
-                            rowSpan="2"
-                            className="background-color-FFFFFF font-size-12px"
-                          >
-                            Acciones
-                          </Table.HeaderCell>
-                        </Table.Row>
-                      </Table.Header>
-                    </Table>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row className="no-padding-top no-padding-left">
-                  <Grid.Column
-                    style={{ height: "360px", overflowY: "auto" }}
-                    className="no-padding-left no-padding-right"
-                  >
-                    <Table
-                      columns={8}
-                      className="border-right-left-none border-top-none"
+                      No.
+                    </Table.HeaderCell>
+                    <Table.HeaderCell
+                      className="background-color-FFFFFF font-size-12px"
+                      width={3}
                     >
-                      <Table.Body>
-                        {jurados.length ? (
-                          jurados.map((datos, index) => (
-                            <Table.Row className="display-flextable-cell">
-                              <Table.Cell
-                                style={{ width: "4%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {index + 1}
-                              </Table.Cell>
-                              <Table.Cell
-                                style={{ width: "19%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {datos.first_name}
-                                {datos.middle_name}
-                                {datos.first_surname}
-                                {datos.second_surname}
-                              </Table.Cell>
-                              {userPermissions && (
-                                <Table.Cell
-                                  style={{ width: "14%" }}
-                                  className="font-size-12px font-family-Work-Sans"
-                                  width={1}
-                                >
-                                  {datos.document_number}
-                                </Table.Cell>
-                              )}
-                              <Table.Cell
-                                style={{ width: "6%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {datos.identification_no}
-                              </Table.Cell>
-                              <Table.Cell
-                                style={{ width: "30%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                {datos.categories.map((category, index) => {
-                                  return (
-                                    category !== null && (
-                                      <span
-                                        key={index}
-                                        className="font-size-12px font-family-Work-Sans"
-                                      >
-                                        -{category + " "}
-                                      </span>
-                                    )
-                                  );
-                                })}
-                              </Table.Cell>{" "}
-                              <Table.Cell
-                                style={{ width: "15%" }}
-                                className={
-                                  datos.estado == "Postulado"
-                                    ? "texto-aprobado"
-                                    : "texto-reprobado"
-                                }
-                                width={1}
-                              >
-                                Reprobado
-                              </Table.Cell>{" "}
-                              <Table.Cell
-                                style={{ width: "10%" }}
-                                className="font-size-12px font-family-Work-Sans"
-                                width={1}
-                              >
-                                <VerJurados datos={datos} />
-                              </Table.Cell>
-                            </Table.Row>
-                          ))
-                        ) : (
-                          <Table.Row>
-                            <Table.Cell style={{ "line-height": "26px" }}>
-                              No hay datos por mostrar
-                            </Table.Cell>
-                          </Table.Row>
+                      Nombres y apellidos
+                    </Table.HeaderCell>
+                    {userPermissions && (
+                      <Table.HeaderCell
+                        className="background-color-FFFFFF font-size-12px"
+                        width={2}
+                      >
+                        No. Documento
+                      </Table.HeaderCell>
+                    )}
+                    <Table.HeaderCell
+                      className="background-color-FFFFFF font-size-12px"
+                      width={1}
+                    >
+                      Código
+                    </Table.HeaderCell>
+                    {!userPermissions && (
+                      <Table.HeaderCell
+                        className="background-color-FFFFFF font-size-12px"
+                        width={1}
+                      >
+                        Estado
+                      </Table.HeaderCell>
+                    )}
+                    {!userPermissions && (
+                      <Table.HeaderCell
+                        className="background-color-FFFFFF font-size-12px"
+                        width={1}
+                      >
+                        Areas
+                      </Table.HeaderCell>
+                    )}
+                    <Table.HeaderCell
+                      className="background-color-FFFFFF font-size-12px"
+                      width={6}
+                    >
+                      Categorías
+                    </Table.HeaderCell>
+                    {userPermissions && (
+                      <Table.HeaderCell
+                        className="background-color-FFFFFF font-size-12px"
+                        width={1}
+                      >
+                        Estado
+                      </Table.HeaderCell>
+                    )}
+                    <Table.HeaderCell
+                      className="background-color-FFFFFF font-size-12px"
+                      width={1}
+                    >
+                      Acciones
+                    </Table.HeaderCell>
+                  </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                  {jurados.length ? (
+                    jurados.map((datos, index) => (
+                      <Table.Row>
+                        <Table.Cell
+                          className="font-size-12px font-family-Work-Sans"
+                          width={1}
+                        >
+                          {index + 1}
+                        </Table.Cell>
+                        <Table.Cell
+                          className="font-size-12px font-family-Work-Sans"
+                          width={3}
+                        >
+                          {datos.first_name}
+                          {datos.middle_name}
+                          {datos.first_surname}
+                          {datos.second_surname}
+                        </Table.Cell>
+                        {userPermissions && (
+                          <Table.Cell
+                            className="font-size-12px font-family-Work-Sans"
+                            width={2}
+                          >
+                            {datos.document_number}
+                          </Table.Cell>
                         )}
-                      </Table.Body>
-                    </Table>
-                  </Grid.Column>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid.Column className="container-pagination-jurados">
-                    <Pagination
-                      totalPages="10"
-                      activePage="1"
-                      // onPageChange={changePagination}
-                    />
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                        <Table.Cell
+                          className="font-size-12px font-family-Work-Sans"
+                          width={1}
+                        >
+                          {datos.identification_no}
+                        </Table.Cell>
+                        {!userPermissions && (
+                          <Table.Cell width={1}>Reprobado</Table.Cell>
+                        )}
+                        {!userPermissions && (
+                          <Table.Cell
+                            className="font-size-12px font-family-Work-Sans"
+                            width={1}
+                          >
+                            <span
+                              key={index}
+                              className="font-size-12px font-family-Work-Sans"
+                            >
+                              {datos.knowledge_area + " "}
+                            </span>
+                          </Table.Cell>
+                        )}
+                        <Table.Cell width={6}>
+                          {datos.categories.map((category, index) => {
+                            return (
+                              category !== null && (
+                                <span
+                                  key={index}
+                                  className="font-size-12px font-family-Work-Sans"
+                                >
+                                  -{category + " "}
+                                </span>
+                              )
+                            );
+                          })}
+                        </Table.Cell>{" "}
+                        {userPermissions && (
+                          <Table.Cell width={1}>Reprobado</Table.Cell>
+                        )}
+                        <Table.Cell
+                          className="font-size-12px font-family-Work-Sans"
+                          style={{ width: "10%" }}
+                        >
+                          <VerJurados
+                            datos={datos}
+                            userState={userPermissions}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    ))
+                  ) : jurados.length ? (
+                    <Table.Row>
+                      <Table.Cell style={{ "line-height": "26px" }}>
+                        No hay datos por mostrar
+                      </Table.Cell>
+                    </Table.Row>
+                  ) : (
+                    <Table.Row
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        width: "100%",
+                        margin: "10px",
+                      }}
+                    >
+                      <Spin indicator={antIcon} />
+                    </Table.Row>
+                  )}
+                </Table.Body>
+                <Table.Footer fullWidth>
+                  <Table.Row>
+                    <Table.HeaderCell colSpan="7">
+                      <Menu floated="right" pagination>
+                        <Menu.Item as="a" icon>
+                          <Icon name="chevron left" />
+                        </Menu.Item>
+                        <Menu.Item as="a">1</Menu.Item>
+                        <Menu.Item as="a">2</Menu.Item>
+                        <Menu.Item as="a">3</Menu.Item>
+                        <Menu.Item as="a">4</Menu.Item>
+                        <Menu.Item as="a" icon>
+                          <Icon name="chevron right" />
+                        </Menu.Item>
+                      </Menu>
+                    </Table.HeaderCell>
+                  </Table.Row>
+                </Table.Footer>
+              </Table>
             </Segment>
           </Form>
         </Grid.Column>

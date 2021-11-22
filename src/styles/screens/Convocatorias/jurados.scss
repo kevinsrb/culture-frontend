@@ -21,6 +21,7 @@
 .formulario-palabra-clave .ui.input {
   width: 100%;
 }
+
 .formulario-palabra-clave input {
   width: 100% !important;
   height: 38px !important;
@@ -30,6 +31,9 @@
   border: 1px solid rgba(34, 36, 38, 0.15);
   border-radius: 4px !important;
   color: #1b1c1d;
+}
+.texto-no-wrap {
+  white-space: nowrap;
 }
 .celda-estatica-adminconvocatoria {
   position: absolute;

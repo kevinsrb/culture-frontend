@@ -18,6 +18,7 @@ import {
   CardDescription,
   Icon,
 } from "semantic-ui-react";
+import { Radio } from "antd";
 
 // import {
 //   documentosConvocatoria,
@@ -33,10 +34,14 @@ import {
 //   nombreConvocatoria,
 // } from "../../store/actions/participantesAction";
 
-export const VerJurados = ({ datos }) => {
+export const VerJurados = ({ datos, userState }) => {
   const dispatch = useDispatch();
   const history = useHistory();
-
+  const [cumpleRequisitos, setCumpleRequisitos] = useState(false);
+  const onChange = (e) => {
+    e.preventDefault();
+    setCumpleRequisitos(e.target.value);
+  };
   const [open, setOpen] = useState(false);
   const {
     idconvocatorias,
@@ -288,23 +293,44 @@ export const VerJurados = ({ datos }) => {
   const TabFive = () => {
     return (
       <>
-        <Header size="small" as="h2">
-          Comentarios evaluador de jurados
-        </Header>
-        <div className="descripcion-del-jurado">
-          <p className="font-size-12px font-family-Work-Sans ">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
-            finibus suscipit quam, at faucibus felis lacinia in. Vestibulum quis
-            consectetur odio, cursus imperdiet massa. Nulla sodales vulputate
-            tortor, eu lacinia justo volutpat vel. Vivamus vel nisi suscipit,
-            consequat tellus a, iaculis dui. Aliquam vulputate eros ut accumsan
-            commodo. Nullam vel ipsum ac velit posuere condimentum a sit amet
-            odio. Duis leo enim, rhoncus a posuere eget, posuere eget orci.
-            Quisque eleifend faucibus purus, at aliquet orci mollis a. Etiam
-            cursus nunc at magna hendrerit, ut fringilla nunc vehicula. Mauris
-            interdum ultricies gravida.
-          </p>
-        </div>
+        {userState ? (
+          <>
+            <Header size="small" as="h2">
+              Comentarios evaluador de jurados
+            </Header>
+            <div className="descripcion-del-jurado">
+              <p className="font-size-12px font-family-Work-Sans ">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam
+                finibus suscipit quam, at faucibus felis lacinia in. Vestibulum
+                quis consectetur odio, cursus imperdiet massa. Nulla sodales
+                vulputate tortor, eu lacinia justo volutpat vel. Vivamus vel
+                nisi suscipit, consequat tellus a, iaculis dui. Aliquam
+                vulputate eros ut accumsan commodo. Nullam vel ipsum ac velit
+                posuere condimentum a sit amet odio. Duis leo enim, rhoncus a
+                posuere eget, posuere eget orci. Quisque eleifend faucibus
+                purus, at aliquet orci mollis a. Etiam cursus nunc at magna
+                hendrerit, ut fringilla nunc vehicula. Mauris interdum ultricies
+                gravida.
+              </p>
+            </div>{" "}
+          </>
+        ) : (
+          <>
+            <Header size="small" as="h2">
+              ¿Cumple con los requisitos para ser jurado?
+            </Header>
+            <div>
+              <Radio.Group
+                onChange={onChange}
+                value={cumpleRequisitos}
+                defaultValue={[]}
+              >
+                <Radio value={true}>Si</Radio>
+                <Radio value={false}>No</Radio>
+              </Radio.Group>
+            </div>
+          </>
+        )}
       </>
     );
   };
@@ -388,24 +414,28 @@ export const VerJurados = ({ datos }) => {
                 {datos.first_surname}
                 {datos.second_surname}
               </CardHeader>
-              <CardDescription>
-                C.C. <span>{datos.identification_cc}</span>
-              </CardDescription>
-              <CardDescription>
-                País: <span>{datos.country}</span>
-              </CardDescription>
-              <CardDescription>
-                Municipio: <span>{datos.city}</span>
-              </CardDescription>
-              <CardDescription>
-                Tel: <span>{datos.landline_phone}</span>
-              </CardDescription>
-              <CardDescription>
-                Cel: <span>{datos.mobile}</span>
-              </CardDescription>
-              <CardDescription>
-                <span>{datos.email}</span>
-              </CardDescription>
+              {userState && (
+                <>
+                  <CardDescription>
+                    C.C. <span>{datos.identification_cc}</span>
+                  </CardDescription>
+                  <CardDescription>
+                    País: <span>{datos.country}</span>
+                  </CardDescription>
+                  <CardDescription>
+                    Municipio: <span>{datos.city}</span>
+                  </CardDescription>
+                  <CardDescription>
+                    Tel: <span>{datos.landline_phone}</span>
+                  </CardDescription>
+                  <CardDescription>
+                    Cel: <span>{datos.mobile}</span>
+                  </CardDescription>
+                  <CardDescription>
+                    <span>{datos.email}</span>
+                  </CardDescription>
+                </>
+              )}
             </CardContent>
           </Card>{" "}
         </Modal.Description>
