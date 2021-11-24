@@ -6,14 +6,26 @@ const PersonaNatural = () => {
   const { Title, Text, Paragraph } = Typography;
   const [form] = Form.useForm();
   const [requiredMark, setRequiredMarkType] = useState<any>("optional");
+  const [diparmentShow, setDiparmentShow] = useState<any>(true);
+  const [diparment, setDiparment] = useState<any>("columbia");
   // @ts-ignore
   const onRequiredTypeChange = ({ requiredMarkValue }) => {
     setRequiredMarkType(requiredMarkValue);
   };
+  function selectCountryOption(item: any) {
+    setDiparment(item);
+    if (item == "india") {
+      setDiparmentShow(false);
+    } else {
+      setDiparmentShow(true);
+    }
+  }
   return (
     <div>
-      {//@ts-ignore
-        <Form requiredMark={requiredMark}
+      {
+        //@ts-ignore
+        <Form
+          requiredMark={requiredMark}
           layout="vertical"
           initialValues={{
             requiredMarkValue: requiredMark,
@@ -86,20 +98,27 @@ const PersonaNatural = () => {
 
             <Col span={8}>
               <Form.Item label="Pais" required>
-                <Select>
-                  <Select.Option value="demo">pais</Select.Option>
+                <Select
+                  style={{ width: "100%" }}
+                  placeholder="Select Pais"
+                  optionFilterProp="children"
+                  value={diparment}
+                  onChange={(e: any) => selectCountryOption(e)}
+                >
+                  <Select.Option value="columbia">Columbia</Select.Option>
+                  <Select.Option value="india">India</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
 
-            <Col span={8}>
+            <Col span={8} className={diparmentShow ? "showFild" : "hideFild"}>
               <Form.Item label="Departamento" required>
                 <Select>
                   <Select.Option value="demo">pais</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
-            <Col span={8}>
+            <Col span={8} className={diparmentShow ? "showFild" : "hideFild"}>
               <Form.Item label="Ciudad" required>
                 <Select>
                   <Select.Option value="demo">pais</Select.Option>

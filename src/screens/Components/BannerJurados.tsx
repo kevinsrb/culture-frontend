@@ -1,8 +1,8 @@
 import React from "react";
 // styled components
-import { Row, Col, Image } from "antd";
+import { Row, Col, Image, Modal } from "antd";
 // images
-import Imageconvocatoria from "../../../assets/landing/ImageConvocatoria.png";
+import Imageconvocatoria from "./../../assets/landing/ImageConvocatoria.png";
 
 // models
 
@@ -11,7 +11,12 @@ interface IProps {
 }
 export const BannerJurados: React.FC<IProps> = (props: IProps) => {
   return (
-    <Row className="container-background-participantes">
+    <Row
+      className="container-background-participantes"
+      style={{
+        backgroundColor: "#ae3e97",
+      }}
+    >
       <Row className="subcontainer-background-participantes">
         <Col
           span={2}

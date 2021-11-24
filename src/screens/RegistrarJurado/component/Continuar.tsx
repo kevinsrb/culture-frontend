@@ -16,8 +16,11 @@ const Continuar = () => {
           minHeight: 400,
         }}
       >
-        <Title level={5}>iGenial Te has registrado con existo.</Title>
+        <Title level={4} className="font-family-Montserrat-Bold">
+          iGenial Te has registrado con existo.
+        </Title>
         <Paragraph
+          className="font-family-Montserrat-Regular"
           style={{
             maxWidth: 750,
             textAlign: "center",

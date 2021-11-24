@@ -12,24 +12,27 @@ import { TextoinicialNumero } from "../Components/TextoinicialNumero";
 import PersonaNatural from "./component/PersonaNatural";
 import PersonalJuridica from "./component/PersonaJuridica";
 import Continuar from "./component/Continuar";
+import { useHistory } from "react-router-dom";
 
 const RegistrarJurado = () => {
   const { Title, Text, Paragraph } = Typography;
-
+  const history = useHistory();
   const [value, setValue] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
-  const onChange = (e:any) => {
+  const onChange = (e: any) => {
     setValue(e.target.value);
   };
 
-  function onChanges(e:any) {
+  function onChanges(e: any) {
     console.log(`checked = ${e.target.checked}`);
   }
 
   return (
     <div>
       <Header />
+      <BannerJurados BannerText="Banco de Jurados" />
+
       <Col
         className="box-container "
         style={{
@@ -38,10 +41,10 @@ const RegistrarJurado = () => {
       >
         {value !== 3 && (
           <>
-            {" "}
             <Col
               style={{
                 borderBottom: "0.1px solid #a9a9a9",
+                paddingBottom: 10,
               }}
             >
               <Row
@@ -50,8 +53,13 @@ const RegistrarJurado = () => {
                   marginTop: 10,
                 }}
               >
-                <Paragraph>
-                  <b>
+                <Paragraph
+                  style={{
+                    fontSize: 17,
+                  }}
+                  className="font-family-Montserrat-Regular"
+                >
+                  <b className="font-family-Montserrat-Bold">
                     Completa el formulario de reistrio para participar en las
                     convocatories.
                   </b>{" "}
@@ -59,13 +67,15 @@ const RegistrarJurado = () => {
                   marcados como opcionales.
                 </Paragraph>
               </Row>
-              {//@ts-ignore
-                <Text level={4} className="heading_regi">
-                Formulario de registro
-              </Text>
+              {
+                <Text className="heading_regi font-family-Montserrat-Regular">
+                  Formulario de registro
+                </Text>
               }
             </Col>
-            <Text className="radio_label_regi">Tipa de socidade</Text>
+            <Text className="radio_label_regi font-family-Montserrat-Bold">
+              Tipa de sociedad
+            </Text>
             <Row className="btn_con_re">
               <Radio.Group onChange={onChange} style={{}} value={value}>
                 <Radio value={1}>Persona Natural</Radio>
@@ -95,10 +105,17 @@ const RegistrarJurado = () => {
             <Col span={20}></Col>
             <Col>
               <Button
-                onClick={() => setValue(value === 3 ? 0 : 3)}
+                onClick={() => {
+                  console.log("value: ", value);
+                  if (value === 3) {
+                    history.push("/cambiarContrasena");
+                  } else {
+                    setValue(3);
+                  }
+                }}
                 type="primary"
                 htmlType="submit"
-                className='reg-form--btn'
+                className="reg-form--btn"
               >
                 CONTINUAR
               </Button>

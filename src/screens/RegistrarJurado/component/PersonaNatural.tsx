@@ -7,20 +7,20 @@ const PersonaNatural = () => {
   const [form] = Form.useForm();
   const [requiredMark, setRequiredMarkType] = useState<any>("optional");
 
-  const [diparmentShow, setDiparmentShow]= useState<any>(true);
+  const [diparmentShow, setDiparmentShow] = useState<any>(true);
+  const [diparment, setDiparment] = useState<any>("columbia");
 
   const onRequiredTypeChange = ({ requiredMarkValue }: any) => {
     setRequiredMarkType(requiredMarkValue);
   };
 
   function selectCountryOption(item: any) {
-      
-    if(item =='columbia'){
-      setDiparmentShow(false)
-    }else{
-      setDiparmentShow(true)
+    setDiparment(item);
+    if (item == "india") {
+      setDiparmentShow(false);
+    } else {
+      setDiparmentShow(true);
     }
-
   }
   return (
     <div>
@@ -115,35 +115,31 @@ const PersonaNatural = () => {
             </Row>
           </Col>
           <Col span={8}>
-            {/* <Form.Item label="Pais" required>
-              <Select onChange={(e:any)=>selectCountryOption(e)}>
-                <Select.Option value="pais">pais</Select.Option>
-                <Select.Option value="pais">India</Select.Option>
-              </Select>
-            </Form.Item> */}
             <label>Pais</label>
             <Select
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               placeholder="Select Pais"
               optionFilterProp="children"
-              onChange={(e:any)=>selectCountryOption(e)}
+              value={diparment}
+              onChange={(e: any) => selectCountryOption(e)}
             >
               <Select.Option value="columbia">Columbia</Select.Option>
-              <Select.Option value="India">India</Select.Option>
-            </Select>,
+              <Select.Option value="india">India</Select.Option>
+            </Select>
+            ,
           </Col>
 
-          <Col span={8} className={(diparmentShow)?'showFild':'hideFild'}>
+          <Col span={8} className={diparmentShow ? "showFild" : "hideFild"}>
             <Form.Item label="Departamento" required>
               <Select>
-                <Select.Option value="demo">pais</Select.Option>
+                <Select.Option value="demo">Departamento</Select.Option>
               </Select>
             </Form.Item>
           </Col>
-          <Col span={8} className={(diparmentShow)?'showFild':'hideFild'}>
+          <Col span={8} className={diparmentShow ? "showFild" : "hideFild"}>
             <Form.Item label="Ciudad" required>
               <Select>
-                <Select.Option value="demo">pais</Select.Option>
+                <Select.Option value="demo">Ciudad</Select.Option>
               </Select>
             </Form.Item>
           </Col>

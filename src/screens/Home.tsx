@@ -4,7 +4,16 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { user_token } from "../store/actions/userAction";
 import axios from "axios";
-import { Form, Image, Header, Input, Checkbox, Button, Grid, Divider } from "semantic-ui-react";
+import {
+  Form,
+  Image,
+  Header,
+  Input,
+  Checkbox,
+  Button,
+  Grid,
+  Divider,
+} from "semantic-ui-react";
 import loginimage from "../assets/login.png";
 import logo from "../assets/escudoAlcaldia.png";
 
@@ -37,7 +46,10 @@ export default function Home() {
   const onChangeInput = (e) => {
     setBoderState({ ...borderState, [e.target.name]: "border-color-707070" });
     setErrorState({ ...errorState, [e.target.name]: false });
-    return setPrincipalState({ ...principalState, [e.target.name]: e.target.value });
+    return setPrincipalState({
+      ...principalState,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const ingresarUsuario = async () => {
@@ -77,10 +89,13 @@ export default function Home() {
     }
 
     try {
-      let token = await axios.post(`${process.env.REACT_APP_PAGE_HOST}api/autenticacion`, {
-        idusuario,
-        contraseña,
-      });
+      let token = await axios.post(
+        `${process.env.REACT_APP_PAGE_HOST}api/autenticacion`,
+        {
+          idusuario,
+          contraseña,
+        }
+      );
       localStorage.setItem("token", token.data);
       dispatch(user_token(token.data));
       history.push("/adminconvocatorias");
@@ -98,7 +113,11 @@ export default function Home() {
       });
     }
 
-    return setPrincipalState({ ...principalState, tipopassword: "input", buttonVER: "button-contraseña-login-show" });
+    return setPrincipalState({
+      ...principalState,
+      tipopassword: "input",
+      buttonVER: "button-contraseña-login-show",
+    });
   }
   return (
     <div>
@@ -124,7 +143,9 @@ export default function Home() {
                 </Header>
               </Form.Field>
               <Form.Field className="container-inputs-login usuario-item-login">
-                <label className="font-color-4B4B4B font-size-12px">Numero de identificación</label>
+                <label className="font-color-4B4B4B font-size-12px">
+                  Numero de identificación
+                </label>
                 <Input
                   name="idusuario"
                   onChange={onChangeInput}
@@ -132,23 +153,37 @@ export default function Home() {
                   className={borderState.idusuario}
                 />
                 {errorState.idusuario ? (
-                  <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
+                  <Header
+                    style={{ paddingTop: "3%" }}
+                    className="font-size-10px font-color-AD0808 no-margin"
+                  >
                     Campo obligatorio
                   </Header>
                 ) : null}
               </Form.Field>
               <Form.Field className="container-inputs-login">
-                <label className="font-color-4B4B4B font-size-12px">Digite su contraseña</label>
+                <label className="font-color-4B4B4B font-size-12px">
+                  Digite su contraseña
+                </label>
                 <Input
                   name="contraseña"
                   onChange={onChangeInput}
                   value={principalState.contraseña}
                   className={borderState.contraseña}
                   type={principalState.tipopassword}
-                  action={<Button className={principalState.buttonVER} content="VER" onClick={mostrarContraseña} />}
+                  action={
+                    <Button
+                      className={principalState.buttonVER}
+                      content="VER"
+                      onClick={mostrarContraseña}
+                    />
+                  }
                 />
                 {errorState.contraseña ? (
-                  <Header style={{ paddingTop: "3%" }} className="font-size-10px font-color-AD0808 no-margin">
+                  <Header
+                    style={{ paddingTop: "3%" }}
+                    className="font-size-10px font-color-AD0808 no-margin"
+                  >
                     Campo obligatorio
                   </Header>
                 ) : null}
@@ -159,7 +194,10 @@ export default function Home() {
                   className="sub-container-checkbox-login checkbox-login font-family-Montserrat-Regular font-size-12px"
                 />
               </Form.Field>
-              <Form.Field className="container-space-between" style={{ paddingTop: "10%", paddingBottom: "10%" }}>
+              <Form.Field
+                className="container-space-between"
+                style={{ paddingTop: "10%", paddingBottom: "10%" }}
+              >
                 <Button
                   basic
                   color="blue"
@@ -167,6 +205,15 @@ export default function Home() {
                   onClick={() => history.push("/registrarJurado")}
                 >
                   Registrarse
+                </Button>
+
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/invitacionJurado")}
+                >
+                  Invitacion Jurado
                 </Button>
                 {/* <Button
                   basic
@@ -188,16 +235,25 @@ export default function Home() {
                   disabled={principalState.disbledIngresar}
                   color="blue"
                   className="boton-ingresar-login"
-                  onClick={() => history.push('/jurados')}>Juries</Button>
+                  onClick={() => history.push("/jurados")}
+                >
+                  Juries
+                </Button>
 
                 <Button
                   disabled={principalState.disbledIngresar}
                   color="blue"
                   className="boton-ingresar-login"
-                  onClick={() => history.push('/administracionJurados')}>Administración jurados</Button>
+                  onClick={() => history.push("/administracionJurados")}
+                >
+                  Administración jurados
+                </Button>
               </Form.Field>
               <Divider clearing />
-              <Header as="h3" className="font-color-632264 login--forgo-txt font-size-12px font-family-Montserrat-Thin texto-alineado-centro">
+              <Header
+                as="h3"
+                className="font-color-632264 login--forgo-txt font-size-12px font-family-Montserrat-Thin texto-alineado-centro"
+              >
                 ¿Olvido la contraseña?&nbsp;&nbsp;&nbsp;&nbsp;
                 <a>Recupérala AQUI</a>
               </Header>

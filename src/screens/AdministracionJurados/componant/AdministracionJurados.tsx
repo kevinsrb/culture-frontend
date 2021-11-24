@@ -25,7 +25,7 @@ export default function AdministracionJurados() {
         setVisible(true)
     };
 
-    const columns:any = [
+    const columns: any = [
         {
             title: 'No',
             width: 25,
@@ -281,7 +281,6 @@ export default function AdministracionJurados() {
                                                             allowClear
                                                             style={{ width: 230 }}
                                                             className='form--selct'
-
                                                         >
                                                             <Option value="male">male</Option>
                                                             <Option value="female">female</Option>
@@ -293,8 +292,13 @@ export default function AdministracionJurados() {
                                         </Form>
                                     </Content>
                                     <Content className='adt-table--box'>
-                                        <Content className='adt--table-box adt-table--hight-box'>
-                                            <Table columns={columns} dataSource={data} scroll={{ x: 1100 }} className='adt--form-table'  />
+                                        {/* <Content className='adt--table-box adt-table--hight-box'>
+                                            <Table columns={columns} dataSource={data} scroll={{ x: 1100 }} className='adt--form-table' />
+
+                                        </Content> */}
+
+                                        <Content >
+                                            <Table columns={columns} dataSource={data} scroll={{ x: 1100 }} className='adt--form-table' />
 
                                         </Content>
 
@@ -304,7 +308,7 @@ export default function AdministracionJurados() {
                             </Content>
                         </Col>
                     </Row>
-                    
+
                 </Content>
             </Layout>
 

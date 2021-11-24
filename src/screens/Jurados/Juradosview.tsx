@@ -17,7 +17,7 @@ import {
 import Sidebar from "../../components/NavBar";
 import HeaderMenu from "../../components/Header";
 
-import "../../App.css";
+import "../../App.scss";
 export default function Juradosview() {
   const history = useHistory();
 
@@ -26,7 +26,6 @@ export default function Juradosview() {
   }, []);
 
   async function setShowPages() {
-
     // @ts-ignore
     await localStorage.setItem("showPage", 0);
   }
@@ -65,12 +64,12 @@ export default function Juradosview() {
                     <Divider clearing />
 
                     <Container
-
                       // @ts-ignore
-                      textAlign="center jura--btn-box">
+                      textAlign="center jura--btn-box"
+                    >
                       <Button
-                        onClick={() =>
-                          history.push("/juradosRegistration")
+                        onClick={
+                          () => history.push("/juradosRegistration")
                           // localStorage.setItem("showPage", 1)
                         }
                         content="btn btn-primary jura--regs-form-btn"

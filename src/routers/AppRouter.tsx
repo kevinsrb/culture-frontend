@@ -1,4 +1,9 @@
-import { Route, BrowserRouter as Router, Switch, useLocation } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Switch,
+  useLocation,
+} from "react-router-dom";
 import React, { FC } from "react";
 
 import CreateNotice from "../screens/Convocatoria/Notices/CreateNotice";
@@ -25,13 +30,15 @@ import { BuscarConvocatoria } from "../screens/Participantes/BuscarConvocatoria/
 
 import Jurados from "../screens/Jurados/Juradosview";
 import JuradosRegistration from "../screens/Jurados/Regiterform/Index";
-import AdministracionJurados from '../screens/AdministracionJurados'
+import AdministracionJurados from "../screens/AdministracionJurados";
+import InvitacionJurado from "../screens/InvitacionJurado";
 
-import ApiEndPoint from '../utils/apiEndPoints'
+import ApiEndPoint from "../utils/apiEndPoints";
 import { apiCall } from "../utils/httpClient";
 import RegistrarJurado from "../screens/RegistrarJurado";
+import CambiarContrasena from "../screens/RegistrarJurado/CambiarContrasena";
 interface Props {
-  children: any
+  children: any;
   // any props that come into the component
 }
 
@@ -44,27 +51,28 @@ const ScrollToTop: FC<Props> = ({ children }) => {
 };
 
 export const AppRouter = () => {
-
   useEffect(() => {
-    getAPiData()
-
+    getAPiData();
   }, []);
 
-
   async function getAPiData() {
-    const params = { type: 'gender' }
-    const { data } = await apiCall('POST', ApiEndPoint.MASTERS, params)
-
+    const params = { type: "gender" };
+    const { data } = await apiCall("POST", ApiEndPoint.MASTERS, params);
   }
 
   return (
-    <Router >
+    <Router>
       <ScrollToTop>
         <div className="App">
           <Switch>
             <Route path="/registrarJurado">
-
               <RegistrarJurado />
+            </Route>
+            <Route path="/cambiarContrasena">
+              <CambiarContrasena />
+            </Route>
+            <Route path="/invitacionJurado">
+              <InvitacionJurado />
             </Route>
             <Route path="/administracionJurados">
               {/* <Navbar /> */}
