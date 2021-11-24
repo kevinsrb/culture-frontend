@@ -3,6 +3,10 @@
   flex-direction: row;
   justify-content: end;
 }
+.ui.segment {
+  box-shadow: none;
+  border: none;
+}
 
 .select-registros-filtrar-por-area {
   border: 1px solid rgba(34, 36, 38, 0.15);
@@ -33,7 +37,7 @@
   color: #1b1c1d;
 }
 .texto-no-wrap {
-  white-space: nowrap;
+  white-space: nowrap !important;
 }
 .celda-estatica-adminconvocatoria {
   position: absolute;

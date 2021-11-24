@@ -1,4 +1,4 @@
-import React, { Children, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Form,
   Segment,
@@ -10,33 +10,45 @@ import {
   Dropdown,
   Menu,
   Search,
+  Button,
 } from "semantic-ui-react";
-import { Spin } from "antd";
+import { Spin, Checkbox, Select } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
-
-import { Checkbox } from "antd";
-
-import { useHistory } from "react-router";
 import { VerJurados } from "../../../components/Jurados/VerJurados";
+import { ExportarDatosJurado } from "../../../components/Jurados/ExportarDatosJurado";
+
+const { Option } = Select;
 
 const filtrarPorArea = [
   {
     key: 1,
     value: 1,
-    text: [],
+    text: "Adquisición de equipos y herramientas tecnológicas",
   },
   {
     key: 2,
     value: 2,
-    text: "Adquisición de equipos y herramientas tecnológicas",
+    text: "Apoyo para la participación en ferias y eventos del sector",
   },
   {
     key: 3,
     value: 3,
-    text: "Apoyo para la participación en ferias y eventos del sector",
+    text: "Áreas integradas",
   },
-  { key: 4, value: 4, text: "Áreas integradas" },
-  { key: 5, value: 5, text: "Arte" },
+  { key: 4, value: 4, text: "Arte" },
+];
+const filtrarPorEstado = [
+  {
+    key: 1,
+    value: 1,
+    text: "Aprobado",
+  },
+  {
+    key: 2,
+    value: 2,
+    text: "Reprobado",
+  },
+  { key: 3, value: 3, text: "Sin verificar" },
 ];
 const cantidadRegistros = [
   {
@@ -65,34 +77,102 @@ export const Jurados = () => {
   useEffect(() => {
     obtenerJurados(url);
   }, []);
-  // const initialState = {
-  //   area: [],
-  //   linea_convocatoria: [],
-  //   tipo_participante: [],
-  //   categoria_linea_convocatoria: [],
-  // };
 
-  const initialStateFiltros = {
-    datossinfiltro: [],
-    numeroregistros: 0,
-  };
-
-  //variables
-  // let LineaConvocatoriaOptionsMap = {};
-  // let categoriaslineasconvocatoriaMap;
-
-  const history = useHistory();
-
-  // useEffect(() => {
-  //   primeroDatostabla();
-  // }, []);
-
-  // const handleInputChange = (event, result) => {
-  //   const { name, value } = result || event.target;
-  //   return setfiltros({ ...filtros, [name]: value });
-  // };
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const FiltrosComponent = () => {
+    return (
+      <Segment
+        className={userPermissions ? "segment-shadow" : "segment-no-shadow"}
+      >
+        <Grid>
+          <Grid.Row>
+            <Grid.Column
+              width={userPermissions ? 8 : 4}
+              className="justify-content-flex-start"
+            >
+              <Grid.Row>
+                <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                  Filtrar por palabra clave o código
+                </label>
+                <Search
+                  placeholder="Buscar por palabra clave..."
+                  className="formulario-palabra-clave no-margin"
+                />
+              </Grid.Row>
+            </Grid.Column>
+            <Grid.Column width={4} className="justify-content-flex-start">
+              <Grid.Row>
+                <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                  Filtrar por area
+                </label>
+                <Dropdown
+                  clearable
+                  floating
+                  fluid
+                  className="select-registros-filtrar-por-area no-margin"
+                  placeholder="Seleccionar..."
+                  options={filtrarPorArea}
+                  icon={
+                    <Icon className="font-color-1FAEEF" name="angle down" />
+                  }
+                />
+              </Grid.Row>
+            </Grid.Column>
 
+            <Grid.Column width={4} className="justify-content-flex-start">
+              <Grid.Row>
+                <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                  Filtrar por Categoría
+                </label>
+                <Dropdown
+                  clearable
+                  floating
+                  labeled
+                  multiple
+                  direction={userPermissions ? "left" : "right"}
+                  fluid
+                  className="select-registros-filtrar-por-area no-margin"
+                  placeholder="Seleccionar..."
+                  options={filtrarPorArea}
+                  icon={
+                    <Icon className="font-color-1FAEEF" name="angle down" />
+                  }
+                />
+              </Grid.Row>
+            </Grid.Column>
+
+            {!userPermissions && (
+              <Grid.Column width={4} className="justify-content-flex-start">
+                <Grid.Row>
+                  <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
+                    Filtrar por Estado
+                  </label>
+                  <Select
+                    style={{
+                      width: "100%",
+                      borderRadius: "4px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-around",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    placeholder="Seleccionar..."
+                    optionFilterProp="children"
+                    allowClear
+                  >
+                    <Option value="0">Aprobado</Option>
+                    <Option value="1">Reprobado</Option>
+                    <Option value="2">Sin verificar</Option>
+                  </Select>
+                </Grid.Row>
+              </Grid.Column>
+            )}
+          </Grid.Row>
+        </Grid>
+      </Segment>
+    );
+  };
   return (
     <React.Fragment>
       <Grid className="no-margin">
@@ -128,95 +208,8 @@ export const Jurados = () => {
           <Checkbox onChange={() => setUserPermissions(!userPermissions)}>
             {userPermissions ? <h1>Administrador</h1> : <h1>Evaluador</h1>}
           </Checkbox>
-          <h1>Gestionar postulación de jurados</h1>
-          <Segment className="segment-shadow">
-            <Grid>
-              <Grid.Row>
-                <Grid.Column
-                  width={userPermissions ? 8 : 4}
-                  className="justify-content-flex-start"
-                >
-                  <Grid.Row>
-                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
-                      Filtrar por palabra clave o código
-                    </label>
-                    <Search
-                      placeholder="Buscar por palabra clave..."
-                      className="formulario-palabra-clave no-margin"
-                      // loading={loading}
-                      // onResultSelect={(e, data) =>
-                      //   dispatch({
-                      //     type: "UPDATE_SELECTION",
-                      //     selection: data.result.title,
-                      //   })
-                      // }
-                      // onSearchChange={handleSearchChange}
-                      // results={results}
-                      // value={value}
-                    />
-                  </Grid.Row>
-                </Grid.Column>
-                <Grid.Column width={4} className="justify-content-flex-start">
-                  <Grid.Row>
-                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
-                      Filtrar por area
-                    </label>
-                    <Dropdown
-                      fluid
-                      className="select-registros-filtrar-por-area no-margin"
-                      placeholder="Seleccionar..."
-                      defaultValue={filtrarPorArea}
-                      options={filtrarPorArea}
-                      icon={
-                        <Icon className="font-color-1FAEEF" name="angle down" />
-                      }
-                    />
-                  </Grid.Row>
-                </Grid.Column>
-
-                <Grid.Column width={4} className="justify-content-flex-start">
-                  <Grid.Row>
-                    <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
-                      Filtrar por Categoría
-                    </label>
-                    <Dropdown
-                      fluid
-                      className="select-registros-filtrar-por-area no-margin"
-                      placeholder="Seleccionar..."
-                      defaultValue={filtrarPorArea}
-                      options={filtrarPorArea}
-                      icon={
-                        <Icon className="font-color-1FAEEF" name="angle down" />
-                      }
-                    />
-                  </Grid.Row>
-                </Grid.Column>
-
-                {!userPermissions && (
-                  <Grid.Column width={4} className="justify-content-flex-start">
-                    <Grid.Row>
-                      <label className="font-family-Montserrat-Regular font-size-16px font-color-000">
-                        Filtrar por Estado
-                      </label>
-                      <Dropdown
-                        fluid
-                        className="select-registros-filtrar-por-area no-margin"
-                        placeholder="Seleccionar..."
-                        defaultValue={filtrarPorArea}
-                        options={filtrarPorArea}
-                        icon={
-                          <Icon
-                            className="font-color-1FAEEF"
-                            name="angle down"
-                          />
-                        }
-                      />
-                    </Grid.Row>
-                  </Grid.Column>
-                )}
-              </Grid.Row>
-            </Grid>
-          </Segment>
+          <Header as="h3">Gestionar postulación de jurados</Header>
+          {userPermissions && <FiltrosComponent />}
         </Grid.Column>
       </Grid>
 
@@ -274,7 +267,7 @@ export const Jurados = () => {
                           <Dropdown
                             fluid
                             className="select-registros-adminconvocatoria no-margin"
-                            defaultValue={cantidadRegistros}
+                            defaultValue={10}
                             options={cantidadRegistros}
                             icon={
                               <Icon
@@ -292,8 +285,11 @@ export const Jurados = () => {
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
+              {!userPermissions && <FiltrosComponent />}
               <Table
                 columns={7}
+                fixed
+                singleLine
                 compact
                 unstackable
                 striped
@@ -310,40 +306,39 @@ export const Jurados = () => {
                     </Table.HeaderCell>
                     <Table.HeaderCell
                       className="background-color-FFFFFF font-size-12px"
-                      width={3}
+                      width={4}
                     >
                       Nombres y apellidos
                     </Table.HeaderCell>
                     {userPermissions && (
                       <Table.HeaderCell
-                        className="background-color-FFFFFF font-size-12px"
-                        width={2}
+                        className="background-color-FFFFFF font-size-12px "
+                        width={3}
                       >
                         No. Documento
                       </Table.HeaderCell>
                     )}
                     <Table.HeaderCell
                       className="background-color-FFFFFF font-size-12px"
-                      width={1}
+                      width={2}
                     >
                       Código
                     </Table.HeaderCell>
                     {!userPermissions && (
                       <Table.HeaderCell
                         className="background-color-FFFFFF font-size-12px"
-                        width={1}
+                        width={2}
                       >
                         Estado
                       </Table.HeaderCell>
                     )}
-                    {!userPermissions && (
-                      <Table.HeaderCell
-                        className="background-color-FFFFFF font-size-12px"
-                        width={1}
-                      >
-                        Areas
-                      </Table.HeaderCell>
-                    )}
+                    <Table.HeaderCell
+                      className="background-color-FFFFFF font-size-12px"
+                      width={3}
+                    >
+                      Areas
+                    </Table.HeaderCell>
+
                     <Table.HeaderCell
                       className="background-color-FFFFFF font-size-12px"
                       width={6}
@@ -353,14 +348,14 @@ export const Jurados = () => {
                     {userPermissions && (
                       <Table.HeaderCell
                         className="background-color-FFFFFF font-size-12px"
-                        width={1}
+                        width={3}
                       >
                         Estado
                       </Table.HeaderCell>
                     )}
                     <Table.HeaderCell
                       className="background-color-FFFFFF font-size-12px"
-                      width={1}
+                      width={2}
                     >
                       Acciones
                     </Table.HeaderCell>
@@ -370,6 +365,7 @@ export const Jurados = () => {
                   {jurados.length ? (
                     jurados.map((datos, index) => (
                       <Table.Row>
+                        {console.log(datos)}
                         <Table.Cell
                           className="font-size-12px font-family-Work-Sans"
                           width={1}
@@ -378,7 +374,7 @@ export const Jurados = () => {
                         </Table.Cell>
                         <Table.Cell
                           className="font-size-12px font-family-Work-Sans"
-                          width={3}
+                          width={4}
                         >
                           {datos.first_name}
                           {datos.middle_name}
@@ -404,31 +400,34 @@ export const Jurados = () => {
                             width={2}
                             className="font-size-12px font-family-Work-Sans"
                           >
-                            Sin verificar
+                            {datos.status}
                           </Table.Cell>
                         )}
-                        {!userPermissions && (
-                          <Table.Cell
-                            className="font-size-12px font-family-Work-Sans"
-                            width={1}
+                        <Table.Cell
+                          className="font-size-12px font-family-Work-Sans"
+                          width={1}
+                        >
+                          <span
+                            key={index}
+                            className="font-size-12px font-family-Work-Sans "
                           >
-                            <span
-                              key={index}
-                              className="font-size-12px font-family-Work-Sans"
-                            >
-                              {datos.knowledge_area + " "}
-                            </span>
-                          </Table.Cell>
-                        )}
-                        <Table.Cell width={5}>
+                            {datos.area}
+                          </span>
+                        </Table.Cell>
+                        <Table.Cell
+                          width={4}
+                          style={{
+                            maxWidth: 4,
+                          }}
+                        >
                           {datos.categories.map((category, index) => {
                             return (
                               category !== null && (
                                 <span
                                   key={index}
-                                  className="font-size-12px font-family-Work-Sans"
+                                  className="font-size-12px font-family-Work-Sans "
                                 >
-                                  -{category + " "}
+                                  {category + " "}
                                 </span>
                               )
                             );
@@ -439,7 +438,7 @@ export const Jurados = () => {
                             width={2}
                             className="font-size-12px font-family-Work-Sans"
                           >
-                            Sin verificar
+                            {datos.status}
                           </Table.Cell>
                         )}
                         <Table.Cell
@@ -474,7 +473,7 @@ export const Jurados = () => {
                 </Table.Body>
                 <Table.Footer fullWidth>
                   <Table.Row>
-                    <Table.HeaderCell colSpan="7">
+                    <Table.HeaderCell colSpan="8">
                       <Menu floated="right" pagination>
                         <Menu.Item as="a" icon>
                           <Icon name="chevron left" />
@@ -492,6 +491,20 @@ export const Jurados = () => {
                 </Table.Footer>
               </Table>
             </Segment>
+            {!userPermissions && (
+              <Segment>
+                <div
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Button className="btn">Atras</Button>
+                  <ExportarDatosJurado />
+                </div>
+              </Segment>
+            )}
           </Form>
         </Grid.Column>
       </Grid>
