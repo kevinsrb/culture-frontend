@@ -1,0 +1,39 @@
+.container__header {
+  background-color: #3467cc;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: 0.5%;
+  padding-left: 5%;
+  padding-right: 5%;
+  padding-bottom: 0.5%;
+
+  .logo__header {
+    .logo__img {
+      width: 50%;
+    }
+  }
+}
+
+.container__shield__section {
+  background-color: #e6effd;
+  display: flex;
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  line-height: normal;
+
+  .shield___image__content {
+      width: 3%;
+      margin-left: 5%;
+
+      .logo__escudo {
+        width: 70%;
+      }
+  }
+
+  .shield__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+}
