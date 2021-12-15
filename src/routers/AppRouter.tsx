@@ -37,6 +37,13 @@ import ApiEndPoint from "../utils/apiEndPoints";
 import { apiCall } from "../utils/httpClient";
 import RegistrarJurado from "../screens/RegistrarJurado";
 import CambiarContrasena from "../screens/RegistrarJurado/CambiarContrasena";
+import MaestraJurados from "../screens/MaestraAdministracionParaJurados";
+import ProyectosEvaluar from '../screens/Jurados/Regiterform/ProyectosEvaluar'
+import EvaluacionCriterios from '../screens/EvaluacionCriterios'
+import MaestraConvocatoriasLicense from '../screens/MaestraConvocatoriasLicense'
+// import GestionMaestrasJurados from '../screens/GestionMaestrasJurados'
+import MaestraConvocatoriasGestionJurados from '../screens/MaestraConvocatoriasGestionJurados'
+
 interface Props {
   children: any;
   // any props that come into the component
@@ -65,6 +72,21 @@ export const AppRouter = () => {
       <ScrollToTop>
         <div className="App">
           <Switch>
+            <Route path="/gestionmaestrasjurados">
+              <MaestraConvocatoriasGestionJurados />
+            </Route>
+            <Route path="/maestraConvocatoriasLicense">
+              <MaestraConvocatoriasLicense />
+            </Route>
+            <Route path="/evaluacioncriterios">
+              <EvaluacionCriterios />
+            </Route>
+            <Route path="/proyectosevaluar">
+              <ProyectosEvaluar />
+            </Route>
+            <Route path="/maestraJurados">
+              <MaestraJurados />
+            </Route>
             <Route path="/registrarJurado">
               <RegistrarJurado />
             </Route>

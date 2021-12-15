@@ -4,21 +4,7 @@ import TermConditionModal from "../../../Popupmodel/TermConditionModal";
 import ApiEndPoint from "../../../../utils/apiEndPoints";
 import { apiCall, errorToast } from "../../../../utils/httpClient";
 
-import {
-  Layout,
-  Row,
-  Col,
-  Divider,
-  List,
-  Typography,
-  Table,
-  Tag,
-  Space,
-  Form,
-  Checkbox,
-  Button,
-  Image,
-} from "antd";
+import { Layout, Row, Col, List, Typography, Form, Button, Image } from "antd";
 import { Container, Grid } from "semantic-ui-react";
 
 import Loader from "../../../../components/loader";
@@ -35,7 +21,6 @@ export default function AdministradorPostulacionesDeJurado(props: any) {
   const [isLoading, setIsLoading] = useState<any>(false);
   const [isTerm, setTerm] = useState<any>(false);
   const [isSubmit, setIsSubmit] = useState<any>(false);
-  console.log('isSubmit: ==> ', isSubmit);
 
   const { Paragraph } = Typography;
   // @ts-ignore
@@ -170,13 +155,12 @@ export default function AdministradorPostulacionesDeJurado(props: any) {
                 <Col span={17}>
                   <Content className="stts--lf-form-head">
                     <Content className="heading--title">
-                      <h1 className="title">Hoja de vida Jurado</h1>
+                      <h1 className="title title_gg">Hoja de vida Jurado</h1>
                     </Content>
                   </Content>
 
                   <Content className="containt--area ml-2 mr-2 mb-2 mt-2">
                     <Typography>
-
                       <Paragraph
                         style={{
                           display: "flex",
@@ -184,27 +168,46 @@ export default function AdministradorPostulacionesDeJurado(props: any) {
                           justifyContent: "center",
                           flexDirection: "column",
                         }}
-                        className={`${(isSubmit) ? 'show-data' : 'hide-data'} head---text-containt`}
+                        className={`${
+                          isSubmit ? "show-data" : "hide-data"
+                        } head---text-containt`}
                       >
-                        <Content className='success-text--data'>
-
+                        <Content className="success-text--data">
                           <b style={{ color: "green" }}>
                             So envio con exito tu hoja de vida
-                          </b><br />
+                          </b>
+                          <br />
                           le notificaremos si es selecciondo para ser jurado
+                        </Content>
+
+                        <Content className="mt-2">
+                          <Row className="">
+                            <Col span={24} className="form--btm-btn-box">
+                              <Button
+                                onClick={() => props.setShowPage(11)}
+                                className="btn-submit"
+                                type="primary"
+                              >
+                                ENVIAR HOJA DE VIDA
+                              </Button>
+                            </Col>
+                          </Row>
                         </Content>
                       </Paragraph>
 
-                      <Paragraph className={`${(isSubmit) ? 'hide-data' : 'show-data'} head---text-containt`}>
+                      <Paragraph
+                        className={`${
+                          isSubmit ? "hide-data" : "show-data"
+                        } head---text-containt`}
+                      >
                         <b>
                           In the process of internal desktop applications
                           development,
                         </b>
                         <br />
-                        many different design specs and implementations would
-                        be involved.
+                        many different design specs and implementations would be
+                        involved.
                       </Paragraph>
-
                     </Typography>
                   </Content>
                   <Content className="containt--area ml-2 mr-2 mb-2 mt-2">
@@ -234,7 +237,6 @@ export default function AdministradorPostulacionesDeJurado(props: any) {
                           </Col>
 
                           <Col span={9}>
-
                             {statusData?.show_resume ? (
                               <p>
                                 <CheckCircleFilled
@@ -499,8 +501,8 @@ export default function AdministradorPostulacionesDeJurado(props: any) {
                                 isTerm
                                   ? setIsSubmit(true)
                                   : errorToast(
-                                    "Please Select Termionos y Condiciones"
-                                  )
+                                      "Please Select Termionos y Condiciones"
+                                    )
                               }
                               className="btn-submit"
                               type="primary"

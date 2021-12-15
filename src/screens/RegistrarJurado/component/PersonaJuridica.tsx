@@ -40,37 +40,37 @@ const PersonaNatural = () => {
           >
             <Col span={8}>
               <Form.Item label="NIT" required>
-                <Input placeholder="No." />
+                <Input placeholder="No." className='form--cont' />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="Tipa de antidad" required>
-                <Select>
+                <Select className='form--cont'>
                   <Select.Option value="demo">pais</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item label="Nombre o razon social" required>
-                <Input placeholder="" />
+                <Input placeholder="" className='form--cont' />
               </Form.Item>
             </Col>
 
             <Col span={8}>
               <Form.Item label="Correo electronico" required>
-                <Input placeholder="" />
+                <Input placeholder="" className='form--cont'/>
               </Form.Item>
             </Col>
 
             <Col span={8}>
               <Form.Item label="Direccion comercial" required>
-                <Input placeholder="" />
+                <Input placeholder="" className='form--cont'/>
               </Form.Item>
             </Col>
 
             <Col span={8}>
               <Form.Item label="Borio de residencia">
-                <Input placeholder="" />
+                <Input placeholder="" className='form--cont'/>
               </Form.Item>
             </Col>
 
@@ -78,7 +78,7 @@ const PersonaNatural = () => {
               <Row>
                 <Col span={10}>
                   <Form.Item label="Telefono commercial" required>
-                    <Select>
+                    <Select className='form--cont'>
                       <Select.Option value="demo">pais</Select.Option>
                     </Select>
                   </Form.Item>
@@ -90,7 +90,7 @@ const PersonaNatural = () => {
                   }}
                 >
                   <Form.Item label=" " required>
-                    <Input placeholder="Numerio" />
+                    <Input placeholder="Numerio" className='form--cont' />
                   </Form.Item>
                 </Col>
               </Row>
@@ -99,6 +99,7 @@ const PersonaNatural = () => {
             <Col span={8}>
               <Form.Item label="Pais" required>
                 <Select
+                className='form--cont'
                   style={{ width: "100%" }}
                   placeholder="Select Pais"
                   optionFilterProp="children"
@@ -113,14 +114,14 @@ const PersonaNatural = () => {
 
             <Col span={8} className={diparmentShow ? "showFild" : "hideFild"}>
               <Form.Item label="Departamento" required>
-                <Select>
+                <Select className='form--cont'>
                   <Select.Option value="demo">pais</Select.Option>
                 </Select>
               </Form.Item>
             </Col>
             <Col span={8} className={diparmentShow ? "showFild" : "hideFild"}>
               <Form.Item label="Ciudad" required>
-                <Select>
+                <Select className='form--cont'>
                   <Select.Option value="demo">pais</Select.Option>
                 </Select>
               </Form.Item>

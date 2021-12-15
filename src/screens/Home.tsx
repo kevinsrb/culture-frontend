@@ -196,7 +196,7 @@ export default function Home() {
               </Form.Field>
               <Form.Field
                 className="container-space-between"
-                style={{ paddingTop: "10%", paddingBottom: "10%" }}
+                style={{ paddingTop: "10%", paddingBottom: "2%" }}
               >
                 <Button
                   basic
@@ -249,6 +249,59 @@ export default function Home() {
                   Administración jurados
                 </Button>
               </Form.Field>
+
+              <Form.Field
+                className="container-space-between"
+                style={{ paddingTop: "0%", paddingBottom: "2%" }}
+              >
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/maestraJurados")}
+                >
+                  Maestra Jurados
+                </Button>
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/proyectosevaluar")}>
+                  proyecto Sevaluar
+                </Button>
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/evaluacioncriterios")}
+                >
+                  Evaluación criterios
+                </Button>
+              </Form.Field>
+              <Form.Field
+                className="container-space-between"
+                style={{ paddingTop: "0%", paddingBottom: "10%" }}
+              >
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/maestraConvocatoriasLicense")}
+                >
+                  maestra License
+                </Button>
+                <Button
+                  disabled={principalState.disbledIngresar}
+                  color="blue"
+                  className="boton-ingresar-login"
+                  onClick={() => history.push("/gestionmaestrasjurados")}
+                >Gestion Maestras Jurados</Button>
+
+              </Form.Field>
+
+
+
+
               <Divider clearing />
               <Header
                 as="h3"

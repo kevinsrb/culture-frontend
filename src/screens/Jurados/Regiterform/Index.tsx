@@ -9,6 +9,8 @@ import AgregarReconocimeintos from "./Componant/AgregarReconocimeintos";
 import AgregarPublicaciones from "./Componant/AgregarPublicaciones";
 import AceptarTermAndCondition from "./Componant/AceptarTermAndCondition";
 import AdministradorPostulacionesDeJurado from "./Componant/AdministradorPostulacionesDeJurado";
+import EvaluacionProyectos from "./Componant/EvaluacionProyectos";
+import EvaluacionProyectosList from "./Componant/EvaluacionProyectosList";
 
 import { masterAction } from "../../../store/actions/masterAction";
 import ApiEndPoint from "../../../utils/apiEndPoints";
@@ -33,7 +35,7 @@ export default function Index() {
     getcitieslist();
 
     getShowPages();
-    // setShowPages('10');
+    // setShowPages("10");
   }, []);
 
   // let projectInfo = useLocation();
@@ -72,7 +74,7 @@ export default function Index() {
     }
   }
   async function getShowPages() {
-    const pages:any = await localStorage.getItem("showPage");
+    const pages: any = await localStorage.getItem("showPage");
     if (pages >= 1) {
       await setShowPage(pages);
     }
@@ -186,6 +188,13 @@ export default function Index() {
           onPressEdit={onPressEdit}
           setShowPage={setShowPages}
         />
+      ) : showPage == 11 ? (
+        <EvaluacionProyectos
+          onPressEdit={onPressEdit}
+          setShowPage={setShowPages}
+        />
+      ) : showPage == 12 ? (
+        <EvaluacionProyectosList />
       ) : (
         ""
       )}

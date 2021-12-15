@@ -131,6 +131,7 @@ export default function Menuheader({ showIcon = false }) {
         <div
           style={{
             height: showIcon ? 65 : 45,
+            display:'none'
           }}
           className="third--header"
         >
@@ -160,7 +161,7 @@ export default function Menuheader({ showIcon = false }) {
               </div>
             )}
             {!showIcon && (
-              <ul className="trd-head_menu">
+              <ul className="trd-head_menu" >
                 <li className="trd--link-itm">
                   <span className="trd--link">
                     <b> Inscribir Hoja de vida:</b>{" "}

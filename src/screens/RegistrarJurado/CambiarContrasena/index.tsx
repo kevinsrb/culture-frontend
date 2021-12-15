@@ -14,7 +14,7 @@ const CambiarContrasena = () => {
   const [isModal, setShowModal] = useState<boolean>(false);
   const [showConPassword, setShowConPassword] = useState<boolean>(false);
   const [requiredMark, setRequiredMarkType] = useState<any>("optional");
-  const [formErrors, setFormErrors] = useState<any>();
+  const [formErrors, setFormErrors] = useState<any>({});
 
   const [formData, setFormData] = useState<any>({
     mobileNumber: "",
@@ -27,40 +27,77 @@ const CambiarContrasena = () => {
   };
 
   function formValidation() {
-    let formErrors: any = {};
+    let formError: any = {};
     let formIsValid = true;
     if (!formData.mobileNumber) {
       formIsValid = false;
-      formErrors["mobileNumber"] = true;
+      formError["mobileNumber"] = true;
     }
     if (!formData.newPassword) {
       formIsValid = false;
-      formErrors["newPassword"] = true;
+      formError["newPassword"] = true;
     }
     if (!formData.confirmPassword) {
       formIsValid = false;
-      formErrors["confirmPassword"] = true;
+      formError["confirmPassword"] = true;
     }
 
     if (!(formData.confirmPassword === formData.newPassword)) {
-      console.log("formData.newPassword:===", formData.newPassword);
-      console.log("formData.confirmPassword: ===", formData.confirmPassword);
-      console.log(
-        "formData.confirmPassword === formData.newPassword:=== ",
-        !(formData.confirmPassword === formData.newPassword)
-      );
       formIsValid = false;
-      formErrors["confirmPasswords"] = true;
-      formErrors["newPasswords"] = true;
+      formError["confirmPasswords"] = true;
+      formError["newPasswords"] = true;
     }
-    setFormErrors(formErrors);
-    return formIsValid;
+    if (
+      newPasswordVal(formData.newPassword) &&
+      confirmPasswordVal(formData.confirmPassword)
+    ) {
+      setFormErrors({ ...formErrors, ...formError });
+      return formIsValid;
+    }
   }
   const onSubmit = () => {
     if (formValidation()) {
       setShowModal(true);
     }
   };
+
+  function newPasswordVal(value: any) {
+    let formError: any = {};
+    let formIsValid = true;
+    if (value.length >= 8 && value.length <= 20) {
+      if (/[^0-9a-zA-Z]/.test(value)) {
+        formIsValid = false;
+        formError["newPasswordRe"] = true;
+      } else {
+        formIsValid = true;
+        formError["newPasswordRe"] = false;
+      }
+    } else if (!(value.length >= 8 && value.length <= 20)) {
+      formIsValid = false;
+      formError["newPasswordRe"] = true;
+    }
+    setFormErrors({ ...formErrors, ...formError });
+    return formIsValid;
+  }
+
+  function confirmPasswordVal(value: any) {
+    let formError: any = {};
+    let formIsValid = true;
+    if (value.length >= 8 && value.length <= 20) {
+      if (/[^0-9a-zA-Z]/.test(value)) {
+        formIsValid = false;
+        formError["confirmPasswordRe"] = true;
+      } else {
+        formIsValid = true;
+        formError["confirmPasswordRe"] = false;
+      }
+    } else if (!(value.length >= 8 && value.length <= 20)) {
+      formIsValid = false;
+      formError["confirmPasswordRe"] = true;
+    }
+    setFormErrors({ ...formErrors, ...formError });
+    return formIsValid;
+  }
 
   return (
     <div>
@@ -139,16 +176,25 @@ const CambiarContrasena = () => {
                 </Form.Item>
               </Col>
               <Col span={8}>
+                {/* {console.log(
+                  formErrors,
+                  "formErrors?.newPasswordRe",
+                  formErrors?.newPasswordRe ? "rrr" : "ooo"
+                )} */}
                 <Form.Item
                   validateStatus={
-                    formErrors?.newPasswords
+                    formErrors?.newPasswordRe
+                      ? "error"
+                      : formErrors?.newPasswords
                       ? "error"
                       : !formData.newPassword &&
                         formErrors?.newPassword &&
                         "error"
                   }
                   help={
-                    formErrors?.newPasswords
+                    formErrors?.newPasswordRe
+                      ? "La contrasena debe tener minimo 8 caracteres maximo 20, debe tener al menos un numero."
+                      : formErrors?.newPasswords
                       ? "Nueva contrasena and Confirmar contrasena are not same"
                       : !formData.newPassword &&
                         formErrors?.newPassword &&
@@ -159,6 +205,7 @@ const CambiarContrasena = () => {
                 >
                   <Input
                     placeholder=""
+                    onBlur={(e) => newPasswordVal(e.target.value)}
                     onChange={(e) =>
                       setFormData({
                         ...formData,
@@ -183,14 +230,18 @@ const CambiarContrasena = () => {
                   label="Confirmar contrasena"
                   required
                   validateStatus={
-                    formErrors?.confirmPasswords
+                    formErrors?.confirmPasswordRe
+                      ? "error"
+                      : formErrors?.confirmPasswords
                       ? "error"
                       : !formData.confirmPassword &&
                         formErrors?.confirmPassword &&
                         "error"
                   }
                   help={
-                    formErrors?.confirmPasswords
+                    formErrors?.confirmPasswordRe
+                      ? "La contrasena debe tener minimo 8 caracteres maximo 20, debe tener al menos un numero."
+                      : formErrors?.confirmPasswords
                       ? "Nueva contrasena and Confirmar contrasena are not same"
                       : !formData.confirmPassword &&
                         formErrors?.confirmPassword &&
@@ -199,6 +250,7 @@ const CambiarContrasena = () => {
                 >
                   <Input
                     placeholder=""
+                    onBlur={(e) => confirmPasswordVal(e.target.value)}
                     onChange={(e) =>
                       setFormData({
                         ...formData,

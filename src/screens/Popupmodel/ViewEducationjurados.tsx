@@ -4,7 +4,6 @@ export default function ViewEducationjurados(props:any) {
   const { editData, baseUrl, image } = props;
   const img = image ? image : baseUrl + editData?.certification;
   const type = ["png", "jpg", "jpeg"].includes(img.split(".").pop());
-  console.log("type: ", type);
   return (
     <div>
       <Modal

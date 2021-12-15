@@ -35,21 +35,21 @@ export default function AdministracionJurados() {
         },
         {
             title: 'Nombres y apellidos',
-            width: 140,
+            width: 130,
             dataIndex: 'nombresApellidos',
             key: 'nombresApellidos',
             fixed: 'left',
         },
-        { title: 'Código', width: 80, dataIndex: 'codigo', key: 'codigo' },
-        { title: 'Asignados', width: 80, dataIndex: 'asignados', key: 'asignados' },
-        { title: 'Total', width: 80, dataIndex: 'total', key: 'total' },
-        { title: 'Estado', width: 80, dataIndex: 'estado', key: 'estado' },
-        { title: 'Anexo', width: 80, dataIndex: 'anexo', key: 'anexo' },
+        { title: 'Código', width: 60, dataIndex: 'codigo', key: 'codigo' },
+        { title: 'Asignados', width: 60, dataIndex: 'asignados', key: 'asignados' },
+        { title: 'Total', width: 60, dataIndex: 'total', key: 'total' },
+        { title: 'Estado', width: 60, dataIndex: 'estado', key: 'estado' },
+        { title: 'Anexo', width: 60, dataIndex: 'anexo', key: 'anexo' },
         {
             title: 'Action',
             key: 'operation',
             fixed: 'right',
-            width: 100,
+            width: 60,
             render: () => <a onClick={() => showModal()}>Ver más</a>,
         },
     ];
@@ -164,7 +164,7 @@ export default function AdministracionJurados() {
 
                     <Modal
                         visible={visible}
-                        title={<p><span><b>Datos de Jurado:</b> Juan Esteban Ramírez Gonzales</span><span><b>Código:</b> 23401</span></p>}
+                        title={<p><span><b>Datos de Jurado:</b> Juan Esteban Ramírez Gonzales</span><span style={{marginLeft:15}}><b>Código:</b> 23401</span></p>}
                         onOk={() => handleOk()}
                         onCancel={() => handleCancel()}
                         footer={[
@@ -180,12 +180,6 @@ export default function AdministracionJurados() {
                     >
                         <DatosJuradoRamirezGonzalesModel showModal={showModal} />
                     </Modal>
-
-
-
-
-
-
                     <Row>
                         <Col span={5}>
                             <Sidebar />
@@ -293,15 +287,11 @@ export default function AdministracionJurados() {
                                     </Content>
                                     <Content className='adt-table--box'>
                                         {/* <Content className='adt--table-box adt-table--hight-box'>
-                                            <Table columns={columns} dataSource={data} scroll={{ x: 1100 }} className='adt--form-table' />
-
+                                            <Table columns={columns} dataSource={data} scroll={{ x: 1000 }} className='adt--form-table' />
                                         </Content> */}
-
-                                        <Content >
-                                            <Table columns={columns} dataSource={data} scroll={{ x: 1100 }} className='adt--form-table' />
-
+                                        <Content className='adt--table-box'>
+                                            <Table columns={columns} dataSource={data} scroll={{ x: 'calc(520px + 50%)', y: 240 }} className='adt--form-table' />
                                         </Content>
-
 
                                     </Content>
                                 </Content>
