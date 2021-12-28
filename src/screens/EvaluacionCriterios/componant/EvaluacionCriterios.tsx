@@ -40,7 +40,7 @@ import EvaluacionCriteriosModelEdit from './EvaluacionCriteriosModelEdit';
 // import './antTable.css'
 export default function EvaluacionCriterios() {
     const { Content } = Layout
-    const { Option } = Select
+    const { Option }  = Select
 
     const [isModalVisible, setIsModalVisible] = useState<any>(false);
 
@@ -73,6 +73,8 @@ export default function EvaluacionCriterios() {
     const [editAssignedCat, setEditAssignedCat] = useState<any>({});
     const [editAssignedModl, setEditAssignedModl] = useState<any>(false);
     const [allCheckbox, setAllCheckbox] = useState<any>(false);
+    const [sidebarShow, setSidebarShow] = useState<any>(false);
+    const [checkboxCheck, setCheckboxCheck] = useState<any>(false);
     // colores estados
     const coloresEstado: any = { Abierta: "#21BA45", "En proceso": "#EFC236", Cerrada: "#9F0505" };
     const [chkSec, setChkSec] = useState(false);
@@ -96,7 +98,7 @@ export default function EvaluacionCriterios() {
         },
         {
             title: () => <p className='text-center'><span className='as_tbl_hd'>Seleccionar</span ><small className='pr-1 ast_tbl_txt_sml'  >Todos<img src={allCheckbox ? checkBoxChk : checkBoxEpt} width={allCheckbox ? 12 : 18} onClick={() => handelCheckAllData()} className="chkImg" /> </small></p>,
-            width: 60,
+            width: 70,
             fixed: "right",
             render: (text: any, record: any, index: any) => (
 
@@ -125,6 +127,7 @@ export default function EvaluacionCriterios() {
         } else {
             setEditValue([...valueda, item])
         }
+        setCheckboxCheck(true);
     }
 
     function handelCheckAllData() {
@@ -134,13 +137,14 @@ export default function EvaluacionCriterios() {
             setEditValue([])
         } else {
             setAllCheckbox(true);
-             
-            console.log('valueda: ', valueda);
-            console.log('datosActuales: ', datosActuales);
+
+            // console.log('valueda: ', valueda);
+            // console.log('datosActuales: ', datosActuales);
             var arr = [...valueda, ...datosActuales]
-            console.log('arr: ', arr);
+            // console.log('arr: ', arr);
             // setEditValue(datosActuales)
             setEditValue([...valueda, ...datosActuales])
+            setCheckboxCheck(true);
         }
     }
 
@@ -163,7 +167,7 @@ export default function EvaluacionCriterios() {
         },
         {
             title: () => <p className='text-center'><span className='as_tbl_hd'>Seleccionar</span ><small className='pr-1 ast_tbl_txt_sml' >Editar</small> <small className='pr-1 ast_tbl_txt_sml' >Eliminar</small></p>,
-            width: 60,
+            width: 90,
             fixed: "right",
             render: (datos: any, datos2: any, index: any) => (
                 <>
@@ -198,9 +202,7 @@ export default function EvaluacionCriterios() {
         setIsModalVisible(true);
     }
 
-    console.log('setEditValueList: updt mn', editValueList);
-
-
+  
 
     function itemRenderTable(current: any, type: any, originalElement: any) {
         if (type === "prev") {
@@ -231,18 +233,18 @@ export default function EvaluacionCriterios() {
                 {
                     editAssignedModl ?
                         <EvaluacionCriteriosModelEdit setIsModalVisible={setIsModalVisible} editAssignedCat={editAssignedCat} setEditAssignedCat={setEditAssignedCat} editValue={editValue} setEditValue={setEditValue} setEditValueList={setEditValueList} /> :
-                        <EvaluacionCriteriosModel setIsModalVisible={setIsModalVisible} editValue={editValue} setEditValue={setEditValue} setEditValueList={setEditValueList} datosActuales={datosActuales} setDatosActuales={setDatosActuales} />
+                        <EvaluacionCriteriosModel setIsModalVisible={setIsModalVisible} editValue={editValue} setEditValue={setEditValue} setEditValueList={setEditValueList} datosActuales={datosActuales} setDatosActuales={setDatosActuales} setCheckboxCheck={setCheckboxCheck} />
                 }
             </Modal>
 
             <Container fluid>
                 <Grid columns={2}>
                     <Grid.Row>
-                        <Grid.Column className="form--left-box">
-                            <Sidebar />
+                        <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+                            <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                         </Grid.Column>
                         <Grid.Column className="form--right-box">
-                            <HeaderMenu />
+                            <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
 
                             <Layout className='asgn_eval_containt_area p-1'>
                                 <Content className='asgn_eval__card'>
@@ -255,10 +257,10 @@ export default function EvaluacionCriterios() {
                                     <Content className='asgevl_table_box mt-1'>
                                         <Content className="evalpro_table_head asgevl_tbl_head">
                                             <Row>
-                                                <Col span={16}>
+                                                <Col span={5} style={{paddingTop: 5}}>
                                                     <span className='tbl__head '>Jurados</span>
                                                 </Col>
-                                                <Col span={8}>
+                                                <Col span={19}>
                                                     <Content className='text-right'>
                                                         <span className="asgevl_tbl_right_text table--total text-right " style={{ paddingRight: '1rem' }} >
                                                             Total :
@@ -273,17 +275,6 @@ export default function EvaluacionCriterios() {
                                         </Content>
 
                                         <Content className='mb-1'>
-                                            {//@ts-ignore
-                                                // <Table columns={columns}
-                                                //     rowClassName={(record, index) => index % 2 === 0 ? 'table-row-dark' : 'table-row-light'}
-                                                //     dataSource={datosActuales}
-                                                //     scroll={{ x: 800, y: 300 }}
-                                                //     size="small"
-                                                //     className="table-ant-design-modify"
-                                                //     bordered={false}
-                                                //     pagination={{ position: ["bottomRight"], itemRender: itemRenderTable, pageSize: cantidadPáginas }}
-                                                // />
-                                            }
                                             {//@ts-ignore
                                                 <Table columns={columns}
                                                     style={{ borderTop: "1px solid #C4C4C4" }}
@@ -302,14 +293,13 @@ export default function EvaluacionCriterios() {
                                         <Content className="mb-2">
                                             <Row className="">
                                                 <Col span={24} className="form--btm-btn-box">
-                                                    {editValue.length > 0 ?
+                                                    {editValue.length > 0 && checkboxCheck ?
                                                         <Button
                                                             className="form_submit_btn"
                                                             type="primary"
                                                             onClick={() => handelFormSubmit()}
                                                         >Asignar Criterios</Button>
-                                                        : <Button
-                                                            className="form_submit_btn"
+                                                        : <Button className="form_submit_btn"
                                                             type="primary"
                                                         >Asignar Criterios</Button>
                                                     }
@@ -322,10 +312,10 @@ export default function EvaluacionCriterios() {
                                     <Content className='asgevl_table_box mt-1'>
                                         <Content className="evalpro_table_head asgevl_tbl_head">
                                             <Row>
-                                                <Col span={16}>
+                                                <Col span={23}>
                                                     <span className='tbl__head'>Jurados con criterios asignados</span>
                                                 </Col>
-                                                <Col span={8}></Col>
+                                                <Col span={1}></Col>
                                             </Row>
                                         </Content>
 

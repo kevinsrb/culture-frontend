@@ -33,7 +33,7 @@ import Loader from "../../../../components/loader";
 import Sidebar from "../../../../components/NavBar";
 import HeaderMenu from "../../../../components/Header";
 
-export default function AgregarReconocimeintos(props:any) {
+export default function AgregarReconocimeintos(props: any) {
   const { citiesData, isEdit } = props;
   const [viewEduOpen, setViewEduOpen] = useState<any>(false);
   const [editEduOpen, setEditEduOpen] = useState<any>(false);
@@ -56,6 +56,7 @@ export default function AgregarReconocimeintos(props:any) {
   const [showEllipsis, setshowEllipsis] = useState<any>(true);
   const [showFirstAndLastNav, setshowFirstAndLastNav] = useState<any>(true);
   const [showPreviousAndNextNav, setshowPreviousAndNextNav] = useState<any>(true);
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   const [formData, setFormData] = useState<any>({
     resume_id: 0,
     name: "",
@@ -70,16 +71,16 @@ export default function AgregarReconocimeintos(props:any) {
   }, []);
 
   async function setResumeDetail() {
-    const resData:any = await localStorage.getItem("resumeData");
+    const resData: any = await localStorage.getItem("resumeData");
     const val = JSON.parse(resData);
     await setResumeData(val);
   }
 
-  async function handelDropdown(type:any) {
+  async function handelDropdown(type: any) {
     const valDro = openDropdown == type ? "" : openDropdown != type ? type : "";
     setOpenDropdown(valDro);
   }
-  async function handleSelectChange(type:any, item:any) {
+  async function handleSelectChange(type: any, item: any) {
     if (type == "town") {
       setFormData({
         ...formData,
@@ -93,12 +94,12 @@ export default function AgregarReconocimeintos(props:any) {
     //@ts-ignore
     document.getElementById("photoSelect").click();
   }
-  const onFilechange = (event:any) => {
+  const onFilechange = (event: any) => {
     console.log("event: ", event);
     setIdentityDocument(event.target.files[0]);
   };
   function formValidation() {
-    let formErrors:any = {};
+    let formErrors: any = {};
     let formIsValid = true;
 
     if (!formData.name) {
@@ -154,8 +155,8 @@ export default function AgregarReconocimeintos(props:any) {
       }
     }
   }
-  async function getAcknowledgmentsData(offsetval:any) {
-    const resData:any = await localStorage.getItem("resumeData");
+  async function getAcknowledgmentsData(offsetval: any) {
+    const resData: any = await localStorage.getItem("resumeData");
     const val = JSON.parse(resData);
     setIsLoading(true);
     const params = {
@@ -214,7 +215,7 @@ export default function AgregarReconocimeintos(props:any) {
     setPlaceTown("");
     setIdentityDocument({});
   }
-  const handlePaginationChange = (e:any, { activePage }:any) => {
+  const handlePaginationChange = (e: any, { activePage }: any) => {
     setActivePage(activePage);
 
     const offst = limit * activePage;
@@ -250,11 +251,11 @@ export default function AgregarReconocimeintos(props:any) {
         />
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -331,10 +332,10 @@ export default function AgregarReconocimeintos(props:any) {
                             <Form.Field>
                               {// @ts-ignore
                                 <Form.Select
-                                placeholder={placeTown}
-                                onClick={() => handelDropdown("town")}
-                                className="select--val"
-                                error={!formData.town && formErrors?.town}
+                                  placeholder={placeTown}
+                                  onClick={() => handelDropdown("town")}
+                                  className="select--val"
+                                  error={!formData.town && formErrors?.town}
                                 />
                               }
                               {openDropdown && openDropdown == "town" ? (
@@ -344,7 +345,7 @@ export default function AgregarReconocimeintos(props:any) {
                                       <Grid>
                                         {citiesData &&
                                           citiesData.length &&
-                                          citiesData.map((item:any, i:any) => {
+                                          citiesData.map((item: any, i: any) => {
                                             return (
                                               <p
                                                 key={i}
@@ -402,11 +403,10 @@ export default function AgregarReconocimeintos(props:any) {
                                   }
                                   style={{ width: "91%" }}
                                   className={`usr--img-input curser-pointer
-                                       ${
-                                         !identityDocument &&
-                                         formErrors?.document &&
-                                         "activeBorder"
-                                       }`}
+                                       ${!identityDocument &&
+                                    formErrors?.document &&
+                                    "activeBorder"
+                                    }`}
                                 />
                               </div>
                             </Form>
@@ -481,7 +481,7 @@ export default function AgregarReconocimeintos(props:any) {
                             <Table.Body>
                               {formListData &&
                                 // formListData.length &&
-                                formListData.map((item:any, i:any) => {
+                                formListData.map((item: any, i: any) => {
                                   i++;
                                   return (
                                     <Table.Row key={i}>
@@ -590,8 +590,8 @@ export default function AgregarReconocimeintos(props:any) {
                                   isEdit
                                     ? props.onPressEdit(10, false)
                                     : formListData.length > 0
-                                    ? props.setShowPage(8)
-                                    : errorToast("Please fill details")
+                                      ? props.setShowPage(8)
+                                      : errorToast("Please fill details")
                                 }
                                 content="Guardar y Continuar"
                                 className="btn btn-primary right floated"

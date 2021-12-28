@@ -43,6 +43,7 @@ import EvaluacionCriterios from '../screens/EvaluacionCriterios'
 import MaestraConvocatoriasLicense from '../screens/MaestraConvocatoriasLicense'
 // import GestionMaestrasJurados from '../screens/GestionMaestrasJurados'
 import MaestraConvocatoriasGestionJurados from '../screens/MaestraConvocatoriasGestionJurados'
+// import MaestraConvocatoriasArea from '../screens/MaestraConvocatoriasArea'
 
 interface Props {
   children: any;
@@ -72,6 +73,9 @@ export const AppRouter = () => {
       <ScrollToTop>
         <div className="App">
           <Switch>
+            {/* <Route path="/maestraConvocatoriasArea">
+              <MaestraConvocatoriasArea />
+            </Route> */}
             <Route path="/gestionmaestrasjurados">
               <MaestraConvocatoriasGestionJurados />
             </Route>

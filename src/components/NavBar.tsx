@@ -4,6 +4,7 @@ import { Grid, Icon, Sidebar, Image } from "semantic-ui-react";
 // DATA ROUTE IS HERE
 import * as FaIcons from "react-icons/fa";
 import { IconContext } from "react-icons";
+import {CloseOutlined } from "@ant-design/icons";
 const sidebardataAdmin = [
   {
     title: "Administración",
@@ -48,7 +49,7 @@ const sidebardataUser = [
 ];
 
 // PARTICIPANTES
-export default function Navbar() {
+export default function Navbar(props:any) {
   // const sidebar = true;
   const [sidebar, setSidebar] = useState(true);
   const showSidebar = () => setSidebar(!sidebar);
@@ -71,6 +72,13 @@ export default function Navbar() {
               <FaIcons.FaBars onClick={showSidebar} />
             </span>
           </div> */}
+
+         {/*  <div className='menu--head-box'>
+            <span className="close_btn " onClick={()=>props.setSidebarShow(props.sidebarShow ? false:true)} >
+            <CloseOutlined />
+            </span>
+          </div> */}
+
 
           <Sidebar animation="overlay" direction="left" vertical visible={sidebar} className="sidebar navbar js--sidebar">
             <Grid className="no-margin background-color-6DA3FC js-side--top">

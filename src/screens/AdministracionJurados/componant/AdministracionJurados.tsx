@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid } from "semantic-ui-react";
 import Sidebar from "../../../components/NavBar";
 import HeaderMenu from "../../../components/Header";
@@ -20,11 +20,53 @@ export default function AdministracionJurados() {
     //@ts-ignore
     const onSearch = value => console.log(value);
     // const { Header, Content, Footer, Sider } = Layout;
-
+    const [sidebarShow, setSidebarShow] = useState<any>(false);
     async function showModal() {
         setVisible(true)
     };
 
+    const [matchScreen, setMatchScreen] = useState<any>('')
+    const [matchScreenSize, setMatchScreenSize] = useState<any>(1200)
+ 
+
+    useEffect(() => {
+        var mobileQuery1024 = window.matchMedia("(max-width: 1024px)");
+        console.log('mobileQuery1024: ', mobileQuery1024);
+        var mobileQuery991 = window.matchMedia("(max-width: 991px)");
+        var mobileQuery = window.matchMedia("(max-width: 768px)");
+     
+        if (mobileQuery1024.matches == true && mobileQuery1024.media == "(max-width: 1024px)") {
+            setMatchScreenSize(1024);
+        }
+        if (mobileQuery991.matches == true && mobileQuery991.media == "(max-width: 991px)") {
+            setMatchScreenSize(991);
+        }
+        if (mobileQuery.matches == true && mobileQuery.media == "(max-width: 768px)") {
+            setMatchScreenSize(768);
+        } 
+        if(mobileQuery1024.matches == false && mobileQuery991.matches == false && mobileQuery.matches == false) {
+            setMatchScreenSize(1200);
+        }
+
+        if (mobileQuery) {
+            mediaQueryCheck(mobileQuery);
+            mobileQuery.addEventListener("change", mediaQueryCheck);
+        }
+        return () => {
+            mobileQuery.removeEventListener("change", mediaQueryCheck);
+        }
+    }, [matchScreen])
+    function mediaQueryCheck(inputQuery: any) {
+        if (inputQuery.matches) {
+            setMatchScreen(true);
+            setSidebarShow(false);
+        } else {
+            setSidebarShow(true);
+            setMatchScreen(false);
+        }
+    }
+
+ 
     const columns: any = [
         {
             title: 'No',
@@ -157,6 +199,11 @@ export default function AdministracionJurados() {
     async function handleCancel() {
         setVisible(false);
     };
+
+    console.log('matchScreenSize: screen ', matchScreenSize);
+
+    
+   
     return (
         <div>
             <Layout>
@@ -164,7 +211,7 @@ export default function AdministracionJurados() {
 
                     <Modal
                         visible={visible}
-                        title={<p><span><b>Datos de Jurado:</b> Juan Esteban Ramírez Gonzales</span><span style={{marginLeft:15}}><b>Código:</b> 23401</span></p>}
+                        title={<p><span><b>Datos de Jurado:</b> Juan Esteban Ramírez Gonzales</span><span style={{ marginLeft: 15 }}><b>Código:</b> 23401</span></p>}
                         onOk={() => handleOk()}
                         onCancel={() => handleCancel()}
                         footer={[
@@ -173,7 +220,7 @@ export default function AdministracionJurados() {
                             </Button>,
                             <Button key="submit" className='adt-form-submit-btn' type="primary" loading={loading} onClick={() => handleOk()}>
                                 Guardar
-                            </Button>,
+                            </Button>
                         ]}
                         className="adt--tbl-model--form"
                         style={{ top: 25 }}
@@ -181,54 +228,67 @@ export default function AdministracionJurados() {
                         <DatosJuradoRamirezGonzalesModel showModal={showModal} />
                     </Modal>
                     <Row>
-                        <Col span={5}>
-                            <Sidebar />
+                        <Col span={(matchScreenSize > 1024)?4:(matchScreenSize == 1024) ? 6 : (matchScreenSize == 991) ? (sidebarShow)? 7:0 : (matchScreenSize == 768 && sidebarShow)?0:4 }  /* span={sidebarShow ?  4 : 0} */ className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+                            <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                         </Col>
-                        <Col span={18}>
-                            <Content>
-                                <HeaderMenu />
+                        <Col span={(matchScreenSize > 1024)?20:(matchScreenSize == 1024) ? (sidebarShow)? 18:24 : (matchScreenSize == 991) ? (sidebarShow)? 17:24 : (matchScreenSize == 768 && sidebarShow)?24:24 } /* span={sidebarShow ? 20 : 24} */ className='right_box_pd'>
+                            <Content className="form--right-box__">
+                                <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                             </Content>
                             <Content className='main-card card'>
                                 <Content className='main--containt'>
                                     <Content className='adm--table--head'>
                                         <Row>
-                                            <Col span={18}>
+                                            <Col span={8}>
                                                 <Content><span className='head-table'>Listado de postulaciones</span></Content>
                                             </Col>
-                                            <Col span={6}>
-                                                <Row>
-                                                    <Col span={7}>
+                                            <Col span={16}>
+                                                <Content className='text-right'>
+                                                    <span className='table--total' style={{marginRight:13}}>Total:<span className='text-orance'>59</span></span>
+                                                    
+                                                    <small style={{marginRight:5}}>Registros por página</small>
+                                                    <Select defaultValue="10" className='table_num_drop' >
+                                                        <Option value="10">10</Option>
+                                                        <Option value="20">20</Option>
+                                                        <Option value="30">30</Option>
+                                                        <Option value="40">40</Option>
+                                                    </Select>
+
+                                                </Content>
+                                                {/* <Row>
+                                                    <Col span={7} className='text-right'>
                                                         <p className='table--total'>Total:<span className='text-orance'>59</span></p>
                                                     </Col>
-                                                    <Col span={17}><small>Registros por página</small>
-                                                        <Select defaultValue="10" style={{ width: 60 }} >
+                                                    <Col span={17} className='text-right'><small>Registros por página</small>
+                                                        <Select defaultValue="10" className='table_num_drop' >
                                                             <Option value="10">10</Option>
                                                             <Option value="20">20</Option>
                                                             <Option value="30">30</Option>
                                                             <Option value="40">40</Option>
                                                         </Select>
                                                     </Col>
-                                                </Row>
+                                                </Row> */}
                                             </Col>
                                         </Row>
 
                                     </Content>
                                     <Content className='adm--form--area'>
                                         <Form form={form} name="dynamic_form_nest_item" onFinish={onFinish} autoComplete="off">
+
                                             <Row>
-                                                <Col span={6}>
+                                                <Col span={(matchScreenSize > 991) ? 6 : matchScreenSize > 768 ? 12 : 24} className='form_tab' >
                                                     <Form.Item name="area" className='' label="" rules={[{ required: true, message: 'Missing area' }]}>
                                                         <label className='tbl-form-lable'>Filtrar por palabra clave o código</label>
                                                         <Search
                                                             placeholder="Buscar palabra clave..."
                                                             allowClear
                                                             onSearch={onSearch}
-                                                            style={{ width: 230 }}
-                                                            className="adm-search--table"
+                                                            // style={{ width: 230 }}
+                                                            className="adm-search--table frm-pr"
                                                         />
                                                     </Form.Item>
                                                 </Col>
-                                                <Col span={6}>
+                                                <Col span={(matchScreenSize > 991) ? 6 : (matchScreenSize > 768) ? 12 : 24} className='form_tab'>
                                                     <Form.Item
                                                         name=""
                                                         label=""
@@ -237,8 +297,8 @@ export default function AdministracionJurados() {
                                                         <Select
                                                             placeholder="Seleccionar..."
                                                             allowClear
-                                                            style={{ width: 230 }}
-                                                            className='form--selct'
+                                                            // style={{ width: 230 }}
+                                                            className='form--selct frm-pr'
                                                         >
                                                             <Option value="male">male</Option>
                                                             <Option value="female">female</Option>
@@ -246,7 +306,7 @@ export default function AdministracionJurados() {
                                                         </Select>
                                                     </Form.Item>
                                                 </Col>
-                                                <Col span={6}>
+                                                <Col span={(matchScreenSize > 991) ? 6 : (matchScreenSize > 768) ? 12 : 24} className='form_tab'>
                                                     <Form.Item
                                                         name=""
                                                         label=""
@@ -255,8 +315,8 @@ export default function AdministracionJurados() {
                                                         <Select
                                                             placeholder="Seleccionar..."
                                                             allowClear
-                                                            style={{ width: 230 }}
-                                                            className='form--selct'
+                                                            // style={{ width: 230 }}
+                                                            className='form--selct frm-pr'
                                                         >
                                                             <Option value="male">male</Option>
                                                             <Option value="female">female</Option>
@@ -264,7 +324,7 @@ export default function AdministracionJurados() {
                                                         </Select>
                                                     </Form.Item>
                                                 </Col>
-                                                <Col span={6}>
+                                                <Col span={(matchScreenSize > 991) ? 6 : (matchScreenSize > 768) ? 12 : 24} className='form_tab'>
                                                     <Form.Item
                                                         name=""
                                                         label=""
@@ -273,8 +333,8 @@ export default function AdministracionJurados() {
                                                         <Select
                                                             placeholder="Seleccionar..."
                                                             allowClear
-                                                            style={{ width: 230 }}
-                                                            className='form--selct'
+                                                            // style={{ width: 230 }}
+                                                            className='form--selct frm-pr'
                                                         >
                                                             <Option value="male">male</Option>
                                                             <Option value="female">female</Option>
@@ -283,6 +343,7 @@ export default function AdministracionJurados() {
                                                     </Form.Item>
                                                 </Col>
                                             </Row>
+
                                         </Form>
                                     </Content>
                                     <Content className='adt-table--box'>

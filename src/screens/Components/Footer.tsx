@@ -23,7 +23,7 @@ export const Footer = () => {
         <Image src={Logo2} width="40%" preview={false} />
       </Col>
       <Col className="container-logoGOV">
-        <Image src={GOVCO} width="20%" preview={false} />
+        <Image src={GOVCO} className='logoGOV-img' preview={false} />
       </Col>
       <Col className="font-family-Montserrat-Regular font-size-10px font-color-FFFFFF font-weight-normal letter-spacing-1px">
         Conoce GOVCO aquí

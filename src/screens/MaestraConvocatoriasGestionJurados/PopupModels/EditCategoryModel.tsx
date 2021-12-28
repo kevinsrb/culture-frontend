@@ -21,23 +21,18 @@ import {
 import { Container, Grid } from "semantic-ui-react";
 import { LeftOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { json } from 'stream/consumers';
-import EditSuccessModel from './EditSuccessModel'
 export default function EditCategoryModel(props:any) {
     const {editCategoryData, setEditCategoryData, setMessageShow} = props;
     const { Content } = Layout
     const { Option } = Select
-    const [isEditSuccessModal, setIsEditSuccessModal] = useState<any>(false)
-
+ 
     function handleEditCategry(){
         props.editCategory(); 
-        setIsEditSuccessModal(true); 
+        props.setIsEditModalVisible(false); 
+        props.setMessageShow(true)
     }
     return (
         <div>
-             <Modal className="eval_pro_model" visible={isEditSuccessModal} width={1000} footer={false}>
-                    <EditSuccessModel setIsEditModalVisible={props.setIsEditModalVisible} setIsEditSuccessModal ={setIsEditSuccessModal} setMessageShow={setMessageShow} />
-            </Modal>
-
             <Layout
                 className="mb-1 mdl_pd_lf_rg model_info"
                 style={{ borderRadius: "15px 15px 15px 15px" }}

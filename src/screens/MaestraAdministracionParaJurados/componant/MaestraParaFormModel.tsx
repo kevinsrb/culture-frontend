@@ -26,13 +26,11 @@ export default function MaestraParaFormModel(props: any) {
             key: 'action',
             dataIndex: 'action',
             fixed: 'right',
-            width: 20,
+            width: 35,
         },
     ]);
-
-
+    
     const [formTabData, setFormTabData] = useState<any>([]);
-   
     const [formData, setFormData] = useState<any>({
         sNo: '0',
         criterio: '',
@@ -41,6 +39,7 @@ export default function MaestraParaFormModel(props: any) {
     useEffect(() => {
         // setFormTabData([]);
     }, [tabData, formTabData])
+
 
     function submitData() {
         var formVal = {
@@ -53,10 +52,14 @@ export default function MaestraParaFormModel(props: any) {
         }
         var datadd = [...formTabData];
         setFormTabData([...datadd, formVal]);
+        setTabData([...tabData, formVal])
         // setTabData(datadd);
+        setFormData({
+            ...formData,
+            criterio: ''
+        })
     }
-
-    // console.log('formTabData: ', formTabData);
+    
     return (
         <div>
             <Layout className="mastAdt--form-box">
@@ -64,12 +67,12 @@ export default function MaestraParaFormModel(props: any) {
                     <Content className='adm--form--area'>
                         <Content className='maf-head mb-2'>
                             <Row>
-                                <Col span={12}>
+                                <Col span={22}>
                                     <Content>
                                         <span className='title'>Crear criterios de evaluación</span>
                                     </Content>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={2}>
                                     <Content style={{ textAlign: "right" }}>
                                         <a onClick={() => props.handleCancel()} className='close_btn text-danger'><CloseOutlined /></a>
                                     </Content>
@@ -81,11 +84,11 @@ export default function MaestraParaFormModel(props: any) {
                             <Form name="dynamic_form_nest_item" autoComplete="off">
                                 <Form.Item name="area" className='' label="" rules={[{ required: true, message: 'Missing area' }]}>
                                     <label className='tbl-form-lable'>Filtrar por palabra clave o código de jurado</label>
-                                    <Input placeholder="Basic usage" onBlur={(e) => setFormData({
+                                    <Input placeholder="Basic usage" onChange={(e) => setFormData({
                                         ...formData,
                                         sNo: formTabData.length + 1,
                                         criterio: e.target.value
-                                    })} />
+                                    })} value={formData.criterio} />
                                 </Form.Item>
                             </Form>
                             <Content className='text-right'>
@@ -99,7 +102,7 @@ export default function MaestraParaFormModel(props: any) {
                 <Content className='mstAdt-model-table-head'>
                     <Row>
                         <Col span={18}>
-                            <Content><span className='head-table'>Criterios creados</span></Content>
+                           <Content><span className='head-table'>Criterios creados</span></Content>
                         </Col>
                         <Col span={6} className='text-right'>
                             <span>Total: <span>{formTabData.length}</span></span>
@@ -108,7 +111,7 @@ export default function MaestraParaFormModel(props: any) {
                 </Content>
                 <Content className='mstAdt-model-table-box' >
                     <Content className='adt--table-box '>
-                        <Table columns={columns} dataSource={formTabData} scroll={{ x: 'calc(300px + 50%)', y: 240 }} className='adt--form-table' pagination={false} />
+                        <Table columns={columns} dataSource={tabData} scroll={{ x: 'calc(300px + 50%)', y: 240 }} className='adt--form-table' pagination={false} />
                     </Content>
                 </Content>
                 <Content className='text-right mastAdt-modl-footer'>

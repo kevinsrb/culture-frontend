@@ -62,7 +62,7 @@ export default function FormEducation(props: any) {
   const [showEllipsis, setshowEllipsis] = useState<any>(true);
   const [showFirstAndLastNav, setshowFirstAndLastNav] = useState<any>(true);
   const [showPreviousAndNextNav, setshowPreviousAndNextNav] = useState<any>(true);
-
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   useEffect(() => {
     setResumeDetail();
     getFormalEducationData(offset);
@@ -301,11 +301,11 @@ export default function FormEducation(props: any) {
         />
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -435,7 +435,7 @@ export default function FormEducation(props: any) {
                                       <Grid>
                                         {props.citiesData &&
                                           props.citiesData.length &&
-                                          props.citiesData.map((item:any, i:any) => {
+                                          props.citiesData.map((item: any, i: any) => {
                                             return (
                                               <p
                                                 key={i}
@@ -638,7 +638,7 @@ export default function FormEducation(props: any) {
                             </Table.Header>
                             <Table.Body>
                               {formalEducationData &&
-                                formalEducationData.map((item:any, i:any) => {
+                                formalEducationData.map((item: any, i: any) => {
                                   i++;
                                   return (
                                     <Table.Row key={i}>

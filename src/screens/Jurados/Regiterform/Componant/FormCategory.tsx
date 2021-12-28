@@ -37,7 +37,7 @@ export default function FormCategory(props: any) {
   const [placeEducationArea, setPlaceEducationArea] = useState<any>("");
   const [valueda, setvalueda] = useState<any>("");
   const [formErrors, setFormErrors] = useState<any>([]);
-
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   const [formData, setFormData] = useState<any>({
     resume_id: props.resumeData ? props.resumeData.resume_id : 0,
     knowledge: 0,
@@ -46,7 +46,6 @@ export default function FormCategory(props: any) {
   });
 
   const { isEdit } = props;
-  console.log("isEdit: ", isEdit);
 
   useEffect(() => {
     getCategory();
@@ -233,11 +232,11 @@ export default function FormCategory(props: any) {
       <Container fluid>
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ height: "100vh", width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -390,8 +389,8 @@ export default function FormCategory(props: any) {
                       </Grid>
 
                       <Grid style={{ padding: "0px 5px" }}>
-                        <Grid.Column floated="left" width={5}>
-                          <p>
+                        <Grid.Column floated="left"/*  width={5} */ className='table--head-jds_lft'>
+                          <p className='tbl_hdin'>
                             Categorías de conocimiento -{" "}
                             <small>Selecciona 5</small>
                           </p>
@@ -403,10 +402,11 @@ export default function FormCategory(props: any) {
                         </Grid.Column>
                         {//@ts-ignore
                           <Grid.Column floated="right text-right"
-                            width={5}
+                            // width={5}
                             style={{ textAlign: "right" }}
+                            className='table--head-jds_rigt'
                           >
-                            <p>
+                            <p className='tbl_hdin'>
                               Seleccionado{" "}
                               <span className="cat-list-no">
                                 ({selectCategory.length}/5)
@@ -422,7 +422,7 @@ export default function FormCategory(props: any) {
                               styled
                               className={`drop--listing-colsp
                         ${//@ts-ignore
-                          !selectCategory?.length > 0 &&
+                                !selectCategory?.length > 0 &&
                                 formErrors?.selectCategory &&
                                 "activeBorder"
                                 }
@@ -430,7 +430,7 @@ export default function FormCategory(props: any) {
                               style={{ width: "100%" }}
                             >
                               {categoryData &&
-                                categoryData.map((item:any, i:any) => {
+                                categoryData.map((item: any, i: any) => {
                                   i++;
                                   return (
                                     <div key={i}>
@@ -453,7 +453,7 @@ export default function FormCategory(props: any) {
                                         <List>
                                           {subCategoryData &&
                                             subCategoryData.map(
-                                              (valiItm:any, index:any) => {
+                                              (valiItm: any, index: any) => {
                                                 return (
                                                   <div>
                                                     {valiItm.parent_id ==

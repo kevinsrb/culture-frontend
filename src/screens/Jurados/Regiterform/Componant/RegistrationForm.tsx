@@ -31,6 +31,7 @@ export default function RegistrationForm(props: any) {
   const [viewAddressModel, setViewAddressModel] = useState<any>(false);
   const photoClickBtn = useRef(null);
   const [masterData, setMasterData] = React.useState<any>();
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   const [formData, setFormData] = React.useState<any>({
     identification_no: "",
     first_name: "",
@@ -344,11 +345,11 @@ export default function RegistrationForm(props: any) {
         />
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ height: "100vh", width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -497,7 +498,7 @@ export default function RegistrationForm(props: any) {
                       </Grid>
                       <Grid columns={4}>
                         <Grid.Row>
-                          <Grid.Column>
+                          <Grid.Column className='rgFrm_identi'>
                             <label>Documento de identidad</label>
                             <Form.Group>
                               <Form.Select
@@ -507,13 +508,13 @@ export default function RegistrationForm(props: any) {
                                     ? formData?.cc_name
                                     : identificationCC
                                 }
-                                width={6}
+                                // width={6}
                                 fluid
                                 type="text"
                                 onClick={() =>
                                   handelDropdown("identification_cc")
                                 }
-                                className="select--val"
+                                className="select--val rgFotm_cc"
                                 error={
                                   !formData.identification_cc &&
                                   formErrors?.identification_cc
@@ -563,7 +564,7 @@ export default function RegistrationForm(props: any) {
                               <Form.Input
                                 type="number"
                                 placeholder="No."
-                                width={10}
+                                // width={10}
                                 onChange={(e) =>
                                   setFormData({
                                     ...formData,
@@ -575,6 +576,7 @@ export default function RegistrationForm(props: any) {
                                   !formData.identification_no &&
                                   formErrors?.identification_no
                                 }
+                                className='rgFotm_no'
                               />
                             </Form.Group>
                             <Grid></Grid>

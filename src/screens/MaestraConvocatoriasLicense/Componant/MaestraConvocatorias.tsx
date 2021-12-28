@@ -7,23 +7,9 @@ import {
     Layout,
     Row,
     Col,
-    Divider,
-    List,
-    Typography,
-    Table,
-    Tag,
-    Space,
     Form,
-    Checkbox,
     Button,
-    Input,
-    Image,
     Select,
-    Modal,
-    Radio,
-    Empty,
-    Dropdown as DropdownAnt,
-    Radio as RadioAnt, Form as FormAnt
 } from "antd";
 import { Container, Grid } from "semantic-ui-react";
 export default function MaestraConvocatorias(props: any) {
@@ -33,25 +19,27 @@ export default function MaestraConvocatorias(props: any) {
     const [children, setChildren] = useState<any>([]);
     const [validation, setValidation] = useState<any>(false);
     const [gestionarMaestra, setGestionarMaestra] = useState<any>('');
+    const [sidebarShow, setSidebarShow] = useState<any>(false);
 
     function onChange(value:any) {
         setGestionarMaestra(value);
+        props.setSelectMaestr(value);
         setValidation(false) 
     }
 
     function onSearch(val:any) {
-    console.log('search:', val);
+        console.log('search:', val);
     }
     return (
         <div>
             <Container fluid>
                 <Grid columns={2}>
                     <Grid.Row>
-                        <Grid.Column className="form--left-box">
-                            <Sidebar />
+                        <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar':'hide__sidebar'}`}>
+                            <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                         </Grid.Column>
-                        <Grid.Column className="form--right-box">
-                            <HeaderMenu />
+                        <Grid.Column className="form--right-box" >
+                            <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
 
                             <Layout className='licn_containt_area p-1'>
                                 <Content className='licn__card card_box'>
@@ -73,36 +61,35 @@ export default function MaestraConvocatorias(props: any) {
                                                     }
                                                     style={{ width: '100%' }} 
                                                     size='large'
-                                                    className={`select_licn ${validation?'select_validation':''} `} 
+                                                    className={`select_licn select_main_licn ${validation?'select_validation':''} `} 
                                                 >
-                                                    <Option value="jack">Línea y categoría</Option>
-                                                    <Option value="lucy">Actividades cronograma</Option>
-                                                    <Option value="tom">Documentos administrativos</Option>
-                                                    <Option value="tom">Documentos técnicos</Option>
-                                                    <Option value="tom">Área</Option>
+                                                    <Option value="linea_categoria">Línea y categoría</Option>
+                                                    <Option value="actividades_cronograma">Actividades cronograma</Option>
+                                                    <Option value="documentos_administrativos">Documentos administrativos</Option>
+                                                    <Option value="documentos_tecnicos">Documentos técnicos</Option>
+                                                    <Option value="area">Área</Option>
+                                                    <Option value="entidad">Entidad</Option>
+                                                    <Option value="linea_estrategica">Linea Estrategica</Option>
+                                                    <Option value="ciclos">Ciclos</Option>
                                                 </Select>
                                             </Content>
                                         </Form>
                                     </Content>
 
                                     <Content className='asgevl_table_box mt-1'>
-
                                         <Content className="mb-2">
                                             <Row className="">
                                                 <Col span={24} className="form--btm-btn-box">
                                                     {(gestionarMaestra != '')?
                                                     <Button className="btn-submit form_bg_btn" type="primary" onClick={() => props.setShowPage(2)}>Continuar</Button>:
                                                     <Button onClick={()=>setValidation(true)} className="btn-submit form_bg_btn" type="primary">Continuar</Button>
-
                                                     }
                                                 </Col>
                                             </Row>
                                         </Content>
                                     </Content>
                                 </Content>
-
                             </Layout>
-
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

@@ -1,22 +1,8 @@
 import React, { useState } from 'react';
 import {
     Layout,
-    Row,
-    Col,
-    Divider,
-    List,
-    Typography,
-    Table,
-    Tag,
-    Space,
-    Form,
-    Checkbox,
     Button,
-    Input,
-    Image,
-    Select,
-    Modal,
-    Empty
+    Select
 } from "antd";
 import { Container, Grid } from "semantic-ui-react";
 import { LeftOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -29,7 +15,7 @@ export default function EditSuccessModel(props: any) {
         <div>
             <Layout
                 className="mb-1 mdl_pd_lf_rg model_info"
-                style={{ borderRadius: "15px 15px 15px 15px", width:650, margin:'auto' }}
+                style={{ borderRadius: "15px 15px 15px 15px", margin:'auto' }}
             >
 
                 <Content className="asgevl__top_mdl_box">
@@ -39,7 +25,7 @@ export default function EditSuccessModel(props: any) {
                             <p className='succ_mdl_text'>Los cambios se han guardado exitosamente</p>
                         </Content>
                         <Content className='text-center mt-2'>
-                            <Button onClick={()=>{props.setIsEditSuccessModal(false); props.setIsEditModalVisible(false); props.setMessageShow(true)}} className="btn-submit form_bg_btn mt-2" type="primary">Aceptar</Button>
+                            <Button onClick={()=>{props.setIsEditSuccessModal(false);}} className="btn-submit form_bg_btn mt-2" type="primary">Aceptar</Button>
                         </Content>
 
                     </Content>

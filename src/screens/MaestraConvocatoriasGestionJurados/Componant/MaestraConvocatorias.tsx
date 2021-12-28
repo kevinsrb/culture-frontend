@@ -33,26 +33,26 @@ export default function MaestraConvocatorias(props: any) {
     const [children, setChildren] = useState<any>([]);
     const [validation, setValidation] = useState<any>(false);
     const [gestionarMaestra, setGestionarMaestra] = useState<any>('');
-
-    function onChange(value:any) {
+    const [sidebarShow, setSidebarShow] = useState<any>(false);
+    function onChange(value: any) {
         console.log(`selected ${value}`);
         setGestionarMaestra(value);
         setValidation(false)
     }
 
-    function onSearch(val:any) {
-    console.log('search:', val);
+    function onSearch(val: any) {
+        console.log('search:', val);
     }
     return (
         <div>
             <Container fluid>
                 <Grid columns={2}>
                     <Grid.Row>
-                        <Grid.Column className="form--left-box">
-                            <Sidebar />
+                        <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+                            <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                         </Grid.Column>
-                        <Grid.Column className="form--right-box">
-                            <HeaderMenu />
+                        <Grid.Column className="form--right-box" >
+                            <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
 
                             <Layout className='licn_containt_area p-1'>
                                 <Content className='licn__card card_box'>
@@ -69,11 +69,11 @@ export default function MaestraConvocatorias(props: any) {
                                                     optionFilterProp="children"
                                                     onChange={onChange}
                                                     onSearch={onSearch}
-                                                    filterOption={(input:any, option:any) =>
+                                                    filterOption={(input: any, option: any) =>
                                                         option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                                                     }
-                                                    className={`select_licn ${validation?'select_validation':''} `} 
-                                                    style={{ width: '100%' }} 
+                                                    className={`select_licn ${validation ? 'select_validation' : ''} `}
+                                                    style={{ width: '100%' }}
                                                     size='large'
                                                 >
                                                     <Option value="jack">Línea y categoría</Option>
@@ -91,9 +91,9 @@ export default function MaestraConvocatorias(props: any) {
                                         <Content className="mb-2">
                                             <Row className="">
                                                 <Col span={24} className="form--btm-btn-box">
-                                                    {(gestionarMaestra != '')?
-                                                    <Button className="btn-submit form_bg_btn" type="primary" onClick={() => props.setShowPage(2)}>Continuar</Button>:
-                                                    <Button onClick={()=>setValidation(true)} className="btn-submit form_bg_btn" type="primary">Continuar</Button>
+                                                    {(gestionarMaestra != '') ?
+                                                        <Button className="btn-submit form_bg_btn" type="primary" onClick={() => props.setShowPage(2)}>Continuar</Button> :
+                                                        <Button onClick={() => setValidation(true)} className="btn-submit form_bg_btn" type="primary">Continuar</Button>
 
                                                     }
                                                 </Col>

@@ -7,7 +7,9 @@ import { IconContext } from "react-icons";
 // import './Header.css';
 import { Dropdown, Image } from "semantic-ui-react";
 import { Icon } from "semantic-ui-react";
-export default function Menuheader({ showIcon = false }) {
+export default function Menuheader(props:any) {
+console.log('props: ff ', props);
+  const [showIcon, setShowIcon] = useState(false);
   const [sidebar, setSidebar] = useState(false);
   const [seleDrop, setSeleDrop] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
@@ -61,22 +63,28 @@ export default function Menuheader({ showIcon = false }) {
   return (
     <IconContext.Provider value={{ color: "#004884" }}>
       {!showIcon && (
-        <div className="navbar" style={{ padding: 5, marginBottom: "-15px" }}>
+        <div className="navbar" style={{ padding: 5, marginBottom: "-15px"}}>
           {/* <div >
           <Link to="/" className="menu-bars" style={{fontSize: '22px'}}>
             <FaIcons.FaBars onClick={showSidebar} />
           </Link>
         </div> */}
+
+          {/* <div style={{ width: '5%' }}>
+            <a  className="menu-bars sid_menu_bat" style={{ fontSize: '22px' }}>
+              <FaIcons.FaBars onClick={()=>props.setSidebarShow(props.sidebarShow ? false:true)} />
+            </a>
+          </div> */}
           <nav className={sidebar ? "nav-menu active" : "nav-menu"}>
             <ul
               className="nav-menu-items nav-header-menu"
-              onClick={showSidebar}
+              // onClick={showSidebar}
             >
               <li className="navbar-toggle menu--items">
                 <Link
                   to=""
-                  className="menu-bars menu--link"
-                  style={{ fontSize: "14px", color: "black" }}
+                  className="menu-bars menu--link header_title_head"
+                  style={{color: "black" }}
                 >
                   Hola, Luisa María Sánchez Cadavid
                 </Link>
@@ -91,6 +99,7 @@ export default function Menuheader({ showIcon = false }) {
                 <a
                   className="menu-bars menu--link"
                   style={{ fontSize: "22px" }}
+                  onClick={()=>props.setSidebarShow(props.sidebarShow ? false:true)}
                 >
                   {/* <FaIcons.FaBars onClick={showSidebar} /> */}
                   <FaIcons.FaBars />
@@ -131,7 +140,7 @@ export default function Menuheader({ showIcon = false }) {
         <div
           style={{
             height: showIcon ? 65 : 45,
-            display:'none'
+            display: 'none'
           }}
           className="third--header"
         >

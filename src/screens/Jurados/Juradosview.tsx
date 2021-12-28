@@ -20,7 +20,7 @@ import HeaderMenu from "../../components/Header";
 import "../../App.scss";
 export default function Juradosview() {
   const history = useHistory();
-
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   useEffect(() => {
     setShowPages();
   }, []);
@@ -35,11 +35,11 @@ export default function Juradosview() {
       <Container fluid>
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid className="jura--main-page" style={{ marginTop: "0px" }}>
                 <Form className="text-center" style={{ width: "100%" }}>
                   <Form.Field className="jura--head-text">

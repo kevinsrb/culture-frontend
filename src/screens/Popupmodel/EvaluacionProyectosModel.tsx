@@ -36,7 +36,7 @@ export default function EvaluacionProyectosModel(props: any) {
   const listData = [
     {
       title: "1. Coherencia entre el planteamiento estético, - poética, concepto, experiencia, sensibilidad- y el desarrollo técnico",
-      description:"Descripción criterio de evaluación",
+      description: "Descripción criterio de evaluación",
     },
     {
       title: "2. Coherencia entre el planteamiento estético, - poética, concepto, experiencia, sensibilidad- y el desarrollo técnico",
@@ -48,7 +48,7 @@ export default function EvaluacionProyectosModel(props: any) {
     },
     {
       title: "4. Coherencia entre el planteamiento estético, - poética, concepto, experiencia, sensibilidad- y el desarrollo técnico.",
-      description:"Descripción criterio de evaluación",
+      description: "Descripción criterio de evaluación",
     },
   ];
   const columns: any = [
@@ -70,7 +70,7 @@ export default function EvaluacionProyectosModel(props: any) {
       title: <span className='as_tbl_hd'>Acciones</span>,
       key: "acciones",
       fixed: "right",
-      width: 100,
+      width: 70,
       render: () => <a className='view_detl' onClick={() => setDocumentOpen(true)}>VerMas</a>,
     },
   ];
@@ -116,19 +116,19 @@ export default function EvaluacionProyectosModel(props: any) {
   const enlacesData = [
     {
       no: "1",
-      nombreproyectoo:<a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
+      nombreproyectoo: <a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
     },
     {
       no: "2",
-      nombreproyectoo:<a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
+      nombreproyectoo: <a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
     },
     {
       no: "3",
-      nombreproyectoo:<a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
+      nombreproyectoo: <a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
     },
     {
       no: "4",
-      nombreproyectoo:<a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
+      nombreproyectoo: <a>https://xd.adobe.com/view/fa7509de-a369-4be6-8642-023e3516b4e3-af26/screen/ceabbf4a-e9cd-4051-87b1-01edc5033829</a>,
     },
   ];
 
@@ -139,7 +139,7 @@ export default function EvaluacionProyectosModel(props: any) {
   return (
     <div>
       {documentOpen ? (
-        <Layout style={{borderRadius:15}}>
+        <Layout style={{ borderRadius: 15 }}>
           <ViewTechnicalDocumentsProjectModel
             setDocumentOpen={setDocumentOpen}
           />
@@ -155,10 +155,10 @@ export default function EvaluacionProyectosModel(props: any) {
                 <Content className='model__header'>
                   <Content className='mdl_header_containt'>
                     <Row className='mdl_heading_row'>
-                      <Col span={12} className=''>
+                      <Col span={20} className=''>
                         <h3 className='evel_mdl_title'>Evaluacion de Proyecto</h3>
                       </Col>
-                      <Col span={12} className=' text-right'>
+                      <Col span={4} className=' text-right'>
                         <a className="mdl_close_btn" onClick={() => props.setVisible(false)}><CloseOutlined /></a>
                       </Col>
                     </Row>
@@ -189,8 +189,8 @@ export default function EvaluacionProyectosModel(props: any) {
                         }
                       >
                         <a onClick={() =>
-                            setEvalProyectoPage("evaluaarProyectoForm")
-                          }
+                          setEvalProyectoPage("evaluaarProyectoForm")
+                        }
                         >
                           Evaluar proyecto
                         </a>
@@ -286,7 +286,7 @@ export default function EvaluacionProyectosModel(props: any) {
                           <List.Item.Meta
                             className="list_cat"
                             title={<a className='cat_list_title'>{item.title}</a>}
-                            description= {<span className='cat_list_desc'>Descripción criterio de evaluación</span>}
+                            description={<span className='cat_list_desc'>Descripción criterio de evaluación</span>}
                           />
                         </List.Item>
                       )}
@@ -309,7 +309,7 @@ export default function EvaluacionProyectosModel(props: any) {
                           }
                         >
                           <a onClick={() => setTableShow("documentosTecnicos")}>
-                          Documentos técnicos del proyecto
+                            Documentos técnicos del proyecto
                           </a>
                         </li>
                         <li
@@ -318,7 +318,7 @@ export default function EvaluacionProyectosModel(props: any) {
                           }
                         >
                           <a onClick={() => setTableShow("enlacesProyecto")}>
-                          Enlaces del proyecto
+                            Enlaces del proyecto
                           </a>
                         </li>
                       </ul>
@@ -344,7 +344,7 @@ export default function EvaluacionProyectosModel(props: any) {
                     )}
                   </Content>
                   <Content className="text-right">
-                    <Row className="">
+                    {/* <Row className="">
                       <Col span={15}></Col>
                       <Col span={9} className="form--confirm-chkbox text-right">
                         <Form name="basic">
@@ -368,7 +368,42 @@ export default function EvaluacionProyectosModel(props: any) {
                           </Form.Item>
                         </Form>
                       </Col>
-                    </Row>
+                    </Row> */}
+
+                    {/* <Form name="basic">
+                      <Form.Item
+                        name="remember"
+                        valuePropName="checked"
+                        className="row"
+                      >
+                        <Row className="text-right">
+                          <p onClick={() => setTerm(!isTerm)}>
+                            <Image
+                              width={19}
+                              preview={false}
+                              src={!isTerm ? checkboxSel : checkboxEm}
+                            />
+                          </p>
+                          <span className='cat_mdl_chk'>
+                            Me decaro inhabilitado para evauluar este proyecto
+                          </span>{" "}
+                        </Row>
+                      </Form.Item>
+                    </Form> */}
+
+                    <Content>
+                      <span className='cat_mdl_chk' style={{marginRight: '1rem'}}>
+                        <Image
+                          onClick={() => setTerm(!isTerm)}
+                          width={19}
+                          style={{margin: -6}}
+                          preview={false}
+                          src={!isTerm ? checkboxSel : checkboxEm}
+                        />Me decaro inhabilitado para evauluar este proyecto{" "}
+                      </span>
+
+                    </Content>
+
                   </Content>
                 </Content>
 

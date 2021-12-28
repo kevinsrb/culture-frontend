@@ -20,15 +20,46 @@ export default function MaestraAdministracionPara() {
     const [editModel, setEditModel] = useState<any>(false);
     const [loading, setLoading] = useState<any>();
     const [editArrayData, setEditArrayData] = useState<any>({});
+    const [sidebarShow, setSidebarShow] = useState<any>(false);
     //@ts-ignore
     const onSearch = value => console.log(value);
     // const { Header, Content, Footer, Sider } = Layout;
-
+    
     async function showModal() {
         setVisible(true)
     };
-    const [tabData, setTabData] = useState<any>([]);
 
+    
+    const [matchScreen, setMatchScreen] = useState<any>('')
+    const [matchScreenSize, setMatchScreenSize] = useState<any>(1200)
+    useEffect(() => {
+       
+        var mobileQuery = window.matchMedia("(max-width: 768px)");
+        if(mobileQuery.matches== true && mobileQuery.media == "(max-width: 768px)"){
+            setMatchScreenSize(768);
+        }else{
+            setMatchScreenSize(1200);
+        }
+        if(mobileQuery){
+            mediaQueryCheck(mobileQuery);
+            mobileQuery.addEventListener("change", mediaQueryCheck);
+        }
+        return () => {
+            mobileQuery.removeEventListener("change", mediaQueryCheck);
+        }
+    }, [matchScreen])
+    
+    function mediaQueryCheck(inputQuery: any) {
+        if (inputQuery.matches) {
+            setMatchScreen(true);
+            setSidebarShow(false);
+        } else {
+            setSidebarShow(true);
+            setMatchScreen(false);
+        }
+    }
+    
+    const [tabData, setTabData] = useState<any>([]);
     const [columns, setColumns] = useState<any>([
         {
             title: <b>No.</b>,
@@ -139,7 +170,8 @@ export default function MaestraAdministracionPara() {
     useEffect(() => {
         setTabData(tabData)
     }, [tabData]);
-
+    
+  
     async function handleOk(item: any) {
         setTabData(item)
         setLoading(true);
@@ -158,7 +190,8 @@ export default function MaestraAdministracionPara() {
         setTabData([...array]);
         setEditModel(false)
     }
-
+    
+    console.log('tabData: vbn', tabData);
     return (
         <div>
             <div className={`${visible ? "maestAdt-modal-regi" : ""}`}>
@@ -168,7 +201,7 @@ export default function MaestraAdministracionPara() {
                     style={{ top: 25, backgroundColor: 'transparent !important' }}
                 >
                     <Content>
-                        <MaestraParaFormModel showModal={showModal} handleCancel={handleCancel} handleOk={handleOk} data={data} setTabData={setTabData} tabData={tabData} setEditModel={setEditModel} setEditArrayData={setEditArrayData} />
+                        <MaestraParaFormModel showModal={showModal} handleCancel={handleCancel} handleOk={handleOk} data={data} setTabData={setTabData} tabData={tabData} setEditModel={setEditModel} setEditArrayData={setEditArrayData}/>
                     </Content>
                 </Modal>
             </div>
@@ -187,12 +220,12 @@ export default function MaestraAdministracionPara() {
             <Layout>
                 <Content className="">
                     <Row>
-                        <Col span={5}>
-                            <Sidebar />
+                        <Col /* span={sidebarShow? 5:0} */ className="column form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar':'hide__sidebar'}`}>
+                            <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow}/>
                         </Col>
-                        <Col span={18}>
+                        <Col /* span={sidebarShow? 19:24} */ className="column form--right-box evaluRigtBox">
                             <Content>
-                                <HeaderMenu />
+                                <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow}/>
                             </Content>
                             <Content className='ma_para-head-box'>
                                 <Content className='ma_para-btn-box'>
@@ -207,13 +240,12 @@ export default function MaestraAdministracionPara() {
 
                                     <Content className='adm--table--head'>
                                         <Row>
-                                            <Col span={18}>
+                                            <Col span={12}>
                                                 <Content><span className='head-table'>Criterios de evaluación</span></Content>
                                             </Col>
-                                            <Col span={6}>
+                                            <Col span={12}>
                                                 <Row>
-                                                    <Col span={7}></Col>
-                                                    <Col span={17}><small>Registros por página </small>
+                                                    <Col span={24} className='text-right' ><small>Registros por página </small>
                                                         <Select defaultValue="10" style={{ width: 60 }} >
                                                             <Option value="10">10</Option>
                                                             <Option value="20">20</Option>

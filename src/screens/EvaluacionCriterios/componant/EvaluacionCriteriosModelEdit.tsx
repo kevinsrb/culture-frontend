@@ -204,10 +204,10 @@ export default function EvaluacionCriteriosModel(props: any) {
                         <Content className='model__header asgevl_head'>
                             <Content className='mdl_header_containt'>
                                 <Row className='tbl_md_heading_box'>
-                                    <Col span={12} className=''>
+                                    <Col span={20} className=''>
                                         <h3 className='asgevl_mdl_form_head'>Criterios de evaluación fff</h3>
                                     </Col>
-                                    <Col span={12} className='text-right'>
+                                    <Col span={4} className='text-right'>
                                         <a className="mdl_close_btn" onClick={() => props.setIsModalVisible(false)}><CloseOutlined /></a>
                                     </Col>
                                 </Row>

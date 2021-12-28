@@ -33,7 +33,7 @@ import { Footer } from "../../../Components/Footer";
 import EvaluacionProyectosModel from "../../../Popupmodel/EvaluacionProyectosModel";
 import reducers from "../../../../store/reducers";
 import { evaluateProjectList } from "../../../../data/api";
-import {LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 // @ts-ignore
 export default function EvaluacionProyectosList(props: any) {
   const [viewEduOpen, setViewEduOpen] = useState<any>(false);
@@ -47,6 +47,26 @@ export default function EvaluacionProyectosList(props: any) {
   const [visible, setVisible] = useState(false);
   const [cantidadPáginas, setCantidadPáginas] = React.useState(10);
 
+
+
+  const [matchScreen, setMatchScreen] = useState<any>('')
+  useEffect(() => {
+    var mobileQuery = window.matchMedia("(max-width: 768px)");
+    mediaQueryCheck(mobileQuery);
+    mobileQuery.addEventListener("change", mediaQueryCheck);
+    return () => {
+      mobileQuery.removeEventListener("change", mediaQueryCheck);
+    }
+  }, [matchScreen])
+  function mediaQueryCheck(inputQuery: any) {
+    if (inputQuery.matches) {
+      setMatchScreen(true);
+    } else {
+      setMatchScreen(false);
+    }
+  }
+
+  
   const columns: any = [
     {
       title: <span className='as_tbl_hd'>No.</span>,
@@ -61,7 +81,7 @@ export default function EvaluacionProyectosList(props: any) {
       width: 100,
       dataIndex: "nombreproyecto",
       key: "nombreproyecto",
-      fixed: "left",
+      fixed: (matchScreen == true)?"":"left",
       className: 'border_sh'
     },
     { title: <span className='as_tbl_hd'>Nota final</span>, dataIndex: "notafinal", key: "1", width: 100 },
@@ -81,23 +101,23 @@ export default function EvaluacionProyectosList(props: any) {
 
   function itemRenderTable(current: any, type: any, originalElement: any) {
     if (type === "prev") {
-        return (
-            <span className="border-ant-prev-table font-size-10px">
-                <LeftOutlined className="font-color-1FAEEF" style={{ display: "inline-flex", paddingRight: "2px" }} />
-                Ant.
-            </span>
-        );
+      return (
+        <span className="border-ant-prev-table font-size-10px">
+          <LeftOutlined className="font-color-1FAEEF" style={{ display: "inline-flex", paddingRight: "2px" }} />
+          Ant.
+        </span>
+      );
     }
     if (type === "next") {
-        return (
-            <span className="border-ant-prev-table font-size-10px">
-                Sig.
-                <RightOutlined className="font-color-1FAEEF" style={{ display: "inline-flex", paddingLeft: "2px" }} />
-            </span>
-        );
+      return (
+        <span className="border-ant-prev-table font-size-10px">
+          Sig.
+          <RightOutlined className="font-color-1FAEEF" style={{ display: "inline-flex", paddingLeft: "2px" }} />
+        </span>
+      );
     }
     return originalElement;
-}
+  }
 
 
   return (
@@ -140,7 +160,7 @@ export default function EvaluacionProyectosList(props: any) {
                 <Content className="head-containt-img-left">
                   <Image
                     className="head--"
-                    width={200}
+                    style={{ padding: '.7rem' }}
                     preview={false}
                     src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
                   />
@@ -164,7 +184,7 @@ export default function EvaluacionProyectosList(props: any) {
           <Content className="box-container">
             <Content className="">
               <Row>
-                <Col span={5}>
+                <Col  span={(matchScreen == true) ? 24 : 5} style={{ padding: (matchScreen == true) ? 10 : 0 }}>
                   <Content className="table-area pro-menu-containt">
                     <Content className="lft--pro-list">
                       <Content className="mb-1">
@@ -204,7 +224,7 @@ export default function EvaluacionProyectosList(props: any) {
                     </Content>
                   </Content>
                 </Col>
-                <Col span={19}>
+                <Col span={(matchScreen == true) ? 24 : 19}>
                   <Content className="stts--lf-form-head">
                     <Content className="heading--title">
                       <ul
@@ -226,7 +246,7 @@ export default function EvaluacionProyectosList(props: any) {
                     </Content>
                   </Content>
 
-                  <Content className="eval_pro_containt_area ml-2 mr-2 mb-2 mt-2">
+                  <Content className="eval_pro_containt_area p-1 ">
                     <Typography>
                       <Paragraph>
                         <Content className="evalpro_containt_head_text">
@@ -241,18 +261,18 @@ export default function EvaluacionProyectosList(props: any) {
                         <Content className="evalpro__list_table table_card">
                           <Content className="evalpro_table_head">
                             <Row>
-                              <Col span={16}>
+                              <Col span={8}>
                                 <span className='tbl_head_title'>Proyectos a evaluar</span>
                               </Col>
-                              <Col span={8}>
+                              <Col span={16}>
                                 <Row>
-                                  <Col span={7} className='text-right'>
+                                  <Col span={8} className='text-right'>
                                     <p className="table--total table--total-mdl">
                                       Total :
                                       <span className="text-orance"> 59</span>
                                     </p>
                                   </Col>
-                                  <Col span={17} className='text-right'>
+                                  <Col span={16} className='text-right'>
                                     <small className='tbl_pg'>Registros por página</small>
                                     <Select
                                       defaultValue="10"
@@ -270,24 +290,24 @@ export default function EvaluacionProyectosList(props: any) {
                           </Content>
                           <Content className='' >
                             <Content className=''>
-                            {/*   <Table
+                              {/*   <Table
                                 columns={columns}
                                 dataSource={evaluateProjectList}
                                 scroll={{ x: 'calc(590px + 50%)', y: 340 }}
                                 rowClassName={(record, index) => index % 2 === 0 ? 'table-row-dark' : 'table-row-light'}
                               /> */}
-                             {
-                              <Table columns={columns}
-                                style={{ borderTop: "1px solid #C4C4C4" }}
-                                locale={{ emptyText: <Empty description="No hay datos" style={{ padding: "50px" }} /> }}
-                                pagination={{ position: ["bottomRight"], itemRender:itemRenderTable, pageSize: cantidadPáginas }}
-                                dataSource={evaluateProjectList}
-                                scroll={{ x: 'calc(590px + 50%)', y: 340 }}
-                                size="small"
-                                rowClassName={(record, index) => index % 2 === 0 ? 'table-row-dark' : 'table-row-light'}
-                                bordered={false}
-                            />
-                           }
+                              {
+                                <Table columns={columns}
+                                  style={{ borderTop: "1px solid #C4C4C4" }}
+                                  locale={{ emptyText: <Empty description="No hay datos" style={{ padding: "50px" }} /> }}
+                                  pagination={{ position: ["bottomRight"], itemRender: itemRenderTable, pageSize: cantidadPáginas }}
+                                  dataSource={evaluateProjectList}
+                                  scroll={{ x: 'calc(590px + 50%)', y: 340 }}
+                                  size="small"
+                                  rowClassName={(record, index) => index % 2 === 0 ? 'table-row-dark' : 'table-row-light'}
+                                  bordered={false}
+                                />
+                              }
 
                             </Content>
                           </Content>
@@ -301,8 +321,8 @@ export default function EvaluacionProyectosList(props: any) {
           </Content>
           <Content className="text-right">
             <Row className="">
-              <Col span={14}></Col>
-              <Col span={9} className="form--confirm-chkbox text-right">
+              <Col span={2}></Col>
+              <Col span={21} className="form--confirm-chkbox text-right">
                 <Content className='mb-2'>
                   <p className='text-right evel_font_text'>
                     Debe completar todas las evaluaciones asignadas para poder enviarlas.

@@ -50,6 +50,7 @@ export default function AgregarPublicaciones(props: any) {
   const [showEllipsis, setshowEllipsis] = useState<any>(true);
   const [showFirstAndLastNav, setshowFirstAndLastNav] = useState<any>(true);
   const [showPreviousAndNextNav, setshowPreviousAndNextNav] = useState<any>(true);
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   const [formData, setFormData] = useState<any>({
     resume_id: "",
     title: "",
@@ -273,11 +274,11 @@ export default function AgregarPublicaciones(props: any) {
 
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -352,8 +353,8 @@ export default function AgregarPublicaciones(props: any) {
                                           <p
                                             key={i}
                                             className={`form-slct ${formData?.guy == item.id
-                                                ? "active"
-                                                : ""
+                                              ? "active"
+                                              : ""
                                               }`}
                                           >
                                             <p
@@ -394,13 +395,13 @@ export default function AgregarPublicaciones(props: any) {
                                 <Grid.Row>
                                   <Grid.Column className="select__box_clm">
                                     <Grid>
-                                      {masterFilter("format").map((item:any, i:any) => {
+                                      {masterFilter("format").map((item: any, i: any) => {
                                         return (
                                           <p
                                             key={i}
                                             className={`form-slct ${formData?.town == item.id
-                                                ? "active"
-                                                : ""
+                                              ? "active"
+                                              : ""
                                               }`}
                                           >
                                             <p
@@ -429,26 +430,26 @@ export default function AgregarPublicaciones(props: any) {
                           <Grid.Column>
                             <label>Ciudad</label>
                             {// @ts-ignore
-                            <Form.Select
-                            className="select--val"
-                            placeholder={town == "" ? formData?.town : town}
-                            onClick={() => handelDropdown("town")}
-                            error={!formData.town && formErrors?.town}
-                            />
-                          }
+                              <Form.Select
+                                className="select--val"
+                                placeholder={town == "" ? formData?.town : town}
+                                onClick={() => handelDropdown("town")}
+                                error={!formData.town && formErrors?.town}
+                              />
+                            }
 
                             {openDropdown && openDropdown == "town" ? (
                               <Grid columns={1} className="select__box">
                                 <Grid.Row>
                                   <Grid.Column className="select__box_clm">
                                     <Grid>
-                                      {props?.citiesData.map((item:any, i:any) => {
+                                      {props?.citiesData.map((item: any, i: any) => {
                                         return (
                                           <p
                                             key={i}
                                             className={`form-slct ${formData?.town == item.city_id
-                                                ? "active"
-                                                : ""
+                                              ? "active"
+                                              : ""
                                               }`}
                                           >
                                             <p
@@ -597,7 +598,7 @@ export default function AgregarPublicaciones(props: any) {
                             </Table.Header>
                             <Table.Body>
                               {listArray &&
-                                listArray.map((item:any, i:any) => {
+                                listArray.map((item: any, i: any) => {
                                   return (
                                     <Table.Row>
                                       <Table.Cell className="headcol">

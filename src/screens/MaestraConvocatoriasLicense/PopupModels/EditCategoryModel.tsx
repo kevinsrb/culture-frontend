@@ -3,20 +3,11 @@ import {
     Layout,
     Row,
     Col,
-    Divider,
-    List,
-    Typography,
-    Table,
-    Tag,
-    Space,
     Form,
-    Checkbox,
     Button,
     Input,
-    Image,
     Select,
     Modal,
-    Empty
 } from "antd";
 import { Container, Grid } from "semantic-ui-react";
 import { LeftOutlined, CloseOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
@@ -30,11 +21,12 @@ export default function EditCategoryModel(props:any) {
 
     function handleEditCategry(){
         props.editCategory(); 
-        setIsEditSuccessModal(true); 
+        props.setIsEditModalVisible(false); 
+        props.setMessageShow(true)
     }
     return (
         <div>
-             <Modal className="eval_pro_model" visible={isEditSuccessModal} width={1000} footer={false}>
+            <Modal className="eval_pro_model" visible={isEditSuccessModal} width={1000} footer={false}>
                     <EditSuccessModel setIsEditModalVisible={props.setIsEditModalVisible} setIsEditSuccessModal ={setIsEditSuccessModal} setMessageShow={setMessageShow} />
             </Modal>
 

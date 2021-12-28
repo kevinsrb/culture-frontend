@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from "../../../components/NavBar";
 import HeaderMenu from "../../../components/Header";
 import { Layout, Row, Col, Form, Input, Select, Table, Modal, Button } from "antd";
@@ -9,21 +9,48 @@ export default function InvitacionJurado() {
     const { Option } = Select;
     const [showFild, setShowFild] = useState<any>('hide-data')
 
-
+    const [sidebarShow, setSidebarShow] = useState<any>(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
+
+
+    const [matchScreen, setMatchScreen] = useState<any>('')
+    const [matchScreenSize, setMatchScreenSize] = useState<any>(1200)
+
+    useEffect(() => {
+        var mobileQuery = window.matchMedia("(max-width: 768px)");
+        if (mobileQuery.matches == true && mobileQuery.media == "(max-width: 768px)") {
+            setMatchScreenSize(768);
+        } else {
+            setMatchScreenSize(1200);
+        }
+        if (mobileQuery) {
+            mediaQueryCheck(mobileQuery);
+            mobileQuery.addEventListener("change", mediaQueryCheck);
+        }
+        return () => {
+            mobileQuery.removeEventListener("change", mediaQueryCheck);
+        }
+    }, [matchScreen])
+    function mediaQueryCheck(inputQuery: any) {
+        if (inputQuery.matches) {
+            setMatchScreen(true);
+            setSidebarShow(false);
+        } else {
+            setSidebarShow(true);
+            setMatchScreen(false);
+        }
+    }
+
 
     const showModal = () => {
         setIsModalVisible(true);
     };
-
     const handleOk = () => {
         setIsModalVisible(false);
     };
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
-
 
     return (
         <div>
@@ -45,12 +72,12 @@ export default function InvitacionJurado() {
                     </Modal>
 
                     <Row>
-                        <Col span={5}>
-                            <Sidebar />
+                        <Col span={sidebarShow?4:0} className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar':'hide__sidebar'}`}>
+                            <Sidebar  setSidebarShow={setSidebarShow} sidebarShow={sidebarShow}  />
                         </Col>
-                        <Col span={18}>
-                            <Content>
-                                <HeaderMenu />
+                        <Col span={sidebarShow?20:24} className='right_box_pd'>
+                            <Content className="form--right-box__ ">
+                                <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow}  />
                             </Content>
                             <Content className='main-card card'>
                                 <Content className='main--containt'>

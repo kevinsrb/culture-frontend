@@ -37,8 +37,6 @@ export default function Index() {
     getShowPages();
     // setShowPages("10");
   }, []);
-  console.log('showPage: ', showPage);
-
   // let projectInfo = useLocation();
   // let projectData = projectInfo?.state?.projectData;
   // console.log("projectData: ", projectData);

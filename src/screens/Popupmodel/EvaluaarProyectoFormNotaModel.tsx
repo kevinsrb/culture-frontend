@@ -165,10 +165,10 @@ export default function EvaluaarProyectoFormNotaModel(props: any) {
             <Content className='model__header'>
               <Content className='mdl_header_containt'>
                 <Row className='mdl_heading_row'>
-                  <Col span={12} className=''>
+                  <Col span={18} className=''>
                     <h3 className='evel_mdl_title'>Evaluacion de Proyecto</h3>
                   </Col>
-                  <Col span={12} className=' text-right'>
+                  <Col span={6} className=' text-right'>
                     <a className="mdl_close_btn" onClick={() => (props.setVisible("informacionProyectosList"), props.setVisible(false))}><CloseOutlined /></a>
                   </Col>
                 </Row>
@@ -231,10 +231,10 @@ export default function EvaluaarProyectoFormNotaModel(props: any) {
             <Content className="evalu__top_mdl_box">
               <Content className="evalu_listing">
                 <Row className="evol_top_head_box">
-                  <Col span={20}>
+                  <Col span={12}>
                     <span className='evol_hed_tb_title'>criterios evaluados</span>
                   </Col>
-                  <Col span={4} className="text-right">
+                  <Col span={12} className="text-right">
                     <p className="table--total table--total-mdl">
                       Total evaluados :<span className="text-orance">{updateData?.length}</span>
                     </p>

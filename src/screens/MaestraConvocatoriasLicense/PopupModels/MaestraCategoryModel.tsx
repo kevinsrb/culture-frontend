@@ -13,6 +13,7 @@ import {
 } from "antd";
 import { CloseOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import EditCategoryModel from './EditCategoryModel'
+import EditSuccessModel from './EditSuccessModel'
 import moment from 'moment';
 export default function MaestraCategoryModel(props: any) {
     const { gestionarCategory, setGestionarCategory, categoryAddStatus, setCategoryAddStatus, editLicenseCategoryData, setEditLicenseCategoryData } = props;
@@ -20,7 +21,7 @@ export default function MaestraCategoryModel(props: any) {
     const { Option } = Select
     const [isEditModalVisible, setIsEditModalVisible] = useState<any>(false)
     const [messageShow, setMessageShow] = useState<any>(false)
-
+    const [isEditSuccessModal, setIsEditSuccessModal] = useState<any>(false)
     const columns = [
         {
             title: <span className='as_tbl_hd'>Categoría</span>,
@@ -125,6 +126,7 @@ export default function MaestraCategoryModel(props: any) {
             }
             setCategoryAddStatus('')
             props.setIsModalVisible(false)
+            setIsEditSuccessModal(true); 
         }
     }
     const [editCategoryIndex, setEditCategoryIndex] = useState<any>('');
@@ -141,13 +143,17 @@ export default function MaestraCategoryModel(props: any) {
     }
     function onDelete(params: any, item: any) {
         var arr = [...datosCategory];
-        arr.splice(params, 1);
+        arr.splice(item, 1);
         setDatosCategory(arr);
     }
     return (
         <div>
             <Modal className="eval_pro_model" visible={isEditModalVisible} width={1000} footer={false}>
                 <EditCategoryModel editCategoryData={editCategoryData} setEditCategoryData={setEditCategoryData} setIsEditModalVisible={setIsEditModalVisible} editCategory={editCategory} setMessageShow={setMessageShow}/>
+            </Modal>
+
+            <Modal className="eval_pro_model" visible={isEditSuccessModal} width={600} footer={false}>
+                    <EditSuccessModel setIsEditModalVisible={props.setIsEditModalVisible} setIsEditSuccessModal ={setIsEditSuccessModal} setMessageShow={setMessageShow} />
             </Modal>
 
             <Layout
@@ -187,11 +193,9 @@ export default function MaestraCategoryModel(props: any) {
 
                         </Form>
                     </Content>
-                    <Content className="mb-2 text-right">
+                    <Content className="mb-1 text-right">
                         <span onClick={() => handelAddCategory()} className="form__btn_light form_submit_btn" style={{ cursor: "pointer" }}>Agregar</span>
                     </Content>
-
-
                 </Content>
                 <Content className='success_message_box'>
                     {messageShow &&
@@ -201,7 +205,10 @@ export default function MaestraCategoryModel(props: any) {
                         </Content>
                     }
                 </Content>
-
+                
+                <Content className='mdl_cat_tbl_head'>
+                    <span className='mdl_cat_tbl_title'>Áreas creadas</span>
+                </Content>
                 <Content className='lice_mdl_tabl_area'>
                     <Content className='mb-1'>
                         {//@ts-ignore
@@ -210,7 +217,7 @@ export default function MaestraCategoryModel(props: any) {
                                 locale={{ emptyText: <Empty description="No hay datos" style={{ padding: "50px" }} /> }}
                                 pagination={false}
                                 dataSource={datosCategory}
-                                scroll={{ x: 1200, y: 500 }}
+                                scroll={{ x: 1200, y: 250 }}
                                 size="small"
                                 rowClassName={(record, index) => index % 2 === 0 ? 'table-row-dark' : 'table-row-light'}
                                 className="table-ant-design-modify"

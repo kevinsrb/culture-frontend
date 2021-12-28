@@ -34,7 +34,7 @@ const RegistrarJurado = () => {
       <BannerJurados BannerText="Banco de Jurados" />
 
       <Col
-        className="box-container "
+        className="box-container p-1"
         style={{
           minHeight: 400,
         }}
@@ -57,7 +57,7 @@ const RegistrarJurado = () => {
                   style={{
                     fontSize: 17,
                   }}
-                  className="font-family-Montserrat-Regular"
+                  className="font-family-Montserrat-Regular reg--form-text"
                 >
                   <b className="font-family-Montserrat-Bold">
                     Completa el formulario de reistrio para participar en las

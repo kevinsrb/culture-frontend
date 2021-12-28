@@ -30,7 +30,7 @@ import Loader from "../../../../components/loader";
 import Sidebar from "../../../../components/NavBar";
 import HeaderMenu from "../../../../components/Header";
 
-export default function AgregarExperienciaProfesional(props:any) {
+export default function AgregarExperienciaProfesional(props: any) {
   const { isEdit } = props;
 
   const [activeIndex, setActiveIndex] = useState<any>(null);
@@ -55,6 +55,7 @@ export default function AgregarExperienciaProfesional(props:any) {
   const [showEllipsis, setshowEllipsis] = useState<any>(true);
   const [showFirstAndLastNav, setshowFirstAndLastNav] = useState<any>(true);
   const [showPreviousAndNextNav, setshowPreviousAndNextNav] = useState<any>(true);
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   const [formData, setFormData] = useState<any>({
     resume_id: resumeData.resume_id,
     project_name: "",
@@ -70,13 +71,13 @@ export default function AgregarExperienciaProfesional(props:any) {
   }, []);
 
   async function setResumeDetail() {
-    const resData:any = await localStorage.getItem("resumeData");
+    const resData: any = await localStorage.getItem("resumeData");
     const val = JSON.parse(resData);
     await setResumeData(val);
   }
 
   function formValidation() {
-    let formErrors :any = {};
+    let formErrors: any = {};
     let formIsValid = true;
 
     if (!formData.project_name) {
@@ -144,8 +145,8 @@ export default function AgregarExperienciaProfesional(props:any) {
       }
     }
   }
-  async function getProfessionalExperienceData(ofst:any) {
-    const resData:any = await localStorage.getItem("resumeData");
+  async function getProfessionalExperienceData(ofst: any) {
+    const resData: any = await localStorage.getItem("resumeData");
     const val = JSON.parse(resData);
     const params = {
       resume_id: val ? val.resume_id : 0,
@@ -195,10 +196,10 @@ export default function AgregarExperienciaProfesional(props:any) {
 
   async function handelClickPhotoImg() {
     // photoClickBtn.current?.click()
-     // @ts-ignore
+    // @ts-ignore
     document.getElementById("photoSelect").click();
   }
-  const onFilechange = (event:any) => {
+  const onFilechange = (event: any) => {
     setIdentityDocument(event.target.files[0]);
   };
 
@@ -215,7 +216,7 @@ export default function AgregarExperienciaProfesional(props:any) {
     setIdentityDocument({});
     return true;
   }
-  const handlePaginationChange = (e:any, { activePage }:any) => {
+  const handlePaginationChange = (e: any, { activePage }: any) => {
     setActivePage(activePage);
 
     const offst = limit * activePage;
@@ -250,11 +251,11 @@ export default function AgregarExperienciaProfesional(props:any) {
 
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -458,7 +459,7 @@ export default function AgregarExperienciaProfesional(props:any) {
 
                             <Table.Body>
                               {formListData &&
-                                formListData.map((item:any, i:any) => {
+                                formListData.map((item: any, i: any) => {
                                   i++;
                                   return (
                                     <Table.Row key={i}>
@@ -570,8 +571,8 @@ export default function AgregarExperienciaProfesional(props:any) {
                                   isEdit
                                     ? props.onPressEdit(10, false)
                                     : formListData.length > 0
-                                    ? props.setShowPage(6)
-                                    : errorToast("Please fill details")
+                                      ? props.setShowPage(6)
+                                      : errorToast("Please fill details")
                                 }
                                 content="Guardar y Continuar"
                                 className="btn btn-primary right floated"

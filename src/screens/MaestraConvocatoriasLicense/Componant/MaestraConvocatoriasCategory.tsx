@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import HeaderMenu from "../../../components/Header";
 import Sidebar from "../../../components/NavBar";
 import { Footer } from "../../Components/Footer";
@@ -7,23 +7,10 @@ import {
     Layout,
     Row,
     Col,
-    Divider,
-    List,
-    Typography,
     Table,
-    Tag,
-    Space,
-    Form,
-    Checkbox,
-    Button,
-    Input,
-    Image,
     Select,
     Modal,
-    Radio,
     Empty,
-    Dropdown as DropdownAnt,
-    Radio as RadioAnt, Form as FormAnt
 } from "antd";
 import { Container, Grid } from "semantic-ui-react";
 import { EditOutlined, DeleteOutlined, LeftOutlined, RightOutlined, PlusOutlined, CloseOutlined } from "@ant-design/icons";
@@ -36,12 +23,42 @@ export default function MaestraConvocatoriasCategory() {
     const [gestionarCategory, setGestionarCategory] = React.useState([]);
     const [categoryAddStatus, setCategoryAddStatus] = React.useState('');
     const [editLicenseCategoryData, setEditLicenseCategoryData] = React.useState({});
+    const [sidebarShow, setSidebarShow] = useState<any>(false);
 
+
+    const [matchScreen, setMatchScreen] = useState<any>('')
+    const [matchScreenSize, setMatchScreenSize] = useState<any>(1200)
+    useEffect(() => {
+        
+        var mobileQuery = window.matchMedia("(max-width: 768px)");
+        if (mobileQuery.matches == true && mobileQuery.media == "(max-width: 768px)") {
+            setMatchScreenSize(768);
+        }else{
+            setMatchScreenSize(1200);
+        }
+        if (mobileQuery) {
+            mediaQueryCheck(mobileQuery);
+            mobileQuery.addEventListener("change", mediaQueryCheck);
+        }
+        return () => {
+            mobileQuery.removeEventListener("change", mediaQueryCheck);
+        }
+    }, [matchScreen])
+    function mediaQueryCheck(inputQuery: any) {
+        console.log('inputQuery: ff ', inputQuery);
+        if (inputQuery.matches) {
+            setMatchScreen(true);
+        } else {
+            setMatchScreen(false);
+        }
+    }
+
+    console.log('matchScreenSize: ', matchScreenSize);
     //  columnas
     const columns = [
         {
             title: <span className='as_tbl_hd'>No.</span>,
-            width: 30,
+            width: 25,
             dataIndex: "license_id",
             key: "license_id",
             fixed: "left",
@@ -50,10 +67,10 @@ export default function MaestraConvocatoriasCategory() {
         },
         {
             title: <span className='as_tbl_hd'>Fecha creación</span>,
-            width: 70,
+            width: 65,
             dataIndex: "fecha_date",
             key: "fecha_date",
-            fixed: "left",
+            fixed: (matchScreenSize == 768)? "":"left",
         },
         {
             title: <span className='as_tbl_hd'>Nombre línea</span>,
@@ -63,24 +80,24 @@ export default function MaestraConvocatoriasCategory() {
         },
         {
             title: () => <p className='text-center'><span className='as_tbl_hd'>Acciones</span><small className='pr-1 ast_tbl_txt_sml' >Editar</small> <small className='pr-1 ast_tbl_txt_sml' >Eliminar</small></p>,
-            width: 80,
+            width: 55,
             fixed: "right",
             render: (text: any, record: any, index: any) => (
 
                 <p className='text-center'>
-                    <a onClick ={()=>{setIsModalVisible(true); setEditLicenseCategoryData(record); setCategoryAddStatus('Edit')}} className='edit_icon icone_size' ><EditOutlined /></a>{"  "}
-                    <a className='text-danger icone_size' onClick={()=>deleteLicense(record, index)} ><DeleteOutlined /></a>
+                    <a onClick={() => { setIsModalVisible(true); setEditLicenseCategoryData(record); setCategoryAddStatus('Edit') }} className='edit_icon icone_size' ><EditOutlined /></a>{"  "}
+                    <a className='text-danger icone_size' onClick={() => deleteLicense(record, index)} ><DeleteOutlined /></a>
                 </p>
             ),
         }
     ];
 
-    function  deleteLicense(params:any, index:any) {
+    function deleteLicense(params: any, index: any) {
         var arr = [...gestionarCategory];
         arr.splice(index, 1);
         setGestionarCategory(arr);
     }
-   
+
     function itemRenderTable(current: any, type: any, originalElement: any) {
         if (type === "prev") {
             return (
@@ -100,37 +117,33 @@ export default function MaestraConvocatoriasCategory() {
         }
         return originalElement;
     }
- 
+
     return (
         <div>
             <Modal className="eval_pro_model" visible={isModalVisible} width={1000} footer={false}>
-                <MaestraCategoryModel setIsModalVisible={setIsModalVisible} setGestionarCategory={setGestionarCategory} gestionarCategory={gestionarCategory} categoryAddStatus={categoryAddStatus} setCategoryAddStatus={setCategoryAddStatus} setEditLicenseCategoryData={editLicenseCategoryData} editLicenseCategoryData ={editLicenseCategoryData}/>
+                <MaestraCategoryModel setIsModalVisible={setIsModalVisible} setGestionarCategory={setGestionarCategory} gestionarCategory={gestionarCategory} categoryAddStatus={categoryAddStatus} setCategoryAddStatus={setCategoryAddStatus} setEditLicenseCategoryData={editLicenseCategoryData} editLicenseCategoryData={editLicenseCategoryData} />
             </Modal>
-
             <Container fluid>
                 <Grid columns={2}>
                     <Grid.Row>
-                        <Grid.Column className="form--left-box">
-                            <Sidebar />
+                        <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+                            <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                         </Grid.Column>
-                        <Grid.Column className="form--right-box">
-                            <HeaderMenu />
-
+                        <Grid.Column className="form--right-box" >
+                            <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
                             <Layout className='licn_containt_area p-1'>
                                 <Content className='licn_add_cat_head text-right'>
-                                    <span className='licn_add_text'> <span style={{marginRight:8}}> Crear</span> <a  onClick={()=>{setIsModalVisible(true); setCategoryAddStatus('Add')}}><PlusOutlined className='add_icone' /> </a></span>
+                                    <span className='licn_add_text'> <span style={{ marginRight: 8 }}> Crear</span> <a onClick={() => { setIsModalVisible(true); setCategoryAddStatus('Add') }}><PlusOutlined className='add_icone' /> </a></span>
                                 </Content>
                                 <Content className='licn__card card_box'>
-
                                     <Content className='licn_form mb-1'>
                                         <Content className="evalpro_table_head asgevl_tbl_head">
                                             <Row>
-                                                <Col span={16} className='headin_box'>
+                                                <Col span={10} className='headin_box'>
                                                     <h4 className='title licn_title font-family-Montserrat-SemiBold'>Gestionar líneas y categorías</h4>
                                                 </Col>
-                                                <Col span={8}>
+                                                <Col span={14}>
                                                     <Content className='text-right'>
-
                                                         <small className='tbl_pg'>Registros por página</small>
                                                         <Select defaultValue="10" className="select_table_cont">
                                                             <Option value="10">10</Option>
@@ -142,7 +155,7 @@ export default function MaestraConvocatoriasCategory() {
                                                 </Col>
                                             </Row>
                                         </Content>
-                                       
+
                                         <Content className='mb-1'>
                                             {//@ts-ignore
                                                 <Table columns={columns}

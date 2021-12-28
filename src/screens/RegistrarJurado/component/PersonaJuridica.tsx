@@ -75,9 +75,10 @@ const PersonaNatural = () => {
             </Col>
 
             <Col span={8}>
+                  <label>Telefono commercial</label>
               <Row>
                 <Col span={10}>
-                  <Form.Item label="Telefono commercial" required>
+                  <Form.Item /*  label=""  */ required>
                     <Select className='form--cont'>
                       <Select.Option value="demo">pais</Select.Option>
                     </Select>
@@ -89,7 +90,7 @@ const PersonaNatural = () => {
                     marginLeft: 5,
                   }}
                 >
-                  <Form.Item label=" " required>
+                  <Form.Item required>
                     <Input placeholder="Numerio" className='form--cont' />
                   </Form.Item>
                 </Col>

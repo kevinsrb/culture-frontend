@@ -28,7 +28,7 @@ import Loader from "../../../../components/loader";
 import Sidebar from "../../../../components/NavBar";
 import HeaderMenu from "../../../../components/Header";
 
-export default function AgregarFormEducation(props:any) {
+export default function AgregarFormEducation(props: any) {
   const { isEdit } = props;
 
   const [activeIndex, setActiveIndex] = useState<any>(null);
@@ -55,7 +55,7 @@ export default function AgregarFormEducation(props:any) {
   const [showEllipsis, setshowEllipsis] = useState<any>(true);
   const [showFirstAndLastNav, setshowFirstAndLastNav] = useState<any>(true);
   const [showPreviousAndNextNav, setshowPreviousAndNextNav] = useState<any>(true);
-
+  const [sidebarShow, setSidebarShow] = useState<any>(false);
   const [formData, setFormData] = useState<any>({
     resume_id: "",
     guy: "",
@@ -76,19 +76,19 @@ export default function AgregarFormEducation(props:any) {
   }, []);
 
   async function setResumeDetail() {
-    const resData:any = await localStorage.getItem("resumeData");
+    const resData: any = await localStorage.getItem("resumeData");
     const val = JSON.parse(resData);
     await setResumeData(val);
   }
-  const masterFilter = (type:any) =>
+  const masterFilter = (type: any) =>
     (props.masterData &&
-      props.masterData.filter((item:any) => item.type == type)) ||
+      props.masterData.filter((item: any) => item.type == type)) ||
     [];
-  async function handelDropdown(type:any) {
+  async function handelDropdown(type: any) {
     const valDro = openDropdown == type ? "" : openDropdown != type ? type : "";
     setOpenDropdown(valDro);
   }
-  async function handleSelectChange(type:any, item:any) {
+  async function handleSelectChange(type: any, item: any) {
     if (type == "guy") {
       setFormData({
         ...formData,
@@ -114,11 +114,11 @@ export default function AgregarFormEducation(props:any) {
     // @ts-ignore
     document.getElementById("photoSelect").click();
   }
-  const onFilechange = (event:any) => {
+  const onFilechange = (event: any) => {
     setSelectPhoto(event.target.files[0]);
   };
   function formValidation() {
-    let formErrors:any = {};
+    let formErrors: any = {};
     let formIsValid = true;
 
     if (!formData.guy) {
@@ -182,8 +182,8 @@ export default function AgregarFormEducation(props:any) {
       }
     }
   }
-  async function getNonFormalEducationData(offst:any) {
-    const resData:any = await localStorage.getItem("resumeData");
+  async function getNonFormalEducationData(offst: any) {
+    const resData: any = await localStorage.getItem("resumeData");
     const val = JSON.parse(resData);
     const params = {
       resume_id: val ? val.resume_id : 0,
@@ -251,7 +251,7 @@ export default function AgregarFormEducation(props:any) {
     return true;
   }
 
-  const handlePaginationChange = (e:any, { activePage }:any) => {
+  const handlePaginationChange = (e: any, { activePage }: any) => {
     setActivePage(activePage);
 
     const offst = limit * activePage;
@@ -287,11 +287,11 @@ export default function AgregarFormEducation(props:any) {
 
         <Grid columns={2}>
           <Grid.Row>
-            <Grid.Column className="form--left-box">
-              <Sidebar />
+            <Grid.Column className="form--left-box mob_sidebar" id={`${sidebarShow ? 'show__sidebar' : 'hide__sidebar'}`}>
+              <Sidebar setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
             </Grid.Column>
-            <Grid.Column className="form--right-box">
-              <HeaderMenu />
+            <Grid.Column className="form--right-box" >
+              <HeaderMenu setSidebarShow={setSidebarShow} sidebarShow={sidebarShow} />
               <Grid style={{ width: "100%", margin: 0 }}>
                 <Grid.Column style={{ maxWidth: "99%" }}>
                   <Form size="large">
@@ -310,11 +310,11 @@ export default function AgregarFormEducation(props:any) {
                           <Grid.Column>
                             <label>Tipo</label>
                             {// @ts-ignore
-                            <Form.Select
-                              className="select--val"
-                              placeholder={guy == "" ? formData?.guy : guy}
-                              onClick={() => handelDropdown("guy")}
-                              error={!formData.guy && formErrors?.guy}
+                              <Form.Select
+                                className="select--val"
+                                placeholder={guy == "" ? formData?.guy : guy}
+                                onClick={() => handelDropdown("guy")}
+                                error={!formData.guy && formErrors?.guy}
                               />
                             }
                             {openDropdown && openDropdown == "guy" ? (
@@ -322,15 +322,14 @@ export default function AgregarFormEducation(props:any) {
                                 <Grid.Row>
                                   <Grid.Column className="select__box_clm">
                                     <Grid>
-                                      {masterFilter("guy").map((item:any, i:any) => {
+                                      {masterFilter("guy").map((item: any, i: any) => {
                                         return (
                                           <p
                                             key={i}
-                                            className={`form-slct ${
-                                              formData?.guy == item.id
+                                            className={`form-slct ${formData?.guy == item.id
                                                 ? "active"
                                                 : ""
-                                            }`}
+                                              }`}
                                           >
                                             <p
                                               className="form-slct_text"
@@ -357,13 +356,13 @@ export default function AgregarFormEducation(props:any) {
                             {
                               // @ts-ignore
                               <Form.Select
-                              className="select--val"
-                              placeholder={
-                                modality == "" ? formData?.modality : modality
-                              }
-                              onClick={() => handelDropdown("modality")}
-                              required={true}
-                              error={!formData.modality && formErrors?.modality}
+                                className="select--val"
+                                placeholder={
+                                  modality == "" ? formData?.modality : modality
+                                }
+                                onClick={() => handelDropdown("modality")}
+                                required={true}
+                                error={!formData.modality && formErrors?.modality}
                               />
                             }
                             {openDropdown && openDropdown == "modality" ? (
@@ -372,15 +371,14 @@ export default function AgregarFormEducation(props:any) {
                                   <Grid.Column className="select__box_clm">
                                     <Grid>
                                       {masterFilter("modality").map(
-                                        (item:any, i:any) => {
+                                        (item: any, i: any) => {
                                           return (
                                             <p
                                               key={i}
-                                              className={`form-slct ${
-                                                formData?.modality == item.id
+                                              className={`form-slct ${formData?.modality == item.id
                                                   ? "active"
                                                   : ""
-                                              }`}
+                                                }`}
                                             >
                                               <p
                                                 className="form-slct_text"
@@ -508,13 +506,13 @@ export default function AgregarFormEducation(props:any) {
                                   <label>Ciudad</label>
                                   {// @ts-ignore
                                     <Form.Select
-                                    className="select--val"
-                                    placeholder={
-                                      town == "" ? formData?.town : town
-                                    }
-                                    onClick={() => handelDropdown("town")}
-                                    required={true}
-                                    error={!formData.town && formErrors?.town}
+                                      className="select--val"
+                                      placeholder={
+                                        town == "" ? formData?.town : town
+                                      }
+                                      onClick={() => handelDropdown("town")}
+                                      required={true}
+                                      error={!formData.town && formErrors?.town}
                                     />
                                   }
                                   {openDropdown && openDropdown == "town" ? (
@@ -523,16 +521,15 @@ export default function AgregarFormEducation(props:any) {
                                         <Grid.Column className="select__box_clm">
                                           <Grid>
                                             {props?.citiesData.map(
-                                              (item:any, i:any) => {
+                                              (item: any, i: any) => {
                                                 return (
                                                   <p
                                                     key={i}
-                                                    className={`form-slct ${
-                                                      formData?.town ==
-                                                      item.city_id
+                                                    className={`form-slct ${formData?.town ==
+                                                        item.city_id
                                                         ? "active"
                                                         : ""
-                                                    }`}
+                                                      }`}
                                                   >
                                                     <p
                                                       className="form-slct_text"
@@ -583,11 +580,10 @@ export default function AgregarFormEducation(props:any) {
                                   labelPosition="right"
                                   placeholder=""
                                   className={`usr--img-input curser-pointer
-                            ${
-                              !selectPhoto &&
-                              formErrors?.document &&
-                              "activeBorder"
-                            }`}
+                            ${!selectPhoto &&
+                                    formErrors?.document &&
+                                    "activeBorder"
+                                    }`}
                                   value={
                                     selectPhoto?.name ? selectPhoto?.name : ""
                                   }
@@ -682,7 +678,7 @@ export default function AgregarFormEducation(props:any) {
                             </Table.Header>
                             <Table.Body>
                               {nonFormalEducationList &&
-                                nonFormalEducationList.map((item:any, i:any) => {
+                                nonFormalEducationList.map((item: any, i: any) => {
                                   return (
                                     <Table.Row>
                                       <Table.Cell className="headcol">
@@ -802,8 +798,8 @@ export default function AgregarFormEducation(props:any) {
                                   isEdit
                                     ? props.onPressEdit(10, false)
                                     : nonFormalEducationList.length > 0
-                                    ? props.setShowPage(5)
-                                    : errorToast("Please fill details")
+                                      ? props.setShowPage(5)
+                                      : errorToast("Please fill details")
                                 }
                                 content="Guardar y Continuar"
                                 className="btn btn-primary right floated"

@@ -6,19 +6,21 @@ export default function MaestraParaEditDataModel(props: any) {
     const { Content } = Layout;
     const { editArrayData, setEditArrayData, setTabData, tabData } = props;
     const [edifFormData, setEditFormData] = useState<any>({ sNo: '', criterio: '' })
+    console.log('edifFormData: viren ==>', edifFormData);
 
     useEffect(() => {
         setEditFormData(editArrayData)
     }, [props])
 
-    // function updateData() {
-    //     const array = [...tabData]
-    //     const index = tabData.findIndex((item: any) => (item.sNo == edifFormData.sNo))
-    //     array[index].criterio = edifFormData.criterio
-    //     setTabData([...array]);
+    function updateData() {
+        
+        const array = [...tabData]
+        const index = tabData.findIndex((item: any) => (item.sNo == edifFormData.sNo))
+        array[index].criterio = edifFormData.criterio
+        setTabData([...array]);
 
-    //     props.setEditModel(false)
-    // }
+        props.setEditModel(false)
+    }
     return (
         <div>
             <Layout className="mastAdt--form-box" style={{ marginBottom: '0rem' }}>
@@ -26,12 +28,12 @@ export default function MaestraParaEditDataModel(props: any) {
                     <Content className='adm--form--area'>
                         <Content className='maf-head mb-2'>
                             <Row>
-                                <Col span={12}>
+                                <Col span={22}>
                                     <Content>
                                         <span className='title'>Crear criterios de evaluación</span>
                                     </Content>
                                 </Col>
-                                <Col span={12}>
+                                <Col span={2}>
                                     <Content style={{ textAlign: "right" }}>
                                         <a onClick={() => props.setEditModel(false)} className='close_btn text-danger'><CloseOutlined /></a>
                                     </Content>
@@ -50,7 +52,7 @@ export default function MaestraParaEditDataModel(props: any) {
                                 </Form.Item>
                             </Form>
                             <Content className='text-right'>
-                                <Button key="submit" className='adt-form-submit-btn' type="primary" onClick={() => props.updateData()}>Crear</Button>
+                                <Button key="submit" className='adt-form-submit-btn' type="primary" onClick={() => updateData()}>Crear</Button>
                             </Content>
                         </Content>
                     </Content>
